@@ -1,0 +1,12 @@
+log/capistrano.log
+.vscode
+log/
+
+.env
+.env.prod
+.env.staging
+
+# Ignore DevSpace cache and log folder
+.devspace/
+
+.DS_Store

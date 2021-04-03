@@ -1,0 +1,66 @@
+version: '3.4'
+services:
+  db:
+    image: postgres:10
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    env_file:
+      - ./apps/db/.env
+
+  api:
+    build: apps/api
+    command: bundle exec rails s
+    env_file:
+      - ./apps/api/.env
+    ports:
+      - 3000:3000
+    volumes:
+      - ./apps/api:/api
+      - /apps/api/tmp
+    links:
+      - db
+
+  # sidekiq:
+  #   build: apps/api
+  #   command: bundle exec sidekiq -q default
+  #   env_file:
+  #     - ./apps/api/.env
+  #   ports:
+  #     - 3001:3001
+  #   volumes:
+  #     - ./apps/api:/api
+  #     - /apps/api/tmp
+  #   links:
+  #     - db
+
+  www:
+    build:
+      context: apps/www
+      target: dev
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8080
+    env_file:
+      - ./apps/www/.env
+    ports:
+      - 8080:8080
+    volumes:
+      - ./apps/www:/www
+    links:
+      - api
+
+  # redis:
+  #   build: apps/redis
+  #   environment:
+  #     - HOST=0.0.0.0
+  #   ports:
+  #     - 6379:6379
+  #   volumes:
+  #     - redis:/data
+  #     - ./apps/redis/redis.conf:/usr/local/etc/redis/redis.conf
+
+volumes:
+  postgres:
+  redis:

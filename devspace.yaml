@@ -1,0 +1,206 @@
+version: v1beta9
+images:
+  api:
+    image: williamdasilva/generator-api
+    dockerfile: ./apps/api/Dockerfile
+    context: ./apps/api
+    preferSyncOverRebuild: true
+    injectRestartHelper: true
+    build:
+      docker:
+        options:
+          target: release
+
+  www:
+    image: williamdasilva/generator-www
+    dockerfile: ./apps/www/Dockerfile
+    context: ./apps/www
+    preferSyncOverRebuild: true
+    injectRestartHelper: true
+    build:
+      docker:
+        options:
+          target: release
+
+deployments:
+- name: api
+  helm:
+    componentChart: true
+    values:
+      replicas: 2
+      rollingUpdate:
+        enabled: true
+        maxSurge: "100%"
+        maxUnavailable: "50%"
+      initContainers:
+      - image: williamdasilva/generator-api
+        resources:
+          limits:
+            cpu: 400m
+            memory: 500Mi
+            ephemeralStorage: 2Gi
+        command: ["bash"]
+        args: ["-c", "rake db:migrate"]
+        env:
+        - name: HOST
+          value: "0.0.0.0"
+        - name: PORT
+          value: "3003"
+        - name: NODE_ENV
+          value: "production"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: DATABASE_URL
+        - name: SENTRY_DSN
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: SENTRY_DSN
+
+      containers:
+      - image: williamdasilva/generator-api
+        resources:
+          limits:
+            cpu: 400m
+            memory: 500Mi
+            ephemeralStorage: 2Gi
+        env:
+        - name: HOST
+          value: "0.0.0.0"
+        - name: PORT
+          value: "3000"
+        - name: HOST
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: HOST
+        - name: RAILS_ENV
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: RAILS_ENV
+        - name: RAILS_SERVE_STATIC_FILES
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: RAILS_SERVE_STATIC_FILES
+        - name: SECRET_KEY_BASE
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: SECRET_KEY_BASE
+        - name: SENTRY_DSN
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: SENTRY_DSN
+        - name: DATABASE_NAME
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: DATABASE_NAME
+        - name: DATABASE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: DATABASE_USERNAME
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: DATABASE_PASSWORD
+        - name: DATABASE_HOST
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: DATABASE_HOST
+        - name: DATABASE_PORT
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: DATABASE_PORT
+      ingress:
+        annotations:
+          kubernetes.io/ingress.class: nginx
+          nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+          cert-manager.io/cluster-issuer: ls-api-prod
+        ingressClass: nginx
+        tls: ls-api-prod
+        tlsClusterIssuer: ls-api-prod
+        ingressClass: nginx
+        rules:
+        - host: api.generator.xyz
+      service:
+        ports:
+        - port: 3003
+
+- name: www
+  helm:
+    componentChart: true
+    values:
+      replicas: 2
+      rollingUpdate:
+        enabled: true
+        maxSurge: "100%"
+        maxUnavailable: "50%"
+      containers:
+      - image: williamdasilva/generator-www
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          failureThreshold: 30
+          periodSeconds: 5
+        resources:
+          limits:
+            cpu: 400m
+            memory: 500Mi
+            ephemeralStorage: 2Gi
+        env:
+        - name: HOST
+          value: "0.0.0.0"
+        - name: PORT
+          value: "8080"
+        - name: API_BROWSER_BASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: www-secret
+              key: API_BROWSER_BASE_URL
+        - name: GOOGLE_ANALYTICS_ID
+          valueFrom:
+            secretKeyRef:
+              name: www-secret
+              key: GOOGLE_ANALYTICS_ID
+        - name: API_BROWSER_BASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: www-secret
+              key: API_BROWSER_BASE_URL
+        - name: SENTRY_DSN
+          valueFrom:
+            secretKeyRef:
+              name: www-secret
+              key: SENTRY_DSN
+        - name: VUE_APP_HOTJAR_ID
+          valueFrom:
+            secretKeyRef:
+              name: www-secret
+              key: VUE_APP_HOTJAR_ID
+      ingress:
+        annotations:
+          kubernetes.io/ingress.class: nginx
+          nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+          cert-manager.io/cluster-issuer: ls-www-prod
+        ingressClass: nginx
+        tls: ls-www-prod
+        tlsClusterIssuer: ls-www-prod
+        ingressClass: nginx
+        rules:
+        - host: generator.xyz
+        - host: www.generator.xyz
+      service:
+        ports:
+        - port: 8080
