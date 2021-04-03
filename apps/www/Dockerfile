@@ -3,9 +3,7 @@ FROM node:10.16.0 AS base
 
 WORKDIR /www
 
-COPY package.json .
-
-COPY package-lock.json .
+COPY package.json package-lock.json ./
 
 RUN npm ci
 

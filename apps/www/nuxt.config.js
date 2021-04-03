@@ -56,8 +56,6 @@ export default {
 
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
-    // https://go.nuxtjs.dev/eslint
-    '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/composition-api',
     '@nuxt/typescript-build',
@@ -82,8 +80,7 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   stripe: {
-    publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
-    stripeAccount: ''
+    publishableKey: process.env.STRIPE_PUBLISHABLE_KEY
   },
 
   axios: {

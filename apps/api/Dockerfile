@@ -6,9 +6,11 @@ RUN apt-get update -qq && apt-get install -y libxslt-dev libxml2-dev build-essen
 
 RUN apt-get -y install cron
 
-COPY . .
+COPY Gemfile Gemfile.lock ./
 
 RUN bundle install
+
+COPY . .
 
 COPY entrypoint.sh /usr/bin/
 
