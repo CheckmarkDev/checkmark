@@ -1,8 +1,8 @@
 export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    titleTemplate: '%s - <%- name %>',
-    title: '<%- name %>',
+    titleTemplate: '%s - Checkmark',
+    title: 'Get things done',
     htmlAttrs: {
       lang: 'en',
       dir: 'ltr'
@@ -10,16 +10,16 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '<%- description %>' },
-      { hid: 'og:description', name: 'og:description', content: '<%- description %>' },
-      { hid: 'twitter:description', name: 'twitter:description', content: '<%- description %>' },
+      { hid: 'description', name: 'description', content: 'Share your progress with developers around the world and get things done.' },
+      { hid: 'og:description', name: 'og:description', content: 'Share your progress with developers around the world and get things done.' },
+      { hid: 'twitter:description', name: 'twitter:description', content: 'Share your progress with developers around the world and get things done.' },
       { hid: 'og:image', name: 'og:image', content: '' },
       { hid: 'og:image:width', name: 'og:image:width', content: '1200' },
       { hid: 'og:image:height', name: 'og:image:height', content: '628' },
       { hid: 'twitter:image', name: 'twitter:image', content: '' },
       { hid: 'twitter:card', name: 'twitter:card', content: 'summary_large_image' },
-      { hid: 'google-site-verification', name: 'google-site-verification', content: '<%- google_site_verification %>' },
-      { hid: 'og:site_name', property: 'og:site_name', content: '<%- name %>' },
+      { hid: 'google-site-verification', name: 'google-site-verification', content: 'KuZrNJ2U-XmZnD_4ajl8QQrCkS7Ufj3aqmYcHzJRh2w' },
+      { hid: 'og:site_name', property: 'og:site_name', content: 'Checkmark' },
       { hid: 'og:type', property: 'og:type', content: 'website' },
       { hid: 'og:locale', property: 'og:locale', content: 'en_US' },
       { hid: 'robots', name: 'robots', content: 'index' }
@@ -68,7 +68,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@williamdasilva/gtag-module',
-    'nuxt-stripe-module',
+    // 'nuxt-stripe-module',
     'nuxt-socialsplash-module',
     '@nuxtjs/sentry',
     '@nuxtjs/axios',
@@ -78,10 +78,10 @@ export default {
     ['vue-wait/nuxt', { useVuex: true }]
   ],
 
-  // Axios module configuration (https://go.nuxtjs.dev/config-axios)
-  stripe: {
-    publishableKey: process.env.STRIPE_PUBLISHABLE_KEY
-  },
+  // // Axios module configuration (https://go.nuxtjs.dev/config-axios)
+  // stripe: {
+  //   publishableKey: process.env.STRIPE_PUBLISHABLE_KEY
+  // },
 
   axios: {
     baseURL: 'http://back:3333/api',

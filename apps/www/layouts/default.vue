@@ -1,8 +1,20 @@
 <template>
   <div>
+    <app-header />
     <Nuxt />
   </div>
 </template>
+
+<script lang="ts">
+  import AppHeader from '@/components/AppHeader/index.vue'
+
+  export default {
+    components: {
+      AppHeader
+    }
+  }
+</script>
+
 
 <style>
 html {
