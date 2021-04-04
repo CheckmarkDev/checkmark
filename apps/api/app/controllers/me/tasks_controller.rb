@@ -45,7 +45,12 @@ class Me::TasksController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_task
-      @task = Task.find_by_uuid(params[:id])
+      @task = Task.find_by_uuid!(params[:id])
+
+      if @task.user_id != @current_user.id
+        render status: :forbidden, json: { error: 'You are not allowed to make this action.' }
+        return false
+      end
     end
 
     # Only allow a list of trusted parameters through.
