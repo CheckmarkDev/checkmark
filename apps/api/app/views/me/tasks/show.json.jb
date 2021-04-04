@@ -1,0 +1,7 @@
+{
+  uuid: @task.uuid,
+  content: @task.content,
+  state: @task.state,
+  created_at: @task.created_at,
+  updated_at: @task.updated_at
+}

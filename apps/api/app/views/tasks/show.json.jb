@@ -1,8 +1,14 @@
 {
-  id: @task.id,
+  uuid: @task.uuid,
   content: @task.content,
-  type: @task.type,
-  user: @task.user,
+  state: @task.state,
   created_at: @task.created_at,
-  updated_at: @task.updated_at
+  updated_at: @task.updated_at,
+
+  user: {
+    uuid: @task.user.uuid,
+    username: @task.user.username,
+    first_name: @task.user.first_name,
+    last_name: @task.user.last_name
+  }
 }

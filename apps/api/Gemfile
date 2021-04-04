@@ -21,6 +21,7 @@ gem 'whenever', require: false
 gem 'sentry-raven'
 gem 'faraday'
 gem 'apipie-rails'
+gem 'kaminari'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'

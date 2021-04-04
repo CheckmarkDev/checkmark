@@ -3,7 +3,10 @@ Rails.application.routes.draw do
 
   defaults format: :json do
     resources :tasks
-    resources :users
+
+    namespace 'me' do
+      resources :tasks
+    end
 
     scope '/auth' do
       get '/me', to: 'authentication#me'

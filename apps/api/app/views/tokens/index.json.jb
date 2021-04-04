@@ -1,8 +1,0 @@
-@tokens.map do |token|
-  {
-    id: token.id,
-    token: token.token,
-    user: token.user,
-    url: token_url(token, format: :json)
-  }
-end
