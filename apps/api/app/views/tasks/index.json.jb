@@ -1,0 +1,9 @@
+@tasks.map do |task|
+  {
+    id: task.id,
+    content: task.content,
+    type: task.type,
+    user: task.user,
+    url: task_url(task, format: :json)
+  }
+end

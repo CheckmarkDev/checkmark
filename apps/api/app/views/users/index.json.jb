@@ -1,0 +1,11 @@
+@users.map do |user|
+  {
+    id: user.id,
+    email: user.email,
+    password_digest: user.password_digest,
+    username: user.username,
+    first_name: user.first_name,
+    last_name: user.last_name,
+    url: user_url(user, format: :json)
+  }
+end

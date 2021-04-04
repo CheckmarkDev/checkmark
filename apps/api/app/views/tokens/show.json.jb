@@ -1,0 +1,7 @@
+{
+  id: @token.id,
+  token: @token.token,
+  user: @token.user,
+  created_at: @token.created_at,
+  updated_at: @token.updated_at
+}

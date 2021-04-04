@@ -1,0 +1,8 @@
+{
+  id: @task.id,
+  content: @task.content,
+  type: @task.type,
+  user: @task.user,
+  created_at: @task.created_at,
+  updated_at: @task.updated_at
+}
