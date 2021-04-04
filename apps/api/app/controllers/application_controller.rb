@@ -3,25 +3,30 @@ class ApplicationController < ActionController::API
 
   def authorize_request
     header = request.headers['Authorization']
-    header = header.split(' ').last if header
+    token = header.split(' ').last if header
 
-    if header.nil?
+    if token.nil?
       render json: { errors: 'Authorization header is not present' }, status: :unauthorized
       return
     end
 
     begin
-      @decoded = JsonWebToken.decode(header)
+      @decoded = JsonWebToken.decode(token)
 
-      if @decoded[:exp].nil? || @decoded[:user_id].nil? || @decoded[:type].nil?
+      if @decoded[:exp].nil? || @decoded[:sub].nil?
         raise Exception.new 'Token is invalid'
       end
 
-      if Date.parse(@decoded[:exp]) < Time.now
+      if Time.at(@decoded[:exp]) < Time.now
         raise Exception.new 'Token is expired'
       end
 
-      @current_user = User.find_by_uuid(@decoded[:user_id])
+      saved_token = Token.find_by(token: token)
+      if saved_token.nil?
+        raise Exception.new 'Token is invalid'
+      end
+
+      @current_user = User.find_by_uuid(@decoded[:sub])
     rescue ActiveRecord::RecordNotFound => e
       render json: { errors: e.message }, status: :unauthorized
     rescue JWT::DecodeError => e

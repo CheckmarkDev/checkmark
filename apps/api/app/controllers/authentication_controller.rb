@@ -1,10 +1,14 @@
 class AuthenticationController < ApplicationController
   before_action :authorize_request, except: [:login, :register, :password_forgot]
 
+  api :GET, '/auth/me'
   def me
     render status: :ok
   end
 
+  api :POST, '/auth/login'
+  param :email, String, desc: 'E-mail'
+  param :password, String, desc: 'Password'
   def login
     @user = User.find_by_email(login_params[:email])
     if @user.nil?
@@ -21,6 +25,12 @@ class AuthenticationController < ApplicationController
     end
   end
 
+  api :POST, '/auth/register'
+  param :email, String, desc: 'E-mail'
+  param :password, String, desc: 'Password'
+  param :username, String, desc: 'username'
+  param :first_name, String, desc: 'first_name'
+  param :last_name, String, desc: 'last_name'
   def register
     @user = User.find_by_email(register_params[:email])
     if !@user.nil?
@@ -31,6 +41,9 @@ class AuthenticationController < ApplicationController
     @user = User.new(
       email: register_params[:email],
       password: register_params[:password],
+      username: register_params[:username],
+      first_name: register_params[:first_name],
+      last_name: register_params[:last_name],
     )
 
     if @user.save
@@ -75,6 +88,11 @@ class AuthenticationController < ApplicationController
       sub: user.uuid,
       exp: @expires_at
     )
+
+    Token.create!(
+      token: @token,
+      user: user
+    )
   end
 
   def password_reset_params
@@ -90,6 +108,6 @@ class AuthenticationController < ApplicationController
   end
 
   def register_params
-    params.permit(:email, :password)
+    params.permit(:email, :password, :username, :first_name, :last_name)
   end
 end

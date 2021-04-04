@@ -5,5 +5,13 @@ class User < ApplicationRecord
   has_many :tasks
 
   validates :email, presence: true, uniqueness: true
+  validates :username, presence: true, uniqueness: true, length: { minimum: 2 }
   validates :password, length: { minimum: 6 }
+
+  before_save :format_username
+
+  private
+    def format_username
+      self.username = self.username.parameterize
+    end
 end
