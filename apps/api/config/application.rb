@@ -34,6 +34,10 @@ module Api
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
+    config.hosts << "api"
+    config.hosts << "checkmark.dev"
+    config.hosts << "api.checkmark.dev"
+
     config.autoload_paths += %W(#{config.root}/lib)
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
     config.eager_load_paths += Dir["#{config.root}/lib/**/"]

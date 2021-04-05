@@ -21,6 +21,8 @@
     "cookieparser": "^0.1.0",
     "core-js": "^3.6.5",
     "js-cookie": "^2.2.1",
+    "messageformat": "^2.3.0",
+    "messageformat-parser": "^4.1.3",
     "mitt": "^2.1.0",
     "nuxt": "^2.14.6",
     "nuxt-socialsplash-module": "^1.0.0",
@@ -44,6 +46,7 @@
     "@types/js-cookie": "^2.2.6",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.10.0",
-    "eslint-plugin-nuxt": "^1.0.0"
+    "eslint-plugin-nuxt": "^1.0.0",
+    "js-yaml-loader": "^1.2.2"
   }
 }

@@ -34,6 +34,7 @@ export default {
   plugins: [
     '~/plugins/axios',
     '~/plugins/vee-validate',
+    '~/plugins/vue-icu.js',
     {
       src: '~/plugins/vue-sticky.js', mode: 'client'
     },
@@ -112,6 +113,13 @@ export default {
   build: {
     transpile: [
       'vee-validate/dist/rules'
-    ]
+    ],
+
+    extend (config, { isDev, isClient }) {
+      config.module.rules.push({
+        test: /\.ya?ml$/,
+        loader: 'js-yaml-loader'
+      })
+    }
   }
 }
