@@ -1,10 +1,6 @@
 {
-  id: @user.id,
-  email: @user.email,
-  password_digest: @user.password_digest,
+  uuid: @user.uuid,
   username: @user.username,
   first_name: @user.first_name,
-  last_name: @user.last_name,
-  created_at: @user.created_at,
-  updated_at: @user.updated_at
+  last_name: @user.last_name
 }

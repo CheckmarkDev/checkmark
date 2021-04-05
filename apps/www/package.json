@@ -20,6 +20,7 @@
     "@williamdasilva/vue-sticky-directive": "^0.3.0",
     "cookieparser": "^0.1.0",
     "core-js": "^3.6.5",
+    "dayjs": "^1.10.4",
     "js-cookie": "^2.2.1",
     "messageformat": "^2.3.0",
     "messageformat-parser": "^4.1.3",

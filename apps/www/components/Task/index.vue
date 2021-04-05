@@ -1,27 +1,42 @@
 <template>
   <div class="flex flex-col border border-solid border-gray-300 rounded-lg p-4">
-    <div class="flex">
+    <div class="flex mb-2">
       <!-- <div class="w-16">
         <div>
           check
         </div>
       </div> -->
-      <div class="flex flex-col flex-1">
-        <div>
+      <div class="flex flex-col flex-1 leading-tight">
+        <nuxt-link
+          :to="{
+            name: 'User',
+            params: {
+              username: task.user.username
+            }
+          }"
+        >
           <div class="font-medium text-lg">
             {{ task.user.first_name }} {{ task.user.last_name }}
           </div>
-        </div>
-        <div>
+        </nuxt-link>
+        <nuxt-link
+          :to="{
+            name: 'User',
+            params: {
+              username: task.user.username
+            }
+          }"
+          class="text-base text-gray-600"
+        >
           @{{ task.user.username }}
-        </div>
+        </nuxt-link>
       </div>
-      <div>
-        il y a 30 minutes
+      <div class="text-sm text-gray-600">
+        {{ date }}
       </div>
     </div>
     <div>
-      <div>
+      <div class="text-base text-gray-800">
         <p>
           {{ task.content }}
         </p>
@@ -31,13 +46,25 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from '@nuxtjs/composition-api'
+  import dayjs from 'dayjs'
+  import { computed, defineComponent, toRefs } from '@nuxtjs/composition-api'
 
   export default defineComponent({
     props: {
       task: {
         type: Object,
         required: true
+      }
+    },
+    setup (props) {
+      const { task } = toRefs(props)
+
+      const date = computed(() => {
+        return dayjs(task.value.created_at).format('lll')
+      })
+
+      return {
+        date
       }
     }
   })

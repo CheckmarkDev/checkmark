@@ -2,8 +2,8 @@
   <main>
     <div class="home-hero">
       <div class="container mx-auto">
-        <div class="flex items-center justify-between py-8">
-          <div class="w-1/2">
+        <div class="flex flex-col md:flex-row md:items-center justify-between py-8">
+          <div class="md:w-1/2">
             <h1
               class="text-3xl text-white leading-tight mb-4"
               v-text="$trans('home.titles.main')"
@@ -18,6 +18,7 @@
               :to="{
                 path: '/'
               }"
+              class="inline-block mt-4 md:mt-0 bg-white rounded text-blue-500 p-4 font-medium text-base hover:bg-gray-200 hover:shadow-sm"
             >
               {{ $trans('home.buttons.join') }}
             </nuxt-link>
@@ -27,16 +28,22 @@
     </div>
     <div class="home-container">
       <div class="container mx-auto flex items-start">
-        <nav class="bg-white rounded-lg w-3/12 mr-8 p-4">
-          azeaze
+        <nav class="bg-white hidden md:flex rounded-lg w-3/12 mr-8 p-4">
+          <ul class="w-full">
+            <li>
+              <a href="https://www.changelog.xyz/checkmark" class="hover:bg-gray-200 rounded p-2 w-full flex">
+                Changelog
+              </a>
+            </li>
+          </ul>
         </nav>
-        <section class="bg-white rounded-lg w-9/12 p-6">
-          <h2 class="font-medium text-2xl">
+        <section class="bg-white rounded-lg w-full md:w-9/12 p-6">
+          <h2 class="font-medium text-2xl mb-4">
             Feed
           </h2>
-          <h3>
+          <!-- <h3 class="text-xl font-medium mb-4">
             Aujourd'hui
-          </h3>
+          </h3> -->
 
           <Task
             v-for="task in tasks"
@@ -44,10 +51,6 @@
             :task="task"
             class="mb-4"
           />
-
-          <pre>
-            {{ tasks }}
-          </pre>
         </section>
       </div>
     </div>
@@ -85,5 +88,11 @@
 
   .home-container {
     margin-top: -180px;
+  }
+
+  @media only screen and (max-width: 720px) {
+    .home-container {
+      margin-top: -100px;
+    }
   }
 </style>

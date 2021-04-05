@@ -35,6 +35,7 @@ export default {
     '~/plugins/axios',
     '~/plugins/vee-validate',
     '~/plugins/vue-icu.js',
+    '~/plugins/dayjs.js',
     {
       src: '~/plugins/vue-sticky.js', mode: 'client'
     },
