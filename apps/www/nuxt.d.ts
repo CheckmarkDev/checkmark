@@ -7,6 +7,8 @@ declare module 'vue/types/vue' {
     $accessor: typeof accessorType
     $mitt: Emitter
     $wait: VueWaitInstance
+    $toasted: any
+    $trans: any
   }
 }
 
@@ -18,5 +20,7 @@ declare module '@nuxt/types' {
   interface Context {
     $wait: VueWaitInstance
     $mitt: Emitter
+    $toasted: any
+    $trans: any
   }
 }

@@ -10,6 +10,8 @@ declare module '@vue/runtime-core' {
 
   interface ComponentCustomProperties {
     $mitt: Emitter
+    $toasted: any
+    $trans: any
     $accessor: typeof accessorType
   }
 }

@@ -58,9 +58,10 @@
 </template>
 
 <script lang="ts">
+  import { defineComponent } from '@nuxtjs/composition-api'
   import Task from '@/components/Task/index.vue'
 
-  export default {
+  export default defineComponent({
     components: {
       Task
     },
@@ -70,13 +71,19 @@
       }
     },
     async asyncData ({ $axios }) {
-      const res = await $axios.$get('/tasks')
+      try {
+        const res = await $axios.$get('/tasks')
 
-      return {
-        tasks: res.data
+        return {
+          tasks: res.data
+        }
+      } catch (e) {
+        return {
+          tasks: []
+        }
       }
     }
-  }
+  })
 </script>
 
 <style scoped>

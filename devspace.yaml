@@ -172,7 +172,7 @@ deployments:
         - host: api.checkmark.dev
       service:
         ports:
-        - port: 3003
+        - port: 3000
 
 - name: www
   helm:
