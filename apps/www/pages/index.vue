@@ -45,6 +45,11 @@
             Aujourd'hui
           </h3> -->
 
+          <NewTask
+            v-if="$accessor.isAuthenticated"
+            class="mb-8"
+          />
+
           <Task
             v-for="task in tasks"
             :key="task.uuid"
@@ -60,10 +65,12 @@
 <script lang="ts">
   import { defineComponent } from '@nuxtjs/composition-api'
   import Task from '@/components/Task/index.vue'
+  import NewTask from '@/components/NewTask/index.vue'
 
   export default defineComponent({
     components: {
-      Task
+      Task,
+      NewTask
     },
     data () {
       return {

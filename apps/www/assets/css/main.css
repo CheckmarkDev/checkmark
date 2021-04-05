@@ -4,7 +4,7 @@ html, body {
 }
 
 .btn {
-  @apply flex items-center justify-center h-12 rounded text-base font-normal px-4;
+  @apply flex items-center justify-center h-12 rounded text-base font-medium px-4;
 }
 
 .btn-primary {
