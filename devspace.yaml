@@ -101,9 +101,8 @@ deployments:
       - image: williamdasilva/checkmark-api
         resources:
           limits:
-            cpu: 400m
+            cpu: 100m
             memory: 500Mi
-            ephemeralStorage: 2Gi
         env:
         - name: HOST
           value: "0.0.0.0"
@@ -196,7 +195,6 @@ deployments:
           limits:
             cpu: 400m
             memory: 500Mi
-            ephemeralStorage: 2Gi
         env:
         - name: HOST
           value: "0.0.0.0"

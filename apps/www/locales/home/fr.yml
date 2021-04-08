@@ -1,7 +1,10 @@
 home.titles.title: Menons nos projets à terme
 home.titles.main: Menons nos projets à terme, ensemble.
 home.titles.subtitle: Partagez votre progression avec une communauté de développeurs
-home.labels.done: Partagez votre progression avec une communauté de développeurs
+home.labels.done_label: Partagez votre progression avec une communauté de développeurs
+home.labels.done: Fait
+home.labels.doing: En cours
+home.labels.todo: À faire
 home.paragraphs.description: Rejoignez une communauté de developpeurs et développeuses passionné(e)s. Partagez votre progression quotidiennement et discutez autour de vos projets et actions.
 home.paragraphs.task_added: Votre progression a bien été prise en compte !
 home.buttons.join: Rejoindre la communauté

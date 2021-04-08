@@ -17,25 +17,31 @@
             for="task"
             class="text-base text-gray-800 mb-2"
           >
-            {{ $trans('home.labels.done') }}
+            {{ $trans('home.labels.done_label') }}
           </label>
           <div class="flex flex-col md:flex-row">
             <div class="flex flex-1 h-12 border mb-3 md:mb-0 border-solid border-gray-300 rounded md:mr-4">
               <button
                 type="button"
-                class="border border-t-0 border-b-0 border-l-0 border-r border-gray-300 px-4 hover:bg-gray-200"
+                class="new-task__toggle flex items-center border border-t-0 border-b-0 border-l-0 border-r border-gray-300 hover:bg-gray-200"
                 @click="toggleState"
               >
-                <task-check
-                  :state="formData.state"
-                />
+                <div class="flex items-center px-4">
+                  <task-check
+                    :state="formData.state"
+                    class="mr-2"
+                  />
+                  <div class="whitespace-no-wrap">
+                    {{ $trans(state) }}
+                  </div>
+                </div>
               </button>
               <textarea
                 :disabled="$wait.is('creating task')"
                 id="task"
                 v-model="formData.content"
                 name=""
-                class="w-full p-2 border-none rounded appearance-none leading-relaxed"
+                class="flex-1 p-2 border-none rounded appearance-none leading-relaxed"
               ></textarea>
             </div>
             <button
@@ -66,6 +72,19 @@
           state: 'done',
           content: ''
         }
+      }
+    },
+    computed: {
+      state () {
+        const states: {
+          [x: string]: string
+        } = {
+          done: 'home.labels.done',
+          doing: 'home.labels.doing',
+          todo: 'home.labels.todo'
+        }
+
+        return states[(this.formData as any).state]
       }
     },
     methods: {
@@ -107,3 +126,9 @@
     }
   })
 </script>
+
+<style scoped>
+  .new-task__toggle {
+    min-width: 100px;
+  }
+</style>
