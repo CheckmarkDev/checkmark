@@ -1,11 +1,14 @@
 <template>
   <div class="flex flex-col border border-solid border-gray-300 rounded-lg p-4">
     <div class="flex mb-2">
-      <!-- <div class="w-16">
-        <div>
-          check
+      <div class="w-16">
+        <div class="w-12 h-12 rounded-full bg-gray-300 relative">
+          <task-check
+            :state="task.state"
+            class="absolute bottom-0 right-0 bg-white rounded-full"
+          />
         </div>
-      </div> -->
+      </div>
       <div class="flex flex-col flex-1 leading-tight">
         <nuxt-link
           :to="{
@@ -31,12 +34,21 @@
           @{{ task.user.username }}
         </nuxt-link>
       </div>
-      <div class="text-sm text-gray-600">
+      <nuxt-link
+        :to="{
+          name: 'Task',
+          params: {
+            username: task.user.username,
+            task: task.uuid
+          }
+        }"
+        class="text-sm text-gray-600 truncate flex-shrink hover:underline"
+      >
         {{ date }}
-      </div>
+      </nuxt-link>
     </div>
     <div>
-      <div class="text-base text-gray-800">
+      <div class="task__content text-base text-gray-800">
         <p>
           {{ task.content }}
         </p>
@@ -49,7 +61,12 @@
   import dayjs from 'dayjs'
   import { computed, defineComponent, toRefs } from '@nuxtjs/composition-api'
 
+  import TaskCheck from '@/components/TaskCheck/index.vue'
+
   export default defineComponent({
+    components: {
+      TaskCheck
+    },
     props: {
       task: {
         type: Object,
@@ -69,3 +86,9 @@
     }
   })
 </script>
+
+<style scoped>
+  .task__content {
+    padding-left: 64px;
+  }
+</style>

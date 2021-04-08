@@ -27,16 +27,9 @@
             </li>
           </ul>
         </nav>
-        <section class="bg-white w-full h-56 rounded-lg p-6">
-          <h2 class="font-medium text-2xl mb-4">
-            Feed
-          </h2>
-
-          <Task
-            v-for="task in tasks.data"
-            :key="task.uuid"
+        <section class="bg-white w-full md:w-9/12 h-56 rounded-lg p-6">
+          <task
             :task="task"
-            class="mb-4"
           />
         </section>
       </div>
@@ -47,37 +40,47 @@
 <script lang="ts">
   import { defineComponent } from '@nuxtjs/composition-api'
 
+  import Task from '@/components/Task/index.vue'
+
   export default defineComponent({
+    components: {
+      Task
+    },
     data () {
       return {
         user: null,
-        tasks: []
+        task: null
       }
     },
     head () {
       const user = this.user as any
+      const task = this.task as any
       const fullName = `${user.first_name} ${user.last_name}`.trim()
       const description = this.$trans('user.paragraphs.description', {
         user: fullName || user.username
       })
 
       return {
-        title: fullName || user.username,
+        title: task.content,
         meta: [
           { hid: 'description', name: 'description', content: description }
         ]
       }
     },
+    validate ({ route }) {
+      const { username, task } = route.params
+      return !!username && !!task
+    },
     async asyncData ({ $axios, route }) {
-      const { username } = route.params
-      const [user, tasks] = await Promise.all([
+      const { username, task: taskUuid } = route.params
+      const [user, task] = await Promise.all([
         $axios.$get(`/users/${username}`),
-        $axios.$get(`/users/${username}/tasks`)
+        $axios.$get(`/users/${username}/tasks/${taskUuid}`)
       ])
 
       return {
         user,
-        tasks
+        task
       }
     }
   })

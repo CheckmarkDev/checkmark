@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 
 import Home from '@/pages/index.vue'
 import User from '@/pages/user/index.vue'
+import Task from '@/pages/user/task/index.vue'
 import SignIn from '@/pages/auth/sign-in/index.vue'
 
 
@@ -27,6 +28,11 @@ const WEBSITE_ROUTES = [
     name: 'User',
     path: '/u/:username',
     component: User
+  },
+  {
+    name: 'Task',
+    path: '/u/:username/task/:task',
+    component: Task
   }
 ]
 

@@ -14,7 +14,7 @@ class Me::TasksController < ApplicationController
 
   api :POST, '/me/tasks'
   param :content, String, desc: 'Content of the task'
-  param :type, :number, desc: 'Type'
+  param :state, String, desc: 'State'
   def create
     @task = Task.new(task_params)
     @task.user = @current_user
@@ -28,7 +28,7 @@ class Me::TasksController < ApplicationController
 
   api :PUT, '/me/tasks/:id'
   param :content, String, desc: 'Content of the task'
-  param :type, :number, desc: 'Type'
+  param :state, String, desc: 'State'
   def update
     if @task.update(task_params)
       render :show, status: :ok

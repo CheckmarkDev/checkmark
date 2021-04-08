@@ -3,7 +3,8 @@ import VueICU from './vue-icu/index.js'
 export default (ctx, inject) => {
   const TRANSLATION_FILES = [
     'home',
-    'sign-in'
+    'sign-in',
+    'user'
   ]
 
   const messages = {}

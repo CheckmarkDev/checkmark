@@ -2,17 +2,13 @@ export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     titleTemplate: '%s - Checkmark',
-    title: 'Get things done',
     htmlAttrs: {
-      lang: 'en',
+      lang: 'fr',
       dir: 'ltr'
     },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Share your progress with developers around the world and get things done.' },
-      { hid: 'og:description', name: 'og:description', content: 'Share your progress with developers around the world and get things done.' },
-      { hid: 'twitter:description', name: 'twitter:description', content: 'Share your progress with developers around the world and get things done.' },
       { hid: 'og:image', name: 'og:image', content: '' },
       { hid: 'og:image:width', name: 'og:image:width', content: '1200' },
       { hid: 'og:image:height', name: 'og:image:height', content: '628' },
@@ -21,7 +17,7 @@ export default {
       { hid: 'google-site-verification', name: 'google-site-verification', content: 'KuZrNJ2U-XmZnD_4ajl8QQrCkS7Ufj3aqmYcHzJRh2w' },
       { hid: 'og:site_name', property: 'og:site_name', content: 'Checkmark' },
       { hid: 'og:type', property: 'og:type', content: 'website' },
-      { hid: 'og:locale', property: 'og:locale', content: 'en_US' },
+      { hid: 'og:locale', property: 'og:locale', content: 'fr_FR' },
       { hid: 'robots', name: 'robots', content: 'index' }
     ],
   },
