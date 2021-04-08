@@ -40,6 +40,7 @@
                 :disabled="$wait.is('creating task')"
                 id="task"
                 v-model="formData.content"
+                :placeholder="$trans('home.labels.done_placeholder')"
                 name=""
                 class="flex-1 p-2 border-none rounded appearance-none leading-relaxed"
               ></textarea>

@@ -20,6 +20,11 @@ html, body {
   @apply h-12;
 }
 
+input::placeholder,
+textarea::placeholder {
+  @apply text-gray-600;
+}
+
 .textarea {
   @apply py-4;
 }

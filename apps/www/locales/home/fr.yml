@@ -2,6 +2,7 @@ home.titles.title: Menons nos projets à terme
 home.titles.main: Menons nos projets à terme, ensemble.
 home.titles.subtitle: Partagez votre progression avec une communauté de développeurs
 home.labels.done_label: Partagez votre progression avec une communauté de développeurs
+home.labels.done_placeholder: Qu'avez-vous fait aujourd'hui ?
 home.labels.done: Fait
 home.labels.doing: En cours
 home.labels.todo: À faire
