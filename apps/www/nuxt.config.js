@@ -89,6 +89,10 @@ export default {
       name: 'Checkmark',
       lang: 'fr'
     },
+    icon: {
+      source: '[srcDir]/[staticDir]/icon.png',
+      cacheDir: '.nuxt/cache/pwa/icon'
+    }
   },
 
   axios: {
