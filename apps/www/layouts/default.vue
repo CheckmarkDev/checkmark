@@ -6,8 +6,9 @@
 </template>
 
 <script lang="ts">
+  import { defineComponent } from '@nuxtjs/composition-api'
+
   import AppHeader from '@/components/AppHeader/index.vue'
-import { defineComponent } from '@nuxtjs/composition-api'
 
   export default defineComponent({
     components: {
@@ -28,7 +29,6 @@ import { defineComponent } from '@nuxtjs/composition-api'
     }
   })
 </script>
-
 
 <style>
 html {

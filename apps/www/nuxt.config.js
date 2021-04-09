@@ -83,6 +83,14 @@ export default {
   //   publishableKey: process.env.STRIPE_PUBLISHABLE_KEY
   // },
 
+  pwa: {
+    workbox: false,
+    manifest: {
+      name: 'Checkmark',
+      lang: 'fr'
+    },
+  },
+
   axios: {
     baseURL: 'http://back:3333/api',
     browserBaseURL: 'http://localhost:3333/api'

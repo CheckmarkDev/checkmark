@@ -1,28 +1,32 @@
 import VueICU from './vue-icu/index.js'
 
-export default (ctx, inject) => {
-  const TRANSLATION_FILES = [
-    'home',
-    'sign-in',
-    'user'
-  ]
+const TRANSLATION_FILES = [
+  'home',
+  'sign-in',
+  'user'
+]
 
-  const messages = {}
+const LOCALES = ['fr']
 
-  TRANSLATION_FILES.forEach((file) => {
-    const translations = require(`./../locales/${file}/fr.yml`)
-    messages.fr = {
-      ...messages.fr,
+const messages = {}
+
+TRANSLATION_FILES.forEach((file) => {
+  LOCALES.forEach(locale => {
+    const translations = require(`./../locales/${file}/${locale}.yml`)
+    messages[locale] = {
+      ...messages[locale],
       ...translations
     }
   })
+})
 
-  const icu = new VueICU({
-    locale: 'fr',
-    fallbackLocale: 'fr',
-    messages
-  })
+export const icu = new VueICU({
+  locale: 'fr',
+  fallbackLocale: 'fr',
+  messages
+})
 
+export default (ctx, inject) => {
   inject('trans', (path, args) => {
     return icu.trans(path, args)
   })

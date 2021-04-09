@@ -6,9 +6,11 @@ import User from '@/pages/user/index.vue'
 import Task from '@/pages/user/task/index.vue'
 import SignIn from '@/pages/auth/sign-in/index.vue'
 
+import { icu } from '@/plugins/vue-icu'
 
 Vue.use(VueRouter)
 
+const locales = ['fr']
 
 const AUTH_ROUTES = [
   {
@@ -36,19 +38,44 @@ const WEBSITE_ROUTES = [
   }
 ]
 
+function buildRoutes () {
+  const defaultRoutes = [
+    ...AUTH_ROUTES,
+    ...WEBSITE_ROUTES
+  ]
+
+  const localizedRoutes = defaultRoutes.map(route => ({
+    ...route,
+    // path: `/:locale(${locales.join('|')})${route.path}`,
+    meta: {
+      localized: true
+    }
+  }))
+
+  // const redirectRoutes = defaultRoutes.map(route => ({
+  //   ...route,
+  //   name: `${route.name}-redirect`,
+  //   redirect: `/fr${route.path}`
+  // }))
+
+  return [
+    ...localizedRoutes,
+    // ...redirectRoutes
+  ]
+}
+
 export function createRouter() {
   const router = new VueRouter({
     mode: 'history',
-    routes: [
-      ...WEBSITE_ROUTES,
-      ...AUTH_ROUTES,
-      // {
-      //   name: 'NotFound',
-      //   component: NotFound,
-      //   path: '*'
-      // }
-    ],
+    routes: buildRoutes(),
     scrollBehavior: () => ({ x: 0, y: 0 })
+  })
+
+  router.beforeEach((to, from, next) => {
+    if (to.meta.localized) {
+      icu.locale = to.params.locale
+    }
+    next()
   })
 
   return router
