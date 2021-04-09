@@ -52,14 +52,24 @@
         <p>
           {{ task.content }}
         </p>
+        <button
+          v-if="$accessor.getAuthUser && task.user.uuid === $accessor.getAuthUser.uuid && task.state !== 'done'"
+          :disabled="$wait.is(`marking ${task.uuid} as done`)"
+          type="button"
+          class="border border-solid border-gray-300 hover:bg-gray-200 px-2 py-1 rounded mt-4 text-sm"
+          @click="done"
+        >
+          <div class="flex items-center">
+            <task-check
+              state="done"
+              class="mr-2 w-4 h-4"
+            />
+            <div
+              v-text="$trans('home.buttons.mark-as-done')"
+            />
+          </div>
+        </button>
       </div>
-      <button
-        :disabled="$wait.is(`marking ${task.uuid} as done`)"
-        type="button"
-        @click="done"
-      >
-        Mark as done
-      </button>
     </div>
     <div>
     </div>
