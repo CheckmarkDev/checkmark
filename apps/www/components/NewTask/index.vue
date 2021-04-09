@@ -118,7 +118,9 @@
               content: content.trim() || null
             })
               .then(() => {
+                this.formData.content = ''
                 this.$toasted.success(this.$trans('home.paragraphs.task_added'))
+                this.$mitt.emit('update-tasks')
               })
               .finally(() => {
                 this.$wait.end('creating task')

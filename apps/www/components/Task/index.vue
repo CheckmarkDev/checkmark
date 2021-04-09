@@ -82,6 +82,7 @@
 
   import useWait from '@/composables/useWait'
   import useAxios from '@/composables/useAxios'
+  import useMitt from '@/composables/useMitt'
   import TaskCheck from '@/components/TaskCheck/index.vue'
 
   import { Task } from '@/types/task'
@@ -100,6 +101,7 @@
       const { task } = toRefs(props)
       const wait = useWait()
       const axios = useAxios()
+      const mitt = useMitt()
 
       const date = computed(() => {
         return dayjs(task.value.created_at).format('lll')
@@ -112,6 +114,9 @@
         axios.put(`/me/tasks/${uuid}`, {
           state: 'done'
         })
+          .then(() => {
+            mitt.emit('update-tasks')
+          })
           .finally(() => {
             wait.end(`marking ${uuid} as done`)
           })

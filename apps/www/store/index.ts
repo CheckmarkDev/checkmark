@@ -2,11 +2,25 @@ import { ActionTree, GetterTree, MutationTree, ActionContext } from 'vuex'
 import cookieparser from 'cookieparser'
 import { getAccessorType } from 'typed-vuex'
 import { User } from '~/types/user'
+import { Task } from '~/types/task'
+import { NuxtAxiosInstance } from '@nuxtjs/axios'
 
 export interface State {
   auth: {
     token: string | null
     user: User | null
+  },
+  tasks: {
+    items: Array<Task>
+  }
+}
+
+type PaginateResponse<T> = {
+  data: Array<T>,
+  meta: {
+    current_page: number,
+    total_pages: number,
+    count: number
   }
 }
 
@@ -16,6 +30,9 @@ export const state = (): State => ({
   auth: {
     token: null,
     user: null
+  },
+  tasks: {
+    items: []
   }
 })
 
@@ -23,12 +40,14 @@ export type RootState = ReturnType<typeof state>
 
 export enum GetterTypes {
   isAuthenticated = 'isAuthenticated',
-  getAuthUser = 'getAuthUser'
+  getAuthUser = 'getAuthUser',
+  getTasks = 'getTasks'
 }
 
 export type Getters<S> = {
   [GetterTypes.isAuthenticated]: (state: S) => boolean
   [GetterTypes.getAuthUser]: (state: S) => User | null
+  [GetterTypes.getTasks]: (state: S) => Array<Task>
 }
 
 export type InnerGetter = {
@@ -37,17 +56,20 @@ export type InnerGetter = {
 
 export const getters: GetterTree<RootState, RootState> & Getters<RootState> = {
   isAuthenticated: state => !!state.auth.token,
-  getAuthUser: state => state.auth.user
+  getAuthUser: state => state.auth.user,
+  getTasks: state => state.tasks.items
 }
 
 export enum MutationTypes {
   SET_AUTH_TOKEN = 'SET_AUTH_TOKEN',
-  SET_AUTH_USER = 'SET_AUTH_USER'
+  SET_AUTH_USER = 'SET_AUTH_USER',
+  SET_TASKS = 'SET_TASKS'
 }
 
 export type Mutations<S = RootState> = {
   [MutationTypes.SET_AUTH_TOKEN](state: S, token: string | null): void
   [MutationTypes.SET_AUTH_USER](state: S, user: User | null): void
+  [MutationTypes.SET_TASKS](state: S, tasks: Array<Task>): void
 }
 
 export const mutations: MutationTree<RootState> & Mutations = {
@@ -56,12 +78,17 @@ export const mutations: MutationTree<RootState> & Mutations = {
   },
   [MutationTypes.SET_AUTH_USER] (state, user) {
     state.auth.user = user
+  },
+  [MutationTypes.SET_TASKS] (state, tasks) {
+    state.tasks.items = tasks
   }
 }
 
 export enum ActionTypes {
   setAuthToken = 'setAuthToken',
   setAuthUser = 'setAuthUser',
+  retrieveTasks = 'retrieveTasks',
+  createTask = 'createTask',
 }
 
 type AugmentedActionContext = {
@@ -74,6 +101,7 @@ type AugmentedActionContext = {
 export interface Actions<R = RootState> {
   [ActionTypes.setAuthToken]({ commit }: AugmentedActionContext, token: string | null): void
   [ActionTypes.setAuthUser]({ commit }: AugmentedActionContext, user: User | null): void
+  [ActionTypes.retrieveTasks]({ commit }: AugmentedActionContext): Promise<PaginateResponse<Task>>
 }
 
 export const actions: ActionTree<RootState, RootState> & Actions = {
@@ -82,6 +110,14 @@ export const actions: ActionTree<RootState, RootState> & Actions = {
   },
   [ActionTypes.setAuthUser] ({ commit }, user) {
     commit(MutationTypes.SET_AUTH_USER, user)
+  },
+  [ActionTypes.retrieveTasks] ({ commit }) {
+    return (this.$axios as NuxtAxiosInstance).$get('/tasks')
+      .then((res: PaginateResponse<Task>) => {
+        commit(MutationTypes.SET_TASKS, res.data)
+
+        return res
+      })
   },
   nuxtServerInit ({ commit }, { req }) {
     let token = null

@@ -51,7 +51,7 @@
           />
 
           <Task
-            v-for="task in tasks"
+            v-for="task in $accessor.getTasks"
             :key="task.uuid"
             :task="task"
             class="mb-4"
@@ -72,22 +72,18 @@
       Task,
       NewTask
     },
-    data () {
-      return {
-        tasks: []
-      }
+    async middleware ({ store }) {
+      await store.dispatch('retrieveTasks')
     },
-    async asyncData ({ $axios }) {
-      try {
-        const res = await $axios.$get('/tasks')
-
-        return {
-          tasks: res.data
-        }
-      } catch (e) {
-        return {
-          tasks: []
-        }
+    mounted () {
+      this.$mitt.on('update-tasks', this.updateTasks)
+    },
+    beforeDestroy () {
+      this.$mitt.off('update-tasks', this.updateTasks)
+    },
+    methods: {
+      updateTasks () {
+        this.$accessor.retrieveTasks()
       }
     }
   })
