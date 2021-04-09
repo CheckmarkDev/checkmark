@@ -1,9 +1,7 @@
 import { ActionTree, GetterTree, MutationTree, ActionContext } from 'vuex'
 import cookieparser from 'cookieparser'
 import { getAccessorType } from 'typed-vuex'
-
-export type User = {
-}
+import { User } from '~/types/user'
 
 export interface State {
   auth: {

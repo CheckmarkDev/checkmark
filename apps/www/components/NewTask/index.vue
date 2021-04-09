@@ -62,6 +62,7 @@
 <script lang="ts">
   import { defineComponent } from '@nuxtjs/composition-api'
   import TaskCheck from '@/components/TaskCheck/index.vue'
+  import { TaskState } from '~/types/task'
 
   export default defineComponent({
     components: {
@@ -70,7 +71,7 @@
     data () {
       return {
         formData: {
-          state: 'done',
+          state: 'done' as TaskState,
           content: ''
         }
       }
@@ -92,14 +93,14 @@
       toggleState () {
         const { state } = this.formData
         switch (state) {
-          case 'done':
-            this.formData.state = 'todo'
+          case TaskState.DONE:
+            this.formData.state = TaskState.TODO
             break;
-          case 'todo':
-            this.formData.state = 'doing'
+          case TaskState.TODO:
+            this.formData.state = TaskState.DOING
             break;
-          case 'doing':
-            this.formData.state = 'done'
+          case TaskState.DOING:
+            this.formData.state = TaskState.DONE
             break;
         }
       },

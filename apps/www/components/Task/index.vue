@@ -53,6 +53,15 @@
           {{ task.content }}
         </p>
       </div>
+      <button
+        :disabled="$wait.is(`marking ${task.uuid} as done`)"
+        type="button"
+        @click="done"
+      >
+        Mark as done
+      </button>
+    </div>
+    <div>
     </div>
   </div>
 </template>
@@ -61,7 +70,11 @@
   import dayjs from 'dayjs'
   import { computed, defineComponent, toRefs } from '@nuxtjs/composition-api'
 
+  import useWait from '@/composables/useWait'
+  import useAxios from '@/composables/useAxios'
   import TaskCheck from '@/components/TaskCheck/index.vue'
+
+  import { Task } from '@/types/task'
 
   export default defineComponent({
     components: {
@@ -69,19 +82,34 @@
     },
     props: {
       task: {
-        type: Object,
+        type: Object as () => Task,
         required: true
       }
     },
     setup (props) {
       const { task } = toRefs(props)
+      const wait = useWait()
+      const axios = useAxios()
 
       const date = computed(() => {
         return dayjs(task.value.created_at).format('lll')
       })
 
+
+      function done () {
+        const { uuid } = task.value
+        wait.start(`marking ${uuid} as done`)
+        axios.put(`/me/tasks/${uuid}`, {
+          state: 'done'
+        })
+          .finally(() => {
+            wait.end(`marking ${uuid} as done`)
+          })
+      }
+
       return {
-        date
+        date,
+        done
       }
     }
   })

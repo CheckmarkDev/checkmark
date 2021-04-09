@@ -8,6 +8,7 @@
 
 <script lang="ts">
   import { computed, defineComponent, toRefs } from '@nuxtjs/composition-api'
+  import { TaskState } from '~/types/task'
 
   const icons: {[x: string]: any} = {
     todo: require('@/assets/img/icons/todo.svg'),
@@ -18,7 +19,7 @@
   export default defineComponent({
     props: {
       state: {
-        type: String,
+        type: String as () => TaskState,
         required: true
       }
     },

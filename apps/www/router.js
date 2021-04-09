@@ -71,12 +71,5 @@ export function createRouter() {
     scrollBehavior: () => ({ x: 0, y: 0 })
   })
 
-  router.beforeEach((to, from, next) => {
-    if (to.meta.localized) {
-      icu.locale = to.params.locale
-    }
-    next()
-  })
-
   return router
 }
