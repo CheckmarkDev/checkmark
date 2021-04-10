@@ -60,7 +60,6 @@
           {{ task.content }}
         </p>
         <div
-          v-if="$accessor.getAuthUser"
           class="flex items-center mt-4"
         >
           <like-button
@@ -69,7 +68,7 @@
           />
 
           <mark-as-button
-            v-if="task.user.uuid === $accessor.getAuthUser.uuid && task.state !== 'done'"
+            v-if="$accessor.getAuthUser && task.user.uuid === $accessor.getAuthUser.uuid && task.state !== 'done'"
             :task="task"
           />
         </div>

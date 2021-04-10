@@ -1,9 +1,9 @@
 <template>
   <button
-    :disabled="$wait.is(`liking ${task.uuid}`) || isSelfTask"
+    :disabled="$wait.is(`liking ${task.uuid}`) || isSelfTask || !$accessor.isAuthenticated"
     :class="{
       'like-button--liked': hasLiked,
-      'like-button--self': isSelfTask
+      'like-button--self': isSelfTask || !$accessor.isAuthenticated
     }"
     type="button"
     class="like-button relative h-8 w-8 border border-solid border-gray-400 hover:bg-gray-200 rounded-full"
