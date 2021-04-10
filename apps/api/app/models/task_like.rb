@@ -6,4 +6,6 @@ class TaskLike < ApplicationRecord
     :active,
     :inactive
   ]
+
+  scope :from_user, -> (user) { where(user: user) }
 end

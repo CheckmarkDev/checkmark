@@ -59,10 +59,20 @@
         <p>
           {{ task.content }}
         </p>
-        <mark-as-button
-          v-if="$accessor.getAuthUser && task.user.uuid === $accessor.getAuthUser.uuid && task.state !== 'done'"
-          :task="task"
-        />
+        <div
+          v-if="$accessor.getAuthUser"
+          class="flex items-center mt-4"
+        >
+          <like-button
+            :task="task"
+            class="mr-4"
+          />
+
+          <mark-as-button
+            v-if="task.user.uuid === $accessor.getAuthUser.uuid && task.state !== 'done'"
+            :task="task"
+          />
+        </div>
       </div>
     </div>
     <div>
@@ -76,6 +86,7 @@
 
   import TaskCheck from '@/components/TaskCheck/index.vue'
   import MarkAsButton from './MarkAsButton/index.vue'
+  import LikeButton from './LikeButton/index.vue'
   import TaskActions from './TaskActions/index.vue'
 
   import { Task } from '@/types/task'
@@ -83,6 +94,7 @@
   export default defineComponent({
     components: {
       TaskCheck,
+      LikeButton,
       TaskActions,
       MarkAsButton
     },

@@ -12,4 +12,5 @@ export type Task = {
   content: string
   user: User
   created_at: string
+  likes: string[]
 }

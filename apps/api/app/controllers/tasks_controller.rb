@@ -4,7 +4,7 @@ class TasksController < ApplicationController
 
   api :GET, '/tasks'
   def index
-    @tasks = Task.order(created_at: :desc).page(params[:page])
+    @tasks = Task.includes(:task_likes, :user).order(created_at: :desc).page(params[:page])
   end
 
   api :POST, '/tasks/:uuid/like'
