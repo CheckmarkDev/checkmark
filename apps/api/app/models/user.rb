@@ -3,6 +3,7 @@ class User < ApplicationRecord
 
   has_many :tokens
   has_many :tasks
+  has_many :task_likes
 
   validates :email, presence: true, uniqueness: true
   validates :username, presence: true, uniqueness: true, length: { minimum: 2 }

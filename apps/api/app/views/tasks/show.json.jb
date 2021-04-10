@@ -10,5 +10,9 @@
     username: @task.user.username,
     first_name: @task.user.first_name,
     last_name: @task.user.last_name
+  },
+
+  likes: {
+    count: @task.task_likes.active.count
   }
 }

@@ -1,8 +1,14 @@
 Rails.application.routes.draw do
+  resources :task_likes
   apipie
 
   defaults format: :json do
-    resources :tasks
+    resources :tasks do
+      member do
+        post :like
+        delete :like, to: 'tasks#dislike'
+      end
+    end
     resources :users
 
     get '/users/:id/tasks', to: 'user_tasks#index'
