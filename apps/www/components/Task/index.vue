@@ -48,6 +48,7 @@
           {{ date }}
         </nuxt-link>
         <task-actions
+          v-if="$accessor.getAuthUser && task.user.uuid === $accessor.getAuthUser.uuid"
           :task="task"
           class="ml-3"
         />
