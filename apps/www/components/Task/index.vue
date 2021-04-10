@@ -48,27 +48,14 @@
       </nuxt-link>
     </div>
     <div>
-      <div class="task__content text-base text-gray-800">
+      <div class="task__content flex flex-col text-base text-gray-800">
         <p>
           {{ task.content }}
         </p>
-        <button
+        <mark-as-button
           v-if="$accessor.getAuthUser && task.user.uuid === $accessor.getAuthUser.uuid && task.state !== 'done'"
-          :disabled="$wait.is(`marking ${task.uuid} as done`)"
-          type="button"
-          class="border border-solid border-gray-300 hover:bg-gray-200 px-2 py-1 rounded mt-4 text-sm"
-          @click="done"
-        >
-          <div class="flex items-center">
-            <task-check
-              state="done"
-              class="mr-2 w-4 h-4"
-            />
-            <div
-              v-text="$trans('home.buttons.mark-as-done')"
-            />
-          </div>
-        </button>
+          :task="task"
+        />
       </div>
     </div>
     <div>
@@ -80,16 +67,15 @@
   import dayjs from 'dayjs'
   import { computed, defineComponent, toRefs } from '@nuxtjs/composition-api'
 
-  import useWait from '@/composables/useWait'
-  import useAxios from '@/composables/useAxios'
-  import useMitt from '@/composables/useMitt'
   import TaskCheck from '@/components/TaskCheck/index.vue'
+  import MarkAsButton from './MarkAsButton/index.vue'
 
   import { Task } from '@/types/task'
 
   export default defineComponent({
     components: {
-      TaskCheck
+      TaskCheck,
+      MarkAsButton
     },
     props: {
       task: {
@@ -99,32 +85,13 @@
     },
     setup (props) {
       const { task } = toRefs(props)
-      const wait = useWait()
-      const axios = useAxios()
-      const mitt = useMitt()
 
       const date = computed(() => {
         return dayjs(task.value.created_at).format('lll')
       })
 
-
-      function done () {
-        const { uuid } = task.value
-        wait.start(`marking ${uuid} as done`)
-        axios.put(`/me/tasks/${uuid}`, {
-          state: 'done'
-        })
-          .then(() => {
-            mitt.emit('update-tasks')
-          })
-          .finally(() => {
-            wait.end(`marking ${uuid} as done`)
-          })
-      }
-
       return {
-        date,
-        done
+        date
       }
     }
   })
