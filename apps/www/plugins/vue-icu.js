@@ -1,6 +1,7 @@
 import VueICU from './vue-icu/index.js'
 
 const TRANSLATION_FILES = [
+  'global',
   'home',
   'sign-in',
   'user'
