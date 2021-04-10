@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main v-infinite-scroll="loadMore">
     <div class="home-hero">
       <div class="container mx-auto">
         <div class="flex flex-col md:flex-row md:items-center justify-between py-8">
@@ -84,6 +84,9 @@
     methods: {
       updateTasks () {
         this.$accessor.retrieveTasks()
+      },
+      loadMore () {
+        this.$accessor.retrieveMoreTasks()
       }
     }
   })

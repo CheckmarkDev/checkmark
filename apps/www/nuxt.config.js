@@ -34,6 +34,9 @@ export default {
     '~/plugins/vue-icu.js',
     '~/plugins/dayjs.js',
     {
+      src: '~/plugins/vue-infinite-scroll.js', mode: 'client'
+    },
+    {
       src: '~/plugins/vue-sticky.js', mode: 'client'
     },
     {

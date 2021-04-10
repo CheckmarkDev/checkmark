@@ -1,9 +1,12 @@
 <template>
-  <main>
+  <main v-infinite-scroll="loadMore">
     <div class="home-hero">
       <div class="container mx-auto">
         <div class="flex items-center justify-between py-8">
-          <div class="w-1/2">
+          <div
+            v-if="user"
+            class="w-1/2"
+          >
             <h1
               class="text-3xl text-white leading-tight mb-4"
               v-text="`${user.first_name} ${user.last_name}`"
@@ -46,12 +49,23 @@
 
 <script lang="ts">
   import { defineComponent } from '@nuxtjs/composition-api'
+  import { Task } from '~/types/task'
+  import { User } from '~/types/user'
 
   export default defineComponent({
     data () {
       return {
         user: null,
-        tasks: []
+        tasks: {
+          data: [],
+          meta: null
+        }
+      } as {
+        user: User | null,
+        tasks: {
+          data: Array<Task>,
+          meta: any
+        }
       }
     },
     head () {
@@ -78,6 +92,25 @@
       return {
         user,
         tasks
+      }
+    },
+    methods: {
+      loadMore () {
+        if (this.tasks.meta.current_page + 1 > this.tasks.meta.total_pages) return
+
+        const { username } = this.$route.params
+        this.$axios.$get(`/users/${username}/tasks`, {
+          params: {
+            page: this.tasks.meta.current_page + 1
+          }
+        })
+          .then(res => {
+            this.tasks.data = [
+              ...this.tasks.data,
+              ...res.data
+            ]
+            this.tasks.meta = res.meta
+          })
       }
     }
   })
