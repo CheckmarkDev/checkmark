@@ -23,7 +23,7 @@
             <div class="flex flex-1 items-start mb-3 md:mb-0 md:mr-4">
               <button
                 type="button"
-                class="new-task__toggle h-12 flex items-center border border-r-0 border-gray-300 hover:bg-gray-200"
+                class="new-task__toggle h-12 flex items-center border border-r-0 border-gray-300 hover:bg-gray-200 rounded-tl rounded-bl"
                 @click="toggleState"
               >
                 <div class="flex items-center px-4">
