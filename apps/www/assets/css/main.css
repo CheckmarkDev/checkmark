@@ -33,3 +33,11 @@ textarea::placeholder {
 .textarea--invalid {
   @apply border-red-500;
 }
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 200ms;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}

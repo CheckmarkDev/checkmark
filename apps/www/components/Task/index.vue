@@ -34,18 +34,24 @@
           @{{ task.user.username }}
         </nuxt-link>
       </div>
-      <nuxt-link
-        :to="{
-          name: 'Task',
-          params: {
-            username: task.user.username,
-            task: task.uuid
-          }
-        }"
-        class="text-sm text-gray-600 truncate flex-shrink hover:underline"
-      >
-        {{ date }}
-      </nuxt-link>
+      <div class="flex items-center">
+        <nuxt-link
+          :to="{
+            name: 'Task',
+            params: {
+              username: task.user.username,
+              task: task.uuid
+            }
+          }"
+          class="text-sm text-gray-600 truncate flex-shrink hover:underline"
+        >
+          {{ date }}
+        </nuxt-link>
+        <task-actions
+          :task="task"
+          class="ml-3"
+        />
+      </div>
     </div>
     <div>
       <div class="task__content flex flex-col text-base text-gray-800">
@@ -69,12 +75,14 @@
 
   import TaskCheck from '@/components/TaskCheck/index.vue'
   import MarkAsButton from './MarkAsButton/index.vue'
+  import TaskActions from './TaskActions/index.vue'
 
   import { Task } from '@/types/task'
 
   export default defineComponent({
     components: {
       TaskCheck,
+      TaskActions,
       MarkAsButton
     },
     props: {
