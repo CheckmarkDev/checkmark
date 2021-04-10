@@ -4,6 +4,7 @@ const TRANSLATION_FILES = [
   'global',
   'home',
   'sign-in',
+  'sign-up',
   'user'
 ]
 

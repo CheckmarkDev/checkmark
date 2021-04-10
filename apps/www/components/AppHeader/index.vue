@@ -24,13 +24,22 @@
           <template
             v-if="!$accessor.isAuthenticated"
           >
-            <li>
+            <li class="mr-6">
               <nuxt-link
                 :to="{
                   name: 'SignIn'
                 }"
               >
                 {{ $trans('global.buttons.sign-in') }}
+              </nuxt-link>
+            </li>
+            <li>
+              <nuxt-link
+                :to="{
+                  name: 'SignUp'
+                }"
+              >
+                {{ $trans('global.buttons.sign-up') }}
               </nuxt-link>
             </li>
           </template>

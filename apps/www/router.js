@@ -5,18 +5,20 @@ import Home from '@/pages/index.vue'
 import User from '@/pages/user/index.vue'
 import Task from '@/pages/user/task/index.vue'
 import SignIn from '@/pages/auth/sign-in/index.vue'
-
-import { icu } from '@/plugins/vue-icu'
+import SignUp from '@/pages/auth/sign-up/index.vue'
 
 Vue.use(VueRouter)
-
-const locales = ['fr']
 
 const AUTH_ROUTES = [
   {
     name: 'SignIn',
     path: '/auth/sign-in',
     component: SignIn
+  },
+  {
+    name: 'SignUp',
+    path: '/auth/sign-up',
+    component: SignUp
   }
 ]
 
