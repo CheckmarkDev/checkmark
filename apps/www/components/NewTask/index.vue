@@ -20,18 +20,18 @@
             {{ $trans('home.labels.done_label') }}
           </label>
           <div class="flex flex-col md:flex-row">
-            <div class="flex flex-1 h-12 border mb-3 md:mb-0 border-solid border-gray-300 rounded md:mr-4">
+            <div class="flex flex-1 items-start mb-3 md:mb-0 md:mr-4">
               <button
                 type="button"
-                class="new-task__toggle flex items-center border border-t-0 border-b-0 border-l-0 border-r border-gray-300 hover:bg-gray-200"
+                class="new-task__toggle h-12 flex items-center border border-r-0 border-gray-300 hover:bg-gray-200"
                 @click="toggleState"
               >
                 <div class="flex items-center px-4">
                   <task-check
                     :state="formData.state"
-                    class="mr-2"
+                    class="md:mr-2"
                   />
-                  <div class="whitespace-no-wrap">
+                  <div class="hidden md:inline-block whitespace-no-wrap">
                     {{ $trans(state) }}
                   </div>
                 </div>
@@ -42,7 +42,7 @@
                 v-model="formData.content"
                 :placeholder="$trans('home.labels.done_placeholder')"
                 name=""
-                class="flex-1 p-2 border-none rounded appearance-none leading-relaxed"
+                class="flex-1 p-2 rounded-bl rounded-br rounded-tr appearance-none leading-relaxed border border-gray-300 border-solid"
               ></textarea>
             </div>
             <button
@@ -133,6 +133,8 @@
 
 <style scoped>
   .new-task__toggle {
-    min-width: 100px;
+    @screen md {
+      min-width: 100px;
+    }
   }
 </style>
