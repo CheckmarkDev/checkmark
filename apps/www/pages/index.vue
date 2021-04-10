@@ -16,7 +16,7 @@
           <div>
             <nuxt-link
               :to="{
-                path: '/'
+                name: 'SignUp'
               }"
               class="inline-block mt-4 md:mt-0 bg-white rounded text-blue-500 p-4 font-medium text-base hover:bg-gray-200 hover:shadow-sm"
             >
