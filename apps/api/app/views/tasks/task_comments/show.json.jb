@@ -1,0 +1,15 @@
+json = {
+  uuid: @task_comment.uuid,
+  content: @task_comment.content,
+  created_at: @task_comment.created_at,
+  updated_at: @task_comment.updated_at,
+
+  user: {
+    uuid: @task_comment.user.uuid,
+    username: @task_comment.user.username,
+    first_name: @task_comment.user.first_name,
+    last_name: @task_comment.user.last_name
+  }
+}
+
+json

@@ -26,6 +26,10 @@ json[:data] = @tasks.map do |task|
     User.find_by_id(like.user_id).uuid
   end
 
+  v[:metrics] = {
+    comments: task.task_comments.count
+  }
+
   v
 end
 

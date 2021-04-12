@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :task_likes
   apipie
 
   defaults format: :json do
@@ -8,6 +7,8 @@ Rails.application.routes.draw do
         post :like
         delete :like, to: 'tasks#dislike'
       end
+
+      resources :task_comments, path: 'comments'
     end
     resources :users
 
