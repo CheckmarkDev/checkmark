@@ -4,6 +4,7 @@ import { getAccessorType } from 'typed-vuex'
 import { User } from '~/types/user'
 import { Task } from '~/types/task'
 import { NuxtAxiosInstance } from '@nuxtjs/axios'
+import { TaskGroup } from '~/types/taskGroup'
 
 type PaginateResponseMeta = {
   current_page: number,
@@ -16,8 +17,8 @@ export interface State {
     token: string | null
     user: User | null
   },
-  tasks: {
-    items: Array<Task>
+  taskGroups: {
+    items: Array<TaskGroup>
     meta: PaginateResponseMeta | null
   }
 }
@@ -34,7 +35,7 @@ export const state = (): State => ({
     token: null,
     user: null
   },
-  tasks: {
+  taskGroups: {
     items: [],
     meta: null
   }
@@ -45,15 +46,15 @@ export type RootState = ReturnType<typeof state>
 export enum GetterTypes {
   isAuthenticated = 'isAuthenticated',
   getAuthUser = 'getAuthUser',
-  getTasks = 'getTasks',
-  getTasksMeta = 'getTasksMeta'
+  getTaskGroups = 'getTaskGroups',
+  getTaskGroupsMeta = 'getTaskGroupsMeta'
 }
 
 export type Getters<S = RootState> = {
   [GetterTypes.isAuthenticated]: (state: S) => boolean
   [GetterTypes.getAuthUser]: (state: S) => User | null
-  [GetterTypes.getTasks]: (state: S) => Array<Task>
-  [GetterTypes.getTasksMeta]: (state: S) => PaginateResponseMeta | null
+  [GetterTypes.getTaskGroups]: (state: S) => Array<TaskGroup>
+  [GetterTypes.getTaskGroupsMeta]: (state: S) => PaginateResponseMeta | null
 }
 
 export type InnerGetter = {
@@ -63,24 +64,24 @@ export type InnerGetter = {
 export const getters: GetterTree<RootState, RootState> & Getters<RootState> = {
   isAuthenticated: state => !!state.auth.token,
   getAuthUser: state => state.auth.user,
-  getTasks: state => state.tasks.items,
-  getTasksMeta: state => state.tasks.meta
+  getTaskGroups: state => state.taskGroups.items,
+  getTaskGroupsMeta: state => state.taskGroups.meta
 }
 
 export enum MutationTypes {
   SET_AUTH_TOKEN = 'SET_AUTH_TOKEN',
   SET_AUTH_USER = 'SET_AUTH_USER',
-  SET_TASKS = 'SET_TASKS',
-  PUSH_TASKS = 'PUSH_TASKS',
-  SET_TASKS_META = 'SET_TASKS_META'
+  SET_TASK_GROUPS = 'SET_TASK_GROUPS',
+  PUSH_TASK_GROUPS = 'PUSH_TASK_GROUPS',
+  SET_TASK_GROUPS_META = 'SET_TASK_GROUPS_META'
 }
 
 export type Mutations<S = RootState> = {
   [MutationTypes.SET_AUTH_TOKEN](state: S, token: string | null): void
   [MutationTypes.SET_AUTH_USER](state: S, user: User | null): void
-  [MutationTypes.SET_TASKS](state: S, tasks: Array<Task>): void
-  [MutationTypes.PUSH_TASKS](state: S, tasks: Array<Task>): void
-  [MutationTypes.SET_TASKS_META](state: S, meta: PaginateResponseMeta): void
+  [MutationTypes.SET_TASK_GROUPS](state: S, taskGroups: Array<TaskGroup>): void
+  [MutationTypes.PUSH_TASK_GROUPS](state: S, taskGroups: Array<TaskGroup>): void
+  [MutationTypes.SET_TASK_GROUPS_META](state: S, meta: PaginateResponseMeta): void
 }
 
 export const mutations: MutationTree<RootState> & Mutations = {
@@ -90,25 +91,25 @@ export const mutations: MutationTree<RootState> & Mutations = {
   [MutationTypes.SET_AUTH_USER] (state, user) {
     state.auth.user = user
   },
-  [MutationTypes.SET_TASKS] (state, tasks) {
-    state.tasks.items = tasks
+  [MutationTypes.SET_TASK_GROUPS] (state, taskGroups) {
+    state.taskGroups.items = taskGroups
   },
-  [MutationTypes.PUSH_TASKS] (state, tasks) {
-    state.tasks.items = [
-      ...state.tasks.items,
-      ...tasks
+  [MutationTypes.PUSH_TASK_GROUPS] (state, taskGroups) {
+    state.taskGroups.items = [
+      ...state.taskGroups.items,
+      ...taskGroups
     ]
   },
-  [MutationTypes.SET_TASKS_META] (state, meta) {
-    state.tasks.meta = meta
+  [MutationTypes.SET_TASK_GROUPS_META] (state, meta) {
+    state.taskGroups.meta = meta
   }
 }
 
 export enum ActionTypes {
   setAuthToken = 'setAuthToken',
   setAuthUser = 'setAuthUser',
-  retrieveTasks = 'retrieveTasks',
-  retrieveMoreTasks = 'retrieveMoreTasks',
+  retrieveTaskGroups = 'retrieveTaskGroups',
+  retrieveMoreTaskGroups = 'retrieveMoreTaskGroups',
   createTask = 'createTask',
 }
 
@@ -124,8 +125,8 @@ type AugmentedActionContext = {
 export interface Actions<R = RootState> {
   [ActionTypes.setAuthToken]({ commit }: AugmentedActionContext, token: string | null): void
   [ActionTypes.setAuthUser]({ commit }: AugmentedActionContext, user: User | null): void
-  [ActionTypes.retrieveTasks]({ commit }: AugmentedActionContext): Promise<PaginateResponse<Task>>
-  [ActionTypes.retrieveMoreTasks]({ commit }: AugmentedActionContext): Promise<PaginateResponse<Task>> | void
+  [ActionTypes.retrieveTaskGroups]({ commit }: AugmentedActionContext): Promise<PaginateResponse<Task>>
+  [ActionTypes.retrieveMoreTaskGroups]({ commit }: AugmentedActionContext): Promise<PaginateResponse<Task>> | void
 }
 
 export const actions: ActionTree<RootState, RootState> & Actions = {
@@ -135,28 +136,28 @@ export const actions: ActionTree<RootState, RootState> & Actions = {
   [ActionTypes.setAuthUser] ({ commit }, user) {
     commit(MutationTypes.SET_AUTH_USER, user)
   },
-  [ActionTypes.retrieveTasks] ({ commit }) {
-    return (this.$axios as NuxtAxiosInstance).$get('/tasks')
+  [ActionTypes.retrieveTaskGroups] ({ commit }) {
+    return (this.$axios as NuxtAxiosInstance).$get('/task_groups')
       .then((res: PaginateResponse<Task>) => {
-        commit(MutationTypes.SET_TASKS, res.data)
-        commit(MutationTypes.SET_TASKS_META, res.meta)
+        commit(MutationTypes.SET_TASK_GROUPS, res.data)
+        commit(MutationTypes.SET_TASK_GROUPS_META, res.meta)
 
         return res
       })
   },
-  [ActionTypes.retrieveMoreTasks] ({ commit, getters }) {
-    const meta = getters[GetterTypes.getTasksMeta]
+  [ActionTypes.retrieveMoreTaskGroups] ({ commit, getters }) {
+    const meta = getters[GetterTypes.getTaskGroupsMeta]
     if (!meta) return
     if (meta.current_page + 1 > meta.total_pages) return
 
-    return (this.$axios as NuxtAxiosInstance).$get('/tasks', {
+    return (this.$axios as NuxtAxiosInstance).$get('/task_groups', {
       params: {
         page: meta.current_page + 1
       }
     })
       .then((res: PaginateResponse<Task>) => {
-        commit(MutationTypes.PUSH_TASKS, res.data)
-        commit(MutationTypes.SET_TASKS_META, res.meta)
+        commit(MutationTypes.PUSH_TASK_GROUPS, res.data)
+        commit(MutationTypes.SET_TASK_GROUPS_META, res.meta)
 
         return res
       })

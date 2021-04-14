@@ -5,6 +5,7 @@ class User < ApplicationRecord
   has_many :tasks
   has_many :task_likes
   has_many :task_comments
+  has_many :task_groups
 
   validates :email, presence: true, uniqueness: true
   validates :username, presence: true, uniqueness: true, length: { minimum: 2 }

@@ -97,7 +97,7 @@ export default {
     },
     icon: {
       source: '[srcDir]/[staticDir]/icon.png',
-      cacheDir: '.nuxt/cache/pwa/icon'
+      cacheDir: 'node_modules/.cache/pwa/icon'
     }
   },
 
