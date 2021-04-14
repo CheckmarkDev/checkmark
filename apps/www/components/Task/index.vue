@@ -4,10 +4,19 @@
       :state="task.state"
       class="bg-white rounded-full mr-4 mt-1"
     />
-    <p class="flex-1">
-      {{ task.content }}
-    </p>
-    <div class="flex items-center mt-1">
+    <div
+      class="flex flex-col flex-1"
+    >
+      <p>
+        {{ task.content }}
+      </p>
+      <mark-as-button
+        v-if="$accessor.getAuthUser && task.user.uuid === $accessor.getAuthUser.uuid && task.state !== 'done'"
+        :task="task"
+        class="my-4"
+      />
+    </div>
+    <div class="hidden md:flex items-center mt-1">
       <like-button
         :task="task"
         class="mr-4"

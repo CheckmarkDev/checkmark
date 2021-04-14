@@ -13,7 +13,8 @@ class Task < ApplicationRecord
   before_create :assign_task_group, if: Proc.new { |task| task.task_group.nil? }
 
   def assign_task_group
-    task_group = self.user.task_groups.where(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).first
+    timezone = self.user.timezone
+    task_group = self.user.task_groups.where(created_at: DateTime.now.in_time_zone(timezone).beginning_of_day..DateTime.now.in_time_zone(timezone).end_of_day).first
     if task_group.nil?
       task_group = TaskGroup.new()
       task_group.user = self.user

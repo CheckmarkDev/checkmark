@@ -20,7 +20,7 @@ json[:data] = @task_groups.map do |task_group|
     }
   }
 
-  v[:tasks] = task_group.tasks.order(updated_at: :desc).map do |task|
+  v[:tasks] = task_group.tasks.order(created_at: :desc).map do |task|
     t = {
       uuid: task.uuid,
       content: task.content,
