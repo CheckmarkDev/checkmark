@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_14_213814) do
+ActiveRecord::Schema.define(version: 2021_04_14_214647) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -58,7 +58,7 @@ ActiveRecord::Schema.define(version: 2021_04_14_213814) do
     t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "task_group_id"
+    t.integer "task_group_id", null: false
     t.index ["task_group_id"], name: "index_tasks_on_task_group_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
     t.index ["uuid"], name: "index_tasks_on_uuid", unique: true

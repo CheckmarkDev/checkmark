@@ -32,6 +32,11 @@
   import { TaskGroup } from '~/types/taskGroup'
   import TaskGroupComponent from '@/components/TaskGroup/index.vue'
 
+  type Group = {
+    date: string
+    taskGroups: Array<TaskGroup>
+  }
+
   export default defineComponent({
     name: 'DateGroupedTaskGroups',
     components: {
@@ -46,7 +51,7 @@
     setup (props) {
       const { taskGroups } = toRefs(props)
       const groups = computed(() => {
-        const groups = []
+        const groups: Array<Group> = []
 
         taskGroups.value.forEach(taskGroup => {
           const date = dayjs(taskGroup.created_at).format('YYYY-MM-DD')
