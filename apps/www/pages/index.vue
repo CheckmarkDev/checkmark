@@ -50,11 +50,8 @@
             class="mb-8"
           />
 
-          <Task
-            v-for="task in $accessor.getTasks"
-            :key="task.uuid"
-            :task="task"
-            class="mb-4"
+          <DateGroupedTaskGroups
+            :task-groups="$accessor.getTaskGroups"
           />
         </section>
       </div>
@@ -64,16 +61,16 @@
 
 <script lang="ts">
   import { defineComponent } from '@nuxtjs/composition-api'
-  import Task from '@/components/Task/index.vue'
+  import DateGroupedTaskGroups from '@/components/DateGroupedTaskGroups/index.vue'
   import NewTask from '@/components/NewTask/index.vue'
 
   export default defineComponent({
     components: {
-      Task,
+      DateGroupedTaskGroups,
       NewTask
     },
     async middleware ({ store }) {
-      await store.dispatch('retrieveTasks')
+      await store.dispatch('retrieveTaskGroups')
     },
     mounted () {
       this.$mitt.on('update-tasks', this.updateTasks)
@@ -83,10 +80,10 @@
     },
     methods: {
       updateTasks () {
-        this.$accessor.retrieveTasks()
+        this.$accessor.retrieveTaskGroups()
       },
       loadMore () {
-        this.$accessor.retrieveMoreTasks()
+        this.$accessor.retrieveMoreTaskGroups()
       }
     }
   })

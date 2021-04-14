@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_12_211213) do
+ActiveRecord::Schema.define(version: 2021_04_14_221638) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -27,6 +27,15 @@ ActiveRecord::Schema.define(version: 2021_04_12_211213) do
     t.index ["task_id"], name: "index_task_comments_on_task_id"
     t.index ["user_id"], name: "index_task_comments_on_user_id"
     t.index ["uuid"], name: "index_task_comments_on_uuid", unique: true
+  end
+
+  create_table "task_groups", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_task_groups_on_user_id"
+    t.index ["uuid"], name: "index_task_groups_on_uuid", unique: true
   end
 
   create_table "task_likes", force: :cascade do |t|
@@ -49,6 +58,8 @@ ActiveRecord::Schema.define(version: 2021_04_12_211213) do
     t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "task_group_id", null: false
+    t.index ["task_group_id"], name: "index_tasks_on_task_group_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
     t.index ["uuid"], name: "index_tasks_on_uuid", unique: true
   end
@@ -72,6 +83,7 @@ ActiveRecord::Schema.define(version: 2021_04_12_211213) do
     t.string "last_name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "timezone", default: "Europe/Paris"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
     t.index ["uuid"], name: "index_users_on_uuid", unique: true
@@ -79,6 +91,7 @@ ActiveRecord::Schema.define(version: 2021_04_12_211213) do
 
   add_foreign_key "task_comments", "tasks"
   add_foreign_key "task_comments", "users"
+  add_foreign_key "task_groups", "users"
   add_foreign_key "task_likes", "tasks"
   add_foreign_key "task_likes", "users"
 end
