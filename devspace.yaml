@@ -32,70 +32,69 @@ deployments:
         enabled: true
         maxSurge: "100%"
         maxUnavailable: "50%"
-      # initContainers:
-      # - image: williamdasilva/checkmark-api
-      #   resources:
-      #     limits:
-      #       cpu: 400m
-      #       memory: 500Mi
-      #       ephemeralStorage: 2Gi
-      #   command: ["bash"]
-      #   args: ["-c", "rake db:migrate"]
-      #   env:
-      #   - name: HOST
-      #     value: "0.0.0.0"
-      #   - name: PORT
-      #     value: "3000"
-      #   - name: HOST
-      #     valueFrom:
-      #       secretKeyRef:
-      #         name: api-secret
-      #         key: HOST
-      #   - name: RAILS_ENV
-      #     valueFrom:
-      #       secretKeyRef:
-      #         name: api-secret
-      #         key: RAILS_ENV
-      #   - name: RAILS_SERVE_STATIC_FILES
-      #     valueFrom:
-      #       secretKeyRef:
-      #         name: api-secret
-      #         key: RAILS_SERVE_STATIC_FILES
-      #   - name: SECRET_KEY_BASE
-      #     valueFrom:
-      #       secretKeyRef:
-      #         name: api-secret
-      #         key: SECRET_KEY_BASE
-      #   - name: SENTRY_DSN
-      #     valueFrom:
-      #       secretKeyRef:
-      #         name: api-secret
-      #         key: SENTRY_DSN
-      #   - name: DATABASE_NAME
-      #     valueFrom:
-      #       secretKeyRef:
-      #         name: api-secret
-      #         key: DATABASE_NAME
-      #   - name: DATABASE_USERNAME
-      #     valueFrom:
-      #       secretKeyRef:
-      #         name: api-secret
-      #         key: DATABASE_USERNAME
-      #   - name: DATABASE_PASSWORD
-      #     valueFrom:
-      #       secretKeyRef:
-      #         name: api-secret
-      #         key: DATABASE_PASSWORD
-      #   - name: DATABASE_HOST
-      #     valueFrom:
-      #       secretKeyRef:
-      #         name: api-secret
-      #         key: DATABASE_HOST
-      #   - name: DATABASE_PORT
-      #     valueFrom:
-      #       secretKeyRef:
-      #         name: api-secret
-      #         key: DATABASE_PORT
+      initContainers:
+      - image: williamdasilva/checkmark-api
+        resources:
+          limits:
+            cpu: 100m
+            memory: 500Mi
+        command: ["bash"]
+        args: ["-c", "rake db:migrate"]
+        env:
+        - name: HOST
+          value: "0.0.0.0"
+        - name: PORT
+          value: "3000"
+        - name: HOST
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: HOST
+        - name: RAILS_ENV
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: RAILS_ENV
+        - name: RAILS_SERVE_STATIC_FILES
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: RAILS_SERVE_STATIC_FILES
+        - name: SECRET_KEY_BASE
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: SECRET_KEY_BASE
+        - name: SENTRY_DSN
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: SENTRY_DSN
+        - name: DATABASE_NAME
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: DATABASE_NAME
+        - name: DATABASE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: DATABASE_USERNAME
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: DATABASE_PASSWORD
+        - name: DATABASE_HOST
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: DATABASE_HOST
+        - name: DATABASE_PORT
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: DATABASE_PORT
 
       containers:
       - image: williamdasilva/checkmark-api
