@@ -17,6 +17,18 @@
       />
     </div>
     <div class="hidden md:flex items-center mt-1">
+      <nuxt-link
+        :to="{
+          name: 'Task',
+          params: {
+            username: task.user.username,
+            task: task.uuid
+          }
+        }"
+        class="mr-2 text-sm text-gray-600 truncate flex-shrink hover:underline"
+      >
+        {{ date }}
+      </nuxt-link>
       <like-button
         :task="task"
         class="mr-4"
@@ -54,7 +66,7 @@
       const { task } = toRefs(props)
 
       const date = computed(() => {
-        return dayjs(task.value.created_at).format('lll')
+        return dayjs(task.value.created_at).format('LT')
       })
 
       return {

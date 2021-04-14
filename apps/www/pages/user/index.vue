@@ -35,11 +35,8 @@
             Feed
           </h2>
 
-          <Task
-            v-for="task in tasks.data"
-            :key="task.uuid"
-            :task="task"
-            class="mb-4"
+          <DateGroupedTaskGroups
+            :task-groups="taskGroups.data"
           />
         </section>
       </div>
@@ -49,21 +46,25 @@
 
 <script lang="ts">
   import { defineComponent } from '@nuxtjs/composition-api'
-  import { Task } from '~/types/task'
+  import { TaskGroup } from '~/types/taskGroup'
   import { User } from '~/types/user'
+  import DateGroupedTaskGroups from '@/components/DateGroupedTaskGroups/index.vue'
 
   export default defineComponent({
+    components: {
+      DateGroupedTaskGroups
+    },
     data () {
       return {
         user: null,
-        tasks: {
+        taskGroups: {
           data: [],
           meta: null
         }
       } as {
         user: User | null,
-        tasks: {
-          data: Array<Task>,
+        taskGroups: {
+          data: Array<TaskGroup>,
           meta: any
         }
       }
@@ -84,32 +85,32 @@
     },
     async asyncData ({ $axios, route }) {
       const { username } = route.params
-      const [user, tasks] = await Promise.all([
+      const [user, taskGroups] = await Promise.all([
         $axios.$get(`/users/${username}`),
-        $axios.$get(`/users/${username}/tasks`)
+        $axios.$get(`/users/${username}/task_groups`)
       ])
 
       return {
         user,
-        tasks
+        taskGroups
       }
     },
     methods: {
       loadMore () {
-        if (this.tasks.meta.current_page + 1 > this.tasks.meta.total_pages) return
+        if (this.taskGroups.meta.current_page + 1 > this.taskGroups.meta.total_pages) return
 
         const { username } = this.$route.params
-        this.$axios.$get(`/users/${username}/tasks`, {
+        this.$axios.$get(`/users/${username}/task_groups`, {
           params: {
-            page: this.tasks.meta.current_page + 1
+            page: this.taskGroups.meta.current_page + 1
           }
         })
           .then(res => {
-            this.tasks.data = [
-              ...this.tasks.data,
+            this.taskGroups.data = [
+              ...this.taskGroups.data,
               ...res.data
             ]
-            this.tasks.meta = res.meta
+            this.taskGroups.meta = res.meta
           })
       }
     }
