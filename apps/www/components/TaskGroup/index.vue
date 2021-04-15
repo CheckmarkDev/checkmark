@@ -2,8 +2,9 @@
   <div class="task-group flex flex-col border border-solid border-gray-300 rounded-lg p-4">
     <div class="flex items-start mb-2">
       <div class="w-16">
-        <div class="w-12 h-12 rounded-full bg-gray-300 relative">
-        </div>
+        <UserAvatar
+          :user="taskGroup.user"
+        />
       </div>
       <div class="flex flex-col flex-1 leading-tight">
         <nuxt-link
@@ -13,6 +14,7 @@
               username: taskGroup.user.username
             }
           }"
+          class="mr-4"
         >
           <div class="font-medium text-lg">
             {{ taskGroup.user.first_name }} {{ taskGroup.user.last_name }}
@@ -61,9 +63,6 @@
         type: Object as () => TaskGroup,
         required: true
       }
-    },
-    setup (props) {
-      const { taskGroup } = toRefs(props)
     }
   })
 </script>

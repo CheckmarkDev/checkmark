@@ -10,12 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_14_221638) do
+ActiveRecord::Schema.define(version: 2021_04_15_205419) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
+
+  create_table "streaks", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_streaks_on_user_id"
+    t.index ["uuid"], name: "index_streaks_on_uuid", unique: true
+  end
 
   create_table "task_comments", force: :cascade do |t|
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
@@ -59,6 +68,8 @@ ActiveRecord::Schema.define(version: 2021_04_14_221638) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "task_group_id", null: false
+    t.bigint "streak_id"
+    t.index ["streak_id"], name: "index_tasks_on_streak_id"
     t.index ["task_group_id"], name: "index_tasks_on_task_group_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
     t.index ["uuid"], name: "index_tasks_on_uuid", unique: true
@@ -89,6 +100,7 @@ ActiveRecord::Schema.define(version: 2021_04_14_221638) do
     t.index ["uuid"], name: "index_users_on_uuid", unique: true
   end
 
+  add_foreign_key "streaks", "users"
   add_foreign_key "task_comments", "tasks"
   add_foreign_key "task_comments", "users"
   add_foreign_key "task_groups", "users"
