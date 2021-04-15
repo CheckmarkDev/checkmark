@@ -13,7 +13,9 @@
               v-text="$trans('home.titles.subtitle')"
             />
           </div>
-          <div>
+          <div
+            v-if="!$accessor.isAuthenticated"
+          >
             <nuxt-link
               :to="{
                 name: 'SignUp'
