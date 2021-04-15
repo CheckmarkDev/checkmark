@@ -29,10 +29,10 @@ json[:data] = @task_groups.map do |task_group|
       updated_at: task.updated_at,
 
       user: {
-        uuid: task.user.uuid,
-        username: task.user.username,
-        first_name: task.user.first_name,
-        last_name: task.user.last_name
+        uuid: task_group.user.uuid,
+        username: task_group.user.username,
+        first_name: task_group.user.first_name,
+        last_name: task_group.user.last_name
       }
     }
 
