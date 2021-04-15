@@ -16,7 +16,8 @@ json[:data] = @task_groups.map do |task_group|
       uuid: task_group.user.uuid,
       username: task_group.user.username,
       first_name: task_group.user.first_name,
-      last_name: task_group.user.last_name
+      last_name: task_group.user.last_name,
+      streak: task_group.user.streak
     }
   }
 
@@ -32,7 +33,8 @@ json[:data] = @task_groups.map do |task_group|
         uuid: task_group.user.uuid,
         username: task_group.user.username,
         first_name: task_group.user.first_name,
-        last_name: task_group.user.last_name
+        last_name: task_group.user.last_name,
+        streak: task_group.user.streak
       }
     }
 

@@ -1,6 +1,7 @@
 class Task < ApplicationRecord
   belongs_to :user
   belongs_to :task_group, optional: true
+  belongs_to :streak, optional: true
   has_many :task_likes
   has_many :task_comments
 
@@ -11,6 +12,7 @@ class Task < ApplicationRecord
   ]
 
   before_create :assign_task_group, if: Proc.new { |task| task.task_group.nil? }
+  before_create :assign_streak, if: Proc.new { |task| task.streak.nil? }
 
   def assign_task_group
     timezone = self.user.timezone
@@ -22,6 +24,21 @@ class Task < ApplicationRecord
     end
 
     self.task_group = task_group
+  end
+
+  def assign_streak
+    last_streak = self.user.last_streak
+    if last_streak.present?
+      last_task = last_streak.tasks.order(created_at: :desc).first
+
+      if last_task.created_at.to_datetime.beginning_of_day < DateTime.yesterday
+        last_streak = Streak.new
+        last_streak.user = self.user
+        last_streak.save!
+      end
+    end
+
+    self.streak = last_streak
   end
 
 end
