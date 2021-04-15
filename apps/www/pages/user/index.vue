@@ -79,7 +79,18 @@
       return {
         title: fullName || user.username,
         meta: [
-          { hid: 'description', name: 'description', content: description }
+          { hid: 'description', name: 'description', content: description },
+          { hid: 'og:description', property: 'og:description', content: description },
+          { hid: 'og:title', property: 'og:title', content: fullName || user.username },
+          {
+            hid: 'og:image:width', name: 'og:image:width', content: '1200'
+          },
+          {
+            hid: 'og:image:height', name: 'og:image:height', content: '628'
+          },
+          {
+            hid: 'og:image:type', name: 'og:image:type', content: 'image/png'
+          }
         ]
       }
     },

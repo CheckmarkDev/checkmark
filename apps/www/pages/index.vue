@@ -30,8 +30,18 @@
       <div class="container mx-auto flex items-start">
         <nav class="bg-white hidden md:flex rounded-lg w-3/12 mr-8 p-4">
           <ul class="w-full">
-            <li>
-              <a href="https://www.changelog.xyz/checkmark" class="hover:bg-gray-200 rounded p-2 w-full flex">
+            <li class="mb-1">
+              <a href="https://discord.gg/VM3rH2X68P" target="_blank" rel="noopener" class="hover:bg-gray-200 rounded p-2 w-full flex">
+                Discord
+              </a>
+            </li>
+            <li class="mb-1">
+              <a href="https://www.twitter.com/checkmarkdev" target="_blank" rel="noopener" class="hover:bg-gray-200 rounded p-2 w-full flex">
+                Twitter
+              </a>
+            </li>
+            <li class="mb-1">
+              <a href="https://www.changelog.xyz/checkmark" target="_blank" rel="noopener" class="hover:bg-gray-200 rounded p-2 w-full flex">
                 Changelog
               </a>
             </li>
@@ -68,6 +78,20 @@
     components: {
       DateGroupedTaskGroups,
       NewTask
+    },
+    head () {
+      const title = this.$trans('home.titles.title')
+      const description = this.$trans('home.paragraphs.description')
+
+      return {
+        title: title,
+        titleTemplate: 'Checkmark - %s',
+        meta: [
+          { hid: 'description', name: 'description', content: description },
+          { hid: 'og:description', property: 'og:description', content: description },
+          { hid: 'og:title', property: 'og:title', content: title }
+        ]
+      }
     },
     async middleware ({ store }) {
       await store.dispatch('retrieveTaskGroups')
