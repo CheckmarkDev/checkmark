@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main v-infinite-scroll="loadMore">
     <div class="home-hero">
       <div class="container mx-auto">
         <div class="flex items-center justify-between py-8">
@@ -28,8 +28,14 @@
           </ul>
         </nav>
         <section class="bg-white w-full md:w-9/12 h-56 rounded-lg p-6">
-          <task
-            :task="task"
+          <div class="border border-gray-300 rounded mb-8 px-8 py-4">
+            <Task
+              :task="task"
+            />
+          </div>
+
+          <TaskComments
+            :comments="comments"
           />
         </section>
       </div>
@@ -41,15 +47,22 @@
   import { defineComponent } from '@nuxtjs/composition-api'
 
   import Task from '@/components/Task/index.vue'
+  import TaskComments from '@/components/TaskComments/index.vue'
+import { PaginateResponseMeta } from '~/types/pagination'
 
   export default defineComponent({
     components: {
-      Task
+      Task,
+      TaskComments
     },
     data () {
       return {
         user: null,
-        task: null
+        task: null,
+        comments: {
+          data: [],
+          meta: {}
+        }
       }
     },
     head () {
@@ -84,14 +97,39 @@
     },
     async asyncData ({ $axios, route }) {
       const { username, task: taskUuid } = route.params
-      const [user, task] = await Promise.all([
+      const [user, task, comments] = await Promise.all([
         $axios.$get(`/users/${username}`),
-        $axios.$get(`/users/${username}/tasks/${taskUuid}`)
+        $axios.$get(`/users/${username}/tasks/${taskUuid}`),
+        $axios.$get(`/tasks/${taskUuid}/comments`),
       ])
 
       return {
         user,
-        task
+        task,
+        comments
+      }
+    },
+    methods: {
+      loadMore () {
+        const { task: taskUuid } = this.$route.params
+        const meta = this.comments.meta as PaginateResponseMeta
+        if (!meta) return
+        if (meta.current_page + 1 > meta.total_pages) return
+
+        return (this.$axios as NuxtAxiosInstance).$get(`/tasks/${taskUuid}/comments`, {
+          params: {
+            page: meta.current_page + 1
+          }
+        })
+          .then((res: PaginateResponse<Task>) => {
+            this.comments.data = [
+              ...this.comments.data,
+              ...res.data
+            ]
+            this.comments.meta = res.meta
+
+            return res
+          })
       }
     }
   })
