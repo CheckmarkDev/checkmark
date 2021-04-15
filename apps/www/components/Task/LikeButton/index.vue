@@ -60,14 +60,25 @@
       const isSelfTask = computed(() => accessor.getAuthUser && task.value.user.uuid === accessor.getAuthUser.uuid)
 
       function like () {
-        wait.start(`liking ${task.value.uuid}`)
-        axios.post(`/tasks/${task.value.uuid}/like`)
-          .then(() => {
-            mitt.emit('update-tasks')
-          })
-          .finally(() => {
-            wait.end(`liking ${task.value.uuid}`)
-          })
+        if (hasLiked.value) {
+          wait.start(`liking ${task.value.uuid}`)
+          axios.delete(`/tasks/${task.value.uuid}/like`)
+            .then(() => {
+              mitt.emit('update-tasks')
+            })
+            .finally(() => {
+              wait.end(`liking ${task.value.uuid}`)
+            })
+        } else {
+          wait.start(`liking ${task.value.uuid}`)
+          axios.post(`/tasks/${task.value.uuid}/like`)
+            .then(() => {
+              mitt.emit('update-tasks')
+            })
+            .finally(() => {
+              wait.end(`liking ${task.value.uuid}`)
+            })
+        }
       }
 
       return {

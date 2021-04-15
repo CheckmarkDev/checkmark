@@ -22,7 +22,7 @@ json[:data] = @tasks.map do |task|
     }
   }
 
-  v[:likes] = task.task_likes.map do |like|
+  v[:likes] = task.task_likes.active.map do |like|
     User.find_by_id(like.user_id).uuid
   end
 
