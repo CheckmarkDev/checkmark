@@ -28,14 +28,18 @@ class Task < ApplicationRecord
 
   def assign_streak
     last_streak = self.user.last_streak
-    if last_streak.present?
-      last_task = last_streak.tasks.order(created_at: :desc).first
+    if last_streak.nil?
+      last_streak = Streak.new
+      last_streak.user = self.user
+      last_streak.save!
+    end
 
-      if last_task.created_at.to_datetime.beginning_of_day < DateTime.yesterday
-        last_streak = Streak.new
-        last_streak.user = self.user
-        last_streak.save!
-      end
+    last_task = last_streak.tasks.order(created_at: :desc).first
+
+    if last_task.present? && last_task.created_at.to_datetime.beginning_of_day < DateTime.yesterday
+      last_streak = Streak.new
+      last_streak.user = self.user
+      last_streak.save!
     end
 
     self.streak = last_streak
