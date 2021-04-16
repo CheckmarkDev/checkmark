@@ -109,7 +109,7 @@
       this.$mitt.off(`like dialog for ${this.task.uuid}`, this.showLikeDialog)
     },
     methods: {
-      showLikeDialog (e) {
+      showLikeDialog (e: any) {
         this.dialogs.likes = {
           visible: true,
           task: e

@@ -5,16 +5,10 @@
       :key="k"
     >
       <div class="flex items-center mb-4">
-        <!-- v-if="group.isToday" -->
         <div
           class="text-2xl mr-3"
-        >
-          <!-- {{ $trans('home.titles.today') }} -->
-          {{ dayjs(group.date).utc(true).format('LL') }}
-        </div>
-        <!-- <div class="text-gray-700">
-          {{ dayjs(group.date).format('LL') }}
-        </div> -->
+          v-text="dayjs(group.date).format('LL')"
+        />
       </div>
       <TaskGroup
         v-for="taskGroup in group.taskGroups"
@@ -56,7 +50,7 @@
         const groups: Array<Group> = []
 
         taskGroups.value.forEach(taskGroup => {
-          const date = dayjs(taskGroup.created_at).utc().format('YYYY-MM-DD')
+          const date = dayjs(taskGroup.created_at).tz('Europe/Paris').format('YYYY-MM-DD')
 
           const groupIndex = groups.findIndex(group => group.date === date)
           if (groupIndex !== -1) {
@@ -64,7 +58,6 @@
           } else {
             groups.push({
               date,
-              // isToday: dayjs().utc().format('YYYY-MM-DD') === dayjs(date).utc(true).startOf('day').format('YYYY-MM-DD'),
               taskGroups: [
                 taskGroup
               ]
