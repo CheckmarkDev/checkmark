@@ -40,6 +40,8 @@
   import useWait from '~/composables/useWait'
   import useMitt from '~/composables/useMitt'
   import { Task } from '~/types/task'
+  import useToasted from '~/composables/useToasted'
+  import useICU from '~/composables/useICU'
 
   export default defineComponent({
     props: {
@@ -54,12 +56,14 @@
       const axios = useAxios()
       const wait = useWait()
       const mitt = useMitt()
+      const toasted = useToasted()
+      const trans = useICU()
 
       const hasLiked = computed(() => accessor.getAuthUser && task.value.likes.includes(accessor.getAuthUser.uuid))
       const isSelfTask = computed(() => accessor.getAuthUser && task.value.user.uuid === accessor.getAuthUser.uuid)
 
       function like () {
-        if (!accessor.isAuthenticated || !isSelfTask.value) {
+        if (!accessor.isAuthenticated || isSelfTask.value) {
           mitt.emit(`like dialog for ${task.value.uuid}`, task.value)
           return
         }
@@ -70,6 +74,7 @@
             .then(() => {
               mitt.emit('update-tasks')
             })
+            .catch(() => {})
             .finally(() => {
               wait.end(`liking ${task.value.uuid}`)
             })
@@ -78,6 +83,13 @@
           axios.post(`/tasks/${task.value.uuid}/like`)
             .then(() => {
               mitt.emit('update-tasks')
+            })
+            .catch((err) => {
+              if (!err.response) return
+
+              if (err.response.status === 403) {
+                toasted.error(trans('global.paragraphs.no_self_like'))
+              }
             })
             .finally(() => {
               wait.end(`liking ${task.value.uuid}`)

@@ -3,7 +3,7 @@ class TaskLikesController < ApplicationController
 
   api :GET, '/tasks/:task_uuid/likes'
   def index
-    @task_likes = @task.task_likes.order(created_at: :desc).page(params[:page])
+    @task_likes = @task.task_likes.active.order(created_at: :desc).page(params[:page])
 
     render 'tasks/task_likes/index'
   end

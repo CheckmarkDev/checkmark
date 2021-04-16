@@ -24,6 +24,7 @@
             <div
               v-for="like in likes.data"
               :key="like.uuid"
+              class="mb-8"
             >
               <UserCard
                 :user="like.user"

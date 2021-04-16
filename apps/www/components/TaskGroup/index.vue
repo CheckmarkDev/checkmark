@@ -17,8 +17,7 @@
 </template>
 
 <script lang="ts">
-  import dayjs from 'dayjs'
-  import { computed, defineComponent, toRefs } from '@nuxtjs/composition-api'
+  import { defineComponent } from '@nuxtjs/composition-api'
 
   import Task from '@/components/Task/index.vue'
   import UserCard from '@/components/UserCard/index.vue'
