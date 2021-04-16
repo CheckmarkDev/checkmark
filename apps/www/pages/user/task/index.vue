@@ -38,6 +38,7 @@
           </div>
 
           <TaskComments
+            :task="task"
             :comments="comments"
           />
         </section>
@@ -123,7 +124,21 @@
         comments
       }
     },
+    mounted () {
+      this.$mitt.on('new-comment', this.loadComments)
+    },
+    beforeDestroy () {
+      this.$mitt.off('new-comment', this.loadComments)
+    },
     methods: {
+      loadComments () {
+        const { task: taskUuid } = this.$route.params
+        console.log('uuid', taskUuid)
+        return this.$axios.$get(`/tasks/${taskUuid}/comments`)
+          .then((res) => {
+            this.comments = res
+          })
+      },
       loadMore () {
         const { task: taskUuid } = this.$route.params
         const meta = this.comments.meta as PaginateResponseMeta

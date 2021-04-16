@@ -4,8 +4,14 @@
       {{ $trans('user.titles.comments') }}
     </h2>
 
-    <template
+    <NewCommentForm
+      :task="task"
+      class="mb-12"
+    />
+
+    <div
       v-if="comments.data.length"
+      class="border-t border-gray-300 pt-6"
     >
       <Comment
         v-for="comment in comments.data"
@@ -13,7 +19,7 @@
         :comment="comment"
         class="mb-8"
       />
-    </template>
+    </div>
     <template
       v-else
     >
@@ -29,15 +35,23 @@
   import { defineComponent } from '@nuxtjs/composition-api'
 
   import { PaginateResponse } from '~/types/pagination'
+  import { Task } from '~/types/task'
   import Comment from './Comment/index.vue'
+
+  import NewCommentForm from './NewCommentForm/index.vue'
 
   export default defineComponent({
     components: {
-      Comment
+      Comment,
+      NewCommentForm
     },
     props: {
       comments: {
         type: Object as () => PaginateResponse<Comment>,
+        required: true
+      },
+      task: {
+        type: Object as () => Task,
         required: true
       }
     }
