@@ -18,7 +18,7 @@
     >
       <ul
         v-if="open"
-        class="absolute right-0 bg-white rounded border border-solid border-gray-300 p-3 shadow-lg"
+        class="absolute right-0 bg-white rounded border border-solid border-gray-300 p-3 shadow-lg z-10"
       >
         <li>
           <button
@@ -74,6 +74,7 @@
               mitt.emit('update-tasks')
             })
             .finally(() => {
+              open.value = false
               wait.end(`deleting task ${task.value.uuid}`)
             })
         }

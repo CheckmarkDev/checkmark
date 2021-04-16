@@ -1,6 +1,6 @@
 <template>
   <div class="task flex items-start">
-    <task-check
+    <TaskCheck
       :state="task.state"
       class="bg-white rounded-full mr-4 mt-1"
     />
@@ -10,7 +10,7 @@
       <p>
         {{ task.content }}
       </p>
-      <mark-as-button
+      <MarkAsButton
         v-if="$accessor.getAuthUser && task.user.uuid === $accessor.getAuthUser.uuid && task.state !== 'done'"
         :task="task"
         class="my-4"
@@ -29,9 +29,13 @@
       >
         {{ date }}
       </nuxt-link>
-      <like-button
+      <LikeButton
         :task="task"
         class="mr-4"
+      />
+      <TaskActions
+        v-if="$accessor.getAuthUser && task.user.uuid === $accessor.getAuthUser.uuid"
+        :task="task"
       />
     </div>
   </div>
