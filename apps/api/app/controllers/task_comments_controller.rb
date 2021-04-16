@@ -5,7 +5,7 @@ class TaskCommentsController < ApplicationController
 
   api :GET, '/tasks/:task_uuid/comments'
   def index
-    @task_comments = @task.task_comments.page(params[:page])
+    @task_comments = @task.task_comments.order(created_at: :desc).page(params[:page])
 
     render 'tasks/task_comments/index'
   end

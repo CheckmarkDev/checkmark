@@ -29,6 +29,10 @@
       >
         {{ date }}
       </nuxt-link>
+      <CommentButton
+        :task="task"
+        class="mr-4"
+      />
       <LikeButton
         :task="task"
         class="mr-4"
@@ -48,6 +52,7 @@
   import TaskCheck from '@/components/TaskCheck/index.vue'
   import MarkAsButton from './MarkAsButton/index.vue'
   import LikeButton from './LikeButton/index.vue'
+  import CommentButton from './CommentButton/index.vue'
   import TaskActions from './TaskActions/index.vue'
 
   import { Task } from '@/types/task'
@@ -57,6 +62,7 @@
     components: {
       TaskCheck,
       LikeButton,
+      CommentButton,
       TaskActions,
       MarkAsButton
     },

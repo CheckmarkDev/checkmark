@@ -5,12 +5,7 @@ import { User } from '~/types/user'
 import { Task } from '~/types/task'
 import { NuxtAxiosInstance } from '@nuxtjs/axios'
 import { TaskGroup } from '~/types/taskGroup'
-
-type PaginateResponseMeta = {
-  current_page: number,
-  total_pages: number,
-  count: number
-}
+import { PaginateResponse, PaginateResponseMeta } from '~/types/pagination'
 
 export interface State {
   auth: {
@@ -21,11 +16,6 @@ export interface State {
     items: Array<TaskGroup>
     meta: PaginateResponseMeta | null
   }
-}
-
-type PaginateResponse<T> = {
-  data: Array<T>,
-  meta: PaginateResponseMeta
 }
 
 export const strict = false
