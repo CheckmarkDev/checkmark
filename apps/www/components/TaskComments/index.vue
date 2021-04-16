@@ -5,6 +5,7 @@
     </h2>
 
     <NewCommentForm
+      v-if="$accessor.getAuthUser && task.user.uuid === $accessor.getAuthUser.uuid"
       :task="task"
       class="mb-12"
     />
