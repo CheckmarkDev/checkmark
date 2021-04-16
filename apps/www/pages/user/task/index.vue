@@ -3,7 +3,10 @@
     <div class="home-hero">
       <div class="container mx-auto">
         <div class="flex items-center justify-between py-8">
-          <div class="w-1/2">
+          <div
+            v-if="user"
+            class="w-1/2"
+          >
             <h1
               class="text-3xl text-white leading-tight mb-4"
               v-text="`${user.first_name} ${user.last_name}`"
@@ -45,14 +48,18 @@
 
 <script lang="ts">
   import { defineComponent } from '@nuxtjs/composition-api'
+  import { NuxtAxiosInstance } from '@nuxtjs/axios'
 
-  import Task from '@/components/Task/index.vue'
+  import TaskComponent from '@/components/Task/index.vue'
   import TaskComments from '@/components/TaskComments/index.vue'
-import { PaginateResponseMeta } from '~/types/pagination'
+  import { PaginateResponse, PaginateResponseMeta } from '~/types/pagination'
+  import { User } from '~/types/user'
+  import { Comment } from '~/types/comment'
+  import { Task } from '~/types/task'
 
   export default defineComponent({
     components: {
-      Task,
+      Task: TaskComponent,
       TaskComments
     },
     data () {
@@ -62,6 +69,13 @@ import { PaginateResponseMeta } from '~/types/pagination'
         comments: {
           data: [],
           meta: {}
+        }
+      } as {
+        user: User | null,
+        task: Task | null,
+        comments: {
+          data: Array<Comment>,
+          meta: any
         }
       }
     },
@@ -121,7 +135,7 @@ import { PaginateResponseMeta } from '~/types/pagination'
             page: meta.current_page + 1
           }
         })
-          .then((res: PaginateResponse<Task>) => {
+          .then((res: PaginateResponse<Comment>) => {
             this.comments.data = [
               ...this.comments.data,
               ...res.data

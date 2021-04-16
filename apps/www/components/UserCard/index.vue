@@ -38,6 +38,7 @@
   import { defineComponent } from '@nuxtjs/composition-api'
 
   import UserAvatar from '@/components/UserAvatar/index.vue'
+  import { User } from '~/types/user'
 
   export default defineComponent({
     components: {

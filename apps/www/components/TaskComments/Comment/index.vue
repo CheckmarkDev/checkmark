@@ -22,6 +22,7 @@
   import dayjs from 'dayjs'
   import { computed, defineComponent, toRefs } from '@nuxtjs/composition-api'
 
+  import { Comment } from '@/types/comment'
   import UserCard from '@/components/UserCard/index.vue'
 
   export default defineComponent({
@@ -36,7 +37,7 @@
     },
     setup (props) {
       const { comment } = toRefs(props)
-      const date = computed(() => dayjs(comment.created_at).format('LLL'))
+      const date = computed(() => dayjs(comment.value.created_at).format('LLL'))
 
       return {
         date
