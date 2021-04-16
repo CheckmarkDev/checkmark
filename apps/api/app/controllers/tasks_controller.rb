@@ -16,6 +16,12 @@ class TasksController < ApplicationController
     if @like.present?
       @like.state = TaskLike.states[:active]
     else
+      if @task.user == @current_user
+        return render json: {
+          error: 'Not allowed to like your own task.'
+        }, status: :not_allowed
+      end
+
       @like = TaskLike.new(
         task: @task,
         user: @current_user,

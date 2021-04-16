@@ -42,6 +42,13 @@
         :task="task"
       />
     </div>
+
+    <!-- Dialogs -->
+    <LikesDialog
+      v-if="dialogs.likes.visible"
+      :task="dialogs.likes.task"
+      @close="() => dialogs.likes.visible = false"
+    />
   </div>
 </template>
 
@@ -53,6 +60,7 @@
   import MarkAsButton from './MarkAsButton/index.vue'
   import LikeButton from './LikeButton/index.vue'
   import CommentButton from './CommentButton/index.vue'
+  import LikesDialog from '@/components/Task/LikesDialog/index.vue'
   import TaskActions from './TaskActions/index.vue'
 
   import { Task } from '@/types/task'
@@ -63,6 +71,7 @@
       TaskCheck,
       LikeButton,
       CommentButton,
+      LikesDialog,
       TaskActions,
       MarkAsButton
     },
@@ -81,6 +90,30 @@
 
       return {
         date
+      }
+    },
+    data () {
+      return {
+        dialogs: {
+          likes: {
+            visible: false,
+            task: null
+          }
+        }
+      }
+    },
+    mounted () {
+      this.$mitt.on(`like dialog for ${this.task.uuid}`, this.showLikeDialog)
+    },
+    beforeDestroy () {
+      this.$mitt.off(`like dialog for ${this.task.uuid}`, this.showLikeDialog)
+    },
+    methods: {
+      showLikeDialog (e) {
+        this.dialogs.likes = {
+          visible: true,
+          task: e
+        }
       }
     }
   })

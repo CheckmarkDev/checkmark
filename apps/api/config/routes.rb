@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       end
 
       resources :task_comments, path: 'comments'
+      resources :task_likes, path: 'likes'
     end
     resources :users
 

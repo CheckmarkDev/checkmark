@@ -1,9 +1,8 @@
 <template>
   <button
-    :disabled="$wait.is(`liking ${task.uuid}`) || isSelfTask || !$accessor.isAuthenticated"
+    :disabled="$wait.is(`liking ${task.uuid}`)"
     :class="{
-      'like-button--liked': hasLiked,
-      'like-button--self': isSelfTask || !$accessor.isAuthenticated
+      'like-button--liked': hasLiked
     }"
     type="button"
     class="like-button relative h-8 w-8 border border-solid border-gray-400 hover:bg-gray-200 rounded-full"
@@ -60,6 +59,11 @@
       const isSelfTask = computed(() => accessor.getAuthUser && task.value.user.uuid === accessor.getAuthUser.uuid)
 
       function like () {
+        if (!accessor.isAuthenticated || !isSelfTask.value) {
+          mitt.emit(`like dialog for ${task.value.uuid}`, task.value)
+          return
+        }
+
         if (hasLiked.value) {
           wait.start(`liking ${task.value.uuid}`)
           axios.delete(`/tasks/${task.value.uuid}/like`)
@@ -97,14 +101,6 @@
 
   .like-button--liked {
     @apply border-blue-500;
-  }
-
-  .like-button--self {
-    @apply bg-gray-200 cursor-not-allowed;
-  }
-
-  .like-button--self path {
-    @apply text-gray-400 fill-current;
   }
 
   .like-button__badge {

@@ -9,6 +9,7 @@
   import { defineComponent } from '@nuxtjs/composition-api'
 
   import AppHeader from '@/components/AppHeader/index.vue'
+  import { Task } from '~/types/task'
 
   export default defineComponent({
     components: {
