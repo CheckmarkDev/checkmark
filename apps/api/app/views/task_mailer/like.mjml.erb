@@ -1,0 +1,49 @@
+<mj-section background-color="#2589C7" padding-top="32px" padding-bottom="32px" border-radius="4px 4px 0 0">
+  <mj-column>
+    <mj-image
+      src="http://localhost:3000/like-header.svg"
+      align="center"
+      height="100px"
+      width="194px"
+    >
+    </mj-image>
+  </mj-column>
+</mj-section>
+<mj-section background-color="#FFFFFF" border-left="1px solid #CBD5E0" border-right="1px solid #CBD5E0">
+  <mj-column>
+    <mj-text>
+      <p>
+        <a href="<%= ENV['WEB_BASE'] %>/u/<%= @username %>" style="font-weight: 500; color: #4A5568; text-decoration: none;"><%= @name %></a> a aimé votre tâche :
+      </p>
+    </mj-text>
+  </mj-column>
+</mj-section>
+<mj-section background-color="#FFFFFF" border-radius="0px 0px 4px 4px" border-left="1px solid #CBD5E0" border-right="1px solid #CBD5E0" padding="0 25px 8px 25px">
+  <mj-column border="1px solid #CBD5E0">
+    <mj-image
+      src="http://localhost:3000/<%= @task_state %>.svg"
+      width="22px"
+      height="22px"
+      align="left"
+      padding-bottom="0px"
+      padding-top="20px"
+    >
+    </mj-image>
+    <mj-text>
+      <p>
+        <%= @task_content %>
+      </p>
+    </mj-text>
+  </mj-column>
+</mj-section>
+<mj-section background-color="#FFFFFF" border-left="1px solid #CBD5E0" border-right="1px solid #CBD5E0" border-bottom="1px solid #CBD5E0">
+  <mj-column>
+    <mj-button
+      href="<%= ENV['WEB_BASE'] %>/u/<%= @task_username %>/task/<%= @task_uuid %>"
+      align="left"
+      padding-bottom="32px"
+    >
+      Voir la tâche
+    </mj-button>
+  </mj-column>
+</mj-section>

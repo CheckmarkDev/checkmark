@@ -1,0 +1,16 @@
+class TaskMailer < ApplicationMailer
+
+  def like (task, user)
+    @name = "#{user.first_name} #{user.last_name}"
+    @username = user.username
+    @task_content = task.content
+    @task_username = task.user.username
+    @task_uuid = task.uuid
+    @task_state = task.state
+
+    mail(to: task.user.email, subject: "#{user.username} a aimé votre tâche !") do |format|
+      format.text
+      format.mjml
+    end
+  end
+end
