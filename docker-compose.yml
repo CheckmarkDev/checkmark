@@ -21,19 +21,23 @@ services:
       - /apps/api/tmp
     links:
       - db
+      - redis
+      - mjml2html
 
-  # sidekiq:
-  #   build: apps/api
-  #   command: bundle exec sidekiq -q default
-  #   env_file:
-  #     - ./apps/api/.env
-  #   ports:
-  #     - 3001:3001
-  #   volumes:
-  #     - ./apps/api:/api
-  #     - /apps/api/tmp
-  #   links:
-  #     - db
+  sidekiq:
+    build: apps/api
+    command: bundle exec sidekiq -q default -q mailers
+    env_file:
+      - ./apps/api/.env
+    ports:
+      - 3001:3001
+    volumes:
+      - ./apps/api:/api
+      - /apps/api/tmp
+    links:
+      - db
+      - redis
+      - mjml2html
 
   www:
     build:
@@ -51,15 +55,28 @@ services:
     links:
       - api
 
-  # redis:
-  #   build: apps/redis
-  #   environment:
-  #     - HOST=0.0.0.0
-  #   ports:
-  #     - 6379:6379
-  #   volumes:
-  #     - redis:/data
-  #     - ./apps/redis/redis.conf:/usr/local/etc/redis/redis.conf
+  mjml2html:
+    image: docker.pkg.github.com/chronotruck/mjml2html/mjml2html:1.4.0
+    environment:
+      - PORT=8082
+    ports:
+      - 8082:8082
+
+  redis:
+    build: apps/redis
+    environment:
+      - HOST=0.0.0.0
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+      - ./apps/redis/redis.conf:/usr/local/etc/redis/redis.conf
+
+  mailcatcher:
+    image: dockage/mailcatcher:0.6.5
+    ports:
+      - 1080:1080
+      - 1025:1025
 
 volumes:
   postgres:
