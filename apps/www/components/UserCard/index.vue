@@ -1,11 +1,11 @@
 <template>
-  <div class="flex items-center mb-2">
-    <div class="w-16">
+  <div class="user-card flex items-center">
+    <div class="w-16 flex-shrink-0">
       <UserAvatar
         :user="user"
       />
     </div>
-    <div class="flex flex-col flex-1 leading-tight">
+    <div class="user-card__name flex flex-col flex-1 leading-tight truncate">
       <nuxt-link
         :to="{
           name: 'User',
@@ -15,7 +15,7 @@
         }"
         class="mr-4"
       >
-        <div class="font-medium text-lg">
+        <div class="font-medium text-lg truncate">
           {{ user.first_name }} {{ user.last_name }}
         </div>
       </nuxt-link>
@@ -26,7 +26,7 @@
             username: user.username
           }
         }"
-        class="text-base text-gray-600"
+        class="text-base text-gray-600 truncate"
       >
         @{{ user.username }}
       </nuxt-link>

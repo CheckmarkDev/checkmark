@@ -46,14 +46,15 @@
           <template
             v-else
           >
-            <li>
+            <UserMenu />
+            <!-- <li>
               <a
                 href="#"
                 @click.prevent="signOut"
               >
                 {{ $trans('global.buttons.sign-out') }}
               </a>
-            </li>
+            </li> -->
           </template>
         </ul>
       </nav>
@@ -66,8 +67,12 @@
   import Cookie from 'js-cookie'
 
   import useAccessor from '@/composables/useAccessor'
+  import UserMenu from '@/components/AppHeader/UserMenu/index.vue'
 
   export default defineComponent({
+    components: {
+      UserMenu
+    },
     setup () {
       const router = useRouter()
       const accessor = useAccessor()
