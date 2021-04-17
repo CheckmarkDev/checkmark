@@ -6,9 +6,32 @@
       <mj-all font-family="Roboto, Helvetica, sans-serif"></mj-all>
       <mj-text font-weight="300" font-size="16px" color="#616161" line-height="24px"></mj-text>
       <mj-section padding="0px"></mj-section>
+      <mj-button background-color="#2589C7" font-size="16px" font-weight="medium" inner-padding="14px 20px"></mj-button>
     </mj-attributes>
   </mj-head>
-  <mj-body>
+  <mj-body background-color="#F7FAFC">
+    <mj-section padding-bottom="16px" padding-top="16px">
+    	<mj-column>
+        <mj-image
+         src="https://checkmark.dev/logo.svg"
+         width="200px"
+         align="left"
+         href="https://www.checkmark.dev"
+         padding="0"
+        >
+        </mj-image>
+      </mj-column>
+    </mj-section>
     <%= yield %>
+    <%# <mj-section>
+    	<mj-column>
+      	<mj-text align="right">
+        	<a href="#" style="color:#718096; margin-right: 8px; text-decoration: none;">
+          Régler mes notifications</a>
+          <a href="#" style="color:#718096;  text-decoration: none;">
+          Se désinscrire</a>
+        </mj-text>
+      </mj-column>
+    </mj-section> %>
   </mj-body>
 </mjml>

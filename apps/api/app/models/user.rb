@@ -13,6 +13,7 @@ class User < ApplicationRecord
   validates :password, length: { minimum: 6 }
 
   before_save :format_username
+  after_create :send_welcome
 
   def last_streak
     streaks.order(created_at: :desc).first
@@ -25,6 +26,10 @@ class User < ApplicationRecord
     end
 
     return 0
+  end
+
+  def send_welcome
+    UserMailer.welcome(self).deliver_later
   end
 
   private
