@@ -47,14 +47,6 @@
             v-else
           >
             <UserMenu />
-            <!-- <li>
-              <a
-                href="#"
-                @click.prevent="signOut"
-              >
-                {{ $trans('global.buttons.sign-out') }}
-              </a>
-            </li> -->
           </template>
         </ul>
       </nav>
@@ -63,35 +55,13 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, useRouter } from '@nuxtjs/composition-api'
-  import Cookie from 'js-cookie'
+  import { defineComponent } from '@nuxtjs/composition-api'
 
-  import useAccessor from '@/composables/useAccessor'
   import UserMenu from '@/components/AppHeader/UserMenu/index.vue'
 
   export default defineComponent({
     components: {
       UserMenu
-    },
-    setup () {
-      const router = useRouter()
-      const accessor = useAccessor()
-
-      function signOut () {
-        Cookie.remove('token')
-        Cookie.remove('user')
-
-        accessor.setAuthToken(null)
-        accessor.setAuthUser(null)
-
-        router.push({
-          name: 'Home'
-        }).catch(() => {})
-      }
-
-      return {
-        signOut
-      }
     }
   })
 </script>
