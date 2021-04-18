@@ -6,6 +6,8 @@ import User from '@/pages/user/index.vue'
 import Task from '@/pages/user/task/index.vue'
 import SignIn from '@/pages/auth/sign-in/index.vue'
 import SignUp from '@/pages/auth/sign-up/index.vue'
+import Settings from '@/pages/settings/index.vue'
+import SettingsNotifications from '@/pages/settings/notifications/index.vue'
 
 Vue.use(VueRouter)
 
@@ -19,6 +21,24 @@ const AUTH_ROUTES = [
     name: 'SignUp',
     path: '/auth/sign-up',
     component: SignUp
+  }
+]
+
+const SETTINGS_ROUTES = [
+  {
+    name: 'Settings',
+    path: '/settings',
+    component: Settings,
+    redirect: {
+      name: 'SettingsNotifications'
+    },
+    children: [
+      {
+        name: 'SettingsNotifications',
+        path: 'notifications',
+        component: SettingsNotifications
+      }
+    ]
   }
 ]
 
@@ -43,7 +63,8 @@ const WEBSITE_ROUTES = [
 function buildRoutes () {
   const defaultRoutes = [
     ...AUTH_ROUTES,
-    ...WEBSITE_ROUTES
+    ...WEBSITE_ROUTES,
+    ...SETTINGS_ROUTES,
   ]
 
   const localizedRoutes = defaultRoutes.map(route => ({

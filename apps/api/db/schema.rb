@@ -10,12 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_15_205419) do
+ActiveRecord::Schema.define(version: 2021_04_18_200704) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
+
+  create_table "email_notifications", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.boolean "like", default: true
+    t.boolean "comment", default: true
+    t.boolean "newsletter", default: true
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_email_notifications_on_user_id"
+    t.index ["uuid"], name: "index_email_notifications_on_uuid", unique: true
+  end
 
   create_table "streaks", force: :cascade do |t|
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
@@ -100,6 +110,7 @@ ActiveRecord::Schema.define(version: 2021_04_15_205419) do
     t.index ["uuid"], name: "index_users_on_uuid", unique: true
   end
 
+  add_foreign_key "email_notifications", "users"
   add_foreign_key "streaks", "users"
   add_foreign_key "task_comments", "tasks"
   add_foreign_key "task_comments", "users"

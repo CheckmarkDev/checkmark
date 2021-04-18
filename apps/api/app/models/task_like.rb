@@ -13,6 +13,9 @@ class TaskLike < ApplicationRecord
 
   private
     def send_like_email
-      TaskMailer.like(self.task, self.user).deliver_later
+      notification = self.task.user.email_notification.like
+      if notification
+        TaskMailer.like(self.task, self.user).deliver_later
+      end
     end
 end

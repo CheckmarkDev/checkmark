@@ -5,4 +5,6 @@ global.buttons.sign-in: Se connecter
 global.buttons.sign-up: S'inscrire
 global.buttons.sign-out: Déconnexion
 global.buttons.send: Envoyer
+global.buttons.save: Sauvegarder
+global.buttons.settings: Paramètres
 global.labels.comment: Commentaire
