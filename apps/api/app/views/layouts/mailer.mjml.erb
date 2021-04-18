@@ -23,15 +23,17 @@
       </mj-column>
     </mj-section>
     <%= yield %>
-    <%# <mj-section>
+    <mj-section>
     	<mj-column>
       	<mj-text align="right">
-        	<a href="#" style="color:#718096; margin-right: 8px; text-decoration: none;">
-          Régler mes notifications</a>
-          <a href="#" style="color:#718096;  text-decoration: none;">
-          Se désinscrire</a>
+        	<a href="<%= ENV['WEB_BASE'] %>/settings/notifications" style="color:#718096; margin-right: 8px; text-decoration: none;">
+            Régler mes notifications
+          </a>
+          <a href="%unsubscribe_url%" style="color:#718096;  text-decoration: none;">
+            Se désabonner
+          </a>
         </mj-text>
       </mj-column>
-    </mj-section> %>
+    </mj-section>
   </mj-body>
 </mjml>
