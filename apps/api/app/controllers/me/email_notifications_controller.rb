@@ -1,6 +1,6 @@
 class Me::EmailNotificationsController < ApplicationController
   before_action :authorize_request
-  before_action :set_email_notification, only: [:show, :update]
+  before_action :set_email_notification, only: [:index, :update]
 
   api :GET, '/me/email_notifications'
   def index

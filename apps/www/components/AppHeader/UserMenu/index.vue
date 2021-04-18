@@ -38,6 +38,17 @@
       >
         <ul>
           <li>
+            <nuxt-link
+              :to="{
+                name: 'Settings'
+              }"
+              class="flex py-2 px-4 hover:bg-gray-200"
+              @click.native="() => isOpen = false"
+            >
+              {{ $trans('global.buttons.settings') }}
+            </nuxt-link>
+          </li>
+          <li>
             <a
               class="flex py-2 px-4 hover:bg-gray-200"
               href="#"

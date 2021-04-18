@@ -5,7 +5,8 @@ const TRANSLATION_FILES = [
   'home',
   'sign-in',
   'sign-up',
-  'user'
+  'user',
+  'settings'
 ]
 
 const LOCALES = ['fr']
