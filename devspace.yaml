@@ -411,7 +411,6 @@ deployments:
         ingressClass: nginx
         tls: ls-api-prod
         tlsClusterIssuer: ls-api-prod
-        ingressClass: nginx
         rules:
         - host: api.checkmark.dev
       service:
@@ -478,7 +477,6 @@ deployments:
         ingressClass: nginx
         tls: ls-www-prod
         tlsClusterIssuer: ls-www-prod
-        ingressClass: nginx
         rules:
         - host: checkmark.dev
         - host: www.checkmark.dev
