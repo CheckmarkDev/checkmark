@@ -90,8 +90,9 @@
     },
     methods: {
       submitted () {
+        // @ts-ignore
         this.$refs.observer.validate()
-          .then(valid => {
+          .then((valid: boolean) => {
             if (!valid) return
 
             const { like, comment, newsletter } = this.formData
