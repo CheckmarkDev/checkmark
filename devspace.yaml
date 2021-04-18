@@ -290,7 +290,6 @@ deployments:
         ingressClass: nginx
         tls: ls-api-prod
         tlsClusterIssuer: ls-api-prod
-        ingressClass: nginx
         rules:
         - host: api.checkmark.dev
       service:
@@ -526,17 +525,21 @@ deployments:
         maxUnavailable: "50%"
       containers:
         - image: raesta/checkmark-discord-bot
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 9090
-            initialDelaySeconds: 5
-            failureThreshold: 30
-            periodSeconds: 5
           resources:
             limits:
               cpu: 400m
               memory: 500Mi
+          env:
+            - name: DISCORD_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: discord-bot-secret
+                  key: DISCORD_API_TOKEN
+            - name: DISCORD_CHANNEL_EVENT
+              valueFrom:
+                secretKeyRef:
+                  name: discord-bot-secret
+                  key: DISCORD_CHANNEL_EVENT
       ingress:
         annotations:
           kubernetes.io/ingress.class: nginx

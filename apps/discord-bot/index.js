@@ -28,7 +28,7 @@ const getStatusColor = (status) => {
         default:
         case 'todo':
             return '#AFB6BF'
-        case 'pending':
+        case 'doing':
             return '#EDAF53'
         case 'done':
             return '#38A169'
