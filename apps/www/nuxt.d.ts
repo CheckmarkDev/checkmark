@@ -9,6 +9,7 @@ declare module 'vue/types/vue' {
     $wait: VueWaitInstance
     $toasted: any
     $trans: any
+    $socialsplash: any
   }
 }
 
@@ -22,5 +23,6 @@ declare module '@nuxt/types' {
     $mitt: Emitter
     $toasted: any
     $trans: any
+    $socialsplash: any
   }
 }
