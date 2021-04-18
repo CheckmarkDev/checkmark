@@ -1,11 +1,32 @@
 const dotenv = require('dotenv').config();
-const { Client, MessageEmbed } = require('discord.js');
-const client = new Client();
+const { MessageEmbed } = require('discord.js');
+const App = require('./src/app');
+
+global.__basedir = __dirname;
+
+const client = new App({
+    token: process.env.DISCORD_API_TOKEN,
+});
+
+const init = () => {
+    client.loadEvents('./src/events');
+    client.login(client.token);
+}
+
+init();
+
+
+
+
+
+
+
+// webhook
 const express = require('express');
 const bodyParse = require('body-parser');
-const app = express();
+const server = express();
 
-app.use(bodyParse.json({ type: 'application/json'}));
+server.use(bodyParse.json({ type: 'application/json'}));
 
 const getStatusColor = (status) => {
     switch (status) {
@@ -19,7 +40,7 @@ const getStatusColor = (status) => {
     }
 }
 
-app.post('/webhooks', async (req, res) => {
+server.post('/webhooks', async (req, res) => {
     const { body } = req;
 
     if (!body.event || !body.data) {
@@ -47,39 +68,8 @@ app.post('/webhooks', async (req, res) => {
     res.send('coucou');
 });
 
-client.on('ready', async () => {
-    console.log(`Logged in as ${client.user.tag}!`);
+server.listen(9090, () => console.log('Started express'));
 
-    await client.user.setPresence({
-        activity: {
-            type: 'PLAYING',
-            name: 'construire le futur',
-        },
-        status: 'online'
-    })
-});
 
-client.on('message', async message => {
-    if (message.content.startsWith('!help')) {
-        const newMessage = new MessageEmbed()
-            .setColor('#0099ff')
-            .setTitle('!help')
-            .setDescription('help description')
-            .setThumbnail('https://www.checkmark.dev/icon.png')
-            .setFooter('Checkmark', 'https://www.checkmark.dev/icon.png')
-            .setTimestamp()
-        ;
 
-        message.channel.send(newMessage)
-    }
-
-    if (message.content === 'ping') {
-        await message.reply('Pong!');
-    }
-});
-
-client.login(process.env.DISCORD_API_TOKEN);
-
-app.listen(9090, () => {
-    console.log('Started express');
-});
+process.on('unhandledRejection', err => console.log(err));
