@@ -48,6 +48,7 @@
 </template>
 
 <script lang="ts">
+  import dayjs from 'dayjs'
   import { defineComponent } from '@nuxtjs/composition-api'
   import { NuxtAxiosInstance } from '@nuxtjs/axios'
 
@@ -88,12 +89,19 @@
         user: fullName || user.username
       })
 
+      const og = this.$socialsplash.generate('fae08fcc-d0e8-4264-a90c-47d78b9b7680', {
+        subtitle: `${fullName} - ${dayjs(task.created_at).format('LLL')}`,
+        title: task.content,
+      })
+
       return {
         title: task.content,
         meta: [
           { hid: 'description', name: 'description', content: description },
           { hid: 'og:description', property: 'og:description', content: description },
           { hid: 'og:title', property: 'og:title', content: task.content },
+          { hid: 'twitter:image', property: 'twitter:image', content: og },
+          { hid: 'og:image:url', property: 'og:image:url', content: og },
           {
             hid: 'og:image:width', name: 'og:image:width', content: '1200'
           },
