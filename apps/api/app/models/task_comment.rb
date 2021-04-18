@@ -6,6 +6,9 @@ class TaskComment < ApplicationRecord
 
   private
     def send_comment_email
-      TaskMailer.comment(self.task, self.user, self).deliver_later
+      notification = self.task.user.email_notification.comment
+      if notification
+        TaskMailer.comment(self.task, self.user, self).deliver_later
+      end
     end
 end

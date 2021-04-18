@@ -20,6 +20,7 @@ Rails.application.routes.draw do
 
     namespace 'me' do
       resources :tasks
+      resources :email_notifications
     end
 
     scope '/auth' do

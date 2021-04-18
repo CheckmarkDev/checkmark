@@ -7,11 +7,13 @@ class User < ApplicationRecord
   has_many :task_comments
   has_many :task_groups
   has_many :streaks
+  has_one :email_notification
 
   validates :email, presence: true, uniqueness: true
   validates :username, presence: true, uniqueness: true, length: { minimum: 2 }
   validates :password, length: { minimum: 6 }
 
+  before_create :create_email_notification
   before_save :format_username
   after_create :send_welcome
 
@@ -33,6 +35,10 @@ class User < ApplicationRecord
   end
 
   private
+    def create_email_notification
+      self.email_notification = EmailNotification.new
+    end
+
     def format_username
       self.username = self.username.parameterize
     end

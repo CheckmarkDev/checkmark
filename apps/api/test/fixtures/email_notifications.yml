@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  like: false
+  comment: false
+  newsletter: false
+  user: one
+
+two:
+  like: false
+  comment: false
+  newsletter: false
+  user: two
