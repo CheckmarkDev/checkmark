@@ -38,6 +38,18 @@ const getStateColor = (state) => {
     }
 }
 
+const getStateEmoji = (state) => {
+    switch (state) {
+        default:
+        case 'todo':
+            return `<:todo:${process.env.DISCORD_EMOJI_TODO}>`
+        case 'doing':
+            return `<:doing:${process.env.DISCORD_EMOJI_DOING}>`
+        case 'done':
+            return `<:done:${process.env.DISCORD_EMOJI_DONE}>`
+    }
+}
+
 server.post('/webhooks', async (req, res) => {
     const { body } = req;
 
@@ -54,7 +66,7 @@ server.post('/webhooks', async (req, res) => {
                 .setAuthor(`Par ${data.user.first_name} ${data.user.last_name} (${data.user.username})`)
                 .setTitle(`Création d\'une nouvelle tâche`)
                 .setURL(data.url)
-                .setDescription(data.content)
+                .setDescription(`${getStateEmoji(data.status)} ${data.content}`)
                 .setThumbnail(data.user.avatar_url)
                 .setFooter('Checkmark', 'https://www.checkmark.dev/icon.png')
                 .setTimestamp();
