@@ -26,8 +26,8 @@ init();
 // webhook
 server.use(bodyParse.json({ type: 'application/json'}));
 
-const getStatusColor = (status) => {
-    switch (status) {
+const getStateColor = (state) => {
+    switch (state) {
         default:
         case 'todo':
             return '#AFB6BF'
@@ -50,7 +50,7 @@ server.post('/webhooks', async (req, res) => {
     switch (event) {
         case 'task.created':
             const newMessage = new MessageEmbed()
-                .setColor(getStatusColor(data.status))
+                .setColor(getStateColor(data.state))
                 .setAuthor(`Par ${data.user.first_name} ${data.user.last_name} (${data.user.username})`)
                 .setTitle(`Création d\'une nouvelle tâche`)
                 .setURL(data.url)
