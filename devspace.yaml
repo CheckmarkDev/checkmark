@@ -530,6 +530,10 @@ deployments:
               cpu: 400m
               memory: 500Mi
           env:
+            - name: HOST
+              value: "0.0.0.0"
+            - name: PORT
+              value: "9090"
             - name: DISCORD_API_TOKEN
               valueFrom:
                 secretKeyRef:
