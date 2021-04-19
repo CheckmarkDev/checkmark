@@ -23,7 +23,7 @@ images:
           target: release
 
   discord-bot:
-    image: raesta/checkmark-discord-bot
+    image: williamdasilva/checkmark-discord-bot
     dockerfile: ./apps/discord-bot/Dockerfile
     context: ./apps/discord-bot
     preferSyncOverRebuild: true
@@ -524,7 +524,7 @@ deployments:
         maxSurge: "100%"
         maxUnavailable: "50%"
       containers:
-        - image: raesta/checkmark-discord-bot
+        - image: williamdasilva/checkmark-discord-bot
           resources:
             limits:
               cpu: 400m

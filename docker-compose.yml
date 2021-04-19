@@ -57,6 +57,7 @@ services:
 
   discord:
     build: apps/discord-bot
+    command: npm run dev
     environment:
       - HOST=0.0.0.0
       - PORT=9090
