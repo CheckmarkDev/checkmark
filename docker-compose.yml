@@ -55,6 +55,18 @@ services:
     links:
       - api
 
+  discord:
+    build: apps/discord-bot
+    environment:
+      - HOST=0.0.0.0
+      - PORT=9090
+    env_file:
+      - ./apps/discord-bot/.env
+    ports:
+      - 9090:9090
+    volumes:
+      - ./apps/discord-bot:/www
+
   mjml2html:
     image: williamdasilva/mjml2html
     environment:

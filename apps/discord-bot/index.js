@@ -1,8 +1,15 @@
 const dotenv = require('dotenv').config();
 const { MessageEmbed } = require('discord.js');
+const express = require('express');
+const bodyParse = require('body-parser');
 const App = require('./src/app');
 
+const server = express();
+
 global.__basedir = __dirname;
+
+const PORT = process.env.PORT || 9090
+const HOST = process.env.HOST || 'localhost'
 
 const client = new App({
     token: process.env.DISCORD_API_TOKEN,
@@ -17,10 +24,6 @@ init();
 
 
 // webhook
-const express = require('express');
-const bodyParse = require('body-parser');
-const server = express();
-
 server.use(bodyParse.json({ type: 'application/json'}));
 
 const getStatusColor = (status) => {
@@ -63,7 +66,7 @@ server.post('/webhooks', async (req, res) => {
     res.send('coucou');
 });
 
-server.listen(9090, () => console.log('Started express'));
+server.listen(PORT, HOST, () => console.log('Started express'));
 
 
 
