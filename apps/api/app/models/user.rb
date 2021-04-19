@@ -1,3 +1,5 @@
+require 'digest/md5'
+
 class User < ApplicationRecord
   has_secure_password
 
@@ -28,6 +30,14 @@ class User < ApplicationRecord
     end
 
     return 0
+  end
+
+  def avatar_url
+    email_address = self.email.downcase
+    hash = Digest::MD5.hexdigest(email_address)
+    image_src = "https://www.gravatar.com/avatar/#{hash}"
+
+    image_src
   end
 
   def send_welcome
