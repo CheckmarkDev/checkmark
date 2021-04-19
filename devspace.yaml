@@ -544,6 +544,21 @@ deployments:
                 secretKeyRef:
                   name: discord-bot-secret
                   key: DISCORD_CHANNEL_EVENT
+            - name: DISCORD_EMOJI_TODO
+              valueFrom:
+                secretKeyRef:
+                  name: discord-bot-secret
+                  key: DISCORD_EMOJI_TODO
+            - name: DISCORD_EMOJI_DOING
+              valueFrom:
+                secretKeyRef:
+                  name: discord-bot-secret
+                  key: DISCORD_EMOJI_DOING
+            - name: DISCORD_EMOJI_DONE
+              valueFrom:
+                secretKeyRef:
+                  name: discord-bot-secret
+                  key: DISCORD_EMOJI_DONE
       ingress:
         annotations:
           kubernetes.io/ingress.class: nginx
