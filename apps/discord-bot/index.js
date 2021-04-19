@@ -51,8 +51,8 @@ server.post('/webhooks', async (req, res) => {
         case 'task.created':
             const newMessage = new MessageEmbed()
                 .setColor(getStatusColor(data.status))
-                .setAuthor(`Par ${data.user.username}`)
-                .setTitle(`Création d\'une nouvelle tache`)
+                .setAuthor(`Par ${data.user.first_name} ${data.user.last_name} (${data.user.username})`)
+                .setTitle(`Création d\'une nouvelle tâche`)
                 .setURL(data.url)
                 .setDescription(data.content)
                 .setThumbnail(data.user.avatar_url)

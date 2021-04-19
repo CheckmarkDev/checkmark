@@ -38,6 +38,7 @@ services:
       - db
       - redis
       - mjml2html
+      - discord
 
   www:
     build:
