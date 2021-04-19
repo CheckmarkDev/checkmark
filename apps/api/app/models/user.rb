@@ -26,7 +26,7 @@ class User < ApplicationRecord
   def streak
     streak = self.last_streak
     if streak.present?
-      return (DateTime.now - streak.created_at.to_datetime).to_i
+      return (DateTime.now - streak.created_at.to_datetime.beginning_of_day).to_i
     end
 
     return 0
