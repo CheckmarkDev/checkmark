@@ -186,7 +186,9 @@ export const actions: ActionTree<RootState, RootState> & Actions = {
 
     commit(MutationTypes.SET_AUTH_TOKEN, token)
     commit(MutationTypes.SET_AUTH_USER, user)
-    dispatch('retrieveMe')
+    if (user && token) {
+      dispatch('retrieveMe')
+    }
   }
 }
 
