@@ -64,7 +64,9 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/composition-api',
-    '@nuxt/typescript-build',
+    ['@nuxt/typescript-build', {
+      typeCheck: false
+    }],
     '@nuxtjs/tailwindcss',
     '@nuxtjs/router',
     'nuxt-typed-vuex'
