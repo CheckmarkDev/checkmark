@@ -9,4 +9,11 @@ module.exports = async (client) => {
         },
         status: 'online'
     })
+
+    // setup reaction for rules
+    const channel = await client.channels.fetch(process.env.DISCORD_CHANNEL_RULES);
+    const message = await channel.messages.fetch(process.env.DISCORD_MESSAGE_RULES)
+
+    await message.react('✅');
+    await message.react('❌');
 }

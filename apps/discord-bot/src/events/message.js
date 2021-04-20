@@ -1,6 +1,4 @@
 module.exports = async (client, message) => {
-    console.log('message event');
-
     if (message.content.startsWith('!help')) {
         const newMessage = new MessageEmbed()
             .setColor('#0099ff')
@@ -11,7 +9,7 @@ module.exports = async (client, message) => {
             .setTimestamp()
         ;
 
-        message.channel.send(newMessage)
+        await message.channel.send(newMessage)
     }
 
     if (message.content === 'ping') {

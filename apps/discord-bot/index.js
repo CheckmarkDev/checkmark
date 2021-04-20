@@ -13,6 +13,8 @@ const HOST = process.env.HOST || 'localhost'
 
 const client = new App({
     token: process.env.DISCORD_API_TOKEN,
+}, {
+    partials: ['MESSAGE', 'CHANNEL', 'REACTION']
 });
 
 const init = () => {
