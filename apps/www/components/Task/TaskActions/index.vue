@@ -22,9 +22,19 @@
       >
         <li>
           <button
+            :disabled="$wait.is(`editing task ${task.uuid}`)"
+            type="button"
+            class="w-full text-left text-sm py-2 px-3 rounded hover:bg-gray-200"
+            @click="editTask"
+          >
+            {{ $trans('home.buttons.edit') }}
+          </button>
+        </li>
+        <li>
+          <button
             :disabled="$wait.is(`deleting task ${task.uuid}`)"
             type="button"
-            class="text-sm py-2 px-3 rounded hover:bg-gray-200 text-red-600"
+            class="w-full text-left text-sm py-2 px-3 rounded hover:bg-gray-200 text-red-600"
             @click="removeTask"
           >
             {{ $trans('home.buttons.delete') }}
@@ -80,9 +90,14 @@
         }
       }
 
+      function editTask () {
+        mitt.emit(`edit dialog for ${task.value.uuid}`, task.value)
+      }
+
       return {
         open,
-        removeTask
+        removeTask,
+        editTask
       }
     }
   })
