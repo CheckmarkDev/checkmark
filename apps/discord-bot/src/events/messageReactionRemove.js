@@ -11,7 +11,7 @@ module.exports = async (client, reaction, user) => {
     }
 
     // add role basic user if u click on check emoji
-    if (reaction.emoji.name === '✅' && process.env.DISCORD_MESSAGE_RULES === reaction.message.id) {
+    if ('done' === reaction.emoji.name && process.env.DISCORD_MESSAGE_RULES === reaction.message.id) {
         const member = await reaction.message.guild.members.fetch(user);
 
         await member.roles.remove(process.env.DISCORD_ROLES_USER);
