@@ -26,7 +26,7 @@
             </li>
           </ul>
         </nav>
-        <section class="bg-white w-full h-56 rounded-lg p-6">
+        <section class="bg-white w-full md:w-9/12 h-56 rounded-lg p-6">
           <nuxt />
         </section>
       </div>

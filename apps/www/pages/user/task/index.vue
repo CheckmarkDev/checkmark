@@ -21,15 +21,7 @@
     </div>
     <div class="home-container">
       <div class="container mx-auto flex items-start">
-        <nav class="bg-white hidden md:flex rounded-lg w-3/12 mr-8 p-4">
-          <ul class="w-full">
-            <li>
-              <a href="https://www.changelog.xyz/checkmark" class="hover:bg-gray-200 rounded p-2 w-full flex">
-                Changelog
-              </a>
-            </li>
-          </ul>
-        </nav>
+        <SideNavigation />
         <section class="bg-white w-full md:w-9/12 h-56 rounded-lg p-6">
           <div class="border border-gray-300 rounded mb-8 px-8 py-4">
             <Task
@@ -54,6 +46,7 @@
 
   import TaskComponent from '@/components/Task/index.vue'
   import TaskComments from '@/components/TaskComments/index.vue'
+  import SideNavigation from '@/components/Home/SideNavigation/index.vue'
   import { PaginateResponse, PaginateResponseMeta } from '~/types/pagination'
   import { User } from '~/types/user'
   import { Comment } from '~/types/comment'
@@ -62,7 +55,8 @@
   export default defineComponent({
     components: {
       Task: TaskComponent,
-      TaskComments
+      TaskComments,
+      SideNavigation
     },
     data () {
       return {
