@@ -5,6 +5,7 @@
     username: @current_user.username,
     first_name: @current_user.first_name,
     last_name: @current_user.last_name,
-    streak: @current_user.streak
+    streak: @current_user.streak,
+    avatar_url: @current_user.avatar_url
   }
 }

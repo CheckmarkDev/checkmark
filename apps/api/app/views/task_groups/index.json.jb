@@ -17,7 +17,8 @@ json[:data] = @task_groups.map do |task_group|
       username: task_group.user.username,
       first_name: task_group.user.first_name,
       last_name: task_group.user.last_name,
-      streak: task_group.user.streak
+      streak: task_group.user.streak,
+      avatar_url: task_group.user.avatar_url
     }
   }
 
@@ -34,7 +35,8 @@ json[:data] = @task_groups.map do |task_group|
         username: task_group.user.username,
         first_name: task_group.user.first_name,
         last_name: task_group.user.last_name,
-        streak: task_group.user.streak
+        streak: task_group.user.streak,
+        avatar_url: task_group.user.avatar_url
       }
     }
 

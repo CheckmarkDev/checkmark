@@ -18,7 +18,8 @@ json[:data] = @task_comments.map do |comment|
       username: comment.user.username,
       first_name: comment.user.first_name,
       last_name: comment.user.last_name,
-      streak: comment.user.streak
+      streak: comment.user.streak,
+      avatar_url: comment.user.avatar_url
     }
   }
 

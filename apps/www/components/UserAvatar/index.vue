@@ -1,5 +1,10 @@
 <template>
   <div class="user-avatar w-12 h-12 rounded-full bg-gray-300 relative">
+    <img
+      :src="user.avatar_url"
+      alt=""
+      class="rounded-full"
+    >
     <Streak
       :streak="user.streak"
       class="absolute"
@@ -19,7 +24,8 @@
     },
     props: {
       user: {
-        type: Object as () => User
+        type: Object as () => User,
+        required: true
       }
     }
   })
