@@ -1,4 +1,5 @@
 global.titles.reactions: Réactions
+global.titles.edit_task: Modifier une tâche
 global.paragraphs.no_reactions: Aucune réaction pour cette tâche.
 global.paragraphs.no_self_like: Vous ne pouvez pas liker vos propres tâches.
 global.buttons.sign-in: Se connecter

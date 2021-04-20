@@ -9,9 +9,11 @@ home.labels.doing: En cours
 home.labels.todo: À faire
 home.paragraphs.description: Rejoignez une communauté de developpeurs et développeuses passionné(e)s. Partagez votre progression quotidiennement et discutez autour de vos projets et actions.
 home.paragraphs.task_added: Votre progression a bien été prise en compte !
+home.paragraphs.task_edited: Votre progression a bien été mise à jour !
 home.paragraphs.confirm_task_deletion: Êtes-vous sûr de vouloir supprimer cette tâche ?
 home.paragraphs.task_deleted: Votre tâche a bien été supprimée !
 home.buttons.join: Rejoindre la communauté
 home.buttons.send: Envoyer
+home.buttons.edit: Editer
 home.buttons.delete: Supprimer
 home.buttons.mark-as: Marquer comme
