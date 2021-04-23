@@ -5,7 +5,7 @@
     @submit.prevent="submitted"
   >
     <UserAvatar
-      :user="task.user"
+      :user="$accessor.getAuthUser"
       class="hidden md:flex mr-8"
     />
     <div class="flex flex-1 w-full mb-4 md:mb-0 md:mr-4">
