@@ -11,8 +11,6 @@ RUN yarn install --prod --frozen-lockfile
 # copy app source
 COPY . .
 
-RUN export $(grep -v '^#' .env.prod | xargs)
-
 EXPOSE 9090
 
 CMD ["node", "index.js"]
