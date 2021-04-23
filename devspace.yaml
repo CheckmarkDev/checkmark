@@ -535,21 +535,21 @@ deployments:
             - name: PORT
               value: "9090"
             - name: DISCORD_EMOJI_TODO
-              value: 833811566960967681
+              value: "833811566960967681"
             - name: DISCORD_EMOJI_DOING
-              value: 833811525223317514
+              value: "833811525223317514"
             - name: DISCORD_EMOJI_DONE
-              value: 833811466456662037
+              value: "833811466456662037"
             - name: DISCORD_EMOJI_CHECK
-              value: 833811466456662037
+              value: "833811466456662037"
             - name: DISCORD_CHANNEL_EVENT
-              value: 833824731702231111
+              value: "833824731702231111"
             - name: DISCORD_CHANNEL_RULES
-              value: 829400652374868000
+              value: "829400652374868000"
             - name: DISCORD_MESSAGE_RULES
-              value: 834003198926651402
+              value: "834003198926651402"
             - name: DISCORD_ROLES_USER
-              value: 834183755186438165
+              value: "834183755186438165"
             - name: DISCORD_API_TOKEN
               valueFrom:
                 secretKeyRef:
