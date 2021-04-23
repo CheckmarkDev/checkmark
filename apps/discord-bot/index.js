@@ -13,6 +13,8 @@ const HOST = process.env.HOST || 'localhost'
 
 const client = new App({
     token: process.env.DISCORD_API_TOKEN,
+}, {
+    partials: ['MESSAGE', 'CHANNEL', 'REACTION']
 });
 
 const init = () => {
@@ -28,25 +30,25 @@ server.use(bodyParse.json({ type: 'application/json'}));
 
 const getStateColor = (state) => {
     switch (state) {
-        default:
-        case 'todo':
-            return '#AFB6BF'
-        case 'doing':
-            return '#EDAF53'
         case 'done':
             return '#38A169'
+        case 'doing':
+            return '#EDAF53'
+        case 'todo':
+        default:
+            return '#AFB6BF'
     }
 }
 
 const getStateEmoji = (state) => {
     switch (state) {
-        default:
-        case 'todo':
-            return `<:todo:${process.env.DISCORD_EMOJI_TODO}>`
-        case 'doing':
-            return `<:doing:${process.env.DISCORD_EMOJI_DOING}>`
         case 'done':
             return `<:done:${process.env.DISCORD_EMOJI_DONE}>`
+        case 'doing':
+            return `<:doing:${process.env.DISCORD_EMOJI_DOING}>`
+        case 'todo':
+        default:
+            return `<:todo:${process.env.DISCORD_EMOJI_TODO}>`
     }
 }
 
@@ -62,7 +64,7 @@ server.post('/webhooks', async (req, res) => {
     switch (event) {
         case 'task.created':
             const newMessage = new MessageEmbed()
-                .setColor(getStateColor(data.state))
+                .setColor(getStateColor(data.status))
                 .setAuthor(`Par ${data.user.first_name} ${data.user.last_name} (${data.user.username})`)
                 .setTitle(`Création d\'une nouvelle tâche`)
                 .setURL(data.url)
