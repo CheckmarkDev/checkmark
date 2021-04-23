@@ -1,12 +1,12 @@
 <template>
-  <div class="streak flex items-center bg-gray-200 rounded-full px-2 py-1">
+  <div class="streak flex items-center bg-gray-200 rounded-full">
     <div
       v-text="emoji"
-      class="text-sm mr-2"
+      class="text-xs mr-2"
     />
     <div
       v-text="streak"
-      class="font-medium text-sm text-gray-800"
+      class="font-medium text-xs text-gray-800"
     />
   </div>
 </template>
@@ -26,7 +26,8 @@
       const emoji = computed(() => {
         if (streak.value === 0) return '😔'
         if (streak.value > 0 && streak.value <= 2) return '😀'
-        return '🚀'
+        if (streak.value > 3 && streak.value <= 21) return '🚀'
+        return '🔥'
       })
 
       return {
@@ -35,3 +36,9 @@
     }
   })
 </script>
+
+<style scoped>
+  .streak {
+    padding: 2px 4px;
+  }
+</style>
