@@ -29,6 +29,13 @@
               class="flex flex-col"
             >
               <div class="flex flex-col">
+                <pre>
+                  {{ formData.state }}
+                </pre>
+                <TaskStateSwitch
+                  v-model="formData.state"
+                  class="mb-4"
+                />
                 <div class="w-full">
                   <textarea
                     :disabled="$wait.is('updating task')"
@@ -60,11 +67,13 @@
   import { XIcon } from 'vue-feather-icons'
   import { Task } from '~/types/task'
   import UserCard from '@/components/UserCard/index.vue'
+  import TaskStateSwitch from './TaskStateSwitch/index.vue'
 
   export default defineComponent({
     components: {
       XIcon,
-      UserCard
+      UserCard,
+      TaskStateSwitch
     },
     props: {
       task: {
@@ -75,7 +84,8 @@
     setup (props) {
       const { task } = toRefs(props)
       const formData = reactive({
-        content: task.value.content
+        content: task.value.content,
+        state: task.value.state
       })
 
       return {
@@ -89,11 +99,12 @@
           .then((valid: boolean) => {
             if (!valid) return
 
-            const { content } = this.formData
+            const { content, state } = this.formData
 
             this.$wait.start('updating task')
             this.$axios.put(`/me/tasks/${this.task.uuid}`, {
-              content: content.trim() || null
+              content: content.trim() || null,
+              state: state
             })
               .then(() => {
                 this.formData.content = ''
