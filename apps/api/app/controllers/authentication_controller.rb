@@ -46,7 +46,7 @@ class AuthenticationController < ApplicationController
       last_name: register_params[:last_name],
     )
 
-    if @user.save
+    if @user.save!
       generate_token(@user)
 
       render status: :created
