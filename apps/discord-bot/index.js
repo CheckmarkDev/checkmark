@@ -64,11 +64,11 @@ server.post('/webhooks', async (req, res) => {
     switch (event) {
         case 'task.created':
             const newMessage = new MessageEmbed()
-                .setColor(getStateColor(data.status))
+                .setColor(getStateColor(data.state))
                 .setAuthor(`Par ${data.user.first_name} ${data.user.last_name} (${data.user.username})`)
                 .setTitle(`Création d\'une nouvelle tâche`)
                 .setURL(data.url)
-                .setDescription(`${getStateEmoji(data.status)} ${data.content}`)
+                .setDescription(`${getStateEmoji(data.state)} ${data.content}`)
                 .setThumbnail(data.user.avatar_url)
                 .setFooter('Checkmark', 'https://www.checkmark.dev/icon.png')
                 .setTimestamp();
