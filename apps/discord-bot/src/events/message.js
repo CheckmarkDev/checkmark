@@ -1,4 +1,7 @@
+const { MessageEmbed } =  require('discord.js')
+
 module.exports = async (client, message) => {
+
     if (message.content.startsWith('!help')) {
         const newMessage = new MessageEmbed()
             .setColor('#0099ff')
