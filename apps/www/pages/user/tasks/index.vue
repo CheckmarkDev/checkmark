@@ -1,50 +1,38 @@
 <template>
-  <main>
-    <div class="home-hero">
-      <div class="container mx-auto">
-        <div class="flex items-center justify-between py-8">
-          <div
-            v-if="user"
-            class="w-1/2"
-          >
-            <h1
-              class="text-3xl text-white leading-tight mb-4"
-              v-text="`${user.first_name} ${user.last_name}`"
-            />
-            <h2
-              class="text-xl text-gray-300"
-              v-text="`@${user.username}`"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="home-container">
-      <div class="container mx-auto flex items-start">
-        <SideNavigation />
-        <section class="bg-white md:w-9/12 h-56 rounded-lg p-6">
-         <nuxt />
-        </section>
-      </div>
-    </div>
-  </main>
+  <div v-infinite-scroll="loadMore">
+    <h2 class="font-medium text-2xl mb-4">
+      Feed
+    </h2>
+
+    <DateGroupedTaskGroups
+      :task-groups="taskGroups.data"
+    />
+  </div>
 </template>
 
 <script lang="ts">
   import { defineComponent } from '@nuxtjs/composition-api'
   import { TaskGroup } from '~/types/taskGroup'
   import { User } from '~/types/user'
-  import SideNavigation from '@/components/Home/SideNavigation/index.vue'
+  import DateGroupedTaskGroups from '@/components/DateGroupedTaskGroups/index.vue'
 
   export default defineComponent({
     components: {
-      SideNavigation
+      DateGroupedTaskGroups
     },
     data () {
       return {
-        user: null
+        user: null,
+        taskGroups: {
+          data: [],
+          meta: null
+        }
       } as {
-        user: User | null
+        user: User | null,
+        taskGroups: {
+          data: Array<TaskGroup>,
+          meta: any
+        }
       }
     },
     head () {
@@ -74,12 +62,33 @@
     },
     async asyncData ({ $axios, route }) {
       const { username } = route.params
-      const [user] = await Promise.all([
-        $axios.$get(`/users/${username}`)
+      const [user, taskGroups] = await Promise.all([
+        $axios.$get(`/users/${username}`),
+        $axios.$get(`/users/${username}/task_groups`)
       ])
 
       return {
-        user
+        user,
+        taskGroups
+      }
+    },
+    methods: {
+      loadMore () {
+        if (this.taskGroups.meta.current_page + 1 > this.taskGroups.meta.total_pages) return
+
+        const { username } = this.$route.params
+        this.$axios.$get(`/users/${username}/task_groups`, {
+          params: {
+            page: this.taskGroups.meta.current_page + 1
+          }
+        })
+          .then(res => {
+            this.taskGroups.data = [
+              ...this.taskGroups.data,
+              ...res.data
+            ]
+            this.taskGroups.meta = res.meta
+          })
       }
     }
   })

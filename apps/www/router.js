@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import Home from '@/pages/index.vue'
 import User from '@/pages/user/index.vue'
 import Task from '@/pages/user/task/index.vue'
+import UserTasks from '@/pages/user/tasks/index.vue'
 import SignIn from '@/pages/auth/sign-in/index.vue'
 import SignUp from '@/pages/auth/sign-up/index.vue'
 import Settings from '@/pages/settings/index.vue'
@@ -51,13 +52,23 @@ const WEBSITE_ROUTES = [
   {
     name: 'User',
     path: '/u/:username',
-    component: User
+    component: User,
+    redirect: {
+      name: 'UserTasks'
+    },
+    children: [
+      {
+        name: 'UserTasks',
+        path: '',
+        component: UserTasks
+      },
+      {
+        name: 'Task',
+        path: 'task/:task',
+        component: Task
+      }
+    ]
   },
-  {
-    name: 'Task',
-    path: '/u/:username/task/:task',
-    component: Task
-  }
 ]
 
 function buildRoutes () {

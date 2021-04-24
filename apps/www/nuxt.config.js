@@ -78,6 +78,7 @@ export default {
     '@williamdasilva/gtag-module',
     // 'nuxt-stripe-module',
     'nuxt-socialsplash-module',
+    'nuxt-trailingslash-module',
     '@nuxtjs/sentry',
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
