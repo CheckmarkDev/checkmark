@@ -98,18 +98,20 @@
 
 <style scoped>
   .home-hero {
-    height: 400px;
+    height: 320px;
     background: rgb(39,109,170);
     background: linear-gradient(69deg, rgba(39,109,170,1) 0%, rgba(41,169,229,1) 100%);
+
+    @screen md {
+      height: 400px;
+    }
   }
 
   .home-container {
-    margin-top: -180px;
-  }
+    margin-top: -100px;
 
-  @media only screen and (max-width: 720px) {
-    .home-container {
-      margin-top: -100px;
+    @screen md {
+      margin-top: -180px;
     }
   }
 </style>

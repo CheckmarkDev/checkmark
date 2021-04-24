@@ -3,6 +3,8 @@
     <img
       :src="user.avatar_url"
       alt=""
+      width="48"
+      height="48"
       class="rounded-full"
     >
     <Streak

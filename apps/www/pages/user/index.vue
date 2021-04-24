@@ -1,28 +1,34 @@
 <template>
   <main>
-    <div class="home-hero">
+    <div class="user-hero">
       <div class="container mx-auto">
-        <div class="flex items-center justify-between py-8">
+        <div class="flex items-center justify-between py-8 w-full">
           <div
             v-if="user"
-            class="w-1/2"
+            class="w-full md:w-1/2 flex items-center"
           >
-            <h1
-              class="text-3xl text-white leading-tight mb-4"
-              v-text="`${user.first_name} ${user.last_name}`"
+            <UserAvatar
+              :user="user"
+              class="user-hero__avatar mr-8 flex-shrink-0"
             />
-            <h2
-              class="text-xl text-gray-300"
-              v-text="`@${user.username}`"
-            />
+            <div class="truncate">
+              <h1
+                class="text-3xl text-white leading-tight mb-0 truncate"
+                v-text="`${user.first_name} ${user.last_name}`"
+              />
+              <h2
+                class="text-xl text-gray-300"
+                v-text="`@${user.username}`"
+              />
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="home-container">
+    <div class="user-container">
       <div class="container mx-auto flex items-start">
         <SideNavigation />
-        <section class="bg-white md:w-9/12 h-56 rounded-lg p-6">
+        <section class="bg-white w-full md:w-9/12 h-56 rounded-lg p-6">
          <nuxt />
         </section>
       </div>
@@ -35,10 +41,12 @@
   import { TaskGroup } from '~/types/taskGroup'
   import { User } from '~/types/user'
   import SideNavigation from '@/components/Home/SideNavigation/index.vue'
+  import UserAvatar from '@/components/UserAvatar/index.vue'
 
   export default defineComponent({
     components: {
-      SideNavigation
+      SideNavigation,
+      UserAvatar
     },
     data () {
       return {
@@ -86,13 +94,28 @@
 </script>
 
 <style scoped>
-  .home-hero {
-    height: 400px;
+  .user-hero {
+    height: 320px;
     background: rgb(39,109,170);
     background: linear-gradient(69deg, rgba(39,109,170,1) 0%, rgba(41,169,229,1) 100%);
+
+    @screen md {
+      height: 400px;
+    }
+  }
+  .user-hero__avatar {
+    width: 80px;
+    height: 80px;
   }
 
-  .home-container {
+  .user-container {
     margin-top: -180px;
+  }
+</style>
+
+<style>
+  .user-hero__avatar img{
+    width: 80px;
+    height: 80px;
   }
 </style>
