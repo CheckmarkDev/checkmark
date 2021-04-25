@@ -79,6 +79,7 @@ export default {
     // 'nuxt-stripe-module',
     'nuxt-socialsplash-module',
     'nuxt-trailingslash-module',
+    '@nuxt/content',
     '@nuxtjs/sentry',
     '@nuxtjs/axios',
     '@nuxtjs/pwa',

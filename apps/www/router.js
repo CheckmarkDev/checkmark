@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import Home from '@/pages/index.vue'
+import Roadmap from '@/pages/roadmap/index.vue'
+import RoadmapProject from '@/pages/roadmap/project/index.vue'
 import User from '@/pages/user/index.vue'
 import Task from '@/pages/user/task/index.vue'
 import UserTasks from '@/pages/user/tasks/index.vue'
@@ -48,6 +50,24 @@ const WEBSITE_ROUTES = [
     name: 'Home',
     path: '/',
     component: Home
+  },
+  {
+    name: 'Roadmap',
+    path: '/roadmap',
+    component: Roadmap,
+    redirect: {
+      name: 'RoadmapProject',
+      params: {
+        slug: 'weekly_summary'
+      }
+    },
+    children: [
+      {
+        name: 'RoadmapProject',
+        path: ':slug',
+        component: RoadmapProject
+      }
+    ]
   },
   {
     name: 'User',
