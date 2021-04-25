@@ -24,5 +24,6 @@ declare module '@nuxt/types' {
     $toasted: any
     $trans: any
     $socialsplash: any
+    $content: any
   }
 }

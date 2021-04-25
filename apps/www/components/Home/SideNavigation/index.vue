@@ -8,9 +8,18 @@
               name: 'Home'
             }"
             :exact-active-class="'router-link-active bg-gray-200'"
-            class="hover:bg-gray-200 rounded p-2 w-full flex"
+            class="hover:bg-gray-200 rounded p-2 w-full flex mb-1"
           >
             Feed
+          </nuxt-link>
+          <nuxt-link
+            :to="{
+              name: 'Roadmap'
+            }"
+            :active-class="'router-link-active bg-gray-200'"
+            class="hover:bg-gray-200 rounded p-2 w-full flex"
+          >
+            Roadmap
           </nuxt-link>
         </li>
       </ul>
