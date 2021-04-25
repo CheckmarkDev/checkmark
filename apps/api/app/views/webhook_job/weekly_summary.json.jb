@@ -1,0 +1,30 @@
+json = {
+  event: 'weekly_summary',
+  data: {
+    user: {
+      uuid: @user.uuid,
+      username: @user.username,
+      first_name: @user.first_name,
+      last_name: @user.last_name,
+      streak: @user.streak,
+      avatar_url: @user.avatar_url
+    },
+
+    task_groups: @task_groups.map do |task_group|
+      {
+        tasks: task_group.tasks.map do |task|
+          {
+            uuid: task.uuid,
+            content: task.content,
+            state: task.state,
+            created_at: task.created_at
+          }
+        end
+      }
+    end,
+
+    url: "#{ENV['WEB_BASE']}/u/#{@user.username}"
+  }
+}
+
+json

@@ -53,27 +53,42 @@ const getStateEmoji = (state) => {
 }
 
 server.post('/webhooks', async (req, res) => {
-    const { body } = req;
+    const { event, data } = req.body
 
-    if (!body.event || !body.data) {
+    if (!event || !data) {
         return res.json({ status: 400, errorMessage: 'bad parameter' })
     }
 
-    const { event, data } = body;
+    const channel = await client.channels.fetch(process.env.DISCORD_CHANNEL_EVENT);
+    let message
+
+    const { first_name, last_name, username, avatar_url } = data.user
+    const fullName = `${first_name} ${last_name} (${username})`
+    const userProfileUrl = `https://www.checkmark.dev/u/${username}`
 
     switch (event) {
         case 'task.created':
-            const newMessage = new MessageEmbed()
-                .setColor(getStateColor(data.state))
-                .setAuthor(`Par ${data.user.first_name} ${data.user.last_name} (${data.user.username})`)
+            const { url, state, content } = data
+
+            message = new MessageEmbed()
+                .setColor(getStateColor(state))
+                .setAuthor(fullName, avatar_url, userProfileUrl)
                 .setTitle(`Création d\'une nouvelle tâche`)
-                .setURL(data.url)
-                .setDescription(`${getStateEmoji(data.state)} ${data.content}`)
-                .setThumbnail(data.user.avatar_url)
+                .setURL(url)
+                .setDescription(`${getStateEmoji(state)} ${content}`)
                 .setFooter('Checkmark', 'https://www.checkmark.dev/icon.png')
                 .setTimestamp();
-            const channel = await client.channels.fetch(process.env.DISCORD_CHANNEL_EVENT);
-            await channel.send(newMessage)
+
+            await channel.send(message)
+            break
+        case 'weekly_summary':
+            message = new MessageEmbed()
+                .setAuthor(fullName, avatar_url, userProfileUrl)
+                .setTitle(`Résumé de la semaine`)
+                .setFooter('Checkmark', 'https://www.checkmark.dev/icon.png')
+                .setTimestamp();
+
+            await channel.send(message)
             break
     }
 
