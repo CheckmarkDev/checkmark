@@ -59,18 +59,15 @@ server.post('/webhooks', async (req, res) => {
         return res.json({ status: 400, errorMessage: 'bad parameter' })
     }
 
-    const channel = await client.channels.fetch(process.env.DISCORD_CHANNEL_EVENT);
-    let message
-
-    const { first_name, last_name, username, avatar_url } = data.user
-    const fullName = `${first_name} ${last_name} (${username})`
-    const userProfileUrl = `https://www.checkmark.dev/u/${username}`
-
     switch (event) {
-        case 'task.created':
+        case 'task.created': {
             const { url, state, content } = data
+            const channel = await client.channels.fetch(process.env.DISCORD_CHANNEL_EVENT);
+            const { first_name, last_name, username, avatar_url } = data.user
+            const fullName = `${first_name} ${last_name} (${username})`
+            const userProfileUrl = `https://www.checkmark.dev/u/${username}`
 
-            message = new MessageEmbed()
+            const message = new MessageEmbed()
                 .setColor(getStateColor(state))
                 .setAuthor(fullName, avatar_url, userProfileUrl)
                 .setTitle(`Création d\'une nouvelle tâche`)
@@ -80,44 +77,34 @@ server.post('/webhooks', async (req, res) => {
                 .setTimestamp();
 
             await channel.send(message)
-            break
-        case 'weekly_summary':
-            message = new MessageEmbed()
+        } break
+        case 'weekly_summary.created': {
+            const channel = await client.channels.fetch(process.env.DISCORD_CHANNEL_EVENT);
+            const { first_name, last_name, username, avatar_url } = data.user
+            const fullName = `${first_name} ${last_name} (${username})`
+            const userProfileUrl = `https://www.checkmark.dev/u/${username}`
+
+            const message = new MessageEmbed()
                 .setAuthor(fullName, avatar_url, userProfileUrl)
                 .setTitle(`Résumé de la semaine`)
                 .setFooter('Checkmark', 'https://www.checkmark.dev/icon.png')
                 .setTimestamp();
 
             await channel.send(message)
-            break
-    }
+        } break
+        case 'changelog.created': {
+            const channel = await client.channels.fetch(process.env.DISCORD_CHANNEL_CHANGELOG);
+            const { name, content, url, created_at } = data
 
-    res.send('coucou');
-});
-
-server.post('/webhooks/changelog', async (req, res) => {
-    const { event, data } = req.body
-
-    if (!event || !data) {
-        return res.json({ status: 400, errorMessage: 'bad parameter' })
-    }
-
-    const channel = await client.channels.fetch(process.env.DISCORD_CHANNEL_CHANGELOG);
-    let message
-
-    switch (event) {
-        case 'changelog.created':
-            const { name, content } = data
-
-            message = new MessageEmbed()
-                .setTitle(`Nouvelle release : ${name}`)
-                .setURL('https://www.changelog.xyz')
+            const message = new MessageEmbed()
+                .setTitle(name)
+                .setURL(url)
                 .setDescription(content)
-                .setFooter('Changelog', 'https://www.checkmark.dev/icon.png')
-                .setTimestamp();
+                .setFooter('Changelog', 'https://www.changelog.xyz/icon.png')
+                .setTimestamp(Date.parse(created_at));
 
             await channel.send(message)
-            break
+        } break
     }
 
     res.send('coucou');

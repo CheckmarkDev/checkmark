@@ -1,5 +1,5 @@
 json = {
-  event: 'weekly_summary',
+  event: 'weekly_summary.created',
   data: {
     user: {
       uuid: @user.uuid,

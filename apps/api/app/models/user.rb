@@ -55,7 +55,7 @@ class User < ApplicationRecord
             task_groups: task_groups
           })
 
-          WebhookJob.perform_now(webhook, 'weekly_summary', data)
+          WebhookJob.perform_now(webhook, 'weekly_summary.created', data)
         end
       end
     end
