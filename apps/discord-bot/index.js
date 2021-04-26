@@ -95,6 +95,34 @@ server.post('/webhooks', async (req, res) => {
     res.send('coucou');
 });
 
+server.post('/webhooks/changelog', async (req, res) => {
+    const { event, data } = req.body
+
+    if (!event || !data) {
+        return res.json({ status: 400, errorMessage: 'bad parameter' })
+    }
+
+    const channel = await client.channels.fetch(process.env.DISCORD_CHANNEL_CHANGELOG);
+    let message
+
+    switch (event) {
+        case 'changelog.created':
+            const { name, content } = data
+
+            message = new MessageEmbed()
+                .setTitle(`Nouvelle release : ${name}`)
+                .setURL('https://www.changelog.xyz')
+                .setDescription(content)
+                .setFooter('Changelog', 'https://www.checkmark.dev/icon.png')
+                .setTimestamp();
+
+            await channel.send(message)
+            break
+    }
+
+    res.send('coucou');
+});
+
 server.listen(PORT, HOST, () => console.log('Started express'));
 
 
