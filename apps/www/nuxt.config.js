@@ -130,6 +130,10 @@ export default {
     }
   },
 
+  tailwind: {
+    jit: true
+  },
+
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
     transpile: [
