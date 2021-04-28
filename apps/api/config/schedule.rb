@@ -11,3 +11,7 @@ ENV.each { |k, v| env(k, v) }
 
 set :output, "/back/log/cron_log.log"
 set :environment, ENV['RAILS_ENV']
+
+every :monday, at: '10am' do
+  runner "User.notify_weekly_summary"
+end

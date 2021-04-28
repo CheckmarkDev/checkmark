@@ -10,18 +10,11 @@ json = {
       avatar_url: @user.avatar_url
     },
 
-    task_groups: @task_groups.map do |task_group|
-      {
-        tasks: task_group.tasks.map do |task|
-          {
-            uuid: task.uuid,
-            content: task.content,
-            state: task.state,
-            created_at: task.created_at
-          }
-        end
-      }
-    end,
+    metrics: {
+      done: @done,
+      doing: @doing,
+      todo: @todo
+    },
 
     url: "#{ENV['WEB_BASE']}/u/#{@user.username}"
   }
