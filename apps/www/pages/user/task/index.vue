@@ -1,42 +1,16 @@
 <template>
-  <main v-infinite-scroll="loadMore">
-    <div class="home-hero">
-      <div class="container mx-auto">
-        <div class="flex items-center justify-between py-8">
-          <div
-            v-if="user"
-            class="w-1/2"
-          >
-            <h1
-              class="text-3xl text-white leading-tight mb-4"
-              v-text="`${user.first_name} ${user.last_name}`"
-            />
-            <h2
-              class="text-xl text-gray-300"
-              v-text="`@${user.username}`"
-            />
-          </div>
-        </div>
-      </div>
+  <div v-infinite-scroll="loadMore">
+    <div class="border border-gray-300 rounded mb-8 px-8 py-4">
+      <Task
+        :task="task"
+      />
     </div>
-    <div class="home-container">
-      <div class="container mx-auto flex items-start">
-        <SideNavigation />
-        <section class="bg-white w-full md:w-9/12 h-56 rounded-lg p-6">
-          <div class="border border-gray-300 rounded mb-8 px-8 py-4">
-            <Task
-              :task="task"
-            />
-          </div>
 
-          <TaskComments
-            :task="task"
-            :comments="comments"
-          />
-        </section>
-      </div>
-    </div>
-  </main>
+    <TaskComments
+      :task="task"
+      :comments="comments"
+    />
+  </div>
 </template>
 
 <script lang="ts">
@@ -46,7 +20,6 @@
 
   import TaskComponent from '@/components/Task/index.vue'
   import TaskComments from '@/components/TaskComments/index.vue'
-  import SideNavigation from '@/components/Home/SideNavigation/index.vue'
   import { PaginateResponse, PaginateResponseMeta } from '~/types/pagination'
   import { User } from '~/types/user'
   import { Comment } from '~/types/comment'
@@ -55,8 +28,7 @@
   export default defineComponent({
     components: {
       Task: TaskComponent,
-      TaskComments,
-      SideNavigation
+      TaskComments
     },
     data () {
       return {

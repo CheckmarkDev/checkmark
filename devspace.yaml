@@ -544,6 +544,8 @@ deployments:
               value: "833811466456662037"
             - name: DISCORD_CHANNEL_EVENT
               value: "833824731702231111"
+            - name: DISCORD_CHANNEL_CHANGELOG
+              value: "831484135175880734"
             - name: DISCORD_CHANNEL_RULES
               value: "829400652374868000"
             - name: DISCORD_MESSAGE_RULES

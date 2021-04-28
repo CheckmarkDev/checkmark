@@ -78,6 +78,8 @@ export default {
     '@williamdasilva/gtag-module',
     // 'nuxt-stripe-module',
     'nuxt-socialsplash-module',
+    'nuxt-trailingslash-module',
+    '@nuxt/content',
     '@nuxtjs/sentry',
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
@@ -126,6 +128,10 @@ export default {
     gtag: {
       id: process.env.GOOGLE_ANALYTICS_ID
     }
+  },
+
+  tailwind: {
+    jit: true
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)

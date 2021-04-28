@@ -11,7 +11,7 @@ services:
 
   api:
     build: apps/api
-    command: bundle exec rails s
+    command: bundle exec rails s -b 0.0.0.0
     env_file:
       - ./apps/api/.env
     ports:

@@ -44,6 +44,23 @@ class User < ApplicationRecord
     UserMailer.welcome(self).deliver_later
   end
 
+  def self.notify_weekly_summary
+    User.all.each do |user|
+      # Last week, monday morning
+      task_groups = user.task_groups.where(created_at: DateTime.now.last_week..DateTime.yesterday.at_midnight)
+      if task_groups.count > 0
+        Webhook.all.each do |webhook|
+          data = ApplicationController.render(template: 'webhook_job/weekly_summary', assigns: {
+            user: user,
+            task_groups: task_groups
+          })
+
+          WebhookJob.perform_now(webhook, 'weekly_summary.created', data)
+        end
+      end
+    end
+  end
+
   private
     def create_email_notification
       self.email_notification = EmailNotification.new

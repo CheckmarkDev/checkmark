@@ -1,5 +1,5 @@
 # Base
-FROM node:10.16.0 AS base
+FROM node:14.16.1 AS base
 
 WORKDIR /www
 
@@ -22,7 +22,7 @@ COPY . .
 RUN npm run build
 
 # Release
-FROM node:10-alpine AS release
+FROM node:14-alpine AS release
 
 WORKDIR /www
 

@@ -1,35 +1,35 @@
 <template>
-  <main v-infinite-scroll="loadMore">
-    <div class="home-hero">
+  <main>
+    <div class="user-hero">
       <div class="container mx-auto">
-        <div class="flex items-center justify-between py-8">
+        <div class="flex items-center justify-between py-8 w-full">
           <div
             v-if="user"
-            class="w-1/2"
+            class="w-full md:w-1/2 flex items-center"
           >
-            <h1
-              class="text-3xl text-white leading-tight mb-4"
-              v-text="`${user.first_name} ${user.last_name}`"
+            <UserAvatar
+              :user="user"
+              class="user-hero__avatar mr-8 flex-shrink-0"
             />
-            <h2
-              class="text-xl text-gray-300"
-              v-text="`@${user.username}`"
-            />
+            <div class="truncate">
+              <h1
+                class="text-3xl text-white leading-tight mb-0 truncate"
+                v-text="`${user.first_name} ${user.last_name}`"
+              />
+              <h2
+                class="text-xl text-gray-300"
+                v-text="`@${user.username}`"
+              />
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="home-container">
+    <div class="user-container">
       <div class="container mx-auto flex items-start">
         <SideNavigation />
-        <section class="bg-white md:w-9/12 h-56 rounded-lg p-6">
-          <h2 class="font-medium text-2xl mb-4">
-            Feed
-          </h2>
-
-          <DateGroupedTaskGroups
-            :task-groups="taskGroups.data"
-          />
+        <section class="bg-white w-full md:w-9/12 h-56 rounded-lg p-6">
+         <nuxt />
         </section>
       </div>
     </div>
@@ -40,27 +40,19 @@
   import { defineComponent } from '@nuxtjs/composition-api'
   import { TaskGroup } from '~/types/taskGroup'
   import { User } from '~/types/user'
-  import DateGroupedTaskGroups from '@/components/DateGroupedTaskGroups/index.vue'
   import SideNavigation from '@/components/Home/SideNavigation/index.vue'
+  import UserAvatar from '@/components/UserAvatar/index.vue'
 
   export default defineComponent({
     components: {
-      DateGroupedTaskGroups,
-      SideNavigation
+      SideNavigation,
+      UserAvatar
     },
     data () {
       return {
-        user: null,
-        taskGroups: {
-          data: [],
-          meta: null
-        }
+        user: null
       } as {
-        user: User | null,
-        taskGroups: {
-          data: Array<TaskGroup>,
-          meta: any
-        }
+        user: User | null
       }
     },
     head () {
@@ -90,46 +82,40 @@
     },
     async asyncData ({ $axios, route }) {
       const { username } = route.params
-      const [user, taskGroups] = await Promise.all([
-        $axios.$get(`/users/${username}`),
-        $axios.$get(`/users/${username}/task_groups`)
+      const [user] = await Promise.all([
+        $axios.$get(`/users/${username}`)
       ])
 
       return {
-        user,
-        taskGroups
-      }
-    },
-    methods: {
-      loadMore () {
-        if (this.taskGroups.meta.current_page + 1 > this.taskGroups.meta.total_pages) return
-
-        const { username } = this.$route.params
-        this.$axios.$get(`/users/${username}/task_groups`, {
-          params: {
-            page: this.taskGroups.meta.current_page + 1
-          }
-        })
-          .then(res => {
-            this.taskGroups.data = [
-              ...this.taskGroups.data,
-              ...res.data
-            ]
-            this.taskGroups.meta = res.meta
-          })
+        user
       }
     }
   })
 </script>
 
 <style scoped>
-  .home-hero {
-    height: 400px;
+  .user-hero {
+    height: 320px;
     background: rgb(39,109,170);
     background: linear-gradient(69deg, rgba(39,109,170,1) 0%, rgba(41,169,229,1) 100%);
+
+    @screen md {
+      height: 400px;
+    }
+  }
+  .user-hero__avatar {
+    width: 80px;
+    height: 80px;
   }
 
-  .home-container {
+  .user-container {
     margin-top: -180px;
+  }
+</style>
+
+<style>
+  .user-hero__avatar img{
+    width: 80px;
+    height: 80px;
   }
 </style>
