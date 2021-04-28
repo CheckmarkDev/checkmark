@@ -82,7 +82,7 @@ server.post('/webhooks', async (req, res) => {
             const channel = await client.channels.fetch(process.env.DISCORD_CHANNEL_EVENT);
             const { metrics, user, url } = data
             const { first_name, last_name, username, avatar_url } = user
-            const fullName = `${first_name} ${last_name} (${username})`
+            const fullName = `${first_name} ${last_name}`
             const userProfileUrl = `https://www.checkmark.dev/u/${username}`
 
             const states = ['done', 'doing', 'todo']
@@ -100,8 +100,8 @@ server.post('/webhooks', async (req, res) => {
             imageUrl += imageParams.toString()
 
             const message = new MessageEmbed()
-                .setAuthor(fullName, avatar_url, userProfileUrl)
-                .setTitle(`Résumé de la semaine`)
+                .setAuthor(`${fullName} (${username})`, avatar_url, userProfileUrl)
+                .setTitle('Récapitulatif de la semaine')
                 .setImage(imageUrl)
                 .setURL(url)
                 .setFooter('Checkmark', 'https://www.checkmark.dev/icon.png')

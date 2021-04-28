@@ -45,7 +45,7 @@ class User < ApplicationRecord
   end
 
   def self.notify_weekly_summary
-    User.all.each do |user|
+    User.all.each_with_index do |user, k|
       date_range = DateTime.now.last_week..DateTime.yesterday.at_midnight
       tasks = user.tasks.where(created_at: date_range).count
 
@@ -62,7 +62,7 @@ class User < ApplicationRecord
             done: done
           })
 
-          WebhookJob.perform_now(webhook, 'weekly_summary.created', data)
+          WebhookJob.set(wait: k * 30.seconds).perform_later(webhook, 'weekly_summary.created', data)
         end
       end
     end
