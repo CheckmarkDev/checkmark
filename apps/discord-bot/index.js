@@ -80,13 +80,30 @@ server.post('/webhooks', async (req, res) => {
         } break
         case 'weekly_summary.created': {
             const channel = await client.channels.fetch(process.env.DISCORD_CHANNEL_EVENT);
-            const { first_name, last_name, username, avatar_url } = data.user
+            const { metrics, user, url } = data
+            const { first_name, last_name, username, avatar_url } = user
             const fullName = `${first_name} ${last_name} (${username})`
             const userProfileUrl = `https://www.checkmark.dev/u/${username}`
+
+            const states = ['done', 'doing', 'todo']
+
+            const imageParams = new URLSearchParams()
+            imageParams.append('avatar_url', avatar_url)
+            imageParams.append('week', 'Récapitulatif de la semaine')
+            states.forEach(state => {
+                imageParams.append(state, `${metrics[state]} ${metrics[state] === 1 ? 'tâche' : 'tâches'}`)
+            })
+            imageParams.append('name', fullName)
+            imageParams.append('username', `@${username}`)
+
+            let imageUrl = `https://images.socialsplash.xyz/9f1cff11-70b1-4386-a085-dda8b5d61548.jpg?`
+            imageUrl += imageParams.toString()
 
             const message = new MessageEmbed()
                 .setAuthor(fullName, avatar_url, userProfileUrl)
                 .setTitle(`Résumé de la semaine`)
+                .setImage(imageUrl)
+                .setURL(url)
                 .setFooter('Checkmark', 'https://www.checkmark.dev/icon.png')
                 .setTimestamp();
 

@@ -46,13 +46,20 @@ class User < ApplicationRecord
 
   def self.notify_weekly_summary
     User.all.each do |user|
-      # Last week, monday morning
-      task_groups = user.task_groups.where(created_at: DateTime.now.last_week..DateTime.yesterday.at_midnight)
-      if task_groups.count > 0
+      date_range = DateTime.now.last_week..DateTime.yesterday.at_midnight
+      tasks = user.tasks.where(created_at: date_range).count
+
+      todo = user.tasks.todo.where(created_at: date_range).count
+      doing = user.tasks.doing.where(created_at: date_range).count
+      done = user.tasks.done.where(created_at: date_range).count
+
+      if tasks > 0
         Webhook.all.each do |webhook|
           data = ApplicationController.render(template: 'webhook_job/weekly_summary', assigns: {
             user: user,
-            task_groups: task_groups
+            todo: todo,
+            doing: doing,
+            done: done
           })
 
           WebhookJob.perform_now(webhook, 'weekly_summary.created', data)
