@@ -29,9 +29,6 @@
               class="flex flex-col"
             >
               <div class="flex flex-col">
-                <pre>
-                  {{ formData.state }}
-                </pre>
                 <TaskStateSwitch
                   v-model="formData.state"
                   class="mb-4"

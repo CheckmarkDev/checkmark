@@ -4,11 +4,11 @@
       v-for="state in states"
       :key="state.key"
       :class="{
-        'task-state-switch__item--active': state.key === value
+        'task-state-switch__item--active bg-gray-300 hover:bg-gray-300': state.key === value
       }"
       type="button"
       class="task-state-switch__item focus:outline-none flex p-2 hover:bg-gray-200"
-      @click="$emit('input', state)"
+      @click="$emit('input', state.key)"
     >
       <div class="flex items-center">
         <TaskCheck
@@ -43,16 +43,16 @@
       const trans = useICU()
       const states = readonly([
         {
-          key: 'todo',
-          label: trans('home.labels.todo')
+          key: 'done',
+          label: trans('home.labels.done')
         },
         {
           key: 'doing',
           label: trans('home.labels.doing')
         },
         {
-          key: 'done',
-          label: trans('home.labels.done')
+          key: 'todo',
+          label: trans('home.labels.todo')
         }
       ])
 
@@ -73,9 +73,5 @@
 
     border-right-style: solid;
     border-right-width: 1px;
-  }
-
-  .task-state-switch__item--active {
-    @apply border border-solid border-blue-600;
   }
 </style>
