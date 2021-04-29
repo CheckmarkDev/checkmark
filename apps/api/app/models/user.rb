@@ -26,7 +26,8 @@ class User < ApplicationRecord
   def streak
     streak = self.last_streak
     if streak.present?
-      return (DateTime.now - streak.created_at.to_datetime.beginning_of_day).to_i
+      last_task = streak.tasks.select(:created_at).order(created_at: :desc).first
+      return (last_task.created_at.to_datetime - streak.created_at.to_datetime.beginning_of_day).to_i
     end
 
     return 0
