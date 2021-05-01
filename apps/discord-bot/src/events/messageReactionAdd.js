@@ -11,13 +11,13 @@ module.exports = async (client, reaction, user) => {
         console.log(e);
     }
 
-    reactionPermissions.map(async (reactionPermission) => {
+    for (const reactionPermission of reactionPermissions) {
         if (reactionPermission.reactionName === reaction.emoji.name && reactionPermission.messageValidation === reaction.message.id) {
             const member = await reaction.message.guild.members.fetch(user)
 
             await member.roles.add(reactionPermission.userPermission)
         }
-    })
+    }
 
     if ('cancelled' === reaction.emoji.name && process.env.DISCORD_MESSAGE_RULES === reaction.message.id) {
         const member = await reaction.message.guild.members.fetch(user);
