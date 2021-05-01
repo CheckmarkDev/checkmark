@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :projects
   apipie
 
   defaults format: :json do

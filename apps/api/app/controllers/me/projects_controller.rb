@@ -1,11 +1,11 @@
-class ProjectsController < ApplicationController
+class Me::ProjectsController < ApplicationController
   before_action :authorize_request
   before_action :set_project, only: [:show, :update, :destroy]
 
   # GET /projects
   api :GET, '/me/projects'
   def index
-    @projects = Project.all
+    @projects = @current_user.projects
 
     render json: @projects
   end
@@ -20,6 +20,7 @@ class ProjectsController < ApplicationController
   api :POST, '/me/projects'
   def create
     @project = Project.new(project_params)
+    @project.user = @current_user
 
     if @project.save
       render json: @project, status: :created, location: @project
