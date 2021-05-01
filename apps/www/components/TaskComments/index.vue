@@ -11,11 +11,11 @@
     />
 
     <div
-      v-if="comments.data.length"
+      v-if="allComments.length"
       class="border-t border-gray-300 pt-6"
     >
       <Comment
-        v-for="comment in comments.data"
+        v-for="comment in allComments"
         :key="comment.uuid"
         :comment="comment"
         class="mb-8"
@@ -33,27 +33,53 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from '@nuxtjs/composition-api'
+  import { defineComponent, useRoute } from '@nuxtjs/composition-api'
+  import { useQuery, useResult } from '@vue/apollo-composable/dist'
+  import gql from 'graphql-tag'
+
+  import { Comment } from '~/types/comment'
 
   import { PaginateResponse } from '~/types/pagination'
   import { Task } from '~/types/task'
-  import Comment from './Comment/index.vue'
+  import CommentComponent from './Comment/index.vue'
 
   import NewCommentForm from './NewCommentForm/index.vue'
 
   export default defineComponent({
     components: {
-      Comment,
+      Comment: CommentComponent,
       NewCommentForm
     },
     props: {
-      comments: {
-        type: Object as () => PaginateResponse<Comment>,
-        required: true
-      },
       task: {
         type: Object as () => Task,
         required: true
+      }
+    },
+    setup (props) {
+      const route = useRoute()
+      const { task: uuid } = route.value.params
+      const { result } = useQuery(gql`
+        query {
+          allComments (taskUuid: "${uuid}") {
+            uuid
+            content
+            createdAt
+            user {
+              uuid
+              username
+              fullName
+              avatarUrl
+              streak
+            }
+          }
+        }
+      `)
+
+      const allComments = useResult(result, [], data => data.allComments)
+
+      return {
+        allComments
       }
     }
   })

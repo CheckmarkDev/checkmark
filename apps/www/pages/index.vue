@@ -77,9 +77,6 @@
         ]
       }
     },
-    async middleware ({ store }) {
-      await store.dispatch('retrieveTaskGroups')
-    },
     mounted () {
       this.$mitt.on('update-tasks', this.updateTasks)
     },
@@ -88,7 +85,6 @@
     },
     methods: {
       updateTasks () {
-        this.$accessor.retrieveTaskGroups()
       },
       loadMore () {
         this.$accessor.retrieveMoreTaskGroups()

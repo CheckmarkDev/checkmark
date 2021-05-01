@@ -24,10 +24,10 @@
         </svg>
       </template>
       <div
-        v-if="task.likes.length > 0"
+        v-if="task.likesCount > 0"
         class="like-button__badge absolute bg-blue-500 text-white rounded-full w-4 h-4 text-xs"
       >
-        {{ task.likes.length }}
+        {{ task.likesCount }}
       </div>
     </div>
   </button>

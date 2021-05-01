@@ -40,14 +40,7 @@
     components: {
       TaskGroup: TaskGroupComponent
     },
-    props: {
-      taskGroups: {
-        type: Array as () => Array<TaskGroup>,
-        required: true
-      }
-    },
-    setup (props) {
-      const { taskGroups } = toRefs(props)
+    setup () {
       const { result } = useQuery(gql`
         query {
           allTaskGroups {
@@ -56,8 +49,7 @@
               createdAt
               user {
                 uuid
-                firstName
-                lastName
+                fullName
                 username
                 streak
                 avatarUrl
@@ -66,6 +58,7 @@
                 uuid
                 state
                 content
+                commentsCount
               }
             }
           }

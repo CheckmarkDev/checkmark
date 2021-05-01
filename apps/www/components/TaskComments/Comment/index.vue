@@ -38,7 +38,7 @@
     },
     setup (props) {
       const { comment } = toRefs(props)
-      const date = computed(() => dayjs(comment.value.created_at).format('LLL'))
+      const date = computed(() => dayjs(comment.value.createdAt).format('LLL'))
 
       return {
         date

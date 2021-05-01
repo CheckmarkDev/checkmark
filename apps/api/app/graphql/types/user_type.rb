@@ -1,6 +1,6 @@
 module Types
   class UserType < Types::BaseObject
-    field :uuid, String, null: false
+    field :uuid, ID, null: false
     field :email, String, null: false
     field :username, String, null: false
     field :first_name, String, null: true
@@ -11,6 +11,11 @@ module Types
 
     field :streak, Integer, null: false
     field :avatar_url, String, null: false
+    field :full_name, String, null: false
+
+    def full_name
+      object.full_name
+    end
 
     def streak
       object.streak

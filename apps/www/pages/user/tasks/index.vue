@@ -35,60 +35,60 @@
         }
       }
     },
-    head () {
-      const user = this.user as any
-      const fullName = `${user.first_name} ${user.last_name}`.trim()
-      const description = this.$trans('user.paragraphs.description', {
-        user: fullName || user.username
-      })
+    // head () {
+    //   const user = this.user as any
+    //   const fullName = user.fullName.trim()
+    //   const description = this.$trans('user.paragraphs.description', {
+    //     user: fullName || user.username
+    //   })
 
-      return {
-        title: fullName || user.username,
-        meta: [
-          { hid: 'description', name: 'description', content: description },
-          { hid: 'og:description', property: 'og:description', content: description },
-          { hid: 'og:title', property: 'og:title', content: fullName || user.username },
-          {
-            hid: 'og:image:width', name: 'og:image:width', content: '1200'
-          },
-          {
-            hid: 'og:image:height', name: 'og:image:height', content: '628'
-          },
-          {
-            hid: 'og:image:type', name: 'og:image:type', content: 'image/png'
-          }
-        ]
-      }
-    },
-    async asyncData ({ $axios, route }) {
-      const { username } = route.params
-      const [user, taskGroups] = await Promise.all([
-        $axios.$get(`/users/${username}`),
-        $axios.$get(`/users/${username}/task_groups`)
-      ])
+    //   return {
+    //     title: fullName || user.username,
+    //     meta: [
+    //       { hid: 'description', name: 'description', content: description },
+    //       { hid: 'og:description', property: 'og:description', content: description },
+    //       { hid: 'og:title', property: 'og:title', content: fullName || user.username },
+    //       {
+    //         hid: 'og:image:width', name: 'og:image:width', content: '1200'
+    //       },
+    //       {
+    //         hid: 'og:image:height', name: 'og:image:height', content: '628'
+    //       },
+    //       {
+    //         hid: 'og:image:type', name: 'og:image:type', content: 'image/png'
+    //       }
+    //     ]
+    //   }
+    // },
+    // async asyncData ({ $axios, route }) {
+    //   const { username } = route.params
+    //   const [user, taskGroups] = await Promise.all([
+    //     $axios.$get(`/users/${username}`),
+    //     $axios.$get(`/users/${username}/task_groups`)
+    //   ])
 
-      return {
-        user,
-        taskGroups
-      }
-    },
+    //   return {
+    //     user,
+    //     taskGroups
+    //   }
+    // },
     methods: {
       loadMore () {
-        if (this.taskGroups.meta.current_page + 1 > this.taskGroups.meta.total_pages) return
+        // if (this.taskGroups.meta.current_page + 1 > this.taskGroups.meta.total_pages) return
 
-        const { username } = this.$route.params
-        this.$axios.$get(`/users/${username}/task_groups`, {
-          params: {
-            page: this.taskGroups.meta.current_page + 1
-          }
-        })
-          .then(res => {
-            this.taskGroups.data = [
-              ...this.taskGroups.data,
-              ...res.data
-            ]
-            this.taskGroups.meta = res.meta
-          })
+        // const { username } = this.$route.params
+        // this.$axios.$get(`/users/${username}/task_groups`, {
+        //   params: {
+        //     page: this.taskGroups.meta.current_page + 1
+        //   }
+        // })
+        //   .then(res => {
+        //     this.taskGroups.data = [
+        //       ...this.taskGroups.data,
+        //       ...res.data
+        //     ]
+        //     this.taskGroups.meta = res.meta
+        //   })
       }
     }
   })

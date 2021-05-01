@@ -1,6 +1,6 @@
 module Types
   class TaskType < Types::BaseObject
-    field :uuid, String, null: false
+    field :uuid, ID, null: false
     field :content, String, null: true
     field :state, String, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false

@@ -14,7 +14,7 @@
             <div class="truncate">
               <h1
                 class="text-3xl text-white leading-tight mb-0 truncate"
-                v-text="`${user.first_name} ${user.last_name}`"
+                v-text="`${user.fullName}`"
               />
               <h2
                 class="text-xl text-gray-300"
@@ -37,7 +37,10 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from '@nuxtjs/composition-api'
+  import { defineComponent, useRoute } from '@nuxtjs/composition-api'
+  import { useQuery, useResult } from '@vue/apollo-composable/dist'
+  import gql from 'graphql-tag'
+
   import { TaskGroup } from '~/types/taskGroup'
   import { User } from '~/types/user'
   import SideNavigation from '@/components/Home/SideNavigation/index.vue'
@@ -48,48 +51,51 @@
       SideNavigation,
       UserAvatar
     },
-    data () {
-      return {
-        user: null
-      } as {
-        user: User | null
-      }
-    },
-    head () {
-      const user = this.user as any
-      const fullName = `${user.first_name} ${user.last_name}`.trim()
-      const description = this.$trans('user.paragraphs.description', {
-        user: fullName || user.username
-      })
-
-      return {
-        title: fullName || user.username,
-        meta: [
-          { hid: 'description', name: 'description', content: description },
-          { hid: 'og:description', property: 'og:description', content: description },
-          { hid: 'og:title', property: 'og:title', content: fullName || user.username },
-          {
-            hid: 'og:image:width', name: 'og:image:width', content: '1200'
-          },
-          {
-            hid: 'og:image:height', name: 'og:image:height', content: '628'
-          },
-          {
-            hid: 'og:image:type', name: 'og:image:type', content: 'image/png'
+    setup () {
+      const route = useRoute()
+      const { result } = useQuery(gql`
+        query {
+          user (username: "${route.value.params.username}") {
+            uuid
+            fullName
+            username
+            streak
+            avatarUrl
           }
-        ]
-      }
-    },
-    async asyncData ({ $axios, route }) {
-      const { username } = route.params
-      const [user] = await Promise.all([
-        $axios.$get(`/users/${username}`)
-      ])
+        }
+      `)
+
+      const user = useResult(result, null)
 
       return {
         user
       }
     }
+    // head () {
+    //   const user = this.user as any
+    //   const fullName = user.fullName.trim()
+    //   const description = this.$trans('user.paragraphs.description', {
+    //     user: fullName || user.username
+    //   })
+
+    //   return {
+    //     title: fullName || user.username,
+    //     meta: [
+    //       { hid: 'description', name: 'description', content: description },
+    //       { hid: 'og:description', property: 'og:description', content: description },
+    //       { hid: 'og:title', property: 'og:title', content: fullName || user.username },
+    //       {
+    //         hid: 'og:image:width', name: 'og:image:width', content: '1200'
+    //       },
+    //       {
+    //         hid: 'og:image:height', name: 'og:image:height', content: '628'
+    //       },
+    //       {
+    //         hid: 'og:image:type', name: 'og:image:type', content: 'image/png'
+    //       }
+    //     ]
+    //   }
+    // }
   })
 </script>
 

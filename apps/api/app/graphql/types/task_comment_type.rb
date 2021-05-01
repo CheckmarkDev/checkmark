@@ -1,6 +1,6 @@
 module Types
   class TaskCommentType < Types::BaseObject
-    field :uuid, String, null: false
+    field :uuid, ID, null: false
     field :user, UserType, null: false
     field :task, TaskType, null: false
     field :content, String, null: true

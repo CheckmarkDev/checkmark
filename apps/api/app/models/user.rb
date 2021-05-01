@@ -19,6 +19,10 @@ class User < ApplicationRecord
   before_save :format_username
   after_create :send_welcome
 
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
   def last_streak
     streaks.order(created_at: :desc).first
   end

@@ -2,7 +2,7 @@
   <div class="user-menu relative">
     <div class="flex items-center">
       <UserCard
-        :user="$accessor.getAuthUser"
+        :user="user"
         class="hover:bg-gray-200 p-1 rounded"
       />
       <button
@@ -66,6 +66,8 @@
 <script lang="ts">
   import { defineComponent, ref, useRouter } from '@nuxtjs/composition-api'
   import Cookie from 'js-cookie'
+  import { useQuery, useResult } from '@vue/apollo-composable/dist'
+  import gql from 'graphql-tag'
 
   import useAccessor from '@/composables/useAccessor'
 
@@ -78,6 +80,18 @@
     setup () {
       const router = useRouter()
       const accessor = useAccessor()
+      const { result } = useQuery(gql`
+        query {
+          user (username: "${accessor.getAuthUser && accessor.getAuthUser.username}") {
+            username
+            fullName
+            streak
+            avatarUrl
+          }
+        }
+      `)
+
+      const user = useResult(result, null)
 
       const isOpen = ref(false)
 
@@ -96,6 +110,7 @@
       }
 
       return {
+        user,
         isOpen,
         signOut
       }

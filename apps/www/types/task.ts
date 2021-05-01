@@ -12,7 +12,7 @@ export type Task = {
   state: TaskState
   content: string
   user: User
-  created_at: string
+  createdAt: string
   likes: User[]
   comments: Comment[]
   commentsCount: number

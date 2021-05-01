@@ -98,7 +98,7 @@
       const { task } = toRefs(props)
 
       const date = computed(() => {
-        return dayjs(task.value.created_at).format('LT')
+        return dayjs(task.value.createdAt).format('LT')
       })
 
       return {

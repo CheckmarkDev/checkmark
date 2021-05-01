@@ -3,6 +3,7 @@ export type User = {
   username: string
   firstName: string
   lastName: string
+  fullName: string
   streak: number
   avatarUrl: string
 }

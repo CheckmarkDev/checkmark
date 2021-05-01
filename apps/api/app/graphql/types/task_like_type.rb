@@ -1,6 +1,6 @@
 module Types
   class TaskLikeType < Types::BaseObject
-    field :uuid, String, null: false
+    field :uuid, ID, null: false
     field :user, UserType, null: false
     field :task, TaskType, null: false
     field :state, Integer, null: false
