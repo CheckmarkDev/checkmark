@@ -24,7 +24,7 @@ module.exports = async (client) => {
     // update roles sections
     const roleChannel = await client.channels.fetch(process.env.DISCORD_CHANNEL_ROLES);
 
-    roles.map(async (role) => {
+    roles.forEach(async (role) => {
         const messageRole = await roleChannel.messages.fetch(process.env[role.messageIdEnvName]);
         const newMessageRole = new MessageEmbed()
             .setColor('#0099ff')
