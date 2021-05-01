@@ -1,3 +1,4 @@
+const { reactionPermissions } = require('../data/reactionPermissions')
 
 module.exports = async (client, reaction, user) => {
     if (user.bot) {
@@ -10,10 +11,11 @@ module.exports = async (client, reaction, user) => {
         console.log(e);
     }
 
-    // add role basic user if u click on check emoji
-    if ('done' === reaction.emoji.name && process.env.DISCORD_MESSAGE_RULES === reaction.message.id) {
-        const member = await reaction.message.guild.members.fetch(user);
+    reactionPermissions.map(async (reactionPermission) => {
+        if (reactionPermission.reactionName === reaction.emoji.name && reactionPermission.messageValidation === reaction.message.id) {
+            const member = await reaction.message.guild.members.fetch(user)
 
-        await member.roles.remove(process.env.DISCORD_ROLES_USER);
-    }
+            await member.roles.remove(reactionPermission.userPermission)
+        }
+    })
 }

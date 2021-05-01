@@ -19,17 +19,17 @@ const roles = [
       {
         "name": "Réactions",
         "value": [
-            `<:htmlcss:${process.env.DISCORD_EMOJI_HTML}>`,
-            `<:javascriptts:${process.env.DISCORD_EMOJI_JAVASCRIPT}>`,
+            `<:html:${process.env.DISCORD_EMOJI_HTML}>`,
+            `<:javascript:${process.env.DISCORD_EMOJI_JAVASCRIPT}>`,
             `<:php:${process.env.DISCORD_EMOJI_PHP}>`,
             `<:python:${process.env.DISCORD_EMOJI_PYTHON}>`,
-            `<:javakotlin:${process.env.DISCORD_EMOJI_JAVA}>`,
+            `<:java:${process.env.DISCORD_EMOJI_JAVA}>`,
             `<:golang:${process.env.DISCORD_EMOJI_GO}>`,
             `<:ccpp:${process.env.DISCORD_EMOJI_C}>`,
             `<:csharp:${process.env.DISCORD_EMOJI_CSHARP}>`,
             `<:docker:${process.env.DISCORD_EMOJI_DOCKER}>`,
             `<:hardware:${process.env.DISCORD_EMOJI_HARDWARE}>`,
-            `<:databasecache:${process.env.DISCORD_EMOJI_DATABASE}>`,
+            `<:database:${process.env.DISCORD_EMOJI_DATABASE}>`,
             `<:security:${process.env.DISCORD_EMOJI_SECURITY}>`
         ],
         "inline": true
