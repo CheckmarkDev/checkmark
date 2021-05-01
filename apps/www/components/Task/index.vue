@@ -49,6 +49,11 @@
       :task="dialogs.likes.task"
       @close="() => dialogs.likes.visible = false"
     />
+    <EditDialog
+      v-if="dialogs.edit.visible"
+      :task="dialogs.edit.task"
+      @close="() => dialogs.edit.visible = false"
+    />
   </div>
 </template>
 
@@ -61,6 +66,7 @@
   import LikeButton from './LikeButton/index.vue'
   import CommentButton from './CommentButton/index.vue'
   import LikesDialog from '@/components/Task/LikesDialog/index.vue'
+  import EditDialog from '@/components/Task/EditDialog/index.vue'
   import TaskActions from './TaskActions/index.vue'
 
   import { Task } from '@/types/task'
@@ -73,6 +79,7 @@
       CommentButton,
       LikesDialog,
       TaskActions,
+      EditDialog,
       MarkAsButton
     },
     props: {
@@ -98,19 +105,31 @@
           likes: {
             visible: false,
             task: null
+          },
+          edit: {
+            visible: false,
+            task: null
           }
         }
       }
     },
     mounted () {
       this.$mitt.on(`like dialog for ${this.task.uuid}`, this.showLikeDialog)
+      this.$mitt.on(`edit dialog for ${this.task.uuid}`, this.showEditDialog)
     },
     beforeDestroy () {
       this.$mitt.off(`like dialog for ${this.task.uuid}`, this.showLikeDialog)
+      this.$mitt.off(`edit dialog for ${this.task.uuid}`, this.showEditDialog)
     },
     methods: {
       showLikeDialog (e: any) {
         this.dialogs.likes = {
+          visible: true,
+          task: e
+        }
+      },
+      showEditDialog (e: any) {
+        this.dialogs.edit = {
           visible: true,
           task: e
         }

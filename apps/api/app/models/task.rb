@@ -13,6 +13,7 @@ class Task < ApplicationRecord
 
   before_create :assign_task_group, if: Proc.new { |task| task.task_group.nil? }
   before_create :assign_streak, if: Proc.new { |task| task.streak.nil? }
+  after_create :notify_webhooks
 
   def assign_task_group
     timezone = self.user.timezone
@@ -44,5 +45,16 @@ class Task < ApplicationRecord
 
     self.streak = last_streak
   end
+
+  private
+    def notify_webhooks
+      Webhook.all.each do |webhook|
+        data = ApplicationController.render(template: 'webhook_job/task_created', assigns: {
+          task: self
+        })
+
+        WebhookJob.perform_later(webhook, 'task.created', data)
+      end
+    end
 
 end

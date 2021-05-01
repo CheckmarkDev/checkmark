@@ -1,0 +1,23 @@
+json = {
+  event: 'task.created',
+  data: {
+    uuid: @task.uuid,
+    content: @task.content,
+    state: @task.state,
+    created_at: @task.created_at,
+    updated_at: @task.updated_at,
+
+    user: {
+      uuid: @task.user.uuid,
+      username: @task.user.username,
+      first_name: @task.user.first_name,
+      last_name: @task.user.last_name,
+      streak: @task.user.streak,
+      avatar_url: @task.user.avatar_url
+    },
+
+    url: "#{ENV['WEB_BASE']}/u/#{@task.user.username}/task/#{@task.uuid}"
+  }
+}
+
+json

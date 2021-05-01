@@ -22,7 +22,87 @@ images:
         options:
           target: release
 
+  discord-bot:
+    image: williamdasilva/checkmark-discord-bot
+    dockerfile: ./apps/discord-bot/Dockerfile
+    context: ./apps/discord-bot
+    preferSyncOverRebuild: true
+    injectRestartHelper: true
+    build:
+      docker:
+        options:
+          target: release
+
 deployments:
+- name: redis
+  helm:
+    componentChart: true
+    values:
+      containers:
+      - image: redis:6.0
+        args: ["--requirepass", "$(REDIS_PASSWORD)"]
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1Gi
+            ephemeralStorage: 500Mi
+        env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redis-secret
+              key: REDIS_PASSWORD
+        volumeMounts:
+        - containerPath: /data
+          volume:
+            name: redis-data
+            subPath: /data
+            readOnly: false
+      volumes:
+      - name: redis-data
+        size: "1Gi"
+      service:
+        type: ClusterIP
+        ports:
+        - port: 6379
+
+- name: redis-replica
+  helm:
+    componentChart: true
+    values:
+      replicas: 2
+      rollingUpdate:
+        enabled: true
+        maxSurge: "100%"
+        maxUnavailable: "50%"
+      containers:
+      - image: redis:6.0
+        args: ["--requirepass", "$(REDIS_PASSWORD)", "--replicaof", "redis", "6379", "--masterauth", "$(REDIS_PASSWORD)"]
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1Gi
+            ephemeralStorage: 500Mi
+        env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redis-secret
+              key: REDIS_PASSWORD
+        volumeMounts:
+        - containerPath: /data
+          volume:
+            name: redis-replica-data
+            subPath: /data
+            readOnly: false
+      volumes:
+      - name: redis-replica-data
+        size: "1Gi"
+      service:
+        type: ClusterIP
+        ports:
+        - port: 6379
+
 - name: api
   helm:
     componentChart: true
@@ -157,6 +237,51 @@ deployments:
             secretKeyRef:
               name: api-secret
               key: DATABASE_PORT
+        - name: WEB_BASE
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: WEB_BASE
+        - name: MJML_HOST
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: MJML_HOST
+        - name: MJML_PORT
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: MJML_PORT
+        - name: SMTP_ADDRESS
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: SMTP_ADDRESS
+        - name: SMTP_PORT
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: SMTP_PORT
+        - name: SMTP_USER_NAME
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: SMTP_USER_NAME
+        - name: SMTP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: SMTP_PASSWORD
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: REDIS_URL
+        - name: ASSET_HOST
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: ASSET_HOST
       ingress:
         annotations:
           kubernetes.io/ingress.class: nginx
@@ -165,7 +290,137 @@ deployments:
         ingressClass: nginx
         tls: ls-api-prod
         tlsClusterIssuer: ls-api-prod
+        rules:
+        - host: api.checkmark.dev
+      service:
+        ports:
+        - port: 3000
+
+- name: sidekiq
+  helm:
+    componentChart: true
+    values:
+      replicas: 2
+      rollingUpdate:
+        enabled: true
+        maxSurge: "100%"
+        maxUnavailable: "50%"
+      containers:
+      - image: williamdasilva/checkmark-api
+        command: ['sidekiq-entrypoint.sh']
+        args: ["bundle", "exec", "sidekiq -q default -q mailers"]
+        resources:
+          limits:
+            cpu: 400m
+            memory: 1Gi
+        env:
+        - name: HOST
+          value: "0.0.0.0"
+        - name: PORT
+          value: "3000"
+        - name: HOST
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: HOST
+        - name: RAILS_ENV
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: RAILS_ENV
+        - name: RAILS_SERVE_STATIC_FILES
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: RAILS_SERVE_STATIC_FILES
+        - name: SECRET_KEY_BASE
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: SECRET_KEY_BASE
+        - name: SENTRY_DSN
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: SENTRY_DSN
+        - name: DATABASE_NAME
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: DATABASE_NAME
+        - name: DATABASE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: DATABASE_USERNAME
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: DATABASE_PASSWORD
+        - name: DATABASE_HOST
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: DATABASE_HOST
+        - name: DATABASE_PORT
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: DATABASE_PORT
+        - name: WEB_BASE
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: WEB_BASE
+        - name: ASSET_HOST
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: ASSET_HOST
+        - name: MJML_HOST
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: MJML_HOST
+        - name: MJML_PORT
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: MJML_PORT
+        - name: SMTP_ADDRESS
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: SMTP_ADDRESS
+        - name: SMTP_PORT
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: SMTP_PORT
+        - name: SMTP_USER_NAME
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: SMTP_USER_NAME
+        - name: SMTP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: SMTP_PASSWORD
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: REDIS_URL
+      ingress:
+        annotations:
+          kubernetes.io/ingress.class: nginx
+          nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+          cert-manager.io/cluster-issuer: ls-api-prod
         ingressClass: nginx
+        tls: ls-api-prod
+        tlsClusterIssuer: ls-api-prod
         rules:
         - host: api.checkmark.dev
       service:
@@ -232,10 +487,85 @@ deployments:
         ingressClass: nginx
         tls: ls-www-prod
         tlsClusterIssuer: ls-www-prod
-        ingressClass: nginx
         rules:
         - host: checkmark.dev
         - host: www.checkmark.dev
       service:
         ports:
         - port: 8080
+
+- name: mjml2html
+  helm:
+    componentChart: true
+    values:
+      containers:
+      - image: williamdasilva/mjml2html
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+        env:
+        - name: HOST
+          value: "0.0.0.0"
+        - name: PORT
+          value: "8082"
+      service:
+        type: ClusterIP
+        ports:
+        - port: 8082
+
+- name: discord-bot
+  helm:
+    componentChart: true
+    values:
+      replicas: 1
+      rollingUpdate:
+        enabled: true
+        maxSurge: "100%"
+        maxUnavailable: "50%"
+      containers:
+        - image: williamdasilva/checkmark-discord-bot
+          resources:
+            limits:
+              cpu: 400m
+              memory: 500Mi
+          env:
+            - name: HOST
+              value: "0.0.0.0"
+            - name: PORT
+              value: "9090"
+            - name: DISCORD_EMOJI_TODO
+              value: "833811566960967681"
+            - name: DISCORD_EMOJI_DOING
+              value: "833811525223317514"
+            - name: DISCORD_EMOJI_DONE
+              value: "833811466456662037"
+            - name: DISCORD_EMOJI_CHECK
+              value: "833811466456662037"
+            - name: DISCORD_CHANNEL_EVENT
+              value: "833824731702231111"
+            - name: DISCORD_CHANNEL_CHANGELOG
+              value: "831484135175880734"
+            - name: DISCORD_CHANNEL_RULES
+              value: "829400652374868000"
+            - name: DISCORD_MESSAGE_RULES
+              value: "834003198926651402"
+            - name: DISCORD_ROLES_USER
+              value: "834183755186438165"
+            - name: DISCORD_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: discord-bot-secret
+                  key: DISCORD_API_TOKEN
+      ingress:
+        annotations:
+          kubernetes.io/ingress.class: nginx
+          cert-manager.io/cluster-issuer: ls-discord-bot-prod
+        ingressClass: nginx
+        tls: ls-discord-bot-prod
+        tlsClusterIssuer: ls-discord-bot-prod
+        rules:
+          - host: bot.checkmark.dev
+      service:
+        ports:
+          - port: 9090

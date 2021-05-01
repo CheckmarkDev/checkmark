@@ -1,0 +1,5 @@
+{
+  like: @email_notification.like,
+  comment: @email_notification.comment,
+  newsletter: @email_notification.newsletter
+}

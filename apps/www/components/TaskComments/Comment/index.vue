@@ -3,6 +3,7 @@
     <div class="flex justify-between mb-2">
       <UserCard
         :user="comment.user"
+        class="mb-2"
       />
       <div
         v-text="date"

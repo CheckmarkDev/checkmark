@@ -49,6 +49,7 @@ Rails.application.configure do
 
   config.asset_host = ENV.fetch('ASSET_HOST') { 'http://localhost:3000' }
   config.action_controller.asset_host = ENV.fetch('ASSET_HOST') { 'http://localhost:3000' }
+  
 
   config.action_controller.default_url_options = {
     host: 'localhost:3000'

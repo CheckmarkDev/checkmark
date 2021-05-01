@@ -30,32 +30,11 @@
     </div>
     <div class="home-container">
       <div class="container mx-auto flex items-start">
-        <nav class="bg-white hidden md:flex rounded-lg w-3/12 mr-8 p-4">
-          <ul class="w-full">
-            <li class="mb-1">
-              <a href="https://discord.gg/VM3rH2X68P" target="_blank" rel="noopener" class="hover:bg-gray-200 rounded p-2 w-full flex">
-                Discord
-              </a>
-            </li>
-            <li class="mb-1">
-              <a href="https://www.twitter.com/checkmarkdev" target="_blank" rel="noopener" class="hover:bg-gray-200 rounded p-2 w-full flex">
-                Twitter
-              </a>
-            </li>
-            <li class="mb-1">
-              <a href="https://www.changelog.xyz/checkmark" target="_blank" rel="noopener" class="hover:bg-gray-200 rounded p-2 w-full flex">
-                Changelog
-              </a>
-            </li>
-          </ul>
-        </nav>
+        <SideNavigation />
         <section class="bg-white rounded-lg w-full md:w-9/12 p-6">
           <h2 class="font-medium text-2xl mb-4">
             Feed
           </h2>
-          <!-- <h3 class="text-xl font-medium mb-4">
-            Aujourd'hui
-          </h3> -->
 
           <NewTask
             v-if="$accessor.isAuthenticated"
@@ -75,9 +54,11 @@
   import { defineComponent } from '@nuxtjs/composition-api'
   import DateGroupedTaskGroups from '@/components/DateGroupedTaskGroups/index.vue'
   import NewTask from '@/components/NewTask/index.vue'
+  import SideNavigation from '@/components/Home/SideNavigation/index.vue'
 
   export default defineComponent({
     components: {
+      SideNavigation,
       DateGroupedTaskGroups,
       NewTask
     },
@@ -117,18 +98,20 @@
 
 <style scoped>
   .home-hero {
-    height: 400px;
+    height: 320px;
     background: rgb(39,109,170);
     background: linear-gradient(69deg, rgba(39,109,170,1) 0%, rgba(41,169,229,1) 100%);
+
+    @screen md {
+      height: 400px;
+    }
   }
 
   .home-container {
-    margin-top: -180px;
-  }
+    margin-top: -100px;
 
-  @media only screen and (max-width: 720px) {
-    .home-container {
-      margin-top: -100px;
+    @screen md {
+      margin-top: -180px;
     }
   }
 </style>

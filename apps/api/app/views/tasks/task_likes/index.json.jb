@@ -16,7 +16,8 @@ json[:data] = @task_likes.map do |like|
       username: like.user.username,
       first_name: like.user.first_name,
       last_name: like.user.last_name,
-      streak: like.user.streak
+      streak: like.user.streak,
+      avatar_url: like.user.avatar_url
     }
   }
 

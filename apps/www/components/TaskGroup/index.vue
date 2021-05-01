@@ -2,6 +2,7 @@
   <div class="task-group flex flex-col border border-solid border-gray-300 rounded-lg p-4">
     <UserCard
       :user="taskGroup.user"
+      class="mb-2"
     />
     <div>
       <div class="task-group__content flex flex-col text-base text-gray-800">

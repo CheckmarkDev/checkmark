@@ -1,53 +1,20 @@
 <template>
-  <main v-infinite-scroll="loadMore">
-    <div class="home-hero">
-      <div class="container mx-auto">
-        <div class="flex items-center justify-between py-8">
-          <div
-            v-if="user"
-            class="w-1/2"
-          >
-            <h1
-              class="text-3xl text-white leading-tight mb-4"
-              v-text="`${user.first_name} ${user.last_name}`"
-            />
-            <h2
-              class="text-xl text-gray-300"
-              v-text="`@${user.username}`"
-            />
-          </div>
-        </div>
-      </div>
+  <div v-infinite-scroll="loadMore">
+    <div class="border border-gray-300 rounded mb-8 px-8 py-4">
+      <Task
+        :task="task"
+      />
     </div>
-    <div class="home-container">
-      <div class="container mx-auto flex items-start">
-        <nav class="bg-white hidden md:flex rounded-lg w-3/12 mr-8 p-4">
-          <ul class="w-full">
-            <li>
-              <a href="https://www.changelog.xyz/checkmark" class="hover:bg-gray-200 rounded p-2 w-full flex">
-                Changelog
-              </a>
-            </li>
-          </ul>
-        </nav>
-        <section class="bg-white w-full md:w-9/12 h-56 rounded-lg p-6">
-          <div class="border border-gray-300 rounded mb-8 px-8 py-4">
-            <Task
-              :task="task"
-            />
-          </div>
 
-          <TaskComments
-            :task="task"
-            :comments="comments"
-          />
-        </section>
-      </div>
-    </div>
-  </main>
+    <TaskComments
+      :task="task"
+      :comments="comments"
+    />
+  </div>
 </template>
 
 <script lang="ts">
+  import dayjs from 'dayjs'
   import { defineComponent } from '@nuxtjs/composition-api'
   import { NuxtAxiosInstance } from '@nuxtjs/axios'
 
@@ -88,12 +55,19 @@
         user: fullName || user.username
       })
 
+      const og = this.$socialsplash.generate('fae08fcc-d0e8-4264-a90c-47d78b9b7680', {
+        subtitle: `${fullName} - ${dayjs(task.created_at).format('LLL')}`,
+        title: task.content,
+      })
+
       return {
         title: task.content,
         meta: [
           { hid: 'description', name: 'description', content: description },
           { hid: 'og:description', property: 'og:description', content: description },
           { hid: 'og:title', property: 'og:title', content: task.content },
+          { hid: 'twitter:image', property: 'twitter:image', content: og },
+          { hid: 'og:image:url', property: 'og:image:url', content: og },
           {
             hid: 'og:image:width', name: 'og:image:width', content: '1200'
           },

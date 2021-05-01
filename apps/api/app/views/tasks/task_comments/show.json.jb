@@ -9,7 +9,8 @@ json = {
     username: @task_comment.user.username,
     first_name: @task_comment.user.first_name,
     last_name: @task_comment.user.last_name,
-    streak: @task_comment.user.streak
+    streak: @task_comment.user.streak,
+    avatar_url: @task_comment.user.avatar_url
   }
 }
 

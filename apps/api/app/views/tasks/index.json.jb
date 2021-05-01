@@ -19,7 +19,8 @@ json[:data] = @tasks.map do |task|
       username: task.user.username,
       first_name: task.user.first_name,
       last_name: task.user.last_name,
-      streak: task.user.streak
+      streak: task.user.streak,
+      avatar_url: task.user.avatar_url
     }
   }
 

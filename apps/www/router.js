@@ -2,10 +2,15 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import Home from '@/pages/index.vue'
+import Roadmap from '@/pages/roadmap/index.vue'
+import RoadmapProject from '@/pages/roadmap/project/index.vue'
 import User from '@/pages/user/index.vue'
 import Task from '@/pages/user/task/index.vue'
+import UserTasks from '@/pages/user/tasks/index.vue'
 import SignIn from '@/pages/auth/sign-in/index.vue'
 import SignUp from '@/pages/auth/sign-up/index.vue'
+import Settings from '@/pages/settings/index.vue'
+import SettingsNotifications from '@/pages/settings/notifications/index.vue'
 
 Vue.use(VueRouter)
 
@@ -22,6 +27,24 @@ const AUTH_ROUTES = [
   }
 ]
 
+const SETTINGS_ROUTES = [
+  {
+    name: 'Settings',
+    path: '/settings',
+    component: Settings,
+    redirect: {
+      name: 'SettingsNotifications'
+    },
+    children: [
+      {
+        name: 'SettingsNotifications',
+        path: 'notifications',
+        component: SettingsNotifications
+      }
+    ]
+  }
+]
+
 const WEBSITE_ROUTES = [
   {
     name: 'Home',
@@ -29,21 +52,50 @@ const WEBSITE_ROUTES = [
     component: Home
   },
   {
-    name: 'User',
-    path: '/u/:username',
-    component: User
+    name: 'Roadmap',
+    path: '/roadmap',
+    component: Roadmap,
+    redirect: {
+      name: 'RoadmapProject',
+      params: {
+        slug: 'weekly_summary'
+      }
+    },
+    children: [
+      {
+        name: 'RoadmapProject',
+        path: ':slug',
+        component: RoadmapProject
+      }
+    ]
   },
   {
-    name: 'Task',
-    path: '/u/:username/task/:task',
-    component: Task
-  }
+    name: 'User',
+    path: '/u/:username',
+    component: User,
+    redirect: {
+      name: 'UserTasks'
+    },
+    children: [
+      {
+        name: 'UserTasks',
+        path: '',
+        component: UserTasks
+      },
+      {
+        name: 'Task',
+        path: 'task/:task',
+        component: Task
+      }
+    ]
+  },
 ]
 
 function buildRoutes () {
   const defaultRoutes = [
     ...AUTH_ROUTES,
-    ...WEBSITE_ROUTES
+    ...WEBSITE_ROUTES,
+    ...SETTINGS_ROUTES,
   ]
 
   const localizedRoutes = defaultRoutes.map(route => ({

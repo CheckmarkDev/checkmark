@@ -98,6 +98,7 @@ export const mutations: MutationTree<RootState> & Mutations = {
 export enum ActionTypes {
   setAuthToken = 'setAuthToken',
   setAuthUser = 'setAuthUser',
+  retrieveMe = 'retrieveMe',
   retrieveTaskGroups = 'retrieveTaskGroups',
   retrieveMoreTaskGroups = 'retrieveMoreTaskGroups',
   createTask = 'createTask',
@@ -115,6 +116,7 @@ type AugmentedActionContext = {
 export interface Actions<R = RootState> {
   [ActionTypes.setAuthToken]({ commit }: AugmentedActionContext, token: string | null): void
   [ActionTypes.setAuthUser]({ commit }: AugmentedActionContext, user: User | null): void
+  [ActionTypes.retrieveMe]({ commit }: AugmentedActionContext): void
   [ActionTypes.retrieveTaskGroups]({ commit }: AugmentedActionContext): Promise<PaginateResponse<Task>>
   [ActionTypes.retrieveMoreTaskGroups]({ commit }: AugmentedActionContext): Promise<PaginateResponse<Task>> | void
 }
@@ -125,6 +127,16 @@ export const actions: ActionTree<RootState, RootState> & Actions = {
   },
   [ActionTypes.setAuthUser] ({ commit }, user) {
     commit(MutationTypes.SET_AUTH_USER, user)
+  },
+  [ActionTypes.retrieveMe] ({ commit }) {
+    return (this.$axios as NuxtAxiosInstance).$get('/auth/me')
+      .then((res: {
+        user: User
+      }) => {
+        commit(MutationTypes.SET_AUTH_USER, res.user)
+
+        return res
+      })
   },
   [ActionTypes.retrieveTaskGroups] ({ commit }) {
     return (this.$axios as NuxtAxiosInstance).$get('/task_groups')
@@ -152,7 +164,7 @@ export const actions: ActionTree<RootState, RootState> & Actions = {
         return res
       })
   },
-  nuxtServerInit ({ commit }, { req }) {
+  nuxtServerInit ({ commit, dispatch }, { req }) {
     let token = null
     let user = null
 
@@ -174,6 +186,9 @@ export const actions: ActionTree<RootState, RootState> & Actions = {
 
     commit(MutationTypes.SET_AUTH_TOKEN, token)
     commit(MutationTypes.SET_AUTH_USER, user)
+    if (user && token) {
+      dispatch('retrieveMe')
+    }
   }
 }
 
