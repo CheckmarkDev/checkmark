@@ -4,6 +4,6 @@ class AddTaskGroupInTask < ActiveRecord::Migration[6.0]
   end
 
   def down
-    drop_column :tasks, :task_group_id
+    remove_column :tasks, :task_group_id
   end
 end
