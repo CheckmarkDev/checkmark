@@ -3,6 +3,22 @@ const reactionPermissions = [
     reactionName: 'done',
     messageValidation: process.env.DISCORD_MESSAGE_RULES,
     userPermission: process.env.DISCORD_ROLES_USER,
+    addCustomAction: async (reaction, member) => {
+      if (process.env.DISCORD_ROLES_SEPARATOR_ROLE) {
+        await member.roles.add(process.env.DISCORD_ROLES_SEPARATOR_ROLE)
+      }
+      if (process.env.DISCORD_ROLES_SEPARATOR_INTEREST) {
+        await member.roles.add(process.env.DISCORD_ROLES_SEPARATOR_INTEREST)
+      }
+    },
+    removeCustomAction: async (reaction, member) => {
+      if (process.env.DISCORD_ROLES_SEPARATOR_ROLE) {
+        await member.roles.remove(process.env.DISCORD_ROLES_SEPARATOR_ROLE)
+      }
+      if (process.env.DISCORD_ROLES_SEPARATOR_INTEREST) {
+        await member.roles.remove(process.env.DISCORD_ROLES_SEPARATOR_INTEREST)
+      }
+    }
   },
   {
     reactionName: 'docker',

@@ -16,6 +16,10 @@ module.exports = async (client, reaction, user) => {
             const member = await reaction.message.guild.members.fetch(user)
 
             await member.roles.remove(reactionPermission.userPermission)
+
+            if (reactionPermission.removeCustomAction) {
+                await reactionPermission.removeCustomAction(reaction, member)
+            }
         }
     }
 }

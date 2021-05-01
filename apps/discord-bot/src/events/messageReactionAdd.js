@@ -16,6 +16,10 @@ module.exports = async (client, reaction, user) => {
             const member = await reaction.message.guild.members.fetch(user)
 
             await member.roles.add(reactionPermission.userPermission)
+
+            if (reactionPermission.addCustomAction) {
+                await reactionPermission.addCustomAction(reaction, member)
+            }
         }
     }
 
