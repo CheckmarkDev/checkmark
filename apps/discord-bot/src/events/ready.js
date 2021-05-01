@@ -1,4 +1,4 @@
-const { MessageEmbed, Message } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const { roles } = require('../data/roles');
 
 module.exports = async (client) => {
@@ -24,7 +24,7 @@ module.exports = async (client) => {
     // update roles sections
     const roleChannel = await client.channels.fetch(process.env.DISCORD_CHANNEL_ROLES);
 
-    roles.forEach(async (role) => {
+    for (const role of roles) {
         const messageRole = await roleChannel.messages.fetch(process.env[role.messageIdEnvName]);
         const newMessageRole = new MessageEmbed()
             .setColor('#0099ff')
@@ -35,5 +35,13 @@ module.exports = async (client) => {
             .setTimestamp()
         ;
         messageRole.edit(newMessageRole);
-    });
+
+        for (const reactionEmojiName of role.reactionEmojis) {
+            const emoji = await emojis.cache.find((value) => value.name === reactionEmojiName)
+
+            if (emoji) {
+                messageRole.react(emoji)
+            }
+        }
+    }
 }
