@@ -11,7 +11,7 @@
         {{ task.content }}
       </p>
       <MarkAsButton
-        v-if="$accessor.getAuthUser && task.user.uuid === $accessor.getAuthUser.uuid && task.state !== 'done'"
+        v-if="$accessor.getAuthUser && user.uuid === $accessor.getAuthUser.uuid && task.state !== 'done'"
         :task="task"
         class="my-4"
       />
@@ -21,7 +21,7 @@
         :to="{
           name: 'Task',
           params: {
-            username: task.user.username,
+            username: user.username,
             task: task.uuid
           }
         }"
@@ -31,16 +31,17 @@
       </nuxt-link>
       <CommentButton
         :task="task"
+        :user="user"
         class="mr-4"
       />
-      <LikeButton
+      <!-- <LikeButton
         :task="task"
         class="mr-4"
       />
       <TaskActions
-        v-if="$accessor.getAuthUser && task.user.uuid === $accessor.getAuthUser.uuid"
+        v-if="$accessor.getAuthUser && user.uuid === $accessor.getAuthUser.uuid"
         :task="task"
-      />
+      /> -->
     </div>
 
     <!-- Dialogs -->
@@ -70,6 +71,7 @@
   import TaskActions from './TaskActions/index.vue'
 
   import { Task } from '@/types/task'
+  import { User } from '~/types/user'
 
   export default defineComponent({
     name: 'Task',
@@ -85,6 +87,10 @@
     props: {
       task: {
         type: Object as () => Task,
+        required: true
+      },
+      user: {
+        type: Object as () => User,
         required: true
       }
     },

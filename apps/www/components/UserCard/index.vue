@@ -16,7 +16,7 @@
         class="mr-4"
       >
         <div class="font-medium text-lg truncate">
-          {{ user.first_name }} {{ user.last_name }}
+          {{ user.firstName }} {{ user.lastName }}
         </div>
       </nuxt-link>
       <nuxt-link

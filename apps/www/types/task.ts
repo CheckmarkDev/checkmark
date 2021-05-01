@@ -1,3 +1,4 @@
+import { Comment } from './comment'
 import { User } from './user'
 
 export enum TaskState {
@@ -12,8 +13,8 @@ export type Task = {
   content: string
   user: User
   created_at: string
-  likes: string[]
-  metrics: {
-    comments: number
-  }
+  likes: User[]
+  comments: Comment[]
+  commentsCount: number
+  likesCount: number
 }

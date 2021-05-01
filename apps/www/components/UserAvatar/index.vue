@@ -1,7 +1,7 @@
 <template>
   <div class="user-avatar w-12 h-12 rounded-full bg-gray-300 relative">
     <img
-      :src="user.avatar_url"
+      :src="user.avatarUrl"
       alt=""
       width="48"
       height="48"

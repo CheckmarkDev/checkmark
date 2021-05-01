@@ -52,6 +52,7 @@
 
 <script lang="ts">
   import { defineComponent } from '@nuxtjs/composition-api'
+
   import DateGroupedTaskGroups from '@/components/DateGroupedTaskGroups/index.vue'
   import NewTask from '@/components/NewTask/index.vue'
   import SideNavigation from '@/components/Home/SideNavigation/index.vue'

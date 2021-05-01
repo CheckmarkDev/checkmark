@@ -23,6 +23,8 @@
 <script lang="ts">
   import dayjs from 'dayjs'
   import { computed, defineComponent, toRefs } from '@nuxtjs/composition-api'
+  import gql from 'graphql-tag'
+  import { useQuery, useResult } from '@vue/apollo-composable/dist'
 
   import { TaskGroup } from '~/types/taskGroup'
   import TaskGroupComponent from '@/components/TaskGroup/index.vue'
@@ -46,9 +48,34 @@
     },
     setup (props) {
       const { taskGroups } = toRefs(props)
+      const { result } = useQuery(gql`
+        query {
+          allTaskGroups {
+            nodes {
+              uuid
+              createdAt
+              user {
+                uuid
+                firstName
+                lastName
+                username
+                streak
+                avatarUrl
+              }
+              tasks {
+                uuid
+                state
+                content
+              }
+            }
+          }
+        }
+      `)
+
       const groups = computed(() => {
         const groups: Array<Group> = []
 
+        const taskGroups = useResult(result, [], data => data.allTaskGroups && data.allTaskGroups.nodes)
         taskGroups.value.forEach(taskGroup => {
           const date = dayjs(taskGroup.created_at).tz('Europe/Paris').format('YYYY-MM-DD')
 

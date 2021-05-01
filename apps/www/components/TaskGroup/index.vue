@@ -10,6 +10,7 @@
           v-for="task in taskGroup.tasks"
           :key="task.uuid"
           :task="task"
+          :user="taskGroup.user"
           class="mb-2"
         />
       </div>

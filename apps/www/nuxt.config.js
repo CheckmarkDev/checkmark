@@ -30,6 +30,7 @@ export default {
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
     '~/plugins/axios',
+    '~/plugins/vue-apollo',
     '~/plugins/vee-validate',
     '~/plugins/vue-icu.js',
     '~/plugins/dayjs.js',
@@ -80,6 +81,7 @@ export default {
     'nuxt-socialsplash-module',
     'nuxt-trailingslash-module',
     '@nuxt/content',
+    '@nuxtjs/apollo',
     '@nuxtjs/sentry',
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
@@ -105,9 +107,15 @@ export default {
     }
   },
 
+  apollo: {
+    clientConfigs: {
+      default: '~/apollo.config.js'
+    }
+  },
+
   axios: {
-    baseURL: 'http://back:3333/api',
-    browserBaseURL: 'http://localhost:3333/api'
+    baseURL: 'http://api:3000',
+    browserBaseURL: 'http://localhost:3000'
   },
 
   publicRuntimeConfig: {
@@ -137,7 +145,8 @@ export default {
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
     transpile: [
-      'vee-validate/dist/rules'
+      'vee-validate/dist/rules',
+      '@vue/apollo-composable'
     ],
 
     extend (config, { isDev, isClient }) {

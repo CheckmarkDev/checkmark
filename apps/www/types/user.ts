@@ -1,8 +1,8 @@
 export type User = {
   uuid: string
   username: string
-  first_name: string
-  last_name: string
+  firstName: string
+  lastName: string
   streak: number
-  avatar_url: string
+  avatarUrl: string
 }

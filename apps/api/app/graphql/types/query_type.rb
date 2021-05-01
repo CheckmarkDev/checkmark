@@ -14,22 +14,15 @@ module Types
     #   User.all
     # end
 
-    field :all_tasks, [TaskType], null: false
-    field :all_users, [UserType], null: false
-
-    # TODO: remove me
-    field :test_field, String, null: false
-
-    def test_field
-      "Hello World!"
-    end
+    field :all_tasks, TaskType.connection_type, null: false
+    field :all_task_groups, TaskGroupType.connection_type, null: false
 
     def all_tasks
       Task.all
     end
 
-    def all_users
-      User.all
+    def all_task_groups
+      TaskGroup.includes(:tasks, :user).joins(:user, :tasks).order(created_at: :desc)
     end
   end
 end
