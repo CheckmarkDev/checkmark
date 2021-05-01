@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :projects
   apipie
 
   defaults format: :json do
@@ -20,9 +21,11 @@ Rails.application.routes.draw do
 
     namespace 'me' do
       resources :tasks
+      resources :projects
 
       get '/email_notifications', to: 'email_notifications#index'
       put '/email_notifications', to: 'email_notifications#update'
+
     end
 
     scope '/auth' do

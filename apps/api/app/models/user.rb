@@ -9,6 +9,7 @@ class User < ApplicationRecord
   has_many :task_comments
   has_many :task_groups
   has_many :streaks
+  has_many :projects
   has_one :email_notification
 
   validates :email, presence: true, uniqueness: true
