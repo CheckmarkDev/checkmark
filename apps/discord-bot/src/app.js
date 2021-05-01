@@ -3,9 +3,20 @@ const { readdir } = require('fs');
 const { join, resolve } = require('path');
 
 class App extends Discord.Client {
+    /**
+     * Create a new client
+     *
+     * @param {Object} config
+     * @param {ClientOptions} options
+     */
     constructor(config, options = {}) {
         super(options);
 
+        /**
+         * Login token
+         *
+         * @type {string}
+         */
         this.token = config.token;
     }
 
