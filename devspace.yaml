@@ -4,6 +4,9 @@ images:
     image: williamdasilva/checkmark-api
     dockerfile: ./apps/api/Dockerfile
     context: ./apps/api
+    tags:
+      - ${DEVSPACE_RANDOM}
+      - latest
     preferSyncOverRebuild: true
     injectRestartHelper: true
     build:
