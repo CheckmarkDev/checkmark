@@ -52,6 +52,10 @@ const getStateEmoji = (state) => {
     }
 }
 
+server.get('/', (req, res) => {
+    res.send('Everything is OK.');
+});
+
 server.post('/webhooks', async (req, res) => {
     const { event, data } = req.body
 
@@ -127,8 +131,8 @@ server.post('/webhooks', async (req, res) => {
     res.send('coucou');
 });
 
-server.listen(PORT, HOST, () => console.log('Started express'));
-
-
+server.listen(PORT, HOST, () => {
+    console.log(`Discord bot started on ${HOST}:${PORT}.`)
+});
 
 process.on('unhandledRejection', err => console.log(err));
