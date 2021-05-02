@@ -18,6 +18,10 @@ class Me::ProjectsController < ApplicationController
 
   # POST /projects
   api :POST, '/me/projects'
+  param :slug, String, desc: 'Slug of the project'
+  param :name, String, desc: 'Name of the project'
+  param :description, String, desc: 'Description of the project'
+  param :url, String, desc: 'Url of the project'
   def create
     @project = Project.new(project_params)
     @project.user = @current_user

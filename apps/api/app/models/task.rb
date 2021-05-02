@@ -4,6 +4,7 @@ class Task < ApplicationRecord
   belongs_to :streak, optional: true
   has_many :task_likes
   has_many :task_comments
+  has_and_belongs_to_many :projects
 
   enum state: [
     :todo,
