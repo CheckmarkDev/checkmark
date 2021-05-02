@@ -65,7 +65,6 @@
 
 <script lang="ts">
   import { defineComponent, ref, useRouter } from '@nuxtjs/composition-api'
-  import Cookie from 'js-cookie'
 
   import useAccessor from '@/composables/useAccessor'
 
@@ -82,11 +81,7 @@
       const isOpen = ref(false)
 
       function signOut () {
-        Cookie.remove('token')
-        Cookie.remove('user')
-
-        accessor.setAuthToken(null)
-        accessor.setAuthUser(null)
+        accessor.signOut
 
         router.push({
           name: 'Home'

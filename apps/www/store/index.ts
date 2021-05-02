@@ -1,5 +1,6 @@
 import { ActionTree, GetterTree, MutationTree, ActionContext } from 'vuex'
 import cookieparser from 'cookieparser'
+import Cookie from 'js-cookie'
 import { getAccessorType } from 'typed-vuex'
 import { User } from '~/types/user'
 import { Task } from '~/types/task'
@@ -98,6 +99,7 @@ export const mutations: MutationTree<RootState> & Mutations = {
 export enum ActionTypes {
   setAuthToken = 'setAuthToken',
   setAuthUser = 'setAuthUser',
+  signOut = 'signOut',
   retrieveMe = 'retrieveMe',
   retrieveTaskGroups = 'retrieveTaskGroups',
   retrieveMoreTaskGroups = 'retrieveMoreTaskGroups',
@@ -116,6 +118,7 @@ type AugmentedActionContext = {
 export interface Actions<R = RootState> {
   [ActionTypes.setAuthToken]({ commit }: AugmentedActionContext, token: string | null): void
   [ActionTypes.setAuthUser]({ commit }: AugmentedActionContext, user: User | null): void
+  [ActionTypes.signOut]({ commit }: AugmentedActionContext): void
   [ActionTypes.retrieveMe]({ commit }: AugmentedActionContext): void
   [ActionTypes.retrieveTaskGroups]({ commit }: AugmentedActionContext): Promise<PaginateResponse<Task>>
   [ActionTypes.retrieveMoreTaskGroups]({ commit }: AugmentedActionContext): Promise<PaginateResponse<Task>> | void
@@ -127,6 +130,13 @@ export const actions: ActionTree<RootState, RootState> & Actions = {
   },
   [ActionTypes.setAuthUser] ({ commit }, user) {
     commit(MutationTypes.SET_AUTH_USER, user)
+  },
+  [ActionTypes.signOut] ({ dispatch }) {
+    Cookie.remove('token')
+    Cookie.remove('user')
+
+    dispatch(ActionTypes.setAuthToken, null)
+    dispatch(ActionTypes.setAuthUser, null)
   },
   [ActionTypes.retrieveMe] ({ commit }) {
     return (this.$axios as NuxtAxiosInstance).$get('/auth/me')
@@ -187,7 +197,7 @@ export const actions: ActionTree<RootState, RootState> & Actions = {
     commit(MutationTypes.SET_AUTH_TOKEN, token)
     commit(MutationTypes.SET_AUTH_USER, user)
     if (user && token) {
-      dispatch('retrieveMe')
+      dispatch(ActionTypes.retrieveMe)
     }
   }
 }
