@@ -3,22 +3,25 @@ kind: CronJob
 metadata:
   name: weekly-summary
 spec:
-  schedule: "*/1 * * * *"
+  schedule: "0 10 * * 1"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
   jobTemplate:
     spec:
       template:
         spec:
           containers:
-          - name: api
+          - name: cron
             image: williamdasilva/checkmark-api
+            command: ["/bin/sh"]
             args:
-            - /bin/sh
-            - -c
-            - rake "user:weekly_summary"
+            - "-ec"
+            - "rake user:weekly_summary"
             env:
             - name: PORT
               value: "3000"
             envFrom:
             - secretRef:
                 name: api-secret
-          restartPolicy: OnFailure
+          restartPolicy: Never
