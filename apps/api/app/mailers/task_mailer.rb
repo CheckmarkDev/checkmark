@@ -1,5 +1,15 @@
 class TaskMailer < ApplicationMailer
 
+  def streak_reminder (user)
+    @name = user.first_name
+    @streak = user.streak
+
+    mail(to: user.email, subject: "Vous allez perdre votre streak !") do |format|
+      format.text
+      format.mjml
+    end
+  end
+
   def like (task, user)
     @name = "#{user.first_name} #{user.last_name}"
     @username = user.username

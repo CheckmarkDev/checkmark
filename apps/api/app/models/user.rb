@@ -28,6 +28,13 @@ class User < ApplicationRecord
     streak = self.last_streak
     if streak.present?
       last_task = streak.tasks.select(:created_at).order(created_at: :desc).first
+      # Here we want to check if the last task from the streak is less than yesterday
+      # If that's the case, then the streak is lost.
+      if last_streak.created_at.to_datetime < DateTime.yesterday.beginning_of_day
+        return 0
+      end
+
+      # Returns the difference of days from the beginning of the streak to the last task
       return (last_task.created_at.to_datetime - streak.created_at.to_datetime.beginning_of_day).to_i
     end
 
@@ -44,6 +51,18 @@ class User < ApplicationRecord
 
   def send_welcome
     UserMailer.welcome(self).deliver_later
+  end
+
+  # For every user that has a current streak
+  def self.notify_streak_reminder
+    User.all.each do |user|
+      if user.streak > 0
+        today_tasks = user.tasks.where(created_at: DateTime.now.beginning_of_day...DateTime.now.end_of_day)
+        if today_tasks.count === 0
+          TaskMailer.streak_reminder(user).deliver_later
+        end
+      end
+    end
   end
 
   def self.notify_weekly_summary
