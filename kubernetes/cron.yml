@@ -1,0 +1,24 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: weekly-summary
+spec:
+  schedule: "0 10 * * 1"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: api
+            image: williamdasilva/checkmark-api
+            args:
+            - /bin/sh
+            - -c
+            - rake "user:weekly_summary"
+            env:
+            - name: PORT
+              value: "3000"
+            envFrom:
+            - secretRef:
+                name: api-secret
+          restartPolicy: OnFailure
