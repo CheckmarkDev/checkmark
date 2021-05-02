@@ -98,12 +98,13 @@
 
 <style scoped>
   .home-hero {
-    height: 320px;
+    min-height: 320px;
     background: rgb(39,109,170);
     background: linear-gradient(69deg, rgba(39,109,170,1) 0%, rgba(41,169,229,1) 100%);
+    padding-bottom: 100px;
 
     @screen md {
-      height: 400px;
+      min-height: 400px;
     }
   }
 
