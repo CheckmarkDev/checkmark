@@ -4,8 +4,6 @@ WORKDIR /api
 
 RUN apt-get update -qq && apt-get install -y libxslt-dev libxml2-dev build-essential patch ruby-dev zlib1g-dev liblzma-dev libpq-dev
 
-RUN apt-get -y install cron
-
 COPY Gemfile Gemfile.lock ./
 
 RUN bundle install
