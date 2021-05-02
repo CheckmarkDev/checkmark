@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   apipie
 
   defaults format: :json do
+    resources :projects
     resources :task_groups
     resources :tasks do
       member do

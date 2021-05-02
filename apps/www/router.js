@@ -5,8 +5,10 @@ import Home from '@/pages/index.vue'
 import Roadmap from '@/pages/roadmap/index.vue'
 import RoadmapProject from '@/pages/roadmap/project/index.vue'
 import User from '@/pages/user/index.vue'
+import Project from '@/pages/project/index.vue'
 import Task from '@/pages/user/task/index.vue'
 import UserTasks from '@/pages/user/tasks/index.vue'
+import ProjectTasks from '@/pages/project/tasks/index.vue'
 import SignIn from '@/pages/auth/sign-in/index.vue'
 import SignUp from '@/pages/auth/sign-up/index.vue'
 import Settings from '@/pages/settings/index.vue'
@@ -86,6 +88,21 @@ const WEBSITE_ROUTES = [
         name: 'Task',
         path: 'task/:task',
         component: Task
+      }
+    ]
+  },
+  {
+    name: 'Project',
+    path: '/p/:slug',
+    component: Project,
+    redirect: {
+      name: 'ProjectTasks'
+    },
+    children: [
+      {
+        name: 'ProjectTasks',
+        path: '',
+        component: ProjectTasks
       }
     ]
   },

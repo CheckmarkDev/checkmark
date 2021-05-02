@@ -1,9 +1,7 @@
 {
-  id: @project.id,
-  slug: @project.slug
+  uuid: @project.uuid,
+  slug: @project.slug,
   name: @project.name,
   description: @project.description,
-  url: @project.url,
-  created_at: @project.created_at,
-  updated_at: @project.updated_at
+  url: @project.url
 }
