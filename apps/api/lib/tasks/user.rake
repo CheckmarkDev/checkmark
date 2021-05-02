@@ -9,4 +9,15 @@ namespace :user do
       puts "Could not notify weekly summary. #{e}"
     end
   end
+
+  desc "Notify for streak"
+  task streak_reminder: :environment do
+    puts "Notify for streak"
+    begin
+      User.notify_streak_reminder
+    rescue => e
+      Raven.captureMessage("Could not notify streak. #{e}")
+      puts "Could not notify streak. #{e}"
+    end
+  end
 end
