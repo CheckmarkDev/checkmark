@@ -28,6 +28,11 @@ class User < ApplicationRecord
     streak = self.last_streak
     if streak.present?
       last_task = streak.tasks.select(:created_at).order(created_at: :desc).first
+
+      if last_task.nil?
+        return 0
+      end
+
       # Here we want to check if the last task from the streak is less than yesterday
       # If that's the case, then the streak is lost.
       if last_task.created_at.to_datetime < DateTime.yesterday.beginning_of_day
