@@ -83,7 +83,7 @@ server.post('/webhooks', async (req, res) => {
             await channel.send(message)
         } break
         case 'weekly_summary.created': {
-            const channel = await client.channels.fetch(process.env.DISCORD_CHANNEL_EVENT);
+            const channel = await client.channels.fetch(process.env.DISCORD_CHANNEL_WEEKLY);
             const { metrics, user, url } = data
             const { first_name, last_name, username, avatar_url } = user
             const fullName = `${first_name} ${last_name}`
