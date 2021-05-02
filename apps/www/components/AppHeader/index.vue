@@ -1,6 +1,8 @@
 <template>
-  <header class="w-full h-16 flex bg-white">
+  <header class="app-header w-full h-16 flex bg-white">
     <div class="flex items-center container mx-auto">
+      <SideMenu />
+
       <nav>
         <ul>
           <li>
@@ -9,11 +11,19 @@
                 path: '/'
               }"
             >
-              <img
-                src="@/assets/img/logo.svg"
-                alt="Checkmark logo"
-                width="200"
-              >
+              <picture>
+                <source
+                  srcset="@/assets/img/logo.svg"
+                  media="(min-width: 770px)"
+                >
+
+                <img
+                  src="@/assets/img/icon.svg"
+                  alt="Checkmark logo"
+                  class="app-header__logo"
+                  height="30"
+                >
+              </picture>
             </nuxt-link>
           </li>
         </ul>
@@ -24,7 +34,7 @@
           <template
             v-if="!$accessor.isAuthenticated"
           >
-            <li class="mr-6">
+            <li class="mr-6 hidden md:block">
               <nuxt-link
                 :to="{
                   name: 'SignIn'
@@ -55,14 +65,23 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from '@nuxtjs/composition-api'
+  import { defineComponent, ref, watch } from '@nuxtjs/composition-api'
 
   import UserMenu from '@/components/AppHeader/UserMenu/index.vue'
+  import SideMenu from '@/components/AppHeader/SideMenu/index.vue'
 
   export default defineComponent({
     components: {
-      UserMenu
+      UserMenu,
+      SideMenu
     }
   })
 </script>
 
+<style scoped>
+  .app-header__logo {
+    max-width: initial;
+    width: auto;
+    height: 35px;
+  }
+</style>
