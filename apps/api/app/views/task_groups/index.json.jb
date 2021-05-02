@@ -42,7 +42,7 @@ json[:data] = @task_groups.map do |task_group|
 
     t[:projects] = task.projects.map do |project|
       {
-        id: project.id,
+        uuid: project.uuid,
         slug: project.slug,
         name: project.name,
         description: project.description,

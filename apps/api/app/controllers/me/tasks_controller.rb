@@ -19,9 +19,9 @@ class Me::TasksController < ApplicationController
     @task = Task.new(task_params)
     @task.user = @current_user
 
-    matches = @task.content.match(/#(\w*)/)
+    matches = @task.content.scan(/#(\w*)/)
 
-    matches.captures.each do |match|
+    matches.each do |match|
       project = Project.find_by_slug(match)
       @task.projects << project
     end
