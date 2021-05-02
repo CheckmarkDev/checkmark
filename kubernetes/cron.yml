@@ -2,6 +2,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: weekly-summary
+  namespace: checkmark
 spec:
   schedule: "0 10 * * 1"
   concurrencyPolicy: Forbid
@@ -30,6 +31,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: streak-reminder
+  namespace: checkmark
 spec:
   schedule: "0 22 */1 * *"
   concurrencyPolicy: Forbid
