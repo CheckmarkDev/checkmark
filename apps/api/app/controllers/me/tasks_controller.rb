@@ -19,13 +19,6 @@ class Me::TasksController < ApplicationController
     @task = Task.new(task_params)
     @task.user = @current_user
 
-    matches = @task.content.scan(/#(\w*)/)
-
-    matches.each do |match|
-      project = Project.find_by_slug(match)
-      @task.projects << project
-    end
-
     if @task.save
       render :show, status: :created
     else

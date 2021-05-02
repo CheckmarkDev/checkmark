@@ -12,9 +12,21 @@ class Task < ApplicationRecord
     :done
   ]
 
+  before_create :assign_projects
   before_create :assign_task_group, if: Proc.new { |task| task.task_group.nil? }
   before_create :assign_streak, if: Proc.new { |task| task.streak.nil? }
   after_create :notify_webhooks
+
+  def assign_projects
+    matches = self.content.scan(/#(\w*)/)
+
+    matches.each do |match|
+      project = Project.find_by_slug(match)
+      if project.present? && !self.projects.exists?(project.id)
+        self.projects << project
+      end
+    end
+  end
 
   def assign_task_group
     timezone = self.user.timezone
