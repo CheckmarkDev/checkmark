@@ -23,4 +23,14 @@ json[:metrics] = {
   comments: @task.task_comments.count
 }
 
+json[:projects] = @task.projects.map do |project|
+  {
+    uuid: project.uuid,
+    slug: project.slug,
+    name: project.name,
+    description: project.description,
+    url: project.url
+  }
+end
+
 json
