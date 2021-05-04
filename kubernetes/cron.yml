@@ -4,7 +4,7 @@ metadata:
   name: weekly-summary
   namespace: checkmark
 spec:
-  schedule: "0 10 * * 1"
+  schedule: "0 8 * * 1"
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 1
@@ -33,7 +33,7 @@ metadata:
   name: streak-reminder
   namespace: checkmark
 spec:
-  schedule: "0 22 */1 * *"
+  schedule: "0 20 */1 * *"
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 1
