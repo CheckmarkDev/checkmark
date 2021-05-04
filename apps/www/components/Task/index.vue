@@ -7,9 +7,9 @@
     <div
       class="flex flex-col flex-1"
     >
-      <p>
-        {{ task.content }}
-      </p>
+      <TaskContent
+        :task="task"
+      />
       <MarkAsButton
         v-if="$accessor.getAuthUser && task.user.uuid === $accessor.getAuthUser.uuid && task.state !== 'done'"
         :task="task"
@@ -68,6 +68,7 @@
   import LikesDialog from '@/components/Task/LikesDialog/index.vue'
   import EditDialog from '@/components/Task/EditDialog/index.vue'
   import TaskActions from './TaskActions/index.vue'
+  import TaskContent from './TaskContent/index.vue'
 
   import { Task } from '@/types/task'
 
@@ -80,7 +81,8 @@
       LikesDialog,
       TaskActions,
       EditDialog,
-      MarkAsButton
+      MarkAsButton,
+      TaskContent
     },
     props: {
       task: {

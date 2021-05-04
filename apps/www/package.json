@@ -18,6 +18,7 @@
     "@nuxtjs/robots": "^2.5.0",
     "@nuxtjs/sentry": "^5.0.3",
     "@nuxtjs/sitemap": "^2.4.0",
+    "@popperjs/core": "^2.9.2",
     "@williamdasilva/gtag-module": "^1.0.3",
     "@williamdasilva/vue-sticky-directive": "^0.3.0",
     "cookieparser": "^0.1.0",
