@@ -5,6 +5,7 @@ class Task < ApplicationRecord
   has_many :task_likes
   has_many :task_comments
   has_and_belongs_to_many :projects
+  has_many_attached :screenshots
 
   enum state: [
     :todo,
