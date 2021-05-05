@@ -285,6 +285,31 @@ deployments:
             secretKeyRef:
               name: api-secret
               key: ASSET_HOST
+        - name: S3_ENDPOINT
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: S3_ENDPOINT
+        - name: S3_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: S3_ACCESS_KEY_ID
+        - name: S3_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: S3_SECRET_ACCESS_KEY
+        - name: S3_REGION
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: S3_REGION
+        - name: S3_BUCKET
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: S3_BUCKET
       ingress:
         annotations:
           kubernetes.io/ingress.class: nginx
@@ -416,6 +441,31 @@ deployments:
             secretKeyRef:
               name: api-secret
               key: REDIS_URL
+        - name: S3_ENDPOINT
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: S3_ENDPOINT
+        - name: S3_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: S3_ACCESS_KEY_ID
+        - name: S3_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: S3_SECRET_ACCESS_KEY
+        - name: S3_REGION
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: S3_REGION
+        - name: S3_BUCKET
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: S3_BUCKET
       ingress:
         annotations:
           kubernetes.io/ingress.class: nginx
