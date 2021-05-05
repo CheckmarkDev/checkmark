@@ -10,8 +10,28 @@ const roles = [
     "messageIdEnvName": "DISCORD_MESSAGE_ROLE_2",
     "title": "Projet",
     "description": "Choix des centre d\'intérêts des différents projets",
-    "reactionEmojis": [],
-    "fields": [],
+    "reactionEmojis": [
+      "recruitment",
+      "studies",
+    ],
+    "fields": [
+      {
+        "name": "Réactions",
+        "value": [
+          `<:recruitment:${process.env.DISCORD_EMOJI_RECRUITMENT}>`,
+          `<:studies:${process.env.DISCORD_EMOJI_STUDIES}>`,
+        ],
+        "inline": true
+      },
+      {
+        "name": "Salons",
+        "value": [
+          `<#${process.env.DISCORD_CHANNEL_RECRUITMENT}>`,
+          `<#${process.env.DISCORD_CHANNEL_STUDIES}>`,
+        ],
+        "inline": true
+      }
+    ],
   },
   {
     "messageIdEnvName": "DISCORD_MESSAGE_ROLE_3",
@@ -75,14 +95,53 @@ const roles = [
     "title": "Développement de jeux video",
     "description": "Choix des centre d\'intérêts des différents développement dans le monde du jeux video",
     "reactionEmojis": [],
-    "fields": []
+    "fields": [
+      {
+        "name": "Réactions",
+        "value": [
+          `<:assets:${process.env.DISCORD_EMOJI_ASSETS}>`,
+          `<:game:${process.env.DISCORD_EMOJI_GAME}>`,
+          `<:engine:${process.env.DISCORD_EMOJI_ENGINE}>`,
+        ],
+        "inline": true
+      },
+      {
+        "name": "Salons",
+        "value": [
+          `<#${process.env.DISCORD_CHANNEL_ASSETS}>`,
+          `<#${process.env.DISCORD_CHANNEL_GAME}>`,
+          `<#${process.env.DISCORD_CHANNEL_ENGINE}>`,
+        ],
+        "inline": true
+      }
+    ]
   },
   {
     "messageIdEnvName": "DISCORD_MESSAGE_ROLE_5",
     "title": "Loisir",
     "description": "Choix des centre d\'intérêts des différents loisirs",
-    "reactionEmojis": [],
-    "fields": []
+    "reactionEmojis": [
+      "videogame",
+      "sport",
+    ],
+    "fields": [
+      {
+        "name": "Réactions",
+        "value": [
+          `<:videogame:${process.env.DISCORD_EMOJI_VIDEO_GAME}>`,
+          `<:sport:${process.env.DISCORD_EMOJI_SPORT}>`,
+        ],
+        "inline": true
+      },
+      {
+        "name": "Salons",
+        "value": [
+          `<#${process.env.DISCORD_CHANNEL_VIDEO_GAME}>`,
+          `<#${process.env.DISCORD_CHANNEL_SPORT}>`,
+        ],
+        "inline": true
+      }
+    ]
   },
 ];
 

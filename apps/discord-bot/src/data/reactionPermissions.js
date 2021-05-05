@@ -21,6 +21,16 @@ const reactionPermissions = [
     }
   },
   {
+    reactionName: 'recruitment',
+    messageValidation: process.env.DISCORD_MESSAGE_ROLE_2,
+    userPermission: process.env.DISCORD_ROLES_RECRUITMENT,
+  },
+  {
+    reactionName: 'studies',
+    messageValidation: process.env.DISCORD_MESSAGE_ROLE_2,
+    userPermission: process.env.DISCORD_ROLES_STUDIES,
+  },
+  {
     reactionName: 'docker',
     messageValidation: process.env.DISCORD_MESSAGE_ROLE_3,
     userPermission: process.env.DISCORD_ROLES_DOCKER,
@@ -79,6 +89,31 @@ const reactionPermissions = [
     reactionName: 'security',
     messageValidation: process.env.DISCORD_MESSAGE_ROLE_3,
     userPermission: process.env.DISCORD_ROLES_SECURITY,
+  },
+  {
+    reactionName: 'assets',
+    messageValidation: process.env.DISCORD_MESSAGE_ROLE_4,
+    userPermission: process.env.DISCORD_ROLES_ASSETS,
+  },
+  {
+    reactionName: 'game',
+    messageValidation: process.env.DISCORD_MESSAGE_ROLE_4,
+    userPermission: process.env.DISCORD_ROLES_GAME,
+  },
+  {
+    reactionName: 'engine',
+    messageValidation: process.env.DISCORD_MESSAGE_ROLE_4,
+    userPermission: process.env.DISCORD_ROLES_ENGINE,
+  },
+  {
+    reactionName: 'videogame',
+    messageValidation: process.env.DISCORD_MESSAGE_ROLE_5,
+    userPermission: process.env.DISCORD_ROLES_VIDEO_GAME,
+  },
+  {
+    reactionName: 'sport',
+    messageValidation: process.env.DISCORD_MESSAGE_ROLE_5,
+    userPermission: process.env.DISCORD_ROLES_SPORT,
   },
 ]
 
