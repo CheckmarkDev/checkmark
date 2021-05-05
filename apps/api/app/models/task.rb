@@ -5,9 +5,7 @@ class Task < ApplicationRecord
   has_many :task_likes
   has_many :task_comments
   has_and_belongs_to_many :projects
-  has_many_attached :images do |attachable|
-    attachable.variant :thumbnail, resize_to_fit: [720,720]
-  end
+  has_many_attached :images
 
   enum state: [
     :todo,
