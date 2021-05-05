@@ -10,6 +10,12 @@
       <TaskContent
         :task="task"
       />
+      <img
+        v-for="(image, k) in task.images"
+        :key="k"
+        :src="image"
+        alt=""
+      >
       <MarkAsButton
         v-if="$accessor.getAuthUser && task.user.uuid === $accessor.getAuthUser.uuid && task.state !== 'done'"
         :task="task"

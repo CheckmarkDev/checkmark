@@ -58,6 +58,10 @@ json[:data] = @task_groups.map do |task_group|
       comments: task.task_comments.count
     }
 
+    t[:images] = task.images.variant(:thumbnail).map do |image|
+      polymorphic_url(image)
+    end
+
     t
   end
 

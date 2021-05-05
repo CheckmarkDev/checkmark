@@ -14,6 +14,8 @@ scaleway:
   secret_access_key: <%= ENV.fetch('S3_SECRET_ACCESS_KEY') %>
   region: <%= ENV.fetch('S3_REGION') %>
   bucket: <%= ENV.fetch('S3_BUCKET') %>
+  upload:
+    acl: "public-read"
 
 # Remember not to checkin your GCS keyfile to a repository
 # google:

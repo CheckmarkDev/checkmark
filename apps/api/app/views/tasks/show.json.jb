@@ -33,4 +33,8 @@ json[:projects] = @task.projects.map do |project|
   }
 end
 
+json[:images] = @task.images.map do |image|
+  image.url
+end
+
 json

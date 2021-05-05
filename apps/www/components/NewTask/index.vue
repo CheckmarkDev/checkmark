@@ -44,6 +44,13 @@
                 name=""
                 class="flex-1 p-2 rounded-bl rounded-br rounded-tr appearance-none leading-relaxed border border-gray-300 border-solid"
               ></textarea>
+              <input
+                ref="files"
+                type="file"
+                name="images[]"
+                multiple
+                @change="updateImages"
+              >
             </div>
             <button
               :disabled="$wait.is('creating task')"
@@ -72,7 +79,8 @@
       return {
         formData: {
           state: 'done' as TaskState,
-          content: ''
+          content: '',
+          images: []
         }
       }
     },
@@ -104,18 +112,34 @@
             break;
         }
       },
+      // @ts-ignore
+      updateImages (e) {
+        this.formData.images = e.target.files
+      },
       submitted () {
         // @ts-ignore
         this.$refs.observer.validate()
           .then((valid: boolean) => {
             if (!valid) return
 
-            const { state, content } = this.formData
+            const { state, content, images } = this.formData
+
+            const formData = new FormData()
+            formData.append('state', state)
+            if (content.trim()) {
+              formData.append('content', content.trim())
+            }
+
+            // @ts-ignore
+            images.forEach((file, k) => {
+              formData.append('images[]', file)
+            })
 
             this.$wait.start('creating task')
-            this.$axios.post('/me/tasks', {
-              state,
-              content: content.trim() || null
+            this.$axios.post('/me/tasks', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
             })
               .then(() => {
                 this.formData.content = ''
