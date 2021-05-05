@@ -94,7 +94,11 @@ const roles = [
     "messageIdEnvName": "DISCORD_MESSAGE_ROLE_4",
     "title": "Développement de jeux video",
     "description": "Choix des centre d\'intérêts des différents développement dans le monde du jeux video",
-    "reactionEmojis": [],
+    "reactionEmojis": [
+      "assets",
+      "game",
+      "engine",
+    ],
     "fields": [
       {
         "name": "Réactions",
