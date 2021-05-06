@@ -3,17 +3,10 @@ json = {
   content: @task.content,
   state: @task.state,
   created_at: @task.created_at,
-  updated_at: @task.updated_at,
-
-  user: {
-    uuid: @task.user.uuid,
-    username: @task.user.username,
-    first_name: @task.user.first_name,
-    last_name: @task.user.last_name,
-    streak: @task.user.streak,
-    avatar_url: @task.user.avatar_url
-  }
+  updated_at: @task.updated_at
 }
+
+json[:user] = render('users/user', user: @task.user)
 
 json[:likes] = @task.task_likes.active.map do |like|
   User.find_by_id(like.user_id).uuid
@@ -30,6 +23,13 @@ json[:projects] = @task.projects.map do |project|
     name: project.name,
     description: project.description,
     url: project.url
+  }
+end
+
+json[:images] = @task.images.map do |image|
+  {
+    url: polymorphic_url(image),
+    thumbnail_url: polymorphic_url(image.variant(resize_to_fit: [720, 720]))
   }
 end
 

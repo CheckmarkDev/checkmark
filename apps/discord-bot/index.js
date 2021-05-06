@@ -65,7 +65,7 @@ server.post('/webhooks', async (req, res) => {
 
     switch (event) {
         case 'task.created': {
-            const { url, state, content } = data
+            const { url, state, content, images } = data
             const channel = await client.channels.fetch(process.env.DISCORD_CHANNEL_EVENT);
             const { first_name, last_name, username, avatar_url } = data.user
             const fullName = `${first_name} ${last_name} (${username})`
@@ -79,6 +79,14 @@ server.post('/webhooks', async (req, res) => {
                 .setDescription(`${getStateEmoji(state)} ${content}`)
                 .setFooter('Checkmark', 'https://www.checkmark.dev/icon.png')
                 .setTimestamp();
+
+            if (images && images.length) {
+                message.setImage(images[0].url)
+
+                if (images[1]) {
+                    message.setThumbnail(images[1].url)
+                }
+            }
 
             await channel.send(message)
         } break

@@ -10,17 +10,10 @@ json[:data] = @task_groups.map do |task_group|
   v = {
     uuid: task_group.uuid,
     created_at: task_group.created_at,
-    updated_at: task_group.updated_at,
-
-    user: {
-      uuid: task_group.user.uuid,
-      username: task_group.user.username,
-      first_name: task_group.user.first_name,
-      last_name: task_group.user.last_name,
-      streak: task_group.user.streak,
-      avatar_url: task_group.user.avatar_url
-    }
+    updated_at: task_group.updated_at
   }
+
+  v[:user] = render('users/user', user: task_group.user)
 
   v[:tasks] = task_group.tasks.order(created_at: :desc).map do |task|
     t = {
@@ -28,17 +21,10 @@ json[:data] = @task_groups.map do |task_group|
       content: task.content,
       state: task.state,
       created_at: task.created_at,
-      updated_at: task.updated_at,
-
-      user: {
-        uuid: task_group.user.uuid,
-        username: task_group.user.username,
-        first_name: task_group.user.first_name,
-        last_name: task_group.user.last_name,
-        streak: task_group.user.streak,
-        avatar_url: task_group.user.avatar_url
-      }
+      updated_at: task.updated_at
     }
+
+    t[:user] = render('users/user', user: task_group.user)
 
     t[:projects] = task.projects.map do |project|
       {
@@ -57,6 +43,13 @@ json[:data] = @task_groups.map do |task_group|
     t[:metrics] = {
       comments: task.task_comments.count
     }
+
+    t[:images] = task.images.map do |image|
+      {
+        url: polymorphic_url(image),
+        thumbnail_url: polymorphic_url(image.variant(resize_to_fit: [720, 720]))
+      }
+    end
 
     t
   end

@@ -7,6 +7,7 @@ home.labels.done_placeholder: Qu'avez-vous fait aujourd'hui ?
 home.labels.done: Fait
 home.labels.doing: En cours
 home.labels.todo: À faire
+home.labels.images: Images (optionnel)
 home.paragraphs.description: Rejoignez une communauté de developpeurs et développeuses passionné(e)s. Partagez votre progression quotidiennement et discutez autour de vos projets et actions.
 home.paragraphs.task_added: Votre progression a bien été prise en compte !
 home.paragraphs.task_edited: Votre progression a bien été mise à jour !

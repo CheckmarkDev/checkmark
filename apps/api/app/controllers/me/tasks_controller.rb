@@ -19,7 +19,7 @@ class Me::TasksController < ApplicationController
     @task = Task.new(task_params)
     @task.user = @current_user
 
-    if @task.save
+    if @task.save!
       render :show, status: :created
     else
       render json: @task.errors, status: :unprocessable_entity
@@ -55,6 +55,6 @@ class Me::TasksController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def task_params
-      params.permit(:content, :state)
+      params.permit(:content, :state, images: [])
     end
 end

@@ -1,11 +1,14 @@
 class Task < ApplicationRecord
+  include ActionDispatch::Routing::PolymorphicRoutes
+  include Rails.application.routes.url_helpers
+
   belongs_to :user
   belongs_to :task_group, optional: true
   belongs_to :streak, optional: true
   has_many :task_likes
   has_many :task_comments
   has_and_belongs_to_many :projects
-  has_many_attached :screenshots
+  has_many_attached :images
 
   enum state: [
     :todo,
