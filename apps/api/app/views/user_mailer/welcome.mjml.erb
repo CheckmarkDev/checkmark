@@ -1,0 +1,28 @@
+<mj-section background-color="#2589C7" padding-top="32px" padding-bottom="32px" border-radius="4px 4px 0 0">
+  <mj-column>
+    <mj-text color="white" font-size="20px" font-weight="medium" align="center">
+      <h1>
+        Bienvenue !
+      </h1>
+    </mj-text>
+  </mj-column>
+</mj-section>
+<mj-section background-color="#FFFFFF" border-radius="0px 0px 4px 4px" border-left="1px solid #CBD5E0" border-right="1px solid #CBD5E0" border-bottom="1px solid #CBD5E0">
+  <mj-column>
+    <mj-text>
+      <p>
+        Bienvenue <%= @name %> sur Checkmark.dev !
+      </p>
+      <p>
+        Rejoins <a href="https://discord.gg/VM3rH2X68P" style="font-weight: 500; color: #4A5568; text-decoration: none;">notre serveur Discord</a> pour partager ta progression sur tes différents projets personnels.
+      </p>
+    </mj-text>
+    <mj-button
+      href="<%= ENV['WEB_BASE'] %>"
+      align="left"
+      padding-bottom="32px"
+    >
+      Se connecter
+    </mj-button>
+  </mj-column>
+</mj-section>

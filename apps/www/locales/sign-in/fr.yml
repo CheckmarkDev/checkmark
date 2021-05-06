@@ -1,0 +1,6 @@
+sign-in.titles.main: Se connecter
+sign-in.paragraphs.description: Connectez-vous à votre espace personnel et faites avancer les choses. Discutez & partagez votre progression avec une communauté de developpeurs.
+sign-in.paragraphs.email-password-mismatch: L'e-mail ou le mot de passe ne correspondent pas.
+sign-in.labels.email: E-mail
+sign-in.labels.password: Mot de passe
+sign-in.buttons.sign-in: Se connecter

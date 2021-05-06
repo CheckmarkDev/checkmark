@@ -1,0 +1,9 @@
+sign-up.titles.main: S'inscrire
+sign-up.paragraphs.description: Créez-vous un compte et rejoingnez une communauté de développeurs passionnés. Discutez, partagez votre progression et faites avancer vos projets.
+sign-up.labels.email: E-mail
+sign-up.labels.username: Nom d'utilisateur
+sign-up.labels.first_name: Prénom
+sign-up.labels.last_name: Nom
+sign-up.labels.password: Mot de passe
+sign-up.labels.password_confirmation: Confirmation mot de passe
+sign-up.buttons.sign-up: S'inscrire

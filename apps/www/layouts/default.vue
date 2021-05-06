@@ -1,8 +1,35 @@
 <template>
   <div>
+    <app-header />
     <Nuxt />
   </div>
 </template>
+
+<script lang="ts">
+  import { defineComponent } from '@nuxtjs/composition-api'
+
+  import AppHeader from '@/components/AppHeader/index.vue'
+  import { Task } from '~/types/task'
+
+  export default defineComponent({
+    components: {
+      AppHeader
+    },
+    head () {
+      const title = this.$trans('home.titles.title')
+      const description = this.$trans('home.paragraphs.description')
+
+      return {
+        title,
+        meta: [
+          { hid: 'description', name: 'description', content: description },
+          { hid: 'og:description', name: 'og:description', content: description },
+          { hid: 'twitter:description', name: 'twitter:description', content: description },
+        ]
+      }
+    }
+  })
+</script>
 
 <style>
 html {

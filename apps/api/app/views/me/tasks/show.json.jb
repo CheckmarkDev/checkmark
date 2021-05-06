@@ -1,0 +1,13 @@
+json = {
+  uuid: @task.uuid,
+  content: @task.content,
+  state: @task.state,
+  created_at: @task.created_at,
+  updated_at: @task.updated_at
+}
+
+json[:likes] = @task.task_likes.map do |like|
+  User.find_by_id(like.user_id).uuid
+end
+
+json

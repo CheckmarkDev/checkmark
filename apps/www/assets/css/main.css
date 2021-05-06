@@ -1,0 +1,43 @@
+html, body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.btn {
+  @apply flex items-center justify-center h-12 rounded text-base font-medium px-4;
+}
+
+.btn-primary {
+  @apply bg-blue-500 text-white;
+}
+
+.input,
+.textarea {
+  @apply border border-gray-400 rounded w-full px-4 text-gray-800;
+}
+
+.input {
+  @apply h-12;
+}
+
+input::placeholder,
+textarea::placeholder {
+  @apply text-gray-600;
+}
+
+.textarea {
+  @apply py-4;
+}
+
+.input--invalid,
+.textarea--invalid {
+  @apply border-red-500;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 200ms;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}

@@ -1,0 +1,5 @@
+requirepass password
+
+save 10 10
+
+appendfsync everysec

@@ -1,39 +1,44 @@
 export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    titleTemplate: '%s - <%- name %>',
-    title: '<%- name %>',
+    titleTemplate: '%s - Checkmark',
     htmlAttrs: {
-      lang: 'en',
+      lang: 'fr',
       dir: 'ltr'
     },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '<%- description %>' },
-      { hid: 'og:description', name: 'og:description', content: '<%- description %>' },
-      { hid: 'twitter:description', name: 'twitter:description', content: '<%- description %>' },
       { hid: 'og:image', name: 'og:image', content: '' },
       { hid: 'og:image:width', name: 'og:image:width', content: '1200' },
       { hid: 'og:image:height', name: 'og:image:height', content: '628' },
       { hid: 'twitter:image', name: 'twitter:image', content: '' },
       { hid: 'twitter:card', name: 'twitter:card', content: 'summary_large_image' },
-      { hid: 'google-site-verification', name: 'google-site-verification', content: '<%- google_site_verification %>' },
-      { hid: 'og:site_name', property: 'og:site_name', content: '<%- name %>' },
+      { hid: 'google-site-verification', name: 'google-site-verification', content: 'KuZrNJ2U-XmZnD_4ajl8QQrCkS7Ufj3aqmYcHzJRh2w' },
+      { hid: 'og:site_name', property: 'og:site_name', content: 'Checkmark' },
       { hid: 'og:type', property: 'og:type', content: 'website' },
-      { hid: 'og:locale', property: 'og:locale', content: 'en_US' },
+      { hid: 'og:locale', property: 'og:locale', content: 'fr_FR' },
       { hid: 'robots', name: 'robots', content: 'index' }
     ],
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [
+    '@/assets/css/main.css'
   ],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
     '~/plugins/axios',
     '~/plugins/vee-validate',
+    '~/plugins/vue-icu.js',
+    '~/plugins/dayjs.js',
+    {
+      src: '~/plugins/v-click-outside.js', mode: 'client'
+    },
+    {
+      src: '~/plugins/vue-infinite-scroll.js', mode: 'client'
+    },
     {
       src: '~/plugins/vue-sticky.js', mode: 'client'
     },
@@ -51,16 +56,17 @@ export default {
     }
   ],
 
+
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
 
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
-    // https://go.nuxtjs.dev/eslint
-    '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/composition-api',
-    '@nuxt/typescript-build',
+    ['@nuxt/typescript-build', {
+      typeCheck: false
+    }],
     '@nuxtjs/tailwindcss',
     '@nuxtjs/router',
     'nuxt-typed-vuex'
@@ -70,8 +76,10 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@williamdasilva/gtag-module',
-    'nuxt-stripe-module',
+    // 'nuxt-stripe-module',
     'nuxt-socialsplash-module',
+    'nuxt-trailingslash-module',
+    '@nuxt/content',
     '@nuxtjs/sentry',
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
@@ -80,10 +88,21 @@ export default {
     ['vue-wait/nuxt', { useVuex: true }]
   ],
 
-  // Axios module configuration (https://go.nuxtjs.dev/config-axios)
-  stripe: {
-    publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
-    stripeAccount: ''
+  // // Axios module configuration (https://go.nuxtjs.dev/config-axios)
+  // stripe: {
+  //   publishableKey: process.env.STRIPE_PUBLISHABLE_KEY
+  // },
+
+  pwa: {
+    workbox: false,
+    manifest: {
+      name: 'Checkmark',
+      lang: 'fr'
+    },
+    icon: {
+      source: '[srcDir]/[staticDir]/icon.png',
+      cacheDir: 'node_modules/.cache/pwa/icon'
+    }
   },
 
   axios: {
@@ -111,10 +130,21 @@ export default {
     }
   },
 
+  tailwind: {
+    jit: true
+  },
+
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
     transpile: [
       'vee-validate/dist/rules'
-    ]
+    ],
+
+    extend (config, { isDev, isClient }) {
+      config.module.rules.push({
+        test: /\.ya?ml$/,
+        loader: 'js-yaml-loader'
+      })
+    }
   }
 }

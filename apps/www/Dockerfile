@@ -1,11 +1,9 @@
 # Base
-FROM node:10.16.0 AS base
+FROM node:14.16.1 AS base
 
 WORKDIR /www
 
-COPY package.json .
-
-COPY package-lock.json .
+COPY package.json package-lock.json ./
 
 RUN npm ci
 
@@ -24,7 +22,7 @@ COPY . .
 RUN npm run build
 
 # Release
-FROM node:10-alpine AS release
+FROM node:14-alpine AS release
 
 WORKDIR /www
 

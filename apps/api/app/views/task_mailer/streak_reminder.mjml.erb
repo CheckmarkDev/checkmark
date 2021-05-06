@@ -1,0 +1,110 @@
+<mj-section background-color="#2589C7" padding-top="32px" padding-bottom="32px" border-radius="4px 4px 0 0">
+  <mj-column>
+    <mj-image
+      src="<%= image_url('streak-header.png') %>"
+      align="center"
+      height="100px"
+      width="194px"
+    >
+    </mj-image>
+  </mj-column>
+</mj-section>
+<mj-section background-color="#FFFFFF" border-left="1px solid #CBD5E0" border-right="1px solid #CBD5E0">
+  <mj-column>
+    <mj-text>
+      <h1 style="font-size: 20px; font-weight: 500; color: #4A5568;">
+        Hello <%= @name %> !
+      </h1>
+      <p>
+        Tu n'as publié aucune tâche aujourd'hui. Si tu as fait ou prévois de faire quelque chose, pensez à le noter pour que les membres de la communauté puissent suivre ton avancement !
+      </p>
+      <p>
+        Tu risques de <strong>perdre ta “streak” de <%= @streak %> jour(s)</strong> si tu ne publies rien d'ici à ce soir.
+      </p>
+    </mj-text>
+  </mj-column>
+</mj-section>
+<mj-section background-color="#FFFFFF" border-left="1px solid #CBD5E0" border-right="1px solid #CBD5E0">
+  <mj-column>
+    <mj-button
+      href="<%= ENV['WEB_BASE'] %>"
+      align="left"
+      padding-bottom="32px"
+    >
+      Créer une tâche
+    </mj-button>
+  </mj-column>
+</mj-section>
+<mj-section background-color="#FFFFFF" border-left="1px solid #CBD5E0" border-right="1px solid #CBD5E0">
+  <mj-column>
+    <mj-text>
+      <h2 style="font-size: 20px; font-weight: 500; color: #4A5568;">
+        Qu'est-ce qu'une "streak" ?
+      </h2>
+      <p>
+        Une "streak" est le nombre de jours consécutifs où tu publies une tâche sur Checkmark, qu’elle soit faite, ou à faire. S'il se passe une journée lorsqu'aucune tâche n'est publié, alors la streak retourne à zéro.
+      </p>
+      <p>
+        Les paliers de la streak sont :
+      </p>
+    </mj-text>
+  </mj-column>
+</mj-section>
+<mj-section background-color="#FFFFFF" border-left="1px solid #CBD5E0" border-right="1px solid #CBD5E0" border-bottom="1px solid #CBD5E0">
+  <mj-column padding-bottom="0">
+    <mj-image
+      src="<%= image_url('emoji/sad.png') %>"
+      align="left"
+      height="30px"
+      width="30px"
+      padding-bottom="0px"
+      padding-top="0px"
+    >
+    </mj-image>
+    <mj-text>
+      0 jours
+    </mj-text>
+  </mj-column>
+  <mj-column padding-bottom="0">
+    <mj-image
+      src="<%= image_url('emoji/smile.png') %>"
+      align="left"
+      height="30px"
+      width="30px"
+      padding-bottom="0px"
+      padding-top="0px"
+    >
+    </mj-image>
+    <mj-text>
+      1 jour
+    </mj-text>
+  </mj-column>
+  <mj-column padding-bottom="0">
+    <mj-image
+      src="<%= image_url('emoji/rocket.png') %>"
+      align="left"
+      height="30px"
+      width="30px"
+      padding-bottom="0px"
+      padding-top="0px"
+    >
+    </mj-image>
+    <mj-text>
+      7 jours
+    </mj-text>
+  </mj-column>
+  <mj-column padding-bottom="0">
+    <mj-image
+      src="<%= image_url('emoji/fire.png') %>"
+      align="left"
+      height="30px"
+      width="30px"
+      padding-bottom="0px"
+      padding-top="0px"
+    >
+    </mj-image>
+    <mj-text>
+      21 jours
+    </mj-text>
+  </mj-column>
+</mj-section>

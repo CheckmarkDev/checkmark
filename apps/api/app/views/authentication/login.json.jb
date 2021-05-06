@@ -1,0 +1,14 @@
+{
+  user: {
+    uuid: @user.uuid,
+    email: @user.email,
+    username: @user.username,
+    first_name: @user.first_name,
+    last_name: @user.last_name,
+    streak: @user.streak,
+    avatar_url: @user.avatar_url
+  },
+
+  token: @token,
+  expires_at: @expires_at
+}

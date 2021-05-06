@@ -1,0 +1,36 @@
+json = {
+  uuid: @task.uuid,
+  content: @task.content,
+  state: @task.state,
+  created_at: @task.created_at,
+  updated_at: @task.updated_at
+}
+
+json[:user] = render('users/user', user: @task.user)
+
+json[:likes] = @task.task_likes.active.map do |like|
+  User.find_by_id(like.user_id).uuid
+end
+
+json[:metrics] = {
+  comments: @task.task_comments.count
+}
+
+json[:projects] = @task.projects.map do |project|
+  {
+    uuid: project.uuid,
+    slug: project.slug,
+    name: project.name,
+    description: project.description,
+    url: project.url
+  }
+end
+
+json[:images] = @task.images.map do |image|
+  {
+    url: polymorphic_url(image),
+    thumbnail_url: polymorphic_url(image.variant(resize_to_fit: [720, 720]))
+  }
+end
+
+json

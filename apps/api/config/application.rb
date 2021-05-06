@@ -2,6 +2,7 @@ require_relative 'boot'
 
 require "rails"
 # Pick the frameworks you want:
+require "active_support/railtie"
 require "active_model/railtie"
 require "active_job/railtie"
 require "active_record/railtie"
@@ -33,6 +34,10 @@ module Api
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    config.hosts << "api"
+    config.hosts << "checkmark.dev"
+    config.hosts << "api.checkmark.dev"
 
     config.autoload_paths += %W(#{config.root}/lib)
     config.autoload_paths += Dir["#{config.root}/lib/**/"]

@@ -1,0 +1,60 @@
+json = {
+  meta: {
+    current_page: @task_groups.current_page,
+    total_pages: @task_groups.total_pages,
+    count: @task_groups.count
+  }
+}
+
+json[:data] = @task_groups.map do |task_group|
+  v = {
+    uuid: task_group.uuid,
+    created_at: task_group.created_at,
+    updated_at: task_group.updated_at
+  }
+
+  v[:user] = render('users/user', user: task_group.user)
+
+  v[:tasks] = task_group.tasks.order(created_at: :desc).map do |task|
+    t = {
+      uuid: task.uuid,
+      content: task.content,
+      state: task.state,
+      created_at: task.created_at,
+      updated_at: task.updated_at
+    }
+
+    t[:user] = render('users/user', user: task_group.user)
+
+    t[:projects] = task.projects.map do |project|
+      {
+        uuid: project.uuid,
+        slug: project.slug,
+        name: project.name,
+        description: project.description,
+        url: project.url
+      }
+    end
+
+    t[:likes] = task.task_likes.active.map do |like|
+      User.find_by_id(like.user_id).uuid
+    end
+
+    t[:metrics] = {
+      comments: task.task_comments.count
+    }
+
+    t[:images] = task.images.map do |image|
+      {
+        url: polymorphic_url(image),
+        thumbnail_url: polymorphic_url(image.variant(resize_to_fit: [720, 720]))
+      }
+    end
+
+    t
+  end
+
+  v
+end
+
+json

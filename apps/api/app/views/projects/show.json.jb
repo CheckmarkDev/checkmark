@@ -1,0 +1,7 @@
+{
+  uuid: @project.uuid,
+  slug: @project.slug,
+  name: @project.name,
+  description: @project.description,
+  url: @project.url
+}

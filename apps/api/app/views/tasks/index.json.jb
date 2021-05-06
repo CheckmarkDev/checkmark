@@ -1,0 +1,38 @@
+json = {
+  meta: {
+    current_page: @tasks.current_page,
+    total_pages: @tasks.total_pages,
+    count: @tasks.count
+  }
+}
+
+json[:data] = @tasks.map do |task|
+  v = {
+    uuid: task.uuid,
+    content: task.content,
+    state: task.state,
+    created_at: task.created_at,
+    updated_at: task.updated_at,
+
+    user: {
+      uuid: task.user.uuid,
+      username: task.user.username,
+      first_name: task.user.first_name,
+      last_name: task.user.last_name,
+      streak: task.user.streak,
+      avatar_url: task.user.avatar_url
+    }
+  }
+
+  v[:likes] = task.task_likes.active.map do |like|
+    User.find_by_id(like.user_id).uuid
+  end
+
+  v[:metrics] = {
+    comments: task.task_comments.count
+  }
+
+  v
+end
+
+json

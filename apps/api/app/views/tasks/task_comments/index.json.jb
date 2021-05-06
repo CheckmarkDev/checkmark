@@ -1,0 +1,29 @@
+json = {
+  meta: {
+    current_page: @task_comments.current_page,
+    total_pages: @task_comments.total_pages,
+    count: @task_comments.count
+  }
+}
+
+json[:data] = @task_comments.map do |comment|
+  v = {
+    uuid: comment.uuid,
+    content: comment.content,
+    created_at: comment.created_at,
+    updated_at: comment.updated_at,
+
+    user: {
+      uuid: comment.user.uuid,
+      username: comment.user.username,
+      first_name: comment.user.first_name,
+      last_name: comment.user.last_name,
+      streak: comment.user.streak,
+      avatar_url: comment.user.avatar_url
+    }
+  }
+
+  v
+end
+
+json

@@ -27,7 +27,9 @@
       "@nuxt/types",
       "@nuxtjs/axios",
       "@nuxtjs/sentry",
-      "nuxt-stripe-module"
+      "@nuxt/content",
+      "nuxt-stripe-module",
+      "nuxt-socialsplash-module"
     ]
   },
   "exclude": [
