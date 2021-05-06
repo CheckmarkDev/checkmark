@@ -18,6 +18,8 @@ class App extends Discord.Client {
          * @type {string}
          */
         this.token = config.token;
+
+        this.logger = require('./utils/logger');
     }
 
     loadEvents(path) {
