@@ -48,7 +48,7 @@
           return parts
         }
 
-        const hashtags = [...content.match(/(#\w+)/gm)]
+        const hashtags = [...content.matchAll(/(#\w+)/gm)]
         let index = 0
         if (hashtags.length === 0) {
           parts.push({
