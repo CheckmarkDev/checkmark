@@ -1,4 +1,7 @@
 class Task < ApplicationRecord
+  include ActionDispatch::Routing::PolymorphicRoutes
+  include Rails.application.routes.url_helpers
+
   belongs_to :user
   belongs_to :task_group, optional: true
   belongs_to :streak, optional: true

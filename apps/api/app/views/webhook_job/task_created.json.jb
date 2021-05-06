@@ -16,6 +16,13 @@ json = {
       avatar_url: @task.user.avatar_url
     },
 
+    images: @task.images.map do |image|
+      {
+        url: polymorphic_url(image),
+        thumbnail_url: polymorphic_url(image.variant(resize_to_fit: [720, 720]))
+      }
+    end,
+
     url: "#{ENV['WEB_BASE']}/u/#{@task.user.username}/task/#{@task.uuid}"
   }
 }

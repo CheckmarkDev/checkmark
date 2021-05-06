@@ -13,6 +13,10 @@ export type Task = {
   user: User
   created_at: string
   likes: string[]
+  images: Array<{
+    url: string
+    thumbnail_url: string
+  }>
   metrics: {
     comments: number
   }

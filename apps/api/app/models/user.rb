@@ -1,6 +1,9 @@
 require 'digest/md5'
 
 class User < ApplicationRecord
+  include ActionDispatch::Routing::PolymorphicRoutes
+  include Rails.application.routes.url_helpers
+
   has_secure_password
   has_one_attached :avatar
 
@@ -48,6 +51,10 @@ class User < ApplicationRecord
   end
 
   def avatar_url
+    if self.avatar.attached?
+      return polymorphic_url(self.avatar.variant(resize_to_fill: [100, 100]))
+    end
+
     email_address = self.email.downcase
     hash = Digest::MD5.hexdigest(email_address)
     image_src = "https://www.gravatar.com/avatar/#{hash}"
