@@ -17,6 +17,16 @@
             <li>
               <nuxt-link
                 :to="{
+                  name: 'SettingsProfile'
+                }"
+                class="hover:bg-gray-200 rounded p-2 w-full flex"
+              >
+                {{ $trans('settings.titles.profile') }}
+              </nuxt-link>
+            </li>
+            <li>
+              <nuxt-link
+                :to="{
                   name: 'SettingsNotifications'
                 }"
                 class="hover:bg-gray-200 rounded p-2 w-full flex"

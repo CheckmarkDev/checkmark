@@ -11,13 +11,13 @@ json= {
 }
 
 json[:projects] = @current_user.projects.map do |project|
-    {
-        uuid: project.uuid,
-        slug: project.slug,
-        name: project.name,
-        description: project.description,
-        url: project.url
-    }
+  {
+    uuid: project.uuid,
+    slug: project.slug,
+    name: project.name,
+    description: project.description,
+    url: project.url
+  }
 end
 
 json

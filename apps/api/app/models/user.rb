@@ -18,7 +18,7 @@ class User < ApplicationRecord
 
   validates :email, presence: true, uniqueness: true
   validates :username, presence: true, uniqueness: true, length: { minimum: 2 }
-  validates :password, length: { minimum: 6 }
+  # validates :password, length: { minimum: 6 }
 
   before_create :create_email_notification
   before_save :format_username
