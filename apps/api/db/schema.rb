@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_04_232942) do
+ActiveRecord::Schema.define(version: 2021_05_08_172059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -170,10 +170,14 @@ ActiveRecord::Schema.define(version: 2021_05_04_232942) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "email_notifications", "users"
+  add_foreign_key "projects", "users"
+  add_foreign_key "projects_tasks", "projects"
+  add_foreign_key "projects_tasks", "tasks"
   add_foreign_key "streaks", "users"
   add_foreign_key "task_comments", "tasks"
   add_foreign_key "task_comments", "users"
   add_foreign_key "task_groups", "users"
   add_foreign_key "task_likes", "tasks"
   add_foreign_key "task_likes", "users"
+  add_foreign_key "tokens", "users"
 end
