@@ -6,7 +6,9 @@ class Me::ProfileController < ApplicationController
     begin
       @current_user.avatar.attach(profile_params[:avatar])
       if @current_user.save!
-        render json: {}, status: :ok
+
+        @user = @current_user
+        render "users/show"
       else
         render json: @current_user.errors, status: :unprocessable_entity
       end

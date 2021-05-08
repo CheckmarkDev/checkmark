@@ -66,39 +66,42 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from '@nuxtjs/composition-api'
+  import { defineComponent, ref } from '@nuxtjs/composition-api'
 
   import AppAvatar from '@/components/AppAvatar/index.vue'
+  import useAccessor from '~/composables/useAccessor'
 
   export default defineComponent({
     components: {
       AppAvatar
     },
-    data () {
+    setup () {
+      const accessor = useAccessor()
+      const previewUrl = ref(accessor.getAuthUser?.avatar_url)
+      const formData: Ref<{
+        image: Blob|null
+      }> = ref({
+        image: null
+      })
+
       return {
-        previewUrl: null as string|null,
-        formData: {
-          image: null
-        } as {
-          image: Blob|null
-        }
-      }
-    },
-    mounted () {
-      if (this.$accessor.getAuthUser) {
-        this.previewUrl = this.$accessor.getAuthUser.avatar_url
+        previewUrl,
+        formData
       }
     },
     methods: {
-      fileChange (file: Event) {
-        console.log('file', file.target.files)
-        var reader = new FileReader();
-        reader.onload = e => {
-          console.log('on load', e.target.result)
-          this.previewUrl = e.target.result
-        }
+      fileChange (e: Event) {
+        if (e) {
+          const file = (e.target as HTMLInputElement).files[0]
 
-        reader.readAsDataURL(file.target.files[0]); // convert to base64 string
+          this.formData.image = file
+          const reader = new FileReader()
+          reader.onload = v => {
+            this.previewUrl = v.target.result
+          }
+
+          reader.readAsDataURL(file)
+        }
       },
       submitted () {
         // @ts-ignore
@@ -117,7 +120,9 @@
                 'Content-Type': 'multipart/form-data'
               }
             })
-              .then(() => {
+              .then((res) => {
+                this.$accessor.setAuthUser(res.data)
+
                 this.formData.image = null
                 this.$toasted.success(this.$trans('settings.paragraphs.settings_saved'))
               })
