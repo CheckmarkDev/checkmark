@@ -9,6 +9,8 @@ class TaskLike < ApplicationRecord
     :inactive
   ]
 
+  default_scope { where(state: TaskLike.states[:active]) }
+
   scope :from_user, -> (user) { where(user: user) }
 
   private

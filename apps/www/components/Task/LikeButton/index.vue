@@ -24,10 +24,10 @@
         </svg>
       </template>
       <div
-        v-if="task.likes.length > 0"
+        v-if="task.metrics.likes.length > 0"
         class="like-button__badge absolute bg-blue-500 text-white rounded-full w-4 h-4 text-xs"
       >
-        {{ task.likes.length }}
+        {{ task.metrics.likes.length }}
       </div>
     </div>
   </button>
@@ -59,7 +59,7 @@
       const toasted = useToasted()
       const trans = useICU()
 
-      const hasLiked = computed(() => accessor.getAuthUser && task.value.likes.includes(accessor.getAuthUser.uuid))
+      const hasLiked = computed(() => accessor.getAuthUser && task.value.metrics.likes.includes(accessor.getAuthUser.uuid))
       const isSelfTask = computed(() => accessor.getAuthUser && task.value.user.uuid === accessor.getAuthUser.uuid)
 
       function like () {

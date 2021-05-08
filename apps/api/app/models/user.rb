@@ -1,7 +1,4 @@
 class User < ApplicationRecord
-  include ActionDispatch::Routing::PolymorphicRoutes
-  include Rails.application.routes.url_helpers
-
   has_secure_password
   has_one_attached :avatar
 
