@@ -140,7 +140,7 @@ server.post('/webhooks', async (req, res) => {
 });
 
 server.listen(PORT, HOST, () => {
-    console.log(`Discord bot started on ${HOST}:${PORT}.`)
+    client.logger.info(`Discord bot started on ${HOST}:${PORT}.`)
 });
 
 process.on('unhandledRejection', err => console.log(err));

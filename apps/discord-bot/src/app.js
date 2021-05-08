@@ -18,6 +18,8 @@ class App extends Discord.Client {
          * @type {string}
          */
         this.token = config.token;
+
+        this.logger = require('./utils/logger');
     }
 
     loadEvents(path) {
@@ -25,13 +27,13 @@ class App extends Discord.Client {
             if (err) console.log(err);
             files = files.filter(f => f.split('.').pop() === 'js');
             if (files.length === 0) return console.log('No events found');
-            console.log(`${files.length} event(s) found...`);
+            this.logger.info(`${files.length} event(s) found...`);
             files.forEach(f => {
                 const eventName = f.substring(0, f.indexOf('.'));
                 const event = require(resolve(__basedir, join(path, f)));
                 super.on(eventName, event.bind(null, this));
                 delete require.cache[require.resolve(resolve(__basedir, join(path, f)))]; // Clear cache
-                console.log(`Loading event: ${eventName}`);
+                this.logger.info(`Loading event: ${eventName}`);
             });
         });
         return this;
