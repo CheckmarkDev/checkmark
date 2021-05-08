@@ -94,6 +94,20 @@
             <li>
               <nuxt-link
                 :to="{
+                  name: 'User',
+                  params: {
+                    username: $accessor.getAuthUser.username
+                  }
+                }"
+                class="flex py-2 hover:bg-gray-200"
+                @click.native="close"
+              >
+                {{ $trans('global.buttons.profile') }}
+              </nuxt-link>
+            </li>
+            <li>
+              <nuxt-link
+                :to="{
                   name: 'Settings'
                 }"
                 class="flex py-2 hover:bg-gray-200"

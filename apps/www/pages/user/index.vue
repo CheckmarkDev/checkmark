@@ -9,6 +9,8 @@
           >
             <UserAvatar
               :user="user"
+              :width="80"
+              :height="80"
               class="user-hero__avatar mr-8 flex-shrink-0"
             />
             <div class="truncate">
@@ -103,19 +105,8 @@
       height: 400px;
     }
   }
-  .user-hero__avatar {
-    width: 80px;
-    height: 80px;
-  }
 
   .user-container {
     margin-top: -180px;
-  }
-</style>
-
-<style>
-  .user-hero__avatar img{
-    width: 80px;
-    height: 80px;
   }
 </style>

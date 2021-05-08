@@ -9,52 +9,62 @@
         @click.prevent="show"
       >
         <img
-          :src="thumbnail"
+          v-lazy="thumbnail"
           :alt="alternateText"
           class="rounded border border-gray-300 border-solid"
         >
       </a>
     </slot>
+
     <div
       v-if="visible"
       class="lightbox p-8"
       @click="hide"
     >
-      <div class="lightbox__close" @click="hide">
-        <slot name="icon-close">&times;</slot>
-      </div>
-      <div class="lightbox__element" @click.stop="">
-        <div
-          class="lightbox__arrow lightbox__arrow--left"
-          @click.stop.prevent="previous"
-          :class="{ 'lightbox__arrow--invisible': !hasPrevious }"
-        >
-          <slot name="icon-previous">
-            <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z"/>
-              <path d="M0-.5h24v24H0z" fill="none"/>
-            </svg>
-          </slot>
+      <button
+        type="button"
+        class="absolute right-0 top-0 p-3 rounded-full flex justify-center items-center text-white hover:bg-white hover:bg-opacity-25 mt-2 mr-2"
+        @click="hide"
+      >
+        <XIcon
+          size="32"
+        />
+      </button>
+
+      <div class="lightbox__element mx-auto" @click.stop="">
+        <div class="lightbox__element__navigation">
+          <button
+            type="button"
+            class="absolute left-0 w-16 h-16 top-0 bottom-0 m-auto rounded-full flex justify-center items-center text-white hover:bg-white hover:bg-opacity-25 ml-8"
+            @click.stop.prevent="previous"
+            :class="{ 'hidden': !hasPrevious }"
+          >
+            <ChevronLeftIcon
+              size="32"
+            />
+          </button>
+          <button
+            type="button"
+            class="absolute right-0 top-0 bottom-0 m-auto w-16 h-16 rounded-full flex justify-center items-center text-white hover:bg-white hover:bg-opacity-25 mr-8"
+            @click.stop.prevent="next"
+            :class="{ 'hidden': !hasNext }"
+          >
+            <ChevronRightIcon
+              size="32"
+            />
+          </button>
         </div>
+
         <div class="lightbox__image flex justify-center items-center" @click.stop="">
-          <slot name="content" :url="images[index]" v-if="displayImage">
+          <div
+            name="content"
+            v-if="displayImage"
+          >
             <img
-              :src="images[index]"
+              v-lazy="images[index]"
               class="rounded"
             >
-          </slot>
-        </div>
-        <div
-          class="lightbox__arrow lightbox__arrow--right"
-          @click.stop.prevent="next"
-          :class="{ 'lightbox__arrow--invisible': !hasNext }"
-        >
-          <slot name="icon-next">
-            <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"/>
-              <path d="M0-.25h24v24H0z" fill="none"/>
-            </svg>
-          </slot>
+          </div>
         </div>
       </div>
     </div>
@@ -64,8 +74,14 @@
 <script>
   import { defineComponent } from '@nuxtjs/composition-api'
   import Vue from 'vue'
+  import { XIcon, ChevronLeftIcon, ChevronRightIcon } from 'vue-feather-icons'
 
   export default defineComponent({
+    components: {
+      XIcon,
+      ChevronLeftIcon,
+      ChevronRightIcon
+    },
     props: {
       thumbnail: {
         type: String,
@@ -188,37 +204,11 @@
     width: 100%;
   }
   .lightbox__thumbnail:hover {
-    transform: scale(1.05);
-  }
-  .lightbox__close {
-    position: fixed;
-    right: 0;
-    top: 0;
-    padding: 1rem;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: #fff;
-    width: 4rem;
-    height: 4rem;
-  }
-  .lightbox__arrow--invisible {
-    visibility: hidden;
+    transform: scale(1.02);
   }
   .lightbox__element {
     display: flex;
-    width: 100%;
     height: fit-content;
-  }
-  .lightbox__arrow {
-    padding: 0 2rem;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .lightbox__arrow svg {
-    fill: #fff;
-    pointer-events: none;
   }
   .lightbox__image {
     flex: 1;
@@ -227,27 +217,18 @@
     max-width: 100%;
     max-height: 90vh;
   }
-  @media screen and (max-width: 720px) {
-    .lightbox__arrow {
-      padding: 0 1rem;
-    }
-  }
+
   @media screen and (max-width: 500px) {
     .lightbox__element {
       position: relative;
     }
-    .lightbox__arrow {
-      position: absolute;
-      padding: 0 2rem;
-      height: 100%;
-    }
-    .lightbox__arrow--right {
-      right: 0;
-      background: linear-gradient(to right, transparent, rgba(0, 0, 0, .3));
-    }
-    .lightbox__arrow--left {
-      left: 0;
-      background: linear-gradient(to left, transparent, rgba(0, 0, 0, .3));
+  }
+
+  @media only screen and (max-width: 720px) {
+    .lightbox__element__navigation {
+      @apply absolute left-0 w-full;
+
+      bottom: -2.5rem;
     }
   }
 </style>
