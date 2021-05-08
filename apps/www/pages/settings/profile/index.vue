@@ -54,7 +54,7 @@
           </ul>
 
           <button
-            :disabled="$wait.is('updating profile picture')"
+            :disabled="$wait.is('updating profile picture') || !formData.image"
             v-text="$trans('global.buttons.save')"
             type="submit"
             class="btn btn-primary"
@@ -118,6 +118,7 @@
               }
             })
               .then(() => {
+                this.formData.image = null
                 this.$toasted.success(this.$trans('settings.paragraphs.settings_saved'))
               })
               .finally(() => {
