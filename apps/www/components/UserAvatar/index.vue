@@ -1,12 +1,10 @@
 <template>
   <div class="user-avatar w-12 h-12 rounded-full bg-gray-300 relative">
-    <img
+    <AppAvatar
       :src="user.avatar_url"
-      alt=""
       width="48"
       height="48"
-      class="rounded-full"
-    >
+    />
     <Streak
       :streak="user.streak"
       class="absolute"
@@ -19,10 +17,12 @@
 
   import { User } from '~/types/user'
   import Streak from '@/components/Streak/index.vue'
+  import AppAvatar from '@/components/AppAvatar/index.vue'
 
   export default defineComponent({
     components: {
-      Streak
+      Streak,
+      AppAvatar
     },
     props: {
       user: {

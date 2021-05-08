@@ -1,5 +1,3 @@
-require 'digest/md5'
-
 class User < ApplicationRecord
   include ActionDispatch::Routing::PolymorphicRoutes
   include Rails.application.routes.url_helpers
@@ -18,7 +16,7 @@ class User < ApplicationRecord
 
   validates :email, presence: true, uniqueness: true
   validates :username, presence: true, uniqueness: true, length: { minimum: 2 }
-  validates :password, length: { minimum: 6 }
+  # validates :password, length: { minimum: 6 }
 
   before_create :create_email_notification
   before_save :format_username
@@ -52,14 +50,10 @@ class User < ApplicationRecord
 
   def avatar_url
     if self.avatar.attached?
-      return polymorphic_url(self.avatar.variant(resize_to_fill: [100, 100]))
+      return Rails.application.routes.url_helpers.url_for(self.avatar.variant(resize_to_fill: [100, 100]))
     end
 
-    email_address = self.email.downcase
-    hash = Digest::MD5.hexdigest(email_address)
-    image_src = "https://www.gravatar.com/avatar/#{hash}"
-
-    image_src
+    return ActionController::Base.helpers.image_url('default-avatar.png')
   end
 
   def send_welcome

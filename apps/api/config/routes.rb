@@ -25,6 +25,7 @@ Rails.application.routes.draw do
 
       get '/email_notifications', to: 'email_notifications#index'
       put '/email_notifications', to: 'email_notifications#update'
+      put '/profile', to: 'profile#update'
 
     end
 
