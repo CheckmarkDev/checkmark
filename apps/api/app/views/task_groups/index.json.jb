@@ -46,8 +46,8 @@ json[:data] = @task_groups.map do |task_group|
 
     t[:images] = task.images.map do |image|
       {
-        url: polymorphic_url(image),
-        thumbnail_url: polymorphic_url(image.variant(resize_to_fit: [720, 720]))
+        url: Rails.application.routes.url_helpers.url_for(image),
+        thumbnail_url: Rails.application.routes.url_helpers.url_for(image.variant(resize_to_fit: [720, 720]))
       }
     end
 
