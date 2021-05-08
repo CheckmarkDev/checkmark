@@ -26,7 +26,10 @@ class ApplicationController < ActionController::API
         raise Exception.new 'Token is invalid'
       end
 
-      @current_user = User.find_by_uuid(@decoded[:sub])
+      @current_user = User.includes([
+        :streaks,
+        avatar_attachment: :blob
+      ]).find_by_uuid(@decoded[:sub])
     rescue ActiveRecord::RecordNotFound => e
       render json: { errors: e.message }, status: :unauthorized
     rescue JWT::DecodeError => e
