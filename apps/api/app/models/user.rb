@@ -1,5 +1,3 @@
-require 'digest/md5'
-
 class User < ApplicationRecord
   include ActionDispatch::Routing::PolymorphicRoutes
   include Rails.application.routes.url_helpers
@@ -55,11 +53,7 @@ class User < ApplicationRecord
       return Rails.application.routes.url_helpers.url_for(self.avatar.variant(resize_to_fill: [100, 100]))
     end
 
-    email_address = self.email.downcase
-    hash = Digest::MD5.hexdigest(email_address)
-    image_src = "https://www.gravatar.com/avatar/#{hash}"
-
-    image_src
+    return ActionController::Base.helpers.image_url('default-avatar.png')
   end
 
   def send_welcome
