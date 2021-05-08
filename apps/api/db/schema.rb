@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_08_172059) do
+ActiveRecord::Schema.define(version: 2021_05_08_212325) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -123,7 +123,7 @@ ActiveRecord::Schema.define(version: 2021_05_08_172059) do
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.text "content"
     t.integer "state", default: 0, null: false
-    t.bigint "user_id"
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "task_group_id", null: false
@@ -137,7 +137,7 @@ ActiveRecord::Schema.define(version: 2021_05_08_172059) do
   create_table "tokens", force: :cascade do |t|
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.string "token"
-    t.bigint "user_id"
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_tokens_on_user_id"
@@ -179,5 +179,8 @@ ActiveRecord::Schema.define(version: 2021_05_08_172059) do
   add_foreign_key "task_groups", "users"
   add_foreign_key "task_likes", "tasks"
   add_foreign_key "task_likes", "users"
+  add_foreign_key "tasks", "streaks"
+  add_foreign_key "tasks", "task_groups"
+  add_foreign_key "tasks", "users"
   add_foreign_key "tokens", "users"
 end
