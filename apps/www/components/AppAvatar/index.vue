@@ -5,7 +5,13 @@
     <img
       :src="src"
       :alt="alt"
-      class="rounded-full"
+      :width="$attrs.width"
+      :height="$attrs.height"
+      :style="{
+        width: `${$attrs.width}px`,
+        height: `${$attrs.height}px`,
+      }"
+      class="rounded-full object-cover bg-gray-300"
     >
   </picture>
 </template>

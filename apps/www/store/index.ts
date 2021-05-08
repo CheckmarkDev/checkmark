@@ -174,7 +174,7 @@ export const actions: ActionTree<RootState, RootState> & Actions = {
         return res
       })
   },
-  nuxtServerInit ({ commit, dispatch }, { req }) {
+  async nuxtServerInit ({ commit, dispatch }, { req }) {
     let token = null
     let user = null
 
@@ -197,7 +197,7 @@ export const actions: ActionTree<RootState, RootState> & Actions = {
     commit(MutationTypes.SET_AUTH_TOKEN, token)
     commit(MutationTypes.SET_AUTH_USER, user)
     if (user && token) {
-      dispatch(ActionTypes.retrieveMe)
+      await dispatch(ActionTypes.retrieveMe)
     }
   }
 }

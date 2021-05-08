@@ -11,12 +11,12 @@
     >
       <form
         :disabled="$wait.is('updating profile picture')"
-        class="flex"
+        class="flex flex-col md:flex-row"
         @submit.prevent="submitted"
       >
-        <div class="mr-8 flex-shrink-0">
+        <div class="mr-8 flex-shrink-0 mb-4 md:mb-0">
           <AppAvatar
-            :src="formData.image"
+            :src="previewUrl"
             width="150"
             height="150"
           />
@@ -32,6 +32,7 @@
               name="image"
               id="image"
               accept="image/*"
+              class="w-full"
               @change="fileChange"
             >
           </div>
@@ -75,11 +76,11 @@
     },
     data () {
       return {
-        previewUrl: null,
+        previewUrl: null as string|null,
         formData: {
           image: null
         } as {
-          image: string|null
+          image: Blob|null
         }
       }
     },
@@ -89,16 +90,15 @@
       }
     },
     methods: {
-      fileChange (file) {
+      fileChange (file: Event) {
         console.log('file', file.target.files)
-        this.formData.image = file.target.files[0]
-        // var reader = new FileReader();
+        var reader = new FileReader();
+        reader.onload = e => {
+          console.log('on load', e.target.result)
+          this.previewUrl = e.target.result
+        }
 
-        // reader.onload = function(e) {
-        //   this.formData.image = e.target.result
-        // }
-
-        // reader.readAsDataURL(file); // convert to base64 string
+        reader.readAsDataURL(file.target.files[0]); // convert to base64 string
       },
       submitted () {
         // @ts-ignore

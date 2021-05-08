@@ -36,7 +36,7 @@ const SETTINGS_ROUTES = [
     path: '/settings',
     component: Settings,
     redirect: {
-      name: 'SettingsNotifications'
+      name: 'SettingsProfile'
     },
     children: [
       {

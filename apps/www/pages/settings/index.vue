@@ -11,14 +11,15 @@
       </div>
     </div>
     <div class="settings-container">
-      <div class="container mx-auto flex items-start">
-        <nav class="bg-white hidden md:flex rounded-lg w-3/12 mr-8 p-4">
-          <ul class="w-full">
-            <li>
+      <div class="container mx-auto flex flex-col md:flex-row items-start">
+        <nav class="bg-white flex rounded-lg w-full md:w-3/12 mr-8 p-4 mb-4 md:mb-0">
+          <ul class="w-full flex md:flex-col">
+            <li class="mr-2 md:mr-0 md:mb-2">
               <nuxt-link
                 :to="{
                   name: 'SettingsProfile'
                 }"
+                :active-class="'router-link-active bg-gray-200'"
                 class="hover:bg-gray-200 rounded p-2 w-full flex"
               >
                 {{ $trans('settings.titles.profile') }}
@@ -29,6 +30,7 @@
                 :to="{
                   name: 'SettingsNotifications'
                 }"
+                :active-class="'router-link-active bg-gray-200'"
                 class="hover:bg-gray-200 rounded p-2 w-full flex"
               >
                 {{ $trans('settings.titles.notifications') }}
