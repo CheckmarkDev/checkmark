@@ -1,7 +1,4 @@
 class Task < ApplicationRecord
-  include ActionDispatch::Routing::PolymorphicRoutes
-  include Rails.application.routes.url_helpers
-
   belongs_to :user
   belongs_to :task_group, optional: true
   belongs_to :streak, optional: true
@@ -15,6 +12,8 @@ class Task < ApplicationRecord
     :doing,
     :done
   ]
+
+  default_scope { order(created_at: :desc) }
 
   before_create :assign_projects
   before_create :assign_task_group, if: Proc.new { |task| task.task_group.nil? }
