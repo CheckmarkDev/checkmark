@@ -29,7 +29,9 @@
     </div>
     <div class="user-container">
       <div class="container mx-auto flex items-start">
-        <SideNavigation />
+        <UserSideNavigation
+          :user="user"
+        />
         <section class="bg-white w-full md:w-9/12 h-56 rounded-lg p-6">
          <nuxt />
         </section>
@@ -42,12 +44,12 @@
   import { defineComponent } from '@nuxtjs/composition-api'
   import { TaskGroup } from '~/types/taskGroup'
   import { User } from '~/types/user'
-  import SideNavigation from '@/components/Home/SideNavigation/index.vue'
+  import UserSideNavigation from '@/components/User/UserSideNavigation/index.vue'
   import UserAvatar from '@/components/UserAvatar/index.vue'
 
   export default defineComponent({
     components: {
-      SideNavigation,
+      UserSideNavigation,
       UserAvatar
     },
     data () {
