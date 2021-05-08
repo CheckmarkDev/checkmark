@@ -9,7 +9,7 @@
         @click.prevent="show"
       >
         <img
-          :src="thumbnail"
+          v-lazy="thumbnail"
           :alt="alternateText"
           class="rounded border border-gray-300 border-solid"
         >
@@ -61,7 +61,7 @@
             v-if="displayImage"
           >
             <img
-              :src="images[index]"
+              v-lazy="images[index]"
               class="rounded"
             >
           </div>

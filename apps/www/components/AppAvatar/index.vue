@@ -3,7 +3,7 @@
     class="app-avatar rounded-full"
   >
     <img
-      :src="src"
+      v-lazy="src"
       :alt="alt"
       :width="$attrs.width"
       :height="$attrs.height"
