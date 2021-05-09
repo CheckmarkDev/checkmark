@@ -55,14 +55,16 @@
             v-text="$trans('user.paragraphs.no_projects')"
             class="text-gray-700 mb-3"
           />
-          <nuxt-link
-            :to="{
-              name: 'NewProject'
-            }"
-            class="btn btn-primary mb-6"
-            v-text="$trans('user.buttons.add_project')"
-          />
         </template>
+
+        <nuxt-link
+          v-if="$accessor.isAuthenticated && $accessor.getAuthUser.username === $route.params.username"
+          :to="{
+            name: 'NewProject'
+          }"
+          class="btn btn-primary mb-6"
+          v-text="$trans('user.buttons.add_project')"
+        />
       </div>
 
       <ul

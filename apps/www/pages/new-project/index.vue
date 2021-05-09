@@ -15,9 +15,9 @@
               :disabled="$wait.is('creating new project')"
               @submit.prevent="submitted"
             >
-              <div>
+              <div class="flex flex-col md:flex-row">
                 <div
-                  class="md:w-1/2"
+                  class="md:w-1/2 md:mr-8"
                 >
                   <h2
                     v-text="$trans('project.titles.informations')"
@@ -154,7 +154,45 @@
                   </ValidationProvider>
                 </div>
                 <div class="md:w-1/2">
-
+                  <div class="mr-8 flex-shrink-0 mb-4">
+                    <AppAvatar
+                      :src="previewUrl"
+                      width="150"
+                      height="150"
+                    />
+                  </div>
+                  <div>
+                    <h3
+                      v-text="$trans('project.titles.logo')"
+                      class="text-lg text-gray-700 font-medium mb-2"
+                    />
+                    <div class="mb-3 border border-solid border-gray-300 rounded p-2">
+                      <input
+                        type="file"
+                        name="image"
+                        id="image"
+                        accept="image/*"
+                        class="w-full"
+                        @change="fileChange"
+                      >
+                    </div>
+                    <h3
+                      v-text="$trans('settings.titles.profile_rules')"
+                      class="text-base text-gray-700 font-medium mb-2"
+                    />
+                    <p
+                      v-text="$trans('settings.paragraphs.profile_rules')"
+                      class="text-base text-gray-700 mb-1"
+                    />
+                    <ul class="text-base text-gray-700 list-disc pl-4 mb-8">
+                      <li
+                        v-text="$trans('settings.paragraphs.profile_rules.racism')"
+                      />
+                      <li
+                        v-text="$trans('settings.paragraphs.profile_rules.nsfw')"
+                      />
+                    </ul>
+                  </div>
                 </div>
               </div>
               <div>
@@ -180,12 +218,15 @@
     middleware: ['authenticated'],
     data () {
       return {
+        previewUrl: null,
         formData: {
+          logo: null,
           name: null,
           slug: null,
           description: null,
           url: null
         } as {
+          logo: Blob|null
           name: string|null
           slug: string|null
           description: string|null
@@ -194,19 +235,33 @@
       }
     },
     methods: {
+      fileChange (e: Event) {
+        if (e) {
+          const file = (e.target as HTMLInputElement).files[0]
+
+          this.formData.logo = file
+          const reader = new FileReader()
+          reader.onload = v => {
+            this.previewUrl = v.target.result
+          }
+
+          reader.readAsDataURL(file)
+        }
+      },
       submitted () {
         // @ts-ignore
         this.$refs.observer.validate()
           .then((valid: boolean) => {
             if (!valid) return
 
-            const { name, slug, description, url } = this.formData
+            const { name, slug, description, url, logo } = this.formData
 
             const formData = new FormData()
             formData.append('name', name)
             formData.append('slug', slug)
-            formData.append('description', description)
-            formData.append('url', url)
+            if (description) formData.append('description', description)
+            if (url) formData.append('url', url)
+            if (logo) formData.append('avatar', logo)
 
             this.$wait.start('creating new project')
             this.$axios.post('/me/projects', formData, {
