@@ -194,6 +194,19 @@
                 />
               </div>
             </ValidationProvider>
+
+            <div>
+              <input
+                v-model="formData.tos"
+                type="checkbox"
+                name="tos"
+                id="tos"
+                required
+              >
+              <label for="tos">
+                J'ai lu et j'accepte les <nuxt-link :to="{ name: 'Terms' }" class="text-blue-500 underline" target="_blank">conditions générales d'utilisation</nuxt-link>.
+              </label>
+            </div>
           </div>
           <button
             :disabled="$wait.is('signing up')"
@@ -225,6 +238,7 @@
     data () {
       return {
         formData: {
+          tos: false,
           email: null,
           username: null,
           first_name: null,
