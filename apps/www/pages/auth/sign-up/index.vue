@@ -17,8 +17,9 @@
           <div class="flex flex-col mb-4 md:mb-0">
             <ValidationProvider
               rules="email|required"
-              :name="$trans('sign-up.labels.email')"
+              :name="$trans('sign-up.labels.email').toLowerCase()"
               v-slot="{ invalid, errors }"
+              class="mb-2"
               slim
             >
               <div class="flex flex-col">
@@ -49,9 +50,10 @@
               </div>
             </ValidationProvider>
             <ValidationProvider
-              rules="required"
-              :name="$trans('sign-up.labels.username')"
+              rules="required|min:2|max:32"
+              :name="$trans('sign-up.labels.username').toLowerCase()"
               v-slot="{ invalid, errors }"
+              class="mb-2"
               slim
             >
               <div class="flex flex-col">
@@ -73,6 +75,12 @@
                   required
                   autocomplete="username"
                 >
+                <div
+                  v-text="$trans('global.paragraphs.max_chars', {
+                    chars: 32
+                  })"
+                  class="text-gray-700 text-sm"
+                />
                 <span
                   v-if="invalid"
                   v-text="errors[0]"
@@ -81,77 +89,82 @@
                 />
               </div>
             </ValidationProvider>
-            <ValidationProvider
-              rules="required"
-              :name="$trans('sign-up.labels.first_name')"
-              v-slot="{ invalid, errors }"
-              slim
-            >
-              <div class="flex flex-col">
-                <label
-                  for="first_name"
-                  class="text-left text-gray-700 text-base mb-1"
-                >
-                  {{ $trans('sign-up.labels.first_name') }} *
-                </label>
-                <input
-                  v-model="formData.first_name"
-                  :class="{
-                    'input--invalid': invalid && errors[0]
-                  }"
-                  :disabled="$wait.is('signing up')"
-                  type="text"
-                  id="first_name"
-                  class="input mb-1"
-                  required
-                  autocomplete="given-name"
-                >
-                <span
-                  v-if="invalid"
-                  v-text="errors[0]"
-                  role="alert"
-                  class="text-left text-sm text-red-500"
-                />
-              </div>
-            </ValidationProvider>
-            <ValidationProvider
-              rules="required"
-              :name="$trans('sign-up.labels.last_name')"
-              v-slot="{ invalid, errors }"
-              slim
-            >
-              <div class="flex flex-col">
-                <label
-                  for="last_name"
-                  class="text-left text-gray-700 text-base mb-1"
-                >
-                  {{ $trans('sign-up.labels.last_name') }} *
-                </label>
-                <input
-                  v-model="formData.last_name"
-                  :class="{
-                    'input--invalid': invalid && errors[0]
-                  }"
-                  :disabled="$wait.is('signing up')"
-                  type="text"
-                  id="last_name"
-                  class="input mb-1"
-                  required
-                  autocomplete="family-name"
-                >
-                <span
-                  v-if="invalid"
-                  v-text="errors[0]"
-                  role="alert"
-                  class="text-left text-sm text-red-500"
-                />
-              </div>
-            </ValidationProvider>
+            <div class="flex flex-col md:flex-row mb-2">
+              <ValidationProvider
+                rules="required"
+                :name="$trans('sign-up.labels.first_name').toLowerCase()"
+                v-slot="{ invalid, errors }"
+                class="md:w-1/2 md:mr-4"
+                slim
+              >
+                <div class="flex flex-col">
+                  <label
+                    for="first_name"
+                    class="text-left text-gray-700 text-base mb-1"
+                  >
+                    {{ $trans('sign-up.labels.first_name') }} *
+                  </label>
+                  <input
+                    v-model="formData.first_name"
+                    :class="{
+                      'input--invalid': invalid && errors[0]
+                    }"
+                    :disabled="$wait.is('signing up')"
+                    type="text"
+                    id="first_name"
+                    class="input mb-1"
+                    required
+                    autocomplete="given-name"
+                  >
+                  <span
+                    v-if="invalid"
+                    v-text="errors[0]"
+                    role="alert"
+                    class="text-left text-sm text-red-500"
+                  />
+                </div>
+              </ValidationProvider>
+              <ValidationProvider
+                rules="required"
+                :name="$trans('sign-up.labels.last_name').toLowerCase()"
+                v-slot="{ invalid, errors }"
+                class="md:w-1/2"
+                slim
+              >
+                <div class="flex flex-col">
+                  <label
+                    for="last_name"
+                    class="text-left text-gray-700 text-base mb-1"
+                  >
+                    {{ $trans('sign-up.labels.last_name') }} *
+                  </label>
+                  <input
+                    v-model="formData.last_name"
+                    :class="{
+                      'input--invalid': invalid && errors[0]
+                    }"
+                    :disabled="$wait.is('signing up')"
+                    type="text"
+                    id="last_name"
+                    class="input mb-1"
+                    required
+                    autocomplete="family-name"
+                  >
+                  <span
+                    v-if="invalid"
+                    v-text="errors[0]"
+                    role="alert"
+                    class="text-left text-sm text-red-500"
+                  />
+                </div>
+              </ValidationProvider>
+            </div>
             <ValidationProvider
               vid="password"
-              rules="required"
-              :name="$trans('sign-up.labels.password')"
+              rules="required|min:6"
+              :name="$trans('sign-up.labels.password').toLowerCase()"
               v-slot="{ invalid, errors }"
+              class="mb-2"
               slim
             >
               <div class="flex flex-col">
@@ -181,6 +194,19 @@
                 />
               </div>
             </ValidationProvider>
+
+            <div>
+              <input
+                v-model="formData.tos"
+                type="checkbox"
+                name="tos"
+                id="tos"
+                required
+              >
+              <label for="tos">
+                J'ai lu et j'accepte les <nuxt-link :to="{ name: 'Terms' }" class="text-blue-500 underline" target="_blank">conditions générales d'utilisation</nuxt-link>.
+              </label>
+            </div>
           </div>
           <button
             :disabled="$wait.is('signing up')"
@@ -212,6 +238,7 @@
     data () {
       return {
         formData: {
+          tos: false,
           email: null,
           username: null,
           first_name: null,

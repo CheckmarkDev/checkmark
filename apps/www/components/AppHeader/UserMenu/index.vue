@@ -95,7 +95,7 @@
       const isOpen = ref(false)
 
       function signOut () {
-        accessor.signOut
+        accessor.signOut()
 
         router.push({
           name: 'Home'

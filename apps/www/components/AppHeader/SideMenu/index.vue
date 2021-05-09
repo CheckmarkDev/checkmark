@@ -162,7 +162,6 @@
       }
 
       function signOut () {
-        console.log('accessor', accessor)
         accessor.signOut()
 
         router.push({
