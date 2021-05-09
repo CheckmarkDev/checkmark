@@ -4,5 +4,14 @@
   first_name: user.first_name,
   last_name: user.last_name,
   streak: user.streak,
-  avatar_url: user.avatar_url
+  avatar_url: user.avatar_url,
+  projects: user.projects.map do |project|
+    {
+      uuid: project.uuid,
+      slug: project.slug,
+      name: project.name,
+      url: project.url,
+      avatar_url: project.avatar_url
+    }
+  end
 }

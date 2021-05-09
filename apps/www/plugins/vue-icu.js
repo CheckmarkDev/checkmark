@@ -6,6 +6,7 @@ const TRANSLATION_FILES = [
   'sign-in',
   'sign-up',
   'user',
+  'project',
   'settings',
   'roadmap'
 ]

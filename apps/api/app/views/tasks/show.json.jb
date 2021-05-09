@@ -8,12 +8,9 @@ json = {
 
 json[:user] = render('users/user', user: @task.user)
 
-json[:likes] = @task.task_likes.active.map do |like|
-  User.find_by_id(like.user_id).uuid
-end
-
 json[:metrics] = {
-  comments: @task.task_comments.count
+  comments: @task.task_comments.count,
+  likes: User.find(@task.task_likes.pluck(:user_id)).pluck(:uuid)
 }
 
 json[:projects] = @task.projects.map do |project|
@@ -21,7 +18,7 @@ json[:projects] = @task.projects.map do |project|
     uuid: project.uuid,
     slug: project.slug,
     name: project.name,
-    description: project.description,
+    avatar_url: project.avatar_url,
     url: project.url
   }
 end

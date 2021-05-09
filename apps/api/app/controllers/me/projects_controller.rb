@@ -27,7 +27,7 @@ class Me::ProjectsController < ApplicationController
     @project.user = @current_user
 
     if @project.save
-      render json: @project, status: :created, location: @project
+      render "projects/show"
     else
       render json: @project.errors, status: :unprocessable_entity
     end
@@ -62,6 +62,6 @@ class Me::ProjectsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def project_params
-      params.require(:project).permit(:slug, :name, :description, :url)
+      params.permit(:slug, :name, :description, :url, :avatar)
     end
 end

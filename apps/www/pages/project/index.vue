@@ -7,8 +7,11 @@
             v-if="project"
             class="w-full md:w-2/3 flex flex-col md:flex-row items-center"
           >
-            <div
-              class="mr-8 flex-shrink-0 w-24 h-24 self-start md:self-center mb-2 md:mb-0 rounded-full bg-gray-200"
+            <AppAvatar
+              :src="project.avatar_url"
+              :width="96"
+              :height="96"
+              class="mr-8 flex-shrink-0 self-start md:self-center mb-2 md:mb-0"
             />
             <div>
               <h1
@@ -53,10 +56,12 @@
   import { defineComponent } from '@nuxtjs/composition-api'
   import { Project } from '~/types/project'
   import ProjectSideNavigation from '@/components/Project/ProjectSideNavigation/index.vue'
+  import AppAvatar from '@/components/AppAvatar/index.vue'
 
   export default defineComponent({
     components: {
-      ProjectSideNavigation
+      ProjectSideNavigation,
+      AppAvatar
     },
     data () {
       return {

@@ -1,0 +1,9 @@
+project.titles.new-project: Nouveau projet
+project.titles.informations: Informations
+project.titles.logo: Logo
+project.labels.name: Nom
+project.labels.slug: Hashtag
+project.labels.description: Description
+project.labels.url: URL
+project.paragraphs.max: "{chars} caractères max."
+project.paragraphs.created: Votre projet a bien été crée.
