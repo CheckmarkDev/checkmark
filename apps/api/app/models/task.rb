@@ -17,6 +17,7 @@ class Task < ApplicationRecord
   default_scope { order(created_at: :desc) }
 
   before_create :assign_projects
+  before_update :assign_projects, if: :content_changed?
   before_create :assign_mentions
   before_update :assign_mentions, if: :content_changed?
   before_create :assign_task_group, if: Proc.new { |task| task.task_group.nil? }
