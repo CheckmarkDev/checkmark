@@ -26,7 +26,7 @@
       const emoji = computed(() => {
         if (streak.value === 0) return '😔'
         if (streak.value > 0 && streak.value <= 2) return '😀'
-        if (streak.value > 3 && streak.value <= 21) return '🚀'
+        if (streak.value > 2 && streak.value <= 21) return '🚀'
         return '🔥'
       })
 
