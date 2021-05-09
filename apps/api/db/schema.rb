@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_08_212325) do
+ActiveRecord::Schema.define(version: 2021_05_08_215333) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -119,6 +119,13 @@ ActiveRecord::Schema.define(version: 2021_05_08_212325) do
     t.index ["uuid"], name: "index_task_likes_on_uuid", unique: true
   end
 
+  create_table "task_mentions", id: false, force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "task_id"
+    t.index ["task_id"], name: "index_task_mentions_on_task_id"
+    t.index ["user_id"], name: "index_task_mentions_on_user_id"
+  end
+
   create_table "tasks", force: :cascade do |t|
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.text "content"
@@ -179,6 +186,8 @@ ActiveRecord::Schema.define(version: 2021_05_08_212325) do
   add_foreign_key "task_groups", "users"
   add_foreign_key "task_likes", "tasks"
   add_foreign_key "task_likes", "users"
+  add_foreign_key "task_mentions", "tasks"
+  add_foreign_key "task_mentions", "users"
   add_foreign_key "tasks", "streaks"
   add_foreign_key "tasks", "task_groups"
   add_foreign_key "tasks", "users"
