@@ -1,5 +1,5 @@
 <template>
-  <div class="hidden md:flex md:flex-col w-3/12 mr-8">
+  <div class="md:flex-col w-full md:w-3/12 mr-8">
     <nav class="bg-white rounded-lg p-4 mb-4">
       <!-- Projects -->
       <div
@@ -16,6 +16,7 @@
             <li
               v-for="project in user.projects"
               :key="project.uuid"
+              class="mb-3"
             >
               <nuxt-link
                 :to="{
@@ -38,6 +39,7 @@
                     class="font-medium text-base text-gray-800 truncate"
                   />
                   <div
+                    v-if="project.url"
                     v-text="project.url"
                     class="text-sm text-gray-700 truncate"
                   />

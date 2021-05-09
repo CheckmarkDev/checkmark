@@ -28,7 +28,7 @@
       </div>
     </div>
     <div class="user-container">
-      <div class="container mx-auto flex items-start">
+      <div class="container mx-auto flex flex-col md:flex-row items-start">
         <UserSideNavigation
           :user="user"
         />
