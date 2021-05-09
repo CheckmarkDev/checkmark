@@ -10,8 +10,7 @@ class User < ApplicationRecord
   has_many :streaks
   has_many :projects
   has_one :email_notification
-  has_and_belongs_to_many :mention_tasks, class_name: "Task", join_table: "mention_tasks_mentions", foreign_key: "mention_task_id",
-    association_foreign_key: "mention_id"
+  has_and_belongs_to_many :mentions, class_name: "Task", join_table: "task_mentions"
 
   validates :email, presence: true, uniqueness: true
   validates :username, presence: true, uniqueness: true, length: { minimum: 2 }

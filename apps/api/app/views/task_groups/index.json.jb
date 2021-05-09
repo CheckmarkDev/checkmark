@@ -44,15 +44,6 @@ json[:data] = @task_groups.map do |task_group|
       }
     end
 
-    t[:users] = task.users.map do |user|
-      {
-        uuid: user.uuid,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        username: user.username,
-      }
-    end
-
     t[:likes] = task.task_likes.active.map do |like|
       User.find_by_id(like.user_id).uuid
     end
