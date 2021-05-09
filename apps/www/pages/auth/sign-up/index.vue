@@ -17,7 +17,7 @@
           <div class="flex flex-col mb-4 md:mb-0">
             <ValidationProvider
               rules="email|required"
-              :name="$trans('sign-up.labels.email')"
+              :name="$trans('sign-up.labels.email').toLowerCase()"
               v-slot="{ invalid, errors }"
               class="mb-2"
               slim
@@ -51,7 +51,7 @@
             </ValidationProvider>
             <ValidationProvider
               rules="required|min:2|max:32"
-              :name="$trans('sign-up.labels.username')"
+              :name="$trans('sign-up.labels.username').toLowerCase()"
               v-slot="{ invalid, errors }"
               class="mb-2"
               slim
@@ -92,7 +92,7 @@
             <div class="flex flex-col md:flex-row mb-2">
               <ValidationProvider
                 rules="required"
-                :name="$trans('sign-up.labels.first_name')"
+                :name="$trans('sign-up.labels.first_name').toLowerCase()"
                 v-slot="{ invalid, errors }"
                 class="md:w-1/2 md:mr-4"
                 slim
@@ -126,7 +126,7 @@
               </ValidationProvider>
               <ValidationProvider
                 rules="required"
-                :name="$trans('sign-up.labels.last_name')"
+                :name="$trans('sign-up.labels.last_name').toLowerCase()"
                 v-slot="{ invalid, errors }"
                 class="md:w-1/2"
                 slim
@@ -162,7 +162,7 @@
             <ValidationProvider
               vid="password"
               rules="required|min:6"
-              :name="$trans('sign-up.labels.password')"
+              :name="$trans('sign-up.labels.password').toLowerCase()"
               v-slot="{ invalid, errors }"
               class="mb-2"
               slim

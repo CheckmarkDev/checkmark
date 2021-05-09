@@ -17,7 +17,7 @@
           <div class="flex flex-col mb-4 md:mb-0">
             <ValidationProvider
               rules="email|required"
-              :name="$trans('sign-in.labels.email')"
+              :name="$trans('sign-in.labels.email').toLowerCase()"
               v-slot="{ invalid, errors }"
               slim
             >
@@ -51,7 +51,7 @@
             <ValidationProvider
               vid="password"
               rules="required"
-              :name="$trans('sign-in.labels.password')"
+              :name="$trans('sign-in.labels.password').toLowerCase()"
               v-slot="{ invalid, errors }"
               slim
             >
