@@ -3,5 +3,6 @@
   slug: @project.slug,
   name: @project.name,
   description: @project.description,
-  url: @project.url
+  url: @project.url,
+  avatar_url: @project.avatar_url
 }
