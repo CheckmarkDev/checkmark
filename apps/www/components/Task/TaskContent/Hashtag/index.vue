@@ -19,13 +19,19 @@
       ref="tooltip"
       class="project-tooltip flex items-center bg-white rounded p-3 shadow-lg border border-gray-200"
     >
-      <div class="w-10 h-10 rounded-full bg-gray-300 mr-3"></div>
+      <AppAvatar
+        :src="project.avatar_url"
+        :width="40"
+        :height="40"
+        class="mr-3"
+      />
       <div class="flex flex-col">
         <div
           v-text="project.name"
           class="font-medium text-base text-gray-800"
         />
         <div
+          v-if="project.url"
           v-text="project.url"
           class="text-sm text-gray-700"
         />
@@ -38,8 +44,12 @@
   import { createPopper } from '@popperjs/core'
   import { defineComponent } from '@nuxtjs/composition-api'
   import { Project } from '~/types/project'
+  import AppAvatar from '@/components/AppAvatar/index.vue'
 
   export default defineComponent({
+    components: {
+      AppAvatar
+    },
     props:  {
       project: {
         type: Object as () => Project,
