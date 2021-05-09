@@ -78,7 +78,7 @@
                       required
                     >
                     <div
-                      v-text="$trans('project.paragraphs.max', {
+                      v-text="$trans('global.paragraphs.max_chars', {
                         chars: 32
                       })"
                       class="text-gray-600 text-sm"
@@ -112,7 +112,7 @@
                       class="textarea"
                     ></textarea>
                     <div
-                      v-text="$trans('project.paragraphs.max', {
+                      v-text="$trans('global.paragraphs.max_chars', {
                         chars: 255
                       })"
                       class="text-gray-600 text-sm"
