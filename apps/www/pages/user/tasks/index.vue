@@ -72,6 +72,12 @@
         taskGroups
       }
     },
+    mounted () {
+      this.$mitt.on('update-tasks', this.updateTasks)
+    },
+    beforeDestroy () {
+      this.$mitt.off('update-tasks', this.updateTasks)
+    },
     methods: {
       loadMore () {
         if (this.taskGroups.meta.current_page + 1 > this.taskGroups.meta.total_pages) return
@@ -89,7 +95,14 @@
             ]
             this.taskGroups.meta = res.meta
           })
-      }
+      },
+      updateTasks () {
+        const { username } = this.$route.params
+        this.$axios.$get(`/users/${username}/task_groups`)
+          .then(res => {
+            this.taskGroups = res
+          })
+      },
     }
   })
 </script>
