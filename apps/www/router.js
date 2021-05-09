@@ -6,6 +6,7 @@ import Roadmap from '@/pages/roadmap/index.vue'
 import RoadmapProject from '@/pages/roadmap/project/index.vue'
 import User from '@/pages/user/index.vue'
 import Project from '@/pages/project/index.vue'
+import NewProject from '@/pages/new-project/index.vue'
 import Task from '@/pages/user/task/index.vue'
 import UserTasks from '@/pages/user/tasks/index.vue'
 import ProjectTasks from '@/pages/project/tasks/index.vue'
@@ -111,6 +112,11 @@ const WEBSITE_ROUTES = [
         component: ProjectTasks
       }
     ]
+  },
+  {
+    name: 'NewProject',
+    path: '/new/project',
+    component: NewProject
   },
 ]
 
