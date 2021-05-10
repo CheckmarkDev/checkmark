@@ -1,4 +1,5 @@
 import { User } from './user'
+import { Project } from './project'
 
 export enum TaskState {
   TODO = 'todo',
@@ -17,6 +18,8 @@ export type Task = {
     url: string
     thumbnail_url: string
   }>
+  projects?: Array<Project>,
+  mentions?: Array<User>,
   metrics: {
     comments: number
   }

@@ -8,6 +8,7 @@ class TaskGroupsController < ApplicationController
         :projects,
         :task_comments,
         :task_likes,
+        :mentions,
         images_attachments: :blob
       ]
     ])

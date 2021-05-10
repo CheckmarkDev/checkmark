@@ -43,6 +43,15 @@ json[:data] = @task_groups.map do |task_group|
       }
     end
 
+    t[:mentions] = task.mentions.map do |mention|
+      {
+        username: mention.username,
+        first_name: mention.first_name,
+        last_name: mention.last_name,
+        avatar_url: mention.avatar_url
+      }
+    end
+
     t[:metrics] = {
       comments: task.task_comments.size,
       likes: User.find(task.task_likes.pluck(:user_id)).pluck(:uuid)
