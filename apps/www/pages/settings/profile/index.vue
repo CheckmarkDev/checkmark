@@ -193,7 +193,7 @@
         <button
           :disabled="$wait.is('updating profile informations')"
           v-text="$trans('global.buttons.save')"
-          class="btn btn-primary mt-4 md:w-1/2"
+          class="btn btn-primary mt-4 mr-auto"
           type="submit"
         />
       </form>
@@ -298,6 +298,16 @@
                 this.$wait.end('updating profile informations')
               })
           })
+      }
+    },
+    head () {
+      const title = this.$trans('settings.titles.profile')
+
+      return {
+        title,
+        meta: [
+          { hid: 'og:title', property: 'og:title', content: title }
+        ]
       }
     }
   })

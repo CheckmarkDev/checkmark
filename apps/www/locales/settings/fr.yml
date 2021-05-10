@@ -4,6 +4,7 @@ settings.titles.profile: Profil
 settings.titles.profile_picture: Photo de profil
 settings.titles.profile_rules: Règles
 settings.titles.profile_infos: Informations
+settings.titles.account: Compte
 settings.paragraphs.like: Recevoir un e-mail lorsqu’un utilisateur “like” une de mes tâches.
 settings.paragraphs.comment: Recevoir un e-mail lorsqu’un utilisateur commente une de mes tâches.
 settings.paragraphs.newsletter: Recevoir des e-mails promotionels de la part de Checkmark.dev.
