@@ -111,6 +111,16 @@
               })
           })
       }
+    },
+    head () {
+      const title = this.$trans('settings.titles.notifications')
+
+      return {
+        title,
+        meta: [
+          { hid: 'og:title', property: 'og:title', content: title }
+        ]
+      }
     }
   })
 </script>

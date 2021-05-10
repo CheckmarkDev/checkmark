@@ -5,12 +5,12 @@
   >
     <button
       type="button"
-      class="border border-solid border-gray-300 rounded-full p-2"
+      class="flex items-center justify-center border border-solid border-gray-400 w-8 h-8 rounded-full hover:bg-gray-200"
       @click="open = true"
     >
       <more-horizontal-icon
         size="20"
-        class="text-gray-700"
+        class="text-gray-600"
       />
     </button>
     <transition

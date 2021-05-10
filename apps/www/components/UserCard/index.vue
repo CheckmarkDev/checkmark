@@ -6,30 +6,14 @@
       />
     </div>
     <div class="user-card__name flex flex-col flex-1 leading-tight truncate">
-      <nuxt-link
-        :to="{
-          name: 'User',
-          params: {
-            username: user.username
-          }
-        }"
-        class="mr-4"
-      >
-        <div class="font-medium text-lg truncate">
-          {{ user.first_name }} {{ user.last_name }}
-        </div>
-      </nuxt-link>
-      <nuxt-link
-        :to="{
-          name: 'User',
-          params: {
-            username: user.username
-          }
-        }"
+      <div
+        v-text="`${user.first_name} ${user.last_name}`"
+        class="font-medium text-lg truncate mr-4"
+      />
+      <div
+        v-text="`@${user.username}`"
         class="text-base text-gray-600 truncate"
-      >
-        @{{ user.username }}
-      </nuxt-link>
+      />
     </div>
   </div>
 </template>

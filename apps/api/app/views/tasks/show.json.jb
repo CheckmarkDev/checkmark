@@ -23,6 +23,15 @@ json[:projects] = @task.projects.map do |project|
   }
 end
 
+json[:mentions] = @task.mentions.map do |mention|
+  {
+    username: mention.username,
+    first_name: mention.first_name,
+    last_name: mention.last_name,
+    avatar_url: mention.avatar_url
+  }
+end
+
 json[:images] = @task.images.map do |image|
   {
     url: Rails.application.routes.url_helpers.url_for(image),

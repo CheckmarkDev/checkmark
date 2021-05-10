@@ -218,7 +218,7 @@
     middleware: ['authenticated'],
     data () {
       return {
-        previewUrl: null,
+        previewUrl: require('@/assets/img/default-avatar.png'),
         formData: {
           logo: null,
           name: null,

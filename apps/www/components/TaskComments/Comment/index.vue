@@ -1,10 +1,19 @@
 <template>
   <div>
     <div class="flex justify-between mb-2">
-      <UserCard
-        :user="comment.user"
-        class="mb-2"
-      />
+      <nuxt-link
+        :to="{
+          name: 'User',
+          params: {
+            username: comment.user.username
+          }
+        }"
+      >
+        <UserCard
+          :user="comment.user"
+          class="mb-2"
+        />
+      </nuxt-link>
       <div
         v-text="date"
         class="text-gray-600 text-sm self-end mb-2"

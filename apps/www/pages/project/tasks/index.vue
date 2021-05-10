@@ -1,13 +1,35 @@
 <template>
-  <div v-infinite-scroll="loadMore">
+  <div
+    v-infinite-scroll="loadMore"
+    class="flex flex-col"
+  >
+    <h2 class="font-medium text-2xl mb-4">
+      Feed
+    </h2>
+
+    <template
+      v-if="filteredTaskGroups.data.length"
+    >
+      <DateGroupedTaskGroups
+        :task-groups="filteredTaskGroups.data"
+        class="mb-8"
+      />
+    </template>
+    <template
+      v-else
+    >
+      <p
+        v-text="$trans('project.paragraphs.no_tasks')"
+      />
+    </template>
   </div>
 </template>
 
 <script lang="ts">
   import { defineComponent } from '@nuxtjs/composition-api'
   import { TaskGroup } from '~/types/taskGroup'
-  import { Project } from '~/types/project'
   import DateGroupedTaskGroups from '@/components/DateGroupedTaskGroups/index.vue'
+  import { PaginateResponse } from '~/types/pagination'
 
   export default defineComponent({
     components: {
@@ -15,59 +37,72 @@
     },
     data () {
       return {
-        project: null
+        taskGroups: null
       } as {
-        project: Project | null
-      }
-    },
-    head () {
-      const project = this.project as any
-
-      return {
-        title: project.name,
-        meta: [
-          { hid: 'description', name: 'description', content: project.description },
-          { hid: 'og:description', property: 'og:description', content: project.description },
-          { hid: 'og:title', property: 'og:title', content: project.name },
-          {
-            hid: 'og:image:width', name: 'og:image:width', content: '1200'
-          },
-          {
-            hid: 'og:image:height', name: 'og:image:height', content: '628'
-          },
-          {
-            hid: 'og:image:type', name: 'og:image:type', content: 'image/png'
-          }
-        ]
+        taskGroups: PaginateResponse<TaskGroup>|null
       }
     },
     async asyncData ({ $axios, route }) {
       const { slug } = route.params
-      const [project] = await Promise.all([
-        $axios.$get(`/projects/${slug}`),
+      const [taskGroups] = await Promise.all([
+        $axios.$get(`/projects/${slug}/task_groups`),
       ])
 
       return {
-        project
+        taskGroups
       }
     },
+    computed: {
+      /**
+       * Returns a filtered version of the task groups
+       * excluding the tasks that do not belong to this project.
+       */
+      filteredTaskGroups () {
+        return {
+          ...this.taskGroups,
+          data: this.taskGroups.data.map(taskGroup => ({
+            ...taskGroup,
+            tasks: taskGroup.tasks
+              .filter(task => task.projects
+                .map(project => project.slug)
+                .includes(this.$route.params.slug)
+              )
+          }))
+        }
+      }
+    },
+    mounted () {
+      this.$mitt.on('update-tasks', this.fetchTaskGroups)
+    },
+    beforeDestroy () {
+      this.$mitt.off('update-tasks', this.fetchTaskGroups)
+    },
     methods: {
+      fetchTaskGroups (params = {}) {
+        const { slug } = this.$route.params
+        return this.$axios.$get(`/projects/${slug}/task_groups`, {
+          params
+        })
+          .then(res => {
+            this.taskGroups = res
+          })
+      },
       loadMore () {
-        // if (this.taskGroups.meta.current_page + 1 > this.taskGroups.meta.total_pages) return
+        if (this.taskGroups.meta.current_page + 1 > this.taskGroups.meta.total_pages) return
 
-        // const { username } = this.$route.params
-        // this.$axios.$get(`/users/${username}/task_groups`, {
-        //   params: {
-        //     page: this.taskGroups.meta.current_page + 1
-        //   }
-        // })
-        //   .then(res => {
-        //     this.taskGroups.data = [
-        //       ...this.taskGroups.data,
-        //       ...res.data
-        //     ]
-        //     this.taskGroups.meta = res.meta
-        //   })
+        const { slug } = this.$route.params
+        this.$axios.$get(`/projects/${slug}/task_groups`, {
+          params: {
+            page: this.taskGroups.meta.current_page + 1
+          }
+        })
+          .then(res => {
+            this.taskGroups.data = [
+              ...this.taskGroups.data,
+              ...res.data
+            ]
+            this.taskGroups.meta = res.meta
+          })
       }
     }
   })

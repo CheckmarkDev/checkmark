@@ -3,24 +3,18 @@
     <nav class="bg-white rounded-lg p-4 mb-4">
       <ul class="w-full">
         <li class="mb-1">
-          <!-- <nuxt-link
+          <nuxt-link
             :to="{
-              name: 'Home'
+              name: 'ProjectTasks',
+              params: {
+                slug: $route.params.slug
+              }
             }"
             :exact-active-class="'router-link-active bg-gray-200'"
             class="hover:bg-gray-200 rounded p-2 w-full flex mb-1"
           >
             Feed
           </nuxt-link>
-          <nuxt-link
-            :to="{
-              name: 'Roadmap'
-            }"
-            :active-class="'router-link-active bg-gray-200'"
-            class="hover:bg-gray-200 rounded p-2 w-full flex"
-          >
-            Roadmap
-          </nuxt-link> -->
         </li>
       </ul>
     </nav>
