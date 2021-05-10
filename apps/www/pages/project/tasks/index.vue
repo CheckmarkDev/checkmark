@@ -44,8 +44,6 @@
         $axios.$get(`/projects/${slug}/task_groups`),
       ])
 
-      console.log('data?', taskGroups)
-
       return {
         taskGroups
       }
@@ -69,7 +67,22 @@
         }
       }
     },
+    mounted () {
+      this.$mitt.on('update-tasks', this.fetchTaskGroups)
+    },
+    beforeDestroy () {
+      this.$mitt.off('update-tasks', this.fetchTaskGroups)
+    },
     methods: {
+      fetchTaskGroups (params = {}) {
+        const { slug } = this.$route.params
+        return this.$axios.$get(`/projects/${slug}/task_groups`, {
+          params
+        })
+          .then(res => {
+            this.taskGroups = res
+          })
+      },
       loadMore () {
         if (this.taskGroups.meta.current_page + 1 > this.taskGroups.meta.total_pages) return
 
