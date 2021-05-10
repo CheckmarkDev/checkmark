@@ -1,11 +1,15 @@
 <template>
-  <div v-infinite-scroll="loadMore">
+  <div
+    v-infinite-scroll="loadMore"
+    class="flex flex-col"
+  >
     <h2 class="font-medium text-2xl mb-4">
       Feed
     </h2>
 
     <DateGroupedTaskGroups
       :task-groups="taskGroups.data"
+      class="mb-8"
     />
   </div>
 </template>

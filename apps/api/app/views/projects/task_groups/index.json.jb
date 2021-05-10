@@ -1,0 +1,73 @@
+json = {
+  meta: {
+    current_page: @task_groups.current_page,
+    total_pages: @task_groups.total_pages,
+    count: @task_groups.pluck(:id).count
+  }
+}
+
+json[:data] = @task_groups.map do |task_group|
+  user = {
+    uuid: task_group.user.uuid,
+    username: task_group.user.username,
+    first_name: task_group.user.first_name,
+    last_name: task_group.user.last_name,
+    streak: task_group.user.streak,
+    avatar_url: task_group.user.avatar_url
+  }
+
+  v = {
+    uuid: task_group.uuid,
+    created_at: task_group.created_at,
+    updated_at: task_group.updated_at,
+    user: user
+  }
+
+  v[:tasks] = task_group.tasks.map do |task|
+    t = {
+      uuid: task.uuid,
+      content: task.content,
+      state: task.state,
+      created_at: task.created_at,
+      updated_at: task.updated_at,
+      user: user
+    }
+
+    t[:projects] = task.projects.map do |project|
+      {
+        uuid: project.uuid,
+        slug: project.slug,
+        name: project.name,
+        avatar_url: project.avatar_url,
+        url: project.url
+      }
+    end
+
+    t[:mentions] = task.mentions.map do |mention|
+      {
+        username: mention.username,
+        first_name: mention.first_name,
+        last_name: mention.last_name,
+        avatar_url: mention.avatar_url
+      }
+    end
+
+    t[:metrics] = {
+      comments: task.task_comments.size,
+      likes: User.find(task.task_likes.pluck(:user_id)).pluck(:uuid)
+    }
+
+    t[:images] = task.images.map do |image|
+      {
+        url: Rails.application.routes.url_helpers.url_for(image),
+        thumbnail_url: Rails.application.routes.url_helpers.url_for(image.variant(resize_to_fit: [720, 720]))
+      }
+    end
+
+    t
+  end
+
+  v
+end
+
+json
