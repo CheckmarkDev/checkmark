@@ -26,9 +26,18 @@
               :key="like.uuid"
               class="mb-8"
             >
-              <UserCard
-                :user="like.user"
-              />
+              <nuxt-link
+                :to="{
+                  name: 'User',
+                  params: {
+                    username: like.user.username
+                  }
+                }"
+              >
+                <UserCard
+                  :user="like.user"
+                />
+              </nuxt-link>
             </div>
           </template>
           <template
