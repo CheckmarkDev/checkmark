@@ -16,6 +16,7 @@ class ProjectTaskGroupsController < ApplicationController
       .joins(tasks: :projects)
       .where(projects: { id: @project.id })
       .order(created_at: :desc)
+      .group(:id)
       .page(params[:page])
 
     render "projects/task_groups/index"

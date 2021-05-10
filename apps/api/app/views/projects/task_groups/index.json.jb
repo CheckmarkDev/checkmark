@@ -2,7 +2,7 @@ json = {
   meta: {
     current_page: @task_groups.current_page,
     total_pages: @task_groups.total_pages,
-    count: @task_groups.count
+    count: @task_groups.pluck(:id).count
   }
 }
 

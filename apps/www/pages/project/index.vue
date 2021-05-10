@@ -5,7 +5,7 @@
         <div class="flex items-center justify-between py-8 w-full">
           <div
             v-if="project"
-            class="w-full md:w-2/3 flex flex-col md:flex-row items-center"
+            class="w-full md:w-2/3 flex flex-col md:flex-row md:items-center"
           >
             <AppAvatar
               :src="project.avatar_url"
@@ -43,7 +43,7 @@
     </div>
     <div class="project-container">
       <div class="container mx-auto flex items-start">
-        <!-- <ProjectSideNavigation /> -->
+        <ProjectSideNavigation />
         <section class="bg-white w-full md:w-9/12 h-56 rounded-lg p-6">
          <nuxt />
         </section>
