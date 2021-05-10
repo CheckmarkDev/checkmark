@@ -22,5 +22,6 @@ export type Task = {
   mentions?: Array<User>,
   metrics: {
     comments: number
+    likes: string[]
   }
 }
