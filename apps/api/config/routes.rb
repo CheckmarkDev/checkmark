@@ -19,6 +19,8 @@ Rails.application.routes.draw do
     get '/users/:id/task_groups', to: 'user_task_groups#index'
     get '/users/:user_id/tasks/:id', to: 'user_tasks#show'
 
+    get '/projects/:id/task_groups', to: 'project_task_groups#index'
+
     namespace 'me' do
       resources :tasks
       resources :projects
