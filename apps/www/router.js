@@ -16,6 +16,7 @@ import SignUp from '@/pages/auth/sign-up/index.vue'
 import Settings from '@/pages/settings/index.vue'
 import SettingsNotifications from '@/pages/settings/notifications/index.vue'
 import SettingsProfile from '@/pages/settings/profile/index.vue'
+import SettingsAccount from '@/pages/settings/account/index.vue'
 
 Vue.use(VueRouter)
 
@@ -50,6 +51,11 @@ const SETTINGS_ROUTES = [
         name: 'SettingsProfile',
         path: 'profile',
         component: SettingsProfile
+      },
+      {
+        name: 'SettingsAccount',
+        path: 'account',
+        component: SettingsAccount
       }
     ]
   }

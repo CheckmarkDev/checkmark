@@ -7,6 +7,7 @@ export type User = {
   last_name: string
   streak: number
   avatar_url: string
+  email: string
 
   projects?: Array<Project>
 }
