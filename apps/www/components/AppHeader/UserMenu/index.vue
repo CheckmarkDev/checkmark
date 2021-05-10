@@ -1,39 +1,37 @@
 <template>
   <div class="user-menu relative">
-    <div class="flex items-center">
+    <button
+      type="button"
+      class="user-menu__toggle-button flex items-center rounded hover:cursor-pointer hover:bg-gray-200 focus:outline-none text-left"
+      @click="isOpen = true"
+    >
       <UserCard
         :user="$accessor.getAuthUser"
         class="hover:bg-gray-200 p-1 rounded"
       />
-      <button
-        type="button"
-        class="user-menu__toggle-button flex justify-center w-8 h-8 rounded hover:cursor-pointer hover:bg-gray-200"
-        @click="isOpen = true"
-      >
-        <div class="flex m-auto">
-          <svg
-            :class="{
-              'rotate-180': isOpen
-            }"
-            class="transform"
-            width="12"
-            height="6"
-            viewBox="0 0 12 6"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M6 6L0.803847 -2.51245e-08L11.1962 8.834e-07L6 6Z" fill="#4A5568"/>
-          </svg>
-        </div>
-      </button>
-    </div>
+      <div class="flex m-auto w-8 h-8 items-center justify-center">
+        <svg
+          :class="{
+            'rotate-180': isOpen
+          }"
+          class="transform"
+          width="12"
+          height="6"
+          viewBox="0 0 12 6"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M6 6L0.803847 -2.51245e-08L11.1962 8.834e-07L6 6Z" fill="#4A5568"/>
+        </svg>
+      </div>
+    </button>
 
     <transition
       name="fade"
     >
       <nav
         v-if="isOpen"
-        class="user-menu__dropdown absolute right-0 bg-white rounded p-2"
+        class="user-menu__dropdown absolute right-0 bg-white rounded p-2 shadow"
         v-click-outside="() => isOpen = false"
       >
         <ul>
