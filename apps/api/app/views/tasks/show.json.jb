@@ -23,7 +23,7 @@ json[:projects] = @task.projects.map do |project|
   }
 end
 
-t[:mentions] = @task.mentions.map do |mention|
+json[:mentions] = @task.mentions.map do |mention|
   {
     username: mention.username,
     first_name: mention.first_name,
