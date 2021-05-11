@@ -23,7 +23,13 @@ json[:data] = @task_groups.map do |task_group|
     user: user
   }
 
-  v[:tasks] = task_group.tasks.map do |task|
+  v[:tasks] = task_group.tasks.includes(:projects,
+      :task_comments,
+      :task_likes,
+      :mentions,
+      images_attachments: :blob,
+      projects: [avatar_attachment: :blob]
+    ).where(projects: { id: [@project.id] }).map do |task|
     t = {
       uuid: task.uuid,
       content: task.content,
@@ -53,7 +59,7 @@ json[:data] = @task_groups.map do |task_group|
     end
 
     t[:metrics] = {
-      comments: task.task_comments.size,
+      comments: task.task_comments.pluck(:id).size,
       likes: User.find(task.task_likes.pluck(:user_id)).pluck(:uuid)
     }
 

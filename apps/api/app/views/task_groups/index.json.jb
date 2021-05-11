@@ -53,7 +53,7 @@ json[:data] = @task_groups.map do |task_group|
     end
 
     t[:metrics] = {
-      comments: task.task_comments.size,
+      comments: task.task_comments.pluck(:id).size,
       likes: User.find(task.task_likes.pluck(:user_id)).pluck(:uuid)
     }
 

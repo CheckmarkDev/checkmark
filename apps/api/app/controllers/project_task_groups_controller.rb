@@ -4,14 +4,8 @@ class ProjectTaskGroupsController < ApplicationController
   api :GET, '/projects/:slug/task_groups'
   def index
     @task_groups = TaskGroup.includes([
+      tasks: :projects,
       user: [:streaks, avatar_attachment: :blob],
-      tasks: [
-        :projects,
-        :task_comments,
-        :task_likes,
-        :mentions,
-        images_attachments: :blob
-      ]
     ])
       .joins(tasks: :projects)
       .where(projects: { id: @project.id })
