@@ -17,10 +17,12 @@ json = {
     },
 
     images: @task.images.map do |image|
-      {
-        url: polymorphic_url(image),
-        thumbnail_url: polymorphic_url(image.variant(resize_to_fit: [720, 720]))
-      }
+      ActiveStorage::Current.set(host: ENV.fetch("ASSET_HOST")) do
+        {
+          url: image.url,
+          thumbnail_url: image.variant(resize_to_fit: [720, 720]).url
+        }
+      end
     end,
 
     url: "#{ENV['WEB_BASE']}/u/#{@task.user.username}/task/#{@task.uuid}"
