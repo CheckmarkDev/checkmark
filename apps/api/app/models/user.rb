@@ -38,7 +38,7 @@ class User < ApplicationRecord
       ", id])
     )
 
-    if streak.nil?
+    if streak.nil? || streak[0].nil?
       return 0
     end
 
