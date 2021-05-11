@@ -5,6 +5,7 @@ test:
 local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
+  public: true
 
 # Use rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
 scaleway:
@@ -14,6 +15,7 @@ scaleway:
   secret_access_key: <%= ENV.fetch('S3_SECRET_ACCESS_KEY') %>
   region: <%= ENV.fetch('S3_REGION') %>
   bucket: <%= ENV.fetch('S3_BUCKET') %>
+  public: true
   upload:
     acl: "public-read"
 
