@@ -21,29 +21,28 @@ class User < ApplicationRecord
   after_create :send_welcome
 
   def last_streak
-    streaks.order(created_at: :desc).first
+    streaks.joins(:tasks).order(created_at: :desc).first
   end
 
   def streak
-    streak = self.last_streak
-    if streak.present?
-      last_task = streak.tasks.select(:created_at).order(created_at: :desc).first
+    streak = ActiveRecord::Base.connection.select_values(
+      ActiveRecord::Base::sanitize_sql_for_conditions(["
+        select
+          case t.created_at::timestamp <= timestamp 'yesterday'
+            when true then 0
+            when false then date_part('day', t.created_at::timestamp - s.created_at::timestamp) + 1
+          end as streak
+        from tasks as t inner join streaks as s on s.id = t.streak_id where s.id = (
+          select streaks.id from streaks inner join tasks on tasks.streak_id = streaks.id where streaks.user_id = ? order by streaks.created_at desc limit 1
+        ) order by t.created_at desc limit 1
+      ", id])
+    )
 
-      if last_task.nil?
-        return 0
-      end
-
-      # Here we want to check if the last task from the streak is less than yesterday
-      # If that's the case, then the streak is lost.
-      if last_task.created_at.to_datetime < DateTime.yesterday.beginning_of_day
-        return 0
-      end
-
-      # Returns the difference of days from the beginning of the streak to the last task
-      return (last_task.created_at.to_datetime - streak.created_at.to_datetime.beginning_of_day).to_i
+    if streak.nil?
+      return 0
     end
 
-    return 0
+    return streak[0].to_int
   end
 
   def avatar_url

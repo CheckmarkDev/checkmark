@@ -3,13 +3,13 @@ class TaskGroupsController < ApplicationController
   api :GET, '/task_groups'
   def index
     @task_groups = TaskGroup.includes([
-      user: [:streaks, avatar_attachment: :blob],
+      user: [avatar_attachment: :blob],
       tasks: [
-        :projects,
         :task_comments,
         :task_likes,
-        :mentions,
-        images_attachments: :blob
+        images_attachments: :blob,
+        projects: [avatar_attachment: :blob],
+        mentions: [avatar_attachment: :blob],
       ]
     ])
       .order(created_at: :desc)
