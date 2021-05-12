@@ -64,10 +64,6 @@
 </script>
 
 <style scoped>
-  .task-state-switch__item:focus-visible {
-    @apply shadow-outline;
-  }
-
   .task-state-switch__item:not(:last-child) {
     @apply border-gray-300;
 

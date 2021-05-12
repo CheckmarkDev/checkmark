@@ -8,7 +8,7 @@
       }
     }"
     type="button"
-    class="comment-button relative h-8 w-8 border border-solid border-gray-400 hover:bg-gray-200 rounded-full"
+    class="comment-button relative h-8 w-8 border border-solid border-gray-300 hover:bg-gray-200 rounded-full"
   >
     <div class="flex items-center justify-center h-full">
       <img

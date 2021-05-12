@@ -5,7 +5,7 @@
   >
     <button
       type="button"
-      class="flex items-center justify-center border border-solid border-gray-400 w-8 h-8 rounded-full hover:bg-gray-200"
+      class="flex items-center justify-center border border-solid border-gray-300 w-8 h-8 rounded-full hover:bg-gray-200"
       @click="open = true"
     >
       <more-horizontal-icon

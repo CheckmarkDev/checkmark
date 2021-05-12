@@ -12,12 +12,12 @@ html, body {
 }
 
 .btn[disabled=disabled] {
-  @apply bg-gray-400 text-gray-600 cursor-not-allowed;
+  @apply bg-gray-300 text-gray-600 cursor-not-allowed;
 }
 
 .input,
 .textarea {
-  @apply border border-gray-400 rounded w-full px-4 text-gray-800;
+  @apply border border-gray-300 rounded w-full px-4 text-gray-800;
 }
 
 .input {
