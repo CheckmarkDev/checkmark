@@ -8,16 +8,15 @@ module Me
     def update
       @current_user.assign_attributes(profile_params)
 
-      if profile_params[:avatar].present?
-        @current_user.avatar.attach(profile_params[:avatar])
-      end
+      @current_user.avatar.attach(profile_params[:avatar]) if profile_params[:avatar].present?
 
       if @current_user.save!
         @user = @current_user
         render 'authentication/me'
+      else
         render json: { errors: @current_user.errors }, status: :unprocessable_entity
       end
-    rescue StandardError => e
+    rescue StandardError
       render json: {
         errors: @current_user.errors
       }, status: :unprocessable_entity
