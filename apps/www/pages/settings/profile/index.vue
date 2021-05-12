@@ -33,6 +33,7 @@
               v-slot="{ invalid, errors }"
             >
               <input
+                ref="fileInput"
                 type="file"
                 name="image"
                 id="image"
@@ -281,6 +282,8 @@
           .then((res) => {
             accessor.setAuthUser(res.data.user)
             toasted.success(trans('settings.paragraphs.settings_saved'))
+
+            return Promise.resolve(res)
           })
           .catch(err => {
             if (!err.response) return
@@ -316,6 +319,8 @@
             updateProfile(data, 'updating profile picture')
               .then(() => {
                 formData.value.image = null
+                const input = refs.fileInput as HTMLInputElement
+                input.value = ''
               })
           })
       }
