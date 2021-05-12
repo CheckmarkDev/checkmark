@@ -1,12 +1,12 @@
 <template>
-  <div class="streak flex items-center bg-gray-200 rounded-full">
+  <div class="streak flex items-center bg-gray-200 dark:bg-gray-700 rounded-full">
     <div
       v-text="emoji"
       class="text-xs mr-2"
     />
     <div
       v-text="streak"
-      class="font-medium text-xs text-gray-800"
+      class="font-medium text-xs text-gray-800 dark:text-white"
     />
   </div>
 </template>

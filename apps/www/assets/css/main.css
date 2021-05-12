@@ -1,6 +1,8 @@
 html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  @apply dark:bg-gray-800;
 }
 
 .btn {
@@ -17,7 +19,7 @@ html, body {
 
 .input,
 .textarea {
-  @apply border border-gray-300 rounded w-full px-4 text-gray-800;
+  @apply border border-gray-300 rounded w-full px-4 text-gray-800 dark:bg-gray-600 dark:text-white dark:border-gray-600;
 }
 
 .input {

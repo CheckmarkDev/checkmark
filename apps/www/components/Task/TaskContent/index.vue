@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-1">
+  <div class="mt-1 dark:text-white">
     <component
       v-for="(block, k) in blocks"
       :key="k"

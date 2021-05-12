@@ -3,10 +3,10 @@
     <div class="project-hero" />
     <div class="project-container">
       <div class="container mx-auto flex items-start">
-        <section class="bg-white w-full rounded-lg p-6">
+        <section class="bg-white dark:bg-gray-700 dark:text-white w-full rounded-lg p-6">
           <h1
             v-text="$trans('project.titles.new-project')"
-            class="font-medium text-2xl text-gray-800 mb-4"
+            class="font-medium text-2xl mb-4"
           />
           <ValidationObserver
             ref="observer"
@@ -21,7 +21,7 @@
                 >
                   <h2
                     v-text="$trans('project.titles.informations')"
-                    class="font-medium text-lg text-gray-700 mb-4"
+                    class="font-medium text-lg text-gray-700 dark:text-gray-300 mb-4"
                   />
 
                   <ValidationProvider
@@ -81,7 +81,7 @@
                       v-text="$trans('global.paragraphs.max_chars', {
                         chars: 32
                       })"
-                      class="text-gray-600 text-sm"
+                      class="text-gray-600 dark:text-gray-400 text-sm"
                     />
                     <div
                       v-if="errors.length || (invalid && dirty)"
@@ -115,7 +115,7 @@
                       v-text="$trans('global.paragraphs.max_chars', {
                         chars: 255
                       })"
-                      class="text-gray-600 text-sm"
+                      class="text-gray-600 dark:text-gray-400 text-sm"
                     />
                     <div
                       v-if="errors.length || (invalid && dirty)"
@@ -161,12 +161,12 @@
                       height="150"
                     />
                   </div>
-                  <div>
+                  <div class="text-gray-700 dark:text-gray-300">
                     <h3
                       v-text="$trans('project.titles.logo')"
-                      class="text-lg text-gray-700 font-medium mb-2"
+                      class="text-lg font-medium mb-2"
                     />
-                    <div class="mb-3 border border-solid border-gray-300 rounded p-2">
+                    <div class="mb-3 border border-solid border-gray-300 dark:border-gray-600 rounded p-2">
                       <input
                         type="file"
                         name="image"
@@ -178,13 +178,13 @@
                     </div>
                     <h3
                       v-text="$trans('settings.titles.profile_rules')"
-                      class="text-base text-gray-700 font-medium mb-2"
+                      class="text-base font-medium mb-2"
                     />
                     <p
                       v-text="$trans('settings.paragraphs.profile_rules')"
-                      class="text-base text-gray-700 mb-1"
+                      class="text-base mb-1"
                     />
-                    <ul class="text-base text-gray-700 list-disc pl-4 mb-8">
+                    <ul class="text-base list-disc pl-4 mb-8">
                       <li
                         v-text="$trans('settings.paragraphs.profile_rules.racism')"
                       />

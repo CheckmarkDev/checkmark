@@ -17,7 +17,7 @@
       <textarea
         v-model="formData.content"
         name="content"
-        class="flex-1 p-2 rounded-bl rounded-br rounded-tr appearance-none leading-relaxed border border-gray-300 border-solid"
+        class="flex-1 p-2 rounded-bl rounded-br rounded-tr appearance-none leading-relaxed border border-gray-300 border-solid dark:bg-gray-600 dark:border-gray-600 dark:text-white"
         id="content"
       ></textarea>
     </div>

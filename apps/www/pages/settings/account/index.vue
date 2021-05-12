@@ -2,7 +2,7 @@
   <div class="pb-12">
     <h2
       v-text="$trans('settings.titles.account')"
-      class="text-2xl font-medium text-gray-800 mb-8"
+      class="text-2xl font-medium mb-8"
     />
 
     <ValidationObserver
@@ -25,7 +25,7 @@
             <div class="flex flex-col">
               <label
                 for="email"
-                class="text-left text-gray-700 text-base mb-1"
+                class="text-left text-gray-700 dark:text-gray-300 text-base mb-1"
               >
                 {{ $trans('sign-up.labels.email') }} *
               </label>
@@ -61,7 +61,7 @@
             <div class="flex flex-col">
               <label
                 for="password"
-                class="text-left text-gray-700 text-base mb-1"
+                class="text-left text-gray-700 dark:text-gray-300 text-base mb-1"
               >
                 {{ $trans('sign-up.labels.password') }} *
               </label>

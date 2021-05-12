@@ -12,7 +12,7 @@
       />
       <div
         v-text="`@${user.username}`"
-        class="text-base text-gray-600 truncate"
+        class="text-base text-gray-600 dark:text-gray-300 truncate"
       />
     </div>
   </div>

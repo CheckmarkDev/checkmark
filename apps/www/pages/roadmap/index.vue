@@ -35,7 +35,7 @@
     <div class="home-container">
       <div class="container mx-auto flex items-start">
         <SideNavigation />
-        <section class="bg-white rounded-lg w-full md:w-9/12 p-6 pb-32">
+        <section class="bg-white dark:bg-gray-700 dark:text-white rounded-lg w-full md:w-9/12 p-6 pb-32">
           <nuxt />
         </section>
       </div>

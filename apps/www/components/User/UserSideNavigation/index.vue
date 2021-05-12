@@ -1,13 +1,13 @@
 <template>
   <div class="md:flex-col w-full md:w-3/12 mr-8">
-    <nav class="bg-white rounded-lg p-4 mb-4">
+    <nav class="bg-white dark:bg-gray-700 rounded-lg p-4 mb-4">
       <!-- Projects -->
       <div
         v-if="user.projects.length || $accessor.isAuthenticated && $accessor.getAuthUser.username === $route.params.username"
       >
         <h2
           v-text="$trans('user.titles.projects')"
-          class="font-medium text-lg text-gray-700 mb-2"
+          class="font-medium text-lg text-gray-700 dark:text-gray-300 mb-2"
         />
         <template
           v-if="user.projects.length"
@@ -36,12 +36,12 @@
                 <div class="flex flex-col truncate">
                   <div
                     v-text="project.name"
-                    class="font-medium text-base text-gray-800 truncate"
+                    class="font-medium text-base text-gray-800 dark:text-white truncate"
                   />
                   <div
                     v-if="project.url"
                     v-text="project.url"
-                    class="text-sm text-gray-700 truncate"
+                    class="text-sm text-gray-700 dark:text-gray-300 truncate"
                   />
                 </div>
               </nuxt-link>
@@ -69,7 +69,7 @@
 
       <ul
         :class="{
-          'mt-2 border-t border-gray-300 pt-4': user.projects.length || $accessor.isAuthenticated && $accessor.getAuthUser.username === $route.params.username
+          'mt-2 border-t border-gray-300 dark:border-gray-600 pt-4': user.projects.length || $accessor.isAuthenticated && $accessor.getAuthUser.username === $route.params.username
         }"
         class="w-full"
       >
@@ -81,8 +81,8 @@
                 username: $route.params.username
               }
             }"
-            :exact-active-class="'router-link-active bg-gray-200'"
-            class="hover:bg-gray-200 rounded p-2 w-full flex mb-1"
+            :exact-active-class="'router-link-active bg-gray-200 dark:bg-gray-600 dark:text-white'"
+            class="hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-white rounded p-2 w-full flex mb-1"
           >
             Feed
           </nuxt-link>

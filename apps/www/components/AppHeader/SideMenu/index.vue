@@ -14,9 +14,9 @@
     >
       <nav
         v-if="visible"
-        class="side-menu__burger-menu fixed left-0 bg-white z-30 p-6 overflow-y-auto"
+        class="side-menu__burger-menu fixed left-0 bg-white dark:bg-gray-800 dark:text-white z-30 p-6 overflow-y-auto"
       >
-        <ul class="mb-4 border-b border-gray-300 pb-2">
+        <ul class="mb-4 border-b border-gray-300 dark:border-gray-600 pb-2">
           <li>
             <nuxt-link
               :to="{

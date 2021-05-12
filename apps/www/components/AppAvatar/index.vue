@@ -11,7 +11,7 @@
         width: `${$attrs.width}px`,
         height: `${$attrs.height}px`,
       }"
-      class="rounded-full object-cover bg-gray-300"
+      class="rounded-full object-cover bg-gray-300 dark:bg-gray-700"
     >
   </picture>
 </template>

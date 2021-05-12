@@ -1,5 +1,5 @@
 <template>
-  <div class="tos linear-header">
+  <div class="tos dark:text-white linear-header">
     <div class="container mx-auto">
       <h1 class="text-4xl py-12">
         Conditions Générales d'Utilisation
@@ -18,7 +18,7 @@
             >
               <a
                 :href="`#${anchor}`"
-                class="flex bg-gray-100 hover:bg-gray-300 leading-snug rounded py-2 px-4 text-gray-700 hover:text-gray-900"
+                class="flex bg-gray-100 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white  leading-snug rounded py-2 px-4 text-gray-700 hover:text-gray-900"
                 v-text="content"
               />
             </li>
@@ -265,7 +265,7 @@
             </p>
           </section>
 
-          <div class="my-8 text-gray-700 italic">
+          <div class="my-8 text-gray-700 dark:text-gray-300 italic">
             Dernière mise à jour le <time>9 mai 2021</time>.
           </div>
         </div>

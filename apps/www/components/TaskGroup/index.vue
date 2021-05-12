@@ -1,5 +1,5 @@
 <template>
-  <div class="task-group flex flex-col border border-solid border-gray-300 rounded-lg p-4">
+  <div class="task-group flex flex-col border border-solid border-gray-300 dark:border-gray-600 rounded-lg p-4">
     <nuxt-link
       :to="{
         name: 'User',
@@ -7,7 +7,7 @@
           username: taskGroup.user.username
         }
       }"
-      class="mr-auto mb-4"
+      class="mr-auto mb-4 w-full md:w-auto"
     >
       <UserCard
         :user="taskGroup.user"
@@ -59,6 +59,6 @@
   }
 
   .task-group .task:not(:last-child) {
-    @apply border-b border-gray-300 border-solid pb-2;
+    @apply border-b border-gray-300 border-solid pb-2 dark:border-gray-600;
   }
 </style>
