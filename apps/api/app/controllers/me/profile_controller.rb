@@ -15,11 +15,12 @@ module Me
       if @current_user.save!
         @user = @current_user
         render 'authentication/me'
-      else
-        render json: @current_user.errors, status: :unprocessable_entity
+        render json: { errors: @current_user.errors }, status: :unprocessable_entity
       end
     rescue StandardError => e
-      render json: e, status: :unprocessable_entity
+      render json: {
+        errors: @current_user.errors
+      }, status: :unprocessable_entity
     end
 
     private
