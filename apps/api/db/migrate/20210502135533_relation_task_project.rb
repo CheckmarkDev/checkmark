@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RelationTaskProject < ActiveRecord::Migration[6.1]
   def up
     create_table :projects_tasks, id: false do |t|

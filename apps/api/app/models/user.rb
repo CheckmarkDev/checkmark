@@ -1,16 +1,18 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   has_secure_password
   has_one_attached :avatar
 
-  has_many :tokens
-  has_many :tasks
-  has_many :task_likes
-  has_many :task_comments
-  has_many :task_groups
-  has_many :streaks
-  has_many :projects
-  has_one :email_notification
-  has_and_belongs_to_many :mentions, class_name: "Task", join_table: "task_mentions"
+  has_many :tokens, dependent: :destroy
+  has_many :tasks, dependent: :destroy
+  has_many :task_likes, dependent: :destroy
+  has_many :task_comments, dependent: :destroy
+  has_many :task_groups, dependent: :destroy
+  has_many :streaks, dependent: :destroy
+  has_many :projects, dependent: :destroy
+  has_one :email_notification, dependent: :destroy
+  has_and_belongs_to_many :mentions, class_name: 'Task', join_table: 'task_mentions'
 
   validates :email, presence: true, uniqueness: true
   validates :username, presence: true, uniqueness: true, length: { minimum: 2 }
@@ -18,15 +20,16 @@ class User < ApplicationRecord
 
   before_create :create_email_notification
   before_save :format_username
-  after_create :send_welcome
+  after_commit :send_welcome, on: :create
 
   def last_streak
     streaks.joins(:tasks).order(created_at: :desc).first
   end
 
   def streak
+    # rubocop:disable Layout/LineLength
     streak = ActiveRecord::Base.connection.select_values(
-      ActiveRecord::Base::sanitize_sql_for_conditions(["
+      ActiveRecord::Base.sanitize_sql_for_conditions(["
         select
           case t.created_at::timestamp <= timestamp 'yesterday'
             when true then 0
@@ -37,20 +40,17 @@ class User < ApplicationRecord
         ) order by t.created_at desc limit 1
       ", id])
     )
+    # rubocop:enable Layout/LineLength
 
-    if streak.nil? || streak[0].nil?
-      return 0
-    end
+    return 0 if streak.nil? || streak[0].nil?
 
-    return streak[0].to_int
+    streak[0].to_int
   end
 
   def avatar_url
-    if self.avatar.attached?
-      return Rails.application.routes.url_helpers.url_for(self.avatar.variant(resize_to_fill: [100, 100]))
-    end
+    return Rails.application.routes.url_helpers.url_for(avatar.variant(resize_to_fill: [100, 100])) if avatar.attached?
 
-    return ActionController::Base.helpers.image_url('default-avatar.png')
+    ActionController::Base.helpers.image_url('default-avatar.png')
   end
 
   def send_welcome
@@ -59,13 +59,11 @@ class User < ApplicationRecord
 
   # For every user that has a current streak
   def self.notify_streak_reminder
-    User.all.each do |user|
-      if user.streak > 0
-        today_tasks = user.tasks.where(created_at: DateTime.now.beginning_of_day...DateTime.now.end_of_day)
-        if today_tasks.count === 0
-          TaskMailer.streak_reminder(user).deliver_later
-        end
-      end
+    User.all.find_each do |user|
+      next unless user.streak.positive?
+
+      today_tasks = user.tasks.where(created_at: DateTime.now.beginning_of_day...DateTime.now.end_of_day)
+      TaskMailer.streak_reminder(user).deliver_later if today_tasks.count.zero?
     end
   end
 
@@ -78,27 +76,28 @@ class User < ApplicationRecord
       doing = user.tasks.doing.where(created_at: date_range).count
       done = user.tasks.done.where(created_at: date_range).count
 
-      if tasks > 0
-        Webhook.all.each do |webhook|
-          data = ApplicationController.render(template: 'webhook_job/weekly_summary', assigns: {
-            user: user,
-            todo: todo,
-            doing: doing,
-            done: done
-          })
+      next unless tasks.positive?
 
-          WebhookJob.set(wait: k * 30.seconds).perform_later(webhook, 'weekly_summary.created', data)
-        end
+      Webhook.all.find_each do |webhook|
+        data = ApplicationController.render(template: 'webhook_job/weekly_summary', assigns: {
+                                              user: user,
+                                              todo: todo,
+                                              doing: doing,
+                                              done: done
+                                            })
+
+        WebhookJob.set(wait: k * 30.seconds).perform_later(webhook, 'weekly_summary.created', data)
       end
     end
   end
 
   private
-    def create_email_notification
-      self.email_notification = EmailNotification.new
-    end
 
-    def format_username
-      self.username = self.username.parameterize
-    end
+  def create_email_notification
+    self.email_notification = EmailNotification.new
+  end
+
+  def format_username
+    self.username = username.parameterize
+  end
 end

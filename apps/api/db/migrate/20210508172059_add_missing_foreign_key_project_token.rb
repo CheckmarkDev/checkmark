@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddMissingForeignKeyProjectToken < ActiveRecord::Migration[6.1]
   def up
     add_foreign_key :projects, :users, column: :user_id

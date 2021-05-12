@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddTaskGroupInTask < ActiveRecord::Migration[6.0]
   def up
     add_reference(:tasks, :task_group, index: true, null: true)

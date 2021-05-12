@@ -7,7 +7,7 @@
 
     <!-- Profile picture -->
     <ValidationObserver
-      ref="observer"
+      ref="pictureObserver"
     >
       <form
         :disabled="$wait.is('updating profile picture')"
@@ -27,14 +27,26 @@
             class="text-lg text-gray-700 font-medium mb-2"
           />
           <div class="mb-3 border border-solid border-gray-300 rounded p-2">
-            <input
-              type="file"
-              name="image"
-              id="image"
-              accept="image/*"
-              class="w-full"
-              @change="fileChange"
+            <ValidationProvider
+              ref="avatar-provider"
+              rules="image|size:10000"
+              v-slot="{ invalid, errors }"
             >
+              <input
+                type="file"
+                name="image"
+                id="image"
+                accept="image/*"
+                class="w-full"
+                @change="fileChange"
+              >
+              <span
+                v-if="invalid"
+                v-text="errors[0]"
+                role="alert"
+                class="text-left text-sm text-red-500"
+              />
+            </ValidationProvider>
           </div>
           <h3
             v-text="$trans('settings.titles.profile_rules')"
@@ -80,6 +92,7 @@
       >
         <div class="flex flex-col mb-4 md:mb-0">
           <ValidationProvider
+            ref="username-provider"
             rules="required|min:2|max:32"
             :name="$trans('sign-up.labels.username').toLowerCase()"
             v-slot="{ invalid, errors }"
@@ -121,6 +134,7 @@
           </ValidationProvider>
           <div class="flex flex-col md:flex-row mb-2">
             <ValidationProvider
+              ref="first_name-provider"
               rules="required"
               :name="$trans('sign-up.labels.first_name').toLowerCase()"
               v-slot="{ invalid, errors }"
@@ -155,6 +169,7 @@
               </div>
             </ValidationProvider>
             <ValidationProvider
+              ref="last_name-provider"
               rules="required"
               :name="$trans('sign-up.labels.last_name').toLowerCase()"
               v-slot="{ invalid, errors }"
@@ -207,13 +222,22 @@
   import AppAvatar from '@/components/AppAvatar/index.vue'
   import useAccessor from '~/composables/useAccessor'
   import { User } from '~/types/user'
+  import useWait from '~/composables/useWait'
+  import useAxios from '~/composables/useAxios'
+  import useICU from '~/composables/useICU'
+  import useToasted from '~/composables/useToasted'
 
   export default defineComponent({
     components: {
       AppAvatar
     },
-    setup () {
+    setup (props, { refs }) {
+      const axios = useAxios()
+      const wait = useWait()
       const accessor = useAccessor()
+      const trans = useICU()
+      const toasted = useToasted()
+
       const { avatar_url, username, last_name, first_name } = accessor.getAuthUser as User
 
       const previewUrl = ref(avatar_url)
@@ -229,75 +253,97 @@
         last_name
       })
 
+      function fileChange (e: Event) {
+        if (e) {
+          const files = (e.target as HTMLInputElement).files
+          if (files && files.length) {
+            const file = files[0]
+
+            formData.value.image = file
+            const reader = new FileReader()
+            reader.onload = v => {
+              if (v.target && v.target.result) {
+                previewUrl.value = v.target.result as string
+              }
+            }
+            reader.readAsDataURL(file)
+          }
+        }
+      }
+
+      function updateProfile (data: FormData, loader: string): Promise<any> {
+        wait.start(loader)
+        return axios.put('/me/profile', data, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+          .then((res) => {
+            accessor.setAuthUser(res.data.user)
+            toasted.success(trans('settings.paragraphs.settings_saved'))
+          })
+          .catch(err => {
+            if (!err.response) return
+
+            const { errors } = err.response.data
+            if (errors) {
+              Object.keys(errors).forEach(key => {
+                const provider = refs[`${key}-provider`]
+                if (provider) {
+                  // @ts-ignore
+                  provider.setErrors(errors[key])
+                }
+              })
+            }
+          })
+          .finally(() => {
+            wait.end(loader)
+          })
+      }
+
+      function submitted () {
+        // @ts-ignore
+        refs.pictureObserver.validate()
+          .then((valid: boolean) => {
+            if (!valid) return
+
+            const { image } = formData.value
+            if (!image) return
+
+            const data = new FormData()
+            data.append('avatar', image)
+
+            updateProfile(data, 'updating profile picture')
+              .then(() => {
+                formData.value.image = null
+              })
+          })
+      }
+
+      function submittedInformations () {
+        // @ts-ignore
+        refs.observer.validate()
+          .then((valid: boolean) => {
+            if (!valid) return
+
+            const { username, last_name, first_name } = formData.value
+            const data = new FormData()
+            if (username && last_name && first_name) {
+              data.append('username', username)
+              data.append('last_name', last_name)
+              data.append('first_name', first_name)
+            }
+
+            updateProfile(data, 'updating profile picture')
+          })
+      }
+
       return {
+        fileChange,
+        submitted,
+        submittedInformations,
         previewUrl,
         formData
-      }
-    },
-    methods: {
-      fileChange (e: Event) {
-        if (e) {
-          const file = (e.target as HTMLInputElement).files[0]
-
-          this.formData.image = file
-          const reader = new FileReader()
-          reader.onload = v => {
-            this.previewUrl = v.target.result
-          }
-
-          reader.readAsDataURL(file)
-        }
-      },
-      submitted () {
-        // @ts-ignore
-        this.$refs.observer.validate()
-          .then((valid: boolean) => {
-            if (!valid) return
-
-            const { image } = this.formData
-
-            const formData = new FormData()
-            formData.append('avatar', image)
-
-            this.$wait.start('updating profile picture')
-            this.$axios.put('/me/profile', formData, {
-              headers: {
-                'Content-Type': 'multipart/form-data'
-              }
-            })
-              .then((res) => {
-                this.$accessor.setAuthUser(res.data)
-
-                this.formData.image = null
-                this.$toasted.success(this.$trans('settings.paragraphs.settings_saved'))
-              })
-              .finally(() => {
-                this.$wait.end('updating profile picture')
-              })
-          })
-      },
-      submittedInformations () {
-        // @ts-ignore
-        this.$refs.observer.validate()
-          .then((valid: boolean) => {
-            if (!valid) return
-
-            const { username, last_name, first_name } = this.formData
-
-            this.$wait.start('updating profile informations')
-            this.$axios.put('/me/profile', {
-              username,
-              last_name,
-              first_name
-            })
-              .then((res) => {
-                this.$accessor.setAuthUser(res.data)
-                this.$toasted.success(this.$trans('settings.paragraphs.settings_saved'))
-              })
-              .finally(() => {
-                this.$wait.end('updating profile informations')
-              })
-          })
       }
     },
     head () {

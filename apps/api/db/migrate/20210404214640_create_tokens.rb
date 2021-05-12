@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class CreateTokens < ActiveRecord::Migration[6.0]
   def up
     create_table :tokens do |t|
-      t.uuid :uuid, index: { unique: true }, default: "gen_random_uuid()", null: false
+      t.uuid :uuid, index: { unique: true }, default: 'gen_random_uuid()', null: false
       t.string :token
       t.references :user
 

@@ -1,4 +1,6 @@
-json= {
+# frozen_string_literal: true
+
+json = {
   user: {
     uuid: @current_user.uuid,
     email: @current_user.email,

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddStreakToTask < ActiveRecord::Migration[6.0]
   def up
     add_reference(:tasks, :streak, index: true, null: true)

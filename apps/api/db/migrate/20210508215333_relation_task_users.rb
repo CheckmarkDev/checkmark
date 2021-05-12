@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RelationTaskUsers < ActiveRecord::Migration[6.1]
   def up
     create_table :task_mentions, id: false do |t|

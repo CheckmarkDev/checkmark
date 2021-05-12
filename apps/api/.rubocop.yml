@@ -1,0 +1,22 @@
+require: rubocop-rails
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 35
+
+Metrics/AbcSize:
+  Enabled: false
+
+Rails/FilePath:
+  Enabled: false
+
+Rails/BulkChangeTable:
+  Enabled: false
+
+Rails/HasAndBelongsToMany:
+  Enabled: false
+
+Rails/CreateTableWithTimestamps:
+  Enabled: false

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MigrateTasksToStreak < ActiveRecord::Migration[6.0]
   def up
     User.all.each do |user|
@@ -12,6 +14,5 @@ class MigrateTasksToStreak < ActiveRecord::Migration[6.0]
     end
   end
 
-  def down
-  end
+  def down; end
 end

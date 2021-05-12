@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class TasksController < ApplicationController
-  before_action :authorize_request, only: [:like, :dislike]
-  before_action :set_task, only: [ :show, :like, :dislike ]
+  before_action :authorize_request, only: %i[like dislike]
+  before_action :set_task, only: %i[like dislike]
 
   api :GET, '/tasks'
   def index
@@ -54,8 +56,9 @@ class TasksController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_task
-      @task = Task.find_by_uuid!(params[:id])
-    end
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_task
+    @task = Task.find_by!(uuid: params[:id])
+  end
 end
