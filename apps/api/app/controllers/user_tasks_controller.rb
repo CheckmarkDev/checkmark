@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserTasksController < ApplicationController
   before_action :set_user, only: [:index]
   before_action :set_task, only: [:show]
@@ -6,20 +8,21 @@ class UserTasksController < ApplicationController
   def index
     @tasks = @user.tasks.includes(:user, :task_likes).order(created_at: :desc).page(params[:page])
 
-    render "tasks/index"
+    render 'tasks/index'
   end
 
   api :GET, '/users/:username/tasks/:uuid'
   def show
-    render "tasks/show"
+    render 'tasks/show'
   end
 
   private
-    def set_user
-      @user = User.find_by_username!(params[:id])
-    end
 
-    def set_task
-      @task = Task.find_by_uuid!(params[:id])
-    end
+  def set_user
+    @user = User.find_by!(username: params[:id])
+  end
+
+  def set_task
+    @task = Task.find_by!(uuid: params[:id])
+  end
 end

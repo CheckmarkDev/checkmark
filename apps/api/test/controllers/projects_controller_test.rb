@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class ProjectsControllerTest < ActionDispatch::IntegrationTest
@@ -5,30 +7,32 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     @project = projects(:one)
   end
 
-  test "should get index" do
+  test 'should get index' do
     get projects_url, as: :json
     assert_response :success
   end
 
-  test "should create project" do
+  test 'should create project' do
     assert_difference('Project.count') do
-      post projects_url, params: { project: { description: @project.description, name: @project.name, url: @project.url } }, as: :json
+      post projects_url,
+           params: { project: { description: @project.description, name: @project.name, url: @project.url } }, as: :json
     end
 
     assert_response 201
   end
 
-  test "should show project" do
+  test 'should show project' do
     get project_url(@project), as: :json
     assert_response :success
   end
 
-  test "should update project" do
-    patch project_url(@project), params: { project: { description: @project.description, name: @project.name, url: @project.url } }, as: :json
+  test 'should update project' do
+    patch project_url(@project),
+          params: { project: { description: @project.description, name: @project.name, url: @project.url } }, as: :json
     assert_response 200
   end
 
-  test "should destroy project" do
+  test 'should destroy project' do
     assert_difference('Project.count', -1) do
       delete project_url(@project), as: :json
     end

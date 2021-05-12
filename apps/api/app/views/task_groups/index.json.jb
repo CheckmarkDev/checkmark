@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json = {
   meta: {
     current_page: @task_groups.current_page,
@@ -6,6 +8,7 @@ json = {
   }
 }
 
+# rubocop:disable Metrics/BlockLength
 json[:data] = @task_groups.map do |task_group|
   user = {
     uuid: task_group.user.uuid,
@@ -69,5 +72,6 @@ json[:data] = @task_groups.map do |task_group|
 
   v
 end
+# rubocop:enable Metrics/BlockLength
 
 json

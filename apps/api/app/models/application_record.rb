@@ -1,15 +1,17 @@
+# frozen_string_literal: true
+
 class ApplicationRecord < ActiveRecord::Base
-  after_initialize :generate_uuid, unless: :has_uuid
+  after_initialize :generate_uuid, unless: :uuid?
 
   self.abstract_class = true
 
   def generate_uuid
-    self.uuid = SecureRandom.uuid if defined? self.uuid
+    self.uuid = SecureRandom.uuid if defined? uuid
   end
 
   private
 
-  def has_uuid
-    return self.has_attribute?(:uuid) && self.uuid.present?
+  def uuid?
+    has_attribute?(:uuid) && uuid.present?
   end
 end

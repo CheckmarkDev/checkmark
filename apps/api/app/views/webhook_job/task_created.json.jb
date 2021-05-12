@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json = {
   event: 'task.created',
   data: {
@@ -17,7 +19,7 @@ json = {
     },
 
     images: @task.images.map do |image|
-      ActiveStorage::Current.set(host: ENV.fetch("ASSET_HOST")) do
+      ActiveStorage::Current.set(host: ENV.fetch('ASSET_HOST')) do
         {
           url: image.url,
           thumbnail_url: image.variant(resize_to_fit: [720, 720]).url

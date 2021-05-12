@@ -1,17 +1,18 @@
+# frozen_string_literal: true
+
 class CreateTaskGroupForMissingTask < ActiveRecord::Migration[6.0]
   def up
-    orphanTasks = Task.where(task_group: nil)
-    orphanTasks.each do |task|
-      taskGroup = TaskGroup.new
-      taskGroup.user = task.user
-      taskGroup.created_at = task.created_at
-      taskGroup.updated_at = task.updated_at
+    orphan_tasks = Task.where(task_group: nil)
+    orphan_tasks.each do |task|
+      task_group = TaskGroup.new
+      task_group.user = task.user
+      task_group.created_at = task.created_at
+      task_group.updated_at = task.updated_at
 
-      task.task_group = taskGroup
+      task.task_group = task_group
       task.save!
     end
   end
 
-  def down
-  end
+  def down; end
 end
