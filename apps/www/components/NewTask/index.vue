@@ -15,7 +15,7 @@
         >
           <label
             for="task"
-            class="text-base text-gray-800 mb-2"
+            class="text-base text-gray-800 dark:text-gray-300 mb-2"
           >
             {{ $trans('home.labels.done_label') }}
           </label>
@@ -23,7 +23,7 @@
             <div class="flex flex-1 items-start mb-3 md:mb-0 md:mr-4">
               <button
                 type="button"
-                class="new-task__toggle h-12 flex items-center border border-r-0 border-gray-300 hover:bg-gray-200 rounded-tl rounded-bl"
+                class="new-task__toggle h-12 flex items-center border border-r-0 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-tl rounded-bl"
                 @click="toggleState"
               >
                 <div class="flex items-center px-4">
@@ -43,16 +43,16 @@
                   v-model="formData.content"
                   :placeholder="$trans('home.labels.done_placeholder')"
                   name=""
-                  class="p-2 rounded-bl rounded-br rounded-tr appearance-none leading-relaxed border border-gray-300 border-solid mb-2"
+                  class="p-2 rounded-bl rounded-br rounded-tr appearance-none leading-relaxed border border-gray-300 dark:border-gray-600 border-solid mb-2 dark:bg-gray-600 dark:text-white"
                 ></textarea>
 
                 <div
                   v-if="formData.content.length > 0"
-                  class="flex flex-col border border-gray-300 border-solid rounded p-2"
+                  class="flex flex-col border border-gray-300 dark:border-gray-600 border-solid rounded p-2"
                 >
                   <label
                     for="file"
-                    class="text-sm text-gray-700 mb-2"
+                    class="text-sm text-gray-700 dark:text-gray-300 mb-2"
                   >
                     {{ $trans('home.labels.images') }}
                   </label>

@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="container mx-auto pt-4 md:pt-12">
+    <div class="container dark:text-white mx-auto pt-4 md:pt-12">
       <h1 class="text-2xl font-medium">
         {{ $trans('sign-in.titles.main') }}
       </h1>
@@ -24,7 +24,7 @@
               <div class="flex flex-col">
                 <label
                   for="email"
-                  class="text-left text-gray-700 text-base mb-1"
+                  class="text-left text-gray-700 dark:text-gray-300 text-base mb-1"
                 >
                   {{ $trans('sign-in.labels.email') }} *
                 </label>
@@ -58,7 +58,7 @@
               <div class="flex flex-col">
                 <label
                   for="password"
-                  class="text-left text-gray-700 text-base mb-1"
+                  class="text-left text-gray-700 dark:text-gray-300 text-base mb-1"
                 >
                   {{ $trans('sign-in.labels.password') }} *
                 </label>

@@ -1,7 +1,7 @@
 <template>
   <div
     v-infinite-scroll="loadMore"
-    class="flex flex-col"
+    class="flex flex-col dark:text-white"
   >
     <h2 class="font-medium text-2xl mb-4">
       Feed

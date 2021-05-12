@@ -28,6 +28,7 @@
       "@nuxtjs/axios",
       "@nuxtjs/sentry",
       "@nuxt/content",
+      "@nuxtjs/color-mode",
       "nuxt-stripe-module",
       "nuxt-socialsplash-module"
     ]

@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="container mx-auto pt-4 md:pt-12">
+    <div class="container dark:text-white mx-auto pt-4 md:pt-12">
       <h1 class="text-2xl font-medium">
         {{ $trans('sign-up.titles.main') }}
       </h1>
@@ -25,7 +25,7 @@
               <div class="flex flex-col">
                 <label
                   for="email"
-                  class="text-left text-gray-700 text-base mb-1"
+                  class="text-left text-gray-700 dark:text-gray-300 text-base mb-1"
                 >
                   {{ $trans('sign-up.labels.email') }} *
                 </label>
@@ -59,7 +59,7 @@
               <div class="flex flex-col">
                 <label
                   for="username"
-                  class="text-left text-gray-700 text-base mb-1"
+                  class="text-left text-gray-700 dark:text-gray-300 text-base mb-1"
                 >
                   {{ $trans('sign-up.labels.username') }} *
                 </label>
@@ -79,7 +79,7 @@
                   v-text="$trans('global.paragraphs.max_chars', {
                     chars: 32
                   })"
-                  class="text-gray-700 text-sm"
+                  class="text-gray-700 dark:text-gray-300 text-sm"
                 />
                 <span
                   v-if="invalid"
@@ -100,7 +100,7 @@
                 <div class="flex flex-col">
                   <label
                     for="first_name"
-                    class="text-left text-gray-700 text-base mb-1"
+                    class="text-left text-gray-700 dark:text-gray-300 text-base mb-1"
                   >
                     {{ $trans('sign-up.labels.first_name') }} *
                   </label>
@@ -134,7 +134,7 @@
                 <div class="flex flex-col">
                   <label
                     for="last_name"
-                    class="text-left text-gray-700 text-base mb-1"
+                    class="text-left text-gray-700 dark:text-gray-300 text-base mb-1"
                   >
                     {{ $trans('sign-up.labels.last_name') }} *
                   </label>
@@ -170,7 +170,7 @@
               <div class="flex flex-col">
                 <label
                   for="password"
-                  class="text-left text-gray-700 text-base mb-1"
+                  class="text-left text-gray-700 dark:text-gray-300 text-base mb-1"
                 >
                   {{ $trans('sign-up.labels.password') }} *
                 </label>

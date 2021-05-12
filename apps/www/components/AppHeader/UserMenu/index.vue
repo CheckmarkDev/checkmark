@@ -2,12 +2,12 @@
   <div class="user-menu relative">
     <button
       type="button"
-      class="user-menu__toggle-button flex items-center rounded hover:cursor-pointer hover:bg-gray-200 focus:outline-none text-left"
+      class="user-menu__toggle-button flex items-center rounded hover:cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none text-left"
       @click="isOpen = true"
     >
       <UserCard
         :user="$accessor.getAuthUser"
-        class="hover:bg-gray-200 p-1 rounded"
+        class="p-1 rounded dark:text-white"
       />
       <div class="flex m-auto w-8 h-8 items-center justify-center">
         <svg
@@ -21,7 +21,7 @@
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path d="M6 6L0.803847 -2.51245e-08L11.1962 8.834e-07L6 6Z" fill="#4A5568"/>
+          <path d="M6 6L0.803847 -2.51245e-08L11.1962 8.834e-07L6 6Z" fill="#717F98"/>
         </svg>
       </div>
     </button>
@@ -31,7 +31,7 @@
     >
       <nav
         v-if="isOpen"
-        class="user-menu__dropdown absolute right-0 bg-white rounded p-2 shadow"
+        class="user-menu__dropdown absolute right-0 bg-white dark:bg-gray-700 rounded p-2 shadow"
         v-click-outside="() => isOpen = false"
       >
         <ul>
@@ -40,10 +40,10 @@
               :to="{
                 name: 'User',
                 params: {
-                  username: $accessor.getAuthUser.username
+                  username: $accessor.getAuthUser && $accessor.getAuthUser.username
                 }
               }"
-              class="flex py-2 px-4 hover:bg-gray-200"
+              class="flex py-2 px-4 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600"
               @click.native="() => isOpen = false"
             >
               {{ $trans('global.buttons.profile') }}
@@ -54,7 +54,7 @@
               :to="{
                 name: 'Settings'
               }"
-              class="flex py-2 px-4 hover:bg-gray-200"
+              class="flex py-2 px-4 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600"
               @click.native="() => isOpen = false"
             >
               {{ $trans('global.buttons.settings') }}
@@ -62,7 +62,7 @@
           </li>
           <li>
             <a
-              class="flex py-2 px-4 hover:bg-gray-200"
+              class="flex py-2 px-4 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600"
               href="#"
               @click.prevent="signOut"
             >

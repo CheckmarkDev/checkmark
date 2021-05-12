@@ -5,12 +5,12 @@
   >
     <button
       type="button"
-      class="flex items-center justify-center border border-solid border-gray-400 w-8 h-8 rounded-full hover:bg-gray-200"
+      class="flex items-center justify-center border border-solid border-gray-300 dark:border-gray-600 dark:hover:bg-gray-600 w-8 h-8 rounded-full hover:bg-gray-200"
       @click="open = true"
     >
       <more-horizontal-icon
         size="20"
-        class="text-gray-600"
+        class="text-gray-600 dark:text-gray-300"
       />
     </button>
     <transition
@@ -18,13 +18,13 @@
     >
       <ul
         v-if="open"
-        class="absolute right-0 bg-white rounded border border-solid border-gray-300 p-3 shadow-lg z-10"
+        class="absolute right-0 bg-white dark:bg-gray-600 dark:text-white rounded border border-solid border-gray-300 dark:border-gray-600 p-3 shadow-lg z-10"
       >
-        <li>
+        <li class="mb-2">
           <button
             :disabled="$wait.is(`editing task ${task.uuid}`)"
             type="button"
-            class="w-full text-left text-sm py-2 px-3 rounded hover:bg-gray-200"
+            class="w-full text-left text-sm py-2 px-3 rounded hover:bg-gray-200 dark:hover:bg-gray-500"
             @click="editTask"
           >
             {{ $trans('home.buttons.edit') }}
@@ -34,7 +34,7 @@
           <button
             :disabled="$wait.is(`deleting task ${task.uuid}`)"
             type="button"
-            class="w-full text-left text-sm py-2 px-3 rounded hover:bg-gray-200 text-red-600"
+            class="w-full text-left text-sm py-2 px-3 rounded hover:bg-gray-200 dark:hover:bg-gray-500 text-red-600 dark:bg-red-400 dark:bg-opacity-25 dark:hover:bg-red-400 dark:text-white"
             @click="removeTask"
           >
             {{ $trans('home.buttons.delete') }}

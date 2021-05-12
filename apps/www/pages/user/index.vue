@@ -32,7 +32,7 @@
         <UserSideNavigation
           :user="user"
         />
-        <section class="bg-white w-full md:w-9/12 h-56 rounded-lg p-6">
+        <section class="bg-white dark:bg-gray-700 w-full md:w-9/12 rounded-lg p-6 flex flex-col">
          <nuxt />
         </section>
       </div>

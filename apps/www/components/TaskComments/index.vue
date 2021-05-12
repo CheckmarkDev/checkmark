@@ -1,6 +1,6 @@
 <template>
-  <div class="border border-gray-300 border-solid rounded p-8">
-    <h2 class="font-medium text-lg text-gray-800 mb-8">
+  <div class="border border-gray-300 dark:border-gray-600 border-solid rounded p-8">
+    <h2 class="font-medium text-lg text-gray-800 dark:text-gray-300 mb-8">
       {{ $trans('user.titles.comments') }}
     </h2>
 
@@ -12,7 +12,7 @@
 
     <div
       v-if="comments.data.length"
-      class="border-t border-gray-300 pt-6"
+      class="border-t border-gray-300 dark:border-gray-600 pt-6"
     >
       <Comment
         v-for="comment in comments.data"
@@ -26,7 +26,7 @@
     >
       <p
         v-text="$trans('user.paragraphs.no_comments')"
-        class="text-gray-700"
+        class="text-gray-700 dark:text-gray-300"
       />
     </template>
   </div>

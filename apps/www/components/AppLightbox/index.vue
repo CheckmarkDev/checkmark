@@ -11,7 +11,7 @@
         <img
           v-lazy="thumbnail"
           :alt="alternateText"
-          class="rounded border border-gray-300 border-solid"
+          class="rounded border border-gray-300 dark:border-gray-600 border-solid"
         >
       </a>
     </slot>

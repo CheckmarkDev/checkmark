@@ -5,7 +5,7 @@
       'like-button--liked': hasLiked
     }"
     type="button"
-    class="like-button relative h-8 w-8 border border-solid border-gray-400 hover:bg-gray-200 rounded-full"
+    class="like-button relative h-8 w-8 border border-solid border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full"
     @click="like"
   >
     <div class="flex items-center justify-center">
@@ -108,11 +108,11 @@
 
 <style scoped>
   .like-button path {
-    @apply text-gray-400 stroke-current;
+    @apply text-gray-400 stroke-current dark:text-white;
   }
 
   .like-button--liked {
-    @apply border-blue-500;
+    @apply border-blue-500 dark:bg-blue-500 dark:hover:bg-blue-400 dark:border-blue-500 dark:text-blue-500;
   }
 
   .like-button__badge {

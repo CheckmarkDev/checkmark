@@ -31,7 +31,7 @@
     <div class="home-container">
       <div class="container mx-auto flex items-start">
         <SideNavigation />
-        <section class="flex flex-col bg-white rounded-lg w-full md:w-9/12 p-6">
+        <section class="flex flex-col bg-white dark:bg-gray-700 dark:text-white rounded-lg w-full md:w-9/12 p-6">
           <h2 class="font-medium text-2xl mb-4">
             Feed
           </h2>

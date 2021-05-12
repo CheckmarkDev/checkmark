@@ -1,6 +1,9 @@
 <template>
-  <div v-infinite-scroll="loadMore">
-    <div class="border border-gray-300 rounded mb-8 px-8 py-4">
+  <div
+    v-infinite-scroll="loadMore"
+    class=""
+  >
+    <div class="border border-gray-300 dark:border-gray-600 rounded mb-8 px-8 py-4">
       <Task
         :task="task"
       />

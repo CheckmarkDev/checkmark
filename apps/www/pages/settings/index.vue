@@ -12,7 +12,7 @@
     </div>
     <div class="settings-container">
       <div class="container mx-auto flex flex-col md:flex-row items-start">
-        <nav class="bg-white flex rounded-lg w-full md:w-3/12 mr-8 p-4 mb-4 md:mb-0">
+        <nav class="bg-white dark:bg-gray-700 dark:text-white flex rounded-lg w-full md:w-3/12 mr-8 p-4 mb-4 md:mb-0">
           <ul class="w-full flex md:flex-col">
             <li
               v-for="(link, k) in links"
@@ -21,14 +21,14 @@
             >
               <nuxt-link
                 :to="link.to"
-                :active-class="'router-link-active bg-gray-200'"
-                class="hover:bg-gray-200 rounded p-2 w-full flex"
+                :active-class="'router-link-active bg-gray-200 dark:bg-gray-600'"
+                class="hover:bg-gray-200 dark:hover:bg-gray-600 rounded p-2 w-full flex"
                 v-text="link.name"
               />
             </li>
           </ul>
         </nav>
-        <section class="bg-white w-full md:w-9/12 h-56 rounded-lg p-6">
+        <section class="bg-white dark:bg-gray-700 dark:text-white w-full md:w-9/12 rounded-lg p-6">
           <nuxt />
         </section>
       </div>

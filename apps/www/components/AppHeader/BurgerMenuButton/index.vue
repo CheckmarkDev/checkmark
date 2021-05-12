@@ -1,6 +1,6 @@
 <template>
   <button
-    class="burger-menu-button flex border-none appearance-none cursor-pointer text-gray-900 p-2"
+    class="burger-menu-button flex border-none appearance-none cursor-pointer text-gray-900 dark:text-white p-2"
     type="button"
   >
     <div
@@ -45,11 +45,12 @@
   }
 
   #icon span {
+    @apply bg-gray-900 dark:bg-white;
+
     display: block;
     position: absolute;
     height: 2px;
     width: 100%;
-    background: black;
     border-radius: 2;
     opacity: 1;
     left: 0;
