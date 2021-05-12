@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
   apipie
 
@@ -28,7 +31,6 @@ Rails.application.routes.draw do
       get '/email_notifications', to: 'email_notifications#index'
       put '/email_notifications', to: 'email_notifications#update'
       put '/profile', to: 'profile#update'
-
     end
 
     scope '/auth' do
@@ -41,5 +43,6 @@ Rails.application.routes.draw do
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
+# rubocop:enable Metrics/BlockLength
 
-Rails.application.routes.default_url_options[:host] = ENV.fetch('ASSET_HOST') { 'https://api.checkmark.dev' }
+Rails.application.routes.default_url_options[:host] = ENV.fetch('ASSET_HOST', 'https://api.checkmark.dev')

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SetUserIdAsNonNullable < ActiveRecord::Migration[6.1]
   def up
     change_column :tasks, :user_id, :bigint, foreign_key: true, null: false

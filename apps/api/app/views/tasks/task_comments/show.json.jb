@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json = {
   uuid: @task_comment.uuid,
   content: @task_comment.content,

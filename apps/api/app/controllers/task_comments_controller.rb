@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 class TaskCommentsController < ApplicationController
-  before_action :authorize_request, only: [:create, :update, :destroy]
-  before_action :set_task_comment, only: [:update, :destroy]
-  before_action :set_task, only: [ :index, :create, :update, :destroy ]
+  before_action :authorize_request, only: %i[create]
+  before_action :set_task, only: %i[index create]
 
   api :GET, '/tasks/:task_uuid/comments'
   def index
@@ -38,16 +39,17 @@ class TaskCommentsController < ApplicationController
   # end
 
   private
-    def set_task
-      @task = Task.find_by_uuid!(params[:task_id])
-    end
 
-    def set_task_comment
-      @task_comment = TaskComment.find(params[:id])
-    end
+  def set_task
+    @task = Task.find_by!(uuid: params[:task_id])
+  end
 
-    # Only allow a trusted parameter "white list" through.
-    def task_comment_params
-      params.permit(:content)
-    end
+  def set_task_comment
+    @task_comment = TaskComment.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def task_comment_params
+    params.permit(:content)
+  end
 end

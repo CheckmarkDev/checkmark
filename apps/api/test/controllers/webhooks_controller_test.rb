@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class WebhooksControllerTest < ActionDispatch::IntegrationTest
@@ -5,12 +7,12 @@ class WebhooksControllerTest < ActionDispatch::IntegrationTest
     @webhook = webhooks(:one)
   end
 
-  test "should get index" do
+  test 'should get index' do
     get webhooks_url, as: :json
     assert_response :success
   end
 
-  test "should create webhook" do
+  test 'should create webhook' do
     assert_difference('Webhook.count') do
       post webhooks_url, params: { webhook: { url: @webhook.url } }, as: :json
     end
@@ -18,17 +20,17 @@ class WebhooksControllerTest < ActionDispatch::IntegrationTest
     assert_response 201
   end
 
-  test "should show webhook" do
+  test 'should show webhook' do
     get webhook_url(@webhook), as: :json
     assert_response :success
   end
 
-  test "should update webhook" do
+  test 'should update webhook' do
     patch webhook_url(@webhook), params: { webhook: { url: @webhook.url } }, as: :json
     assert_response 200
   end
 
-  test "should destroy webhook" do
+  test 'should destroy webhook' do
     assert_difference('Webhook.count', -1) do
       delete webhook_url(@webhook), as: :json
     end

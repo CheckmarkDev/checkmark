@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 {
   uuid: user.uuid,
   username: user.username,
