@@ -22,6 +22,8 @@ class Task < ApplicationRecord
   before_create :assign_task_group, if: proc { |task| task.task_group.nil? }
   before_create :assign_streak, if: proc { |task| task.streak.nil? }
   after_commit :notify_webhooks, on: :create
+  after_commit :delete_remaining_task_group, on: :destroy
+  after_commit :delete_remaining_streak, on: :destroy
 
   def assign_mentions
     self.mentions = []
@@ -75,6 +77,18 @@ class Task < ApplicationRecord
     end
 
     self.streak = last_streak
+  end
+
+  # Delete the associated task group if the task
+  # we are deleting is the last one associated to that task group.
+  def delete_remaining_task_group
+    task_group.destroy! if task_group.present? && task_group.tasks.count.zero?
+  end
+
+  # Delete the associated task group if the task
+  # we are deleting is the last one associated to that task group.
+  def delete_remaining_streak
+    streak.destroy! if streak.present? && streak.tasks.count.zero?
   end
 
   private
