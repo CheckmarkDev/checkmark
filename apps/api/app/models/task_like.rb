@@ -4,7 +4,7 @@ class TaskLike < ApplicationRecord
   belongs_to :user
   belongs_to :task
 
-  after_create :send_like_email
+  after_commit :send_like_email, on: :create
 
   enum state: { active: 0, inactive: 1 }
 

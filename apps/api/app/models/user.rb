@@ -20,7 +20,7 @@ class User < ApplicationRecord
 
   before_create :create_email_notification
   before_save :format_username
-  after_create :send_welcome
+  after_commit :send_welcome, on: :create
 
   def last_streak
     streaks.joins(:tasks).order(created_at: :desc).first
