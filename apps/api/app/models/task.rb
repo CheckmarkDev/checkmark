@@ -21,7 +21,7 @@ class Task < ApplicationRecord
   before_update :assign_mentions, if: :content_changed?
   before_create :assign_task_group, if: proc { |task| task.task_group.nil? }
   before_create :assign_streak, if: proc { |task| task.streak.nil? }
-  after_create :notify_webhooks
+  after_commit :notify_webhooks, on: :create
 
   def assign_mentions
     self.mentions = []

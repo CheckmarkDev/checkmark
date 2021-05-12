@@ -4,7 +4,7 @@ class TaskComment < ApplicationRecord
   belongs_to :user
   belongs_to :task
 
-  after_create :send_comment_email
+  after_commit :send_comment_email, on: :create
 
   private
 
