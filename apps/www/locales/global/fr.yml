@@ -10,4 +10,5 @@ global.buttons.send: Envoyer
 global.buttons.save: Sauvegarder
 global.buttons.settings: Paramètres
 global.buttons.profile: Profil
+global.buttons.dark_mode: Mode sombre
 global.labels.comment: Commentaire

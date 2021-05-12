@@ -43,7 +43,7 @@
                   username: $accessor.getAuthUser && $accessor.getAuthUser.username
                 }
               }"
-              class="flex py-2 px-4 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600"
+              class="flex py-2 px-4 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600 rounded mb-2"
               @click.native="() => isOpen = false"
             >
               {{ $trans('global.buttons.profile') }}
@@ -54,15 +54,35 @@
               :to="{
                 name: 'Settings'
               }"
-              class="flex py-2 px-4 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600"
+              class="flex py-2 px-4 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600 rounded mb-2"
               @click.native="() => isOpen = false"
             >
               {{ $trans('global.buttons.settings') }}
             </nuxt-link>
           </li>
           <li>
+            <button
+              type="button"
+              class="flex py-2 px-4 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600 rounded mb-2 font-medium w-full"
+              @click="toggleDarkMode"
+            >
+              <div class="flex items-center">
+                <div
+                  :class="{
+                    'user-menu__dropdown__switch--active': $colorMode.preference === 'dark'
+                  }"
+                  class="user-menu__dropdown__switch bg-gray-300 dark:bg-gray-800 w-8 h-6 rounded-full mr-2"
+                >
+                </div>
+                <div
+                  v-text="$trans('global.buttons.dark_mode')"
+                />
+              </div>
+            </button>
+          </li>
+          <li class="border-t border-gray-300 dark:border-gray-600 mt-2 pt-2">
             <a
-              class="flex py-2 px-4 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600"
+              class="flex py-2 px-4 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600 rounded"
               href="#"
               @click.prevent="signOut"
             >
@@ -76,7 +96,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, useRouter } from '@nuxtjs/composition-api'
+  import { defineComponent, ref, useContext, useRouter } from '@nuxtjs/composition-api'
 
   import useAccessor from '@/composables/useAccessor'
 
@@ -89,6 +109,7 @@
     setup () {
       const router = useRouter()
       const accessor = useAccessor()
+      const { $colorMode } = useContext()
 
       const isOpen = ref(false)
 
@@ -102,9 +123,14 @@
         isOpen.value = false
       }
 
+      function toggleDarkMode () {
+        $colorMode.preference = $colorMode.preference === 'light' ? 'dark' : 'light'
+      }
+
       return {
         isOpen,
-        signOut
+        signOut,
+        toggleDarkMode
       }
     }
   })
@@ -130,5 +156,25 @@
   .user-menu__dropdown {
     top: 64px;
     width: 250px;
+  }
+
+  .user-menu__dropdown__switch {
+    @apply relative;
+  }
+
+  .user-menu__dropdown__switch::after {
+    @apply absolute top-0 bottom-0 m-auto bg-gray-400 rounded-full;
+
+    content: '';
+    width: 14px;
+    height: 14px;
+    left: 4px;
+  }
+
+  .user-menu__dropdown__switch--active::after {
+    @apply bg-blue-500;
+
+    right: 4px;
+    left: auto;
   }
 </style>
