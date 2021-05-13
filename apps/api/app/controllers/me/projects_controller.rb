@@ -16,7 +16,7 @@ module Me
     # GET /projects/1
     api :GET, '/me/projects/:id'
     def show
-      render json: @project
+      render 'projects/show'
     end
 
     # POST /projects
@@ -32,17 +32,21 @@ module Me
       if @project.save
         render 'projects/show'
       else
-        render json: @project.errors, status: :unprocessable_entity
+        render json: { errors: @project.errors }, status: :unprocessable_entity
       end
     end
 
     # PATCH/PUT /projects/1
     api :PUT, '/me/projects/:id'
     def update
-      if @project.update(project_params)
-        render json: @project
+      @project.assign_attributes(project_params)
+
+      @project.avatar.attach(project_params[:avatar]) if project_params[:avatar].present?
+
+      if @project.save!
+        render 'projects/show'
       else
-        render json: @project.errors, status: :unprocessable_entity
+        render json: { errors: @project.errors }, status: :unprocessable_entity
       end
     end
 
@@ -56,7 +60,7 @@ module Me
 
     # Use callbacks to share common setup or constraints between actions.
     def set_project
-      @project = Project.find_by!(uuid: params[:id])
+      @project = Project.find_by_slug!(params[:id])
 
       # rubocop:disable Style/GuardClause
       if @project.user_id != @current_user.id
