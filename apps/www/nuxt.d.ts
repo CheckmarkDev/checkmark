@@ -19,6 +19,7 @@ declare module '@nuxt/types' {
   }
 
   interface Context {
+    $accessor: typeof accessorType
     $wait: VueWaitInstance
     $mitt: Emitter
     $toasted: any

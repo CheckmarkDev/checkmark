@@ -110,7 +110,6 @@
     methods: {
       loadComments () {
         const { task: taskUuid } = this.$route.params
-        console.log('uuid', taskUuid)
         return this.$axios.$get(`/tasks/${taskUuid}/comments`)
           .then((res) => {
             this.comments = res
