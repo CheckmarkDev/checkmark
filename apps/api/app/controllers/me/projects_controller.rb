@@ -43,7 +43,7 @@ module Me
 
       @project.avatar.attach(project_params[:avatar]) if project_params[:avatar].present?
 
-      if @project.save!
+      if @project.save
         render 'projects/show'
       else
         render json: { errors: @project.errors }, status: :unprocessable_entity

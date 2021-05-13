@@ -4,11 +4,11 @@
       <div class="container mx-auto">
         <div class="flex items-center justify-between py-8 w-full">
           <div
-            v-if="project"
+            v-if="$accessor.project.getProject"
             class="w-full md:w-2/3 flex flex-col md:flex-row md:items-center"
           >
             <AppAvatar
-              :src="project.avatar_url"
+              :src="$accessor.project.getProject.avatar_url"
               :width="96"
               :height="96"
               class="mr-8 flex-shrink-0 self-start md:self-center mb-2 md:mb-0"
@@ -16,20 +16,20 @@
             <div>
               <h1
                 class="text-3xl text-white leading-tight truncate mb-2"
-                v-text="project.name"
+                v-text="$accessor.project.getProject.name"
               />
               <p
-                v-text="project.description"
+                v-text="$accessor.project.getProject.description"
                 class="text-gray-200"
               />
               <ul
-                v-if="project.url"
+                v-if="$accessor.project.getProject.url"
                 class="mt-2"
               >
                 <li>
                   <a
-                    :href="project.url"
-                    v-text="project.url"
+                    :href="$accessor.project.getProject.url"
+                    v-text="$accessor.project.getProject.url"
                     rel="noopener nofollow"
                     target="_blank"
                     class="text-gray-200 hover:underline"
@@ -42,7 +42,7 @@
       </div>
     </div>
     <div class="project-container">
-      <div class="container mx-auto flex items-start">
+      <div class="container mx-auto flex flex-col md:flex-row items-start">
         <ProjectSettingsSideNavigation />
         <section class="bg-white dark:bg-gray-700 dark:text-white w-full md:w-9/12 rounded-lg p-6">
           <nuxt />
@@ -54,53 +54,19 @@
 
 <script lang="ts">
   import { defineComponent } from '@nuxtjs/composition-api'
-  import { Project } from '~/types/project'
   import ProjectSettingsSideNavigation from '@/components/Project/ProjectSettingsSideNavigation/index.vue'
   import AppAvatar from '@/components/AppAvatar/index.vue'
 
   export default defineComponent({
-    middleware: ['authenticated'],
+    middleware: ['authenticated', async ({ route, $accessor }) => {
+      const { slug } = route.params
+      await Promise.all([
+        $accessor.project.retrieveProject(slug)
+      ])
+    }],
     components: {
       ProjectSettingsSideNavigation,
       AppAvatar
-    },
-    data () {
-      return {
-        project: null
-      } as {
-        project: Project | null
-      }
-    },
-    head () {
-      const project = this.project as any
-
-      return {
-        title: project.name,
-        meta: [
-          { hid: 'description', name: 'description', content: project.description },
-          { hid: 'og:description', property: 'og:description', content: project.description },
-          { hid: 'og:title', property: 'og:title', content: project.name },
-          {
-            hid: 'og:image:width', name: 'og:image:width', content: '1200'
-          },
-          {
-            hid: 'og:image:height', name: 'og:image:height', content: '628'
-          },
-          {
-            hid: 'og:image:type', name: 'og:image:type', content: 'image/png'
-          }
-        ]
-      }
-    },
-    async asyncData ({ route, $accessor }) {
-      const { slug } = route.params
-      const [project] = await Promise.all([
-        $accessor.project.retrieveProject(slug)
-      ])
-
-      return {
-        project
-      }
     }
   })
 </script>

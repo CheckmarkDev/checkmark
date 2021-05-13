@@ -14,9 +14,10 @@
       >
         <div class="flex flex-col md:flex-row">
           <div
-            class="md:w-1/2 md:mr-8"
+            class="md:w-2/3 md:mr-8"
           >
             <ValidationProvider
+              ref="name-provider"
               rules="required"
               :name="$trans('project.labels.name').toLowerCase()"
               v-slot="{ errors, invalid, dirty }"
@@ -47,6 +48,7 @@
             </ValidationProvider>
 
             <ValidationProvider
+              ref="slug-provider"
               rules="required|min:2|max:32"
               :name="$trans('project.labels.slug').toLowerCase()"
               v-slot="{ errors, invalid, dirty }"
@@ -83,6 +85,7 @@
             </ValidationProvider>
 
             <ValidationProvider
+              ref="description-provider"
               rules="max:255"
               :name="$trans('project.labels.description').toLowerCase()"
               v-slot="{ errors, invalid, dirty }"
@@ -118,6 +121,7 @@
 
 
             <ValidationProvider
+              ref="url-provider"
               :name="$trans('project.labels.url').toLowerCase()"
               v-slot="{ errors, invalid, dirty }"
               tag="div"
@@ -160,25 +164,20 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, onMounted, Ref, ref, useContext, useRoute } from '@nuxtjs/composition-api'
+  import { defineComponent, Ref, ref, useRoute } from '@nuxtjs/composition-api'
 
-  import AppAvatar from '@/components/AppAvatar/index.vue'
   import useAccessor from '~/composables/useAccessor'
-  import { User } from '~/types/user'
   import useWait from '~/composables/useWait'
-  import useAxios from '~/composables/useAxios'
   import useICU from '~/composables/useICU'
   import useToasted from '~/composables/useToasted'
-import { Project } from '~/types/project'
+  import { Project } from '~/types/project'
 
   export default defineComponent({
     setup (props, { refs }) {
-      const axios = useAxios()
       const wait = useWait()
       const accessor = useAccessor()
       const trans = useICU()
       const toasted = useToasted()
-      const route = useRoute()
 
       const { name, slug, description, url } = accessor.project.getProject as Project
 
@@ -194,19 +193,11 @@ import { Project } from '~/types/project'
         url
       })
 
-      function updateProject (data: FormData, loader: string): Promise<any> {
-        const { slug } = route
-
+      function updateProject (data: any, loader: string): Promise<any> {
         wait.start(loader)
-        return axios.put(`/me/projects/${slug}`, data, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        })
-          .then((res) => {
+        return accessor.project.updateProject({ slug, data })
+          .then(() => {
             toasted.success(trans('project.paragraphs.updated'))
-
-            return Promise.resolve(res)
           })
           .catch(err => {
             if (!err.response) return
@@ -248,9 +239,6 @@ import { Project } from '~/types/project'
         submitted,
         formData
       }
-    },
-    mounted () {
-      console.log('parent', this.$parent)
     },
     head () {
       const title = this.$trans('project.titles.informations')

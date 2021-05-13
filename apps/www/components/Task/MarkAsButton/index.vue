@@ -70,7 +70,6 @@
 
       function markAs (state: TaskState) {
         const { uuid } = task.value
-        console.log('ok?', state)
         wait.start(`marking ${uuid} as ${state}`)
         axios.put(`/me/tasks/${uuid}`, {
           state

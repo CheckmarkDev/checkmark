@@ -1,7 +1,7 @@
 <template>
-  <div class="hidden md:flex md:flex-col w-3/12 mr-8">
+  <div class="w-full md:flex md:flex-col md:w-3/12 mr-8">
     <nav class="bg-white dark:bg-gray-700 rounded-lg p-4 mb-4">
-      <ul class="w-full">
+      <ul>
         <li class="mb-1">
           <nuxt-link
             :to="{

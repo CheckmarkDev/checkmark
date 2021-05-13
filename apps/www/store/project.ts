@@ -39,30 +39,22 @@ export const mutations: MutationTree<State> & Mutations = {
 
 export enum GetterTypes {
   getProjects = 'getProjects',
-  getProject = 'getProject',
-  // getAuthUser = 'getAuthUser',
-  // getTaskGroups = 'getTaskGroups',
-  // getTaskGroupsMeta = 'getTaskGroupsMeta'
+  getProject = 'getProject'
 }
 
 export type Getters<S = State> = {
   [GetterTypes.getProjects]: (state: S) => any
   [GetterTypes.getProject]: (state: S) => Project|null
-  // [GetterTypes.getAuthUser]: (state: S) => User | null
-  // [GetterTypes.getTaskGroups]: (state: S) => Array<TaskGroup>
-  // [GetterTypes.getTaskGroupsMeta]: (state: S) => PaginateResponseMeta | null
 }
 
 export const getters: GetterTree<State, State> & Getters<State> = {
   getProjects: state => '',
-  getProject: state => state.project,
-  // getAuthUser: state => state.auth.user,
-  // getTaskGroups: state => state.taskGroups.items,
-  // getTaskGroupsMeta: state => state.taskGroups.meta
+  getProject: state => state.project
 }
 
 export enum ActionTypes {
-  retrieveProject = 'retrieveProject'
+  retrieveProject = 'retrieveProject',
+  updateProject = 'updateProject'
 }
 
 type AugmentedActionContext = {
@@ -76,6 +68,8 @@ type AugmentedActionContext = {
 
 export interface Actions<R = State> {
   [ActionTypes.retrieveProject]({ commit }: AugmentedActionContext, slug: string): Promise<any>
+  // TODO: Use type for data
+  [ActionTypes.updateProject]({ commit }: AugmentedActionContext, params: { slug: string, data: any }): Promise<any>
 }
 
 export const actions: ActionTree<State, State> & Actions = {
@@ -85,6 +79,14 @@ export const actions: ActionTree<State, State> & Actions = {
         commit(MutationTypes.SET_PROJECT, project)
 
         return project
+      })
+  },
+  [ActionTypes.updateProject] ({ commit }, { slug, data }) {
+    return (this.$axios as NuxtAxiosInstance).put(`/me/projects/${slug}`, data)
+      .then(res => {
+        commit(MutationTypes.SET_PROJECT, res.data)
+
+        return res
       })
   }
 }
