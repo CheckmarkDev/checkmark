@@ -8,6 +8,8 @@ import User from '@/pages/user/index.vue'
 import Tos from '@/pages/tos/index.vue'
 import Project from '@/pages/project/index.vue'
 import NewProject from '@/pages/new-project/index.vue'
+import ProjectSettings from '@/pages/project-settings/index.vue'
+import ProjectSettingsInformations from '@/pages/project-settings/informations/index.vue'
 import Task from '@/pages/user/task/index.vue'
 import UserTasks from '@/pages/user/tasks/index.vue'
 import ProjectTasks from '@/pages/project/tasks/index.vue'
@@ -124,6 +126,21 @@ const WEBSITE_ROUTES = [
     name: 'NewProject',
     path: '/new/project',
     component: NewProject
+  },
+  {
+    name: 'ProjectSettings',
+    path: '/p/:slug/settings',
+    component: ProjectSettings,
+    redirect: {
+      name: 'ProjectSettingsInformations'
+    },
+    children: [
+      {
+        name: 'ProjectSettingsInformations',
+        component: ProjectSettingsInformations,
+        path: 'informations'
+      }
+    ]
   },
   {
     name: 'Terms',

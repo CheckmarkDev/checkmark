@@ -1,6 +1,7 @@
 const { colors, flex } = require('tailwindcss/defaultTheme')
 
 module.exports = {
+  darkMode: 'class',
   theme: {
     fontFamily: {
      'baloo': ['"Baloo Chettan 2"', 'system-ui']
@@ -28,12 +29,23 @@ module.exports = {
         500: '#84C318'
       },
       blue: {
+        400: '#429ED7',
         500: '#2589C7',
         600: '#1B75BB',
         700: '#14405B'
       }
     }
   },
-  variants: {},
+  variants: {
+    backgroundColor: [
+      "dark",
+      "dark-hover",
+      "dark-group-hover",
+      "dark-even",
+      "dark-odd"
+    ],
+    borderColor: ["dark", "dark-focus", "dark-focus-within"],
+    textColor: ["dark", "dark-hover", "dark-active"]
+  },
   plugins: []
 }

@@ -2,7 +2,7 @@
   <div class="pb-12">
     <h2
       v-text="$trans('settings.titles.profile')"
-      class="text-2xl font-medium text-gray-800 mb-8"
+      class="text-2xl font-medium text-gray-800 dark:text-white mb-8"
     />
 
     <!-- Profile picture -->
@@ -21,12 +21,12 @@
             height="150"
           />
         </div>
-        <div>
+        <div class="text-gray-700 dark:text-gray-300">
           <h3
             v-text="$trans('settings.titles.profile_picture')"
-            class="text-lg text-gray-700 font-medium mb-2"
+            class="text-lg font-medium mb-2"
           />
-          <div class="mb-3 border border-solid border-gray-300 rounded p-2">
+          <div class="mb-3 border border-solid border-gray-300 dark:border-gray-600 rounded p-2">
             <ValidationProvider
               ref="avatar-provider"
               rules="image|size:10000"
@@ -51,13 +51,13 @@
           </div>
           <h3
             v-text="$trans('settings.titles.profile_rules')"
-            class="text-base text-gray-700 font-medium mb-2"
+            class="text-base font-medium mb-2"
           />
           <p
             v-text="$trans('settings.paragraphs.profile_rules')"
-            class="text-base text-gray-700 mb-1"
+            class="text-base mb-1"
           />
-          <ul class="text-base text-gray-700 list-disc pl-4 mb-8">
+          <ul class="text-base list-disc pl-4 mb-8">
             <li
               v-text="$trans('settings.paragraphs.profile_rules.racism')"
             />
@@ -79,7 +79,7 @@
     <!-- Profile informations -->
     <h3
       v-text="$trans('settings.titles.profile_infos')"
-      class="text-lg text-gray-700 font-medium mb-2"
+      class="text-lg text-gray-700 dark:text-white font-medium mb-2"
     />
 
     <ValidationObserver
@@ -103,7 +103,7 @@
             <div class="flex flex-col">
               <label
                 for="username"
-                class="text-left text-gray-700 text-base mb-1"
+                class="text-left text-gray-700 dark:text-gray-300 text-base mb-1"
               >
                 {{ $trans('sign-up.labels.username') }} *
               </label>
@@ -123,7 +123,7 @@
                 v-text="$trans('global.paragraphs.max_chars', {
                   chars: 32
                 })"
-                class="text-gray-700 text-sm"
+                class="text-gray-700 dark:text-gray-300 text-sm"
               />
               <span
                 v-if="invalid"
@@ -145,7 +145,7 @@
               <div class="flex flex-col">
                 <label
                   for="first_name"
-                  class="text-left text-gray-700 text-base mb-1"
+                  class="text-left text-gray-700 dark:text-gray-300 text-base mb-1"
                 >
                   {{ $trans('sign-up.labels.first_name') }} *
                 </label>
@@ -180,7 +180,7 @@
               <div class="flex flex-col">
                 <label
                   for="last_name"
-                  class="text-left text-gray-700 text-base mb-1"
+                  class="text-left text-gray-700 dark:text-gray-300 text-base mb-1"
                 >
                   {{ $trans('sign-up.labels.last_name') }} *
                 </label>

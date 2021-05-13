@@ -32,9 +32,6 @@
 <style scoped>
   .task-images .app-lightbox:not(:last-child) {
     @apply mb-4;
-
-    @screen md {
-      @apply mr-4 mb-0;
-    }
+    @apply md:mr-4 md:mb-0;
   }
 </style>

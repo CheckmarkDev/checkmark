@@ -1,5 +1,5 @@
 <template>
-  <header class="app-header w-full h-16 flex bg-white">
+  <header class="app-header w-full h-16 flex bg-white dark:bg-gray-800">
     <div class="flex items-center container mx-auto">
       <SideMenu />
 
@@ -11,7 +11,9 @@
                 path: '/'
               }"
             >
-              <picture>
+              <picture
+                class="app-header__logo--light dark:hidden"
+              >
                 <source
                   srcset="@/assets/img/logo.svg"
                   media="(min-width: 770px)"
@@ -19,6 +21,21 @@
 
                 <img
                   src="@/assets/img/icon.svg"
+                  alt="Checkmark logo"
+                  class="app-header__logo"
+                  height="30"
+                >
+              </picture>
+              <picture
+                class="app-header__logo--dark hidden dark:block"
+              >
+                <source
+                  srcset="@/assets/img/logo-white.svg"
+                  media="(min-width: 770px)"
+                >
+
+                <img
+                  src="@/assets/img/icon-white.svg"
                   alt="Checkmark logo"
                   class="app-header__logo"
                   height="30"
@@ -39,6 +56,7 @@
                 :to="{
                   name: 'SignIn'
                 }"
+                class="dark:text-white"
               >
                 {{ $trans('global.buttons.sign-in') }}
               </nuxt-link>
@@ -48,6 +66,7 @@
                 :to="{
                   name: 'SignUp'
                 }"
+                class="dark:text-white"
               >
                 {{ $trans('global.buttons.sign-up') }}
               </nuxt-link>
@@ -65,7 +84,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, watch } from '@nuxtjs/composition-api'
+  import { defineComponent } from '@nuxtjs/composition-api'
 
   import UserMenu from '@/components/AppHeader/UserMenu/index.vue'
   import SideMenu from '@/components/AppHeader/SideMenu/index.vue'

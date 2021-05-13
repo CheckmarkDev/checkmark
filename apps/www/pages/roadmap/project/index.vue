@@ -60,10 +60,14 @@
   }
 
   .nuxt-content a {
-    @apply text-blue-600 underline;
+    @apply text-blue-600 underline dark:text-white dark:bg-gray-600 p-1 rounded;
   }
 
   .nuxt-content img {
     @apply mb-8 bg-gray-300;
+  }
+
+  .nuxt-content .nuxt-content-highlight pre {
+    @apply dark:bg-gray-800 dark:text-white rounded;
   }
 </style>

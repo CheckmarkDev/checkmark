@@ -7,11 +7,13 @@ import { Task } from '~/types/task'
 import { NuxtAxiosInstance } from '@nuxtjs/axios'
 import { TaskGroup } from '~/types/taskGroup'
 import { PaginateResponse, PaginateResponseMeta } from '~/types/pagination'
+import { Project } from '~/types/project'
 
 export interface State {
   auth: {
     token: string | null
-    user: User | null
+    user: User | null,
+    projects: Array<Project>
   },
   taskGroups: {
     items: Array<TaskGroup>
@@ -24,7 +26,8 @@ export const strict = false
 export const state = (): State => ({
   auth: {
     token: null,
-    user: null
+    user: null,
+    projects: []
   },
   taskGroups: {
     items: [],
@@ -37,6 +40,7 @@ export type RootState = ReturnType<typeof state>
 export enum GetterTypes {
   isAuthenticated = 'isAuthenticated',
   getAuthUser = 'getAuthUser',
+  getAuthProjects = 'getAuthProjects',
   getTaskGroups = 'getTaskGroups',
   getTaskGroupsMeta = 'getTaskGroupsMeta'
 }
@@ -44,17 +48,15 @@ export enum GetterTypes {
 export type Getters<S = RootState> = {
   [GetterTypes.isAuthenticated]: (state: S) => boolean
   [GetterTypes.getAuthUser]: (state: S) => User | null
+  [GetterTypes.getAuthProjects]: (state: S) => Array<Project>
   [GetterTypes.getTaskGroups]: (state: S) => Array<TaskGroup>
   [GetterTypes.getTaskGroupsMeta]: (state: S) => PaginateResponseMeta | null
-}
-
-export type InnerGetter = {
-  [Property in GetterTypes]: ReturnType<Getters<RootState>[Property]>
 }
 
 export const getters: GetterTree<RootState, RootState> & Getters<RootState> = {
   isAuthenticated: state => !!state.auth.token,
   getAuthUser: state => state.auth.user,
+  getAuthProjects: state => state.auth.projects,
   getTaskGroups: state => state.taskGroups.items,
   getTaskGroupsMeta: state => state.taskGroups.meta
 }
@@ -62,6 +64,7 @@ export const getters: GetterTree<RootState, RootState> & Getters<RootState> = {
 export enum MutationTypes {
   SET_AUTH_TOKEN = 'SET_AUTH_TOKEN',
   SET_AUTH_USER = 'SET_AUTH_USER',
+  SET_AUTH_PROJECTS = 'SET_AUTH_PROJECTS',
   SET_TASK_GROUPS = 'SET_TASK_GROUPS',
   PUSH_TASK_GROUPS = 'PUSH_TASK_GROUPS',
   SET_TASK_GROUPS_META = 'SET_TASK_GROUPS_META'
@@ -70,6 +73,7 @@ export enum MutationTypes {
 export type Mutations<S = RootState> = {
   [MutationTypes.SET_AUTH_TOKEN](state: S, token: string | null): void
   [MutationTypes.SET_AUTH_USER](state: S, user: User | null): void
+  [MutationTypes.SET_AUTH_PROJECTS](state: S, projects: Array<Project>): void
   [MutationTypes.SET_TASK_GROUPS](state: S, taskGroups: Array<TaskGroup>): void
   [MutationTypes.PUSH_TASK_GROUPS](state: S, taskGroups: Array<TaskGroup>): void
   [MutationTypes.SET_TASK_GROUPS_META](state: S, meta: PaginateResponseMeta): void
@@ -81,6 +85,9 @@ export const mutations: MutationTree<RootState> & Mutations = {
   },
   [MutationTypes.SET_AUTH_USER] (state, user) {
     state.auth.user = user
+  },
+  [MutationTypes.SET_AUTH_PROJECTS] (state, projects) {
+    state.auth.projects = projects
   },
   [MutationTypes.SET_TASK_GROUPS] (state, taskGroups) {
     state.taskGroups.items = taskGroups
@@ -99,6 +106,7 @@ export const mutations: MutationTree<RootState> & Mutations = {
 export enum ActionTypes {
   setAuthToken = 'setAuthToken',
   setAuthUser = 'setAuthUser',
+  setAuthProjects = 'setAuthProjects',
   signOut = 'signOut',
   retrieveMe = 'retrieveMe',
   retrieveTaskGroups = 'retrieveTaskGroups',
@@ -131,19 +139,25 @@ export const actions: ActionTree<RootState, RootState> & Actions = {
   [ActionTypes.setAuthUser] ({ commit }, user) {
     commit(MutationTypes.SET_AUTH_USER, user)
   },
+  [ActionTypes.setAuthProjects] ({ commit }, projects) {
+    commit(MutationTypes.SET_AUTH_PROJECTS, projects)
+  },
   [ActionTypes.signOut] ({ dispatch }) {
     Cookie.remove('token')
     Cookie.remove('user')
 
     dispatch(ActionTypes.setAuthToken, null)
     dispatch(ActionTypes.setAuthUser, null)
+    dispatch(ActionTypes.setAuthProjects, null)
   },
   [ActionTypes.retrieveMe] ({ commit }) {
     return (this.$axios as NuxtAxiosInstance).$get('/auth/me')
       .then((res: {
-        user: User
+        user: User,
+        projects: Array<Project>
       }) => {
         commit(MutationTypes.SET_AUTH_USER, res.user)
+        commit(MutationTypes.SET_AUTH_PROJECTS, res.projects)
 
         return res
       })

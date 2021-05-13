@@ -1,6 +1,9 @@
 <template>
-  <div v-infinite-scroll="loadMore">
-    <div class="border border-gray-300 rounded mb-8 px-8 py-4">
+  <div
+    v-infinite-scroll="loadMore"
+    class=""
+  >
+    <div class="border border-gray-300 dark:border-gray-600 rounded mb-8 px-8 py-4">
       <Task
         :task="task"
       />
@@ -107,7 +110,6 @@
     methods: {
       loadComments () {
         const { task: taskUuid } = this.$route.params
-        console.log('uuid', taskUuid)
         return this.$axios.$get(`/tasks/${taskUuid}/comments`)
           .then((res) => {
             this.comments = res

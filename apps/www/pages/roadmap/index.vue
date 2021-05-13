@@ -35,7 +35,7 @@
     <div class="home-container">
       <div class="container mx-auto flex items-start">
         <SideNavigation />
-        <section class="bg-white rounded-lg w-full md:w-9/12 p-6 pb-32">
+        <section class="bg-white dark:bg-gray-700 dark:text-white rounded-lg w-full md:w-9/12 p-6 pb-32">
           <nuxt />
         </section>
       </div>
@@ -84,9 +84,9 @@
 
 <style scoped>
   .roadmap__timeline::before {
-    @screen md {
-      @apply absolute w-full h-2 bg-blue-600 z-0;
+    @apply md:absolute md:w-full md:h-2 md:bg-blue-600 md:z-0;
 
+    @screen md {
       content: '';
       top: 55px;
     }
@@ -113,8 +113,6 @@
   }
 
   .roadmap-item:not(:last-child) {
-    @screen md {
-      @apply mr-4;
-    }
+    @apply md:mr-4;
   }
 </style>
