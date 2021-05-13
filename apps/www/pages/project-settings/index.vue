@@ -92,10 +92,10 @@
         ]
       }
     },
-    async asyncData ({ $axios, route }) {
+    async asyncData ({ route, $accessor }) {
       const { slug } = route.params
       const [project] = await Promise.all([
-        $axios.$get(`/me/projects/${slug}`)
+        $accessor.project.retrieveProject(slug)
       ])
 
       return {

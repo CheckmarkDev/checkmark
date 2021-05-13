@@ -5,138 +5,157 @@
       class="text-lg text-gray-700 dark:text-white font-medium mb-2"
     />
 
-    <!-- <ValidationObserver
+    <ValidationObserver
       ref="observer"
-      slim
     >
       <form
-        :disabled="$wait.is('updating profile informations')"
-        class="flex flex-col lg:w-2/3 mt-4"
+        :disabled="$wait.is('updating project informations')"
         @submit.prevent="submitted"
       >
-        <div class="flex flex-col mb-4 md:mb-0">
-          <ValidationProvider
-            ref="username-provider"
-            rules="required|min:2|max:32"
-            :name="$trans('sign-up.labels.username').toLowerCase()"
-            v-slot="{ invalid, errors }"
-            class="mb-3"
-            slim
+        <div class="flex flex-col md:flex-row">
+          <div
+            class="md:w-1/2 md:mr-8"
           >
-            <div class="flex flex-col">
+            <ValidationProvider
+              rules="required"
+              :name="$trans('project.labels.name').toLowerCase()"
+              v-slot="{ errors, invalid, dirty }"
+              tag="div"
+              class="flex flex-col mb-4"
+            >
               <label
-                for="username"
-                class="text-left text-gray-700 dark:text-gray-300 text-base mb-1"
-              >
-                {{ $trans('sign-up.labels.username') }} *
-              </label>
+                for="project-name"
+                v-text="`${$trans('project.labels.name')} *`"
+                class="mb-2"
+              />
               <input
-                v-model="formData.username"
+                v-model="formData.name"
                 :class="{
-                  'input--invalid': invalid && errors[0]
+                  'input--invalid': errors.length || (invalid && dirty)
                 }"
-                :disabled="$wait.is('updating profile informations')"
                 type="text"
-                id="username"
-                class="input mb-1"
+                name="project-name"
+                id="project-name"
+                class="input"
                 required
-                autocomplete="username"
+              >
+              <div
+                v-if="errors.length || (invalid && dirty)"
+                v-text="errors[0]"
+                class="text-red-600 text-sm"
+              />
+            </ValidationProvider>
+
+            <ValidationProvider
+              rules="required|min:2|max:32"
+              :name="$trans('project.labels.slug').toLowerCase()"
+              v-slot="{ errors, invalid, dirty }"
+              tag="div"
+              class="flex flex-col mb-4"
+            >
+              <label
+                for="slug"
+                v-text="`${$trans('project.labels.slug')} *`"
+                class="mb-2"
+              />
+              <input
+                v-model="formData.slug"
+                :class="{
+                  'input--invalid': errors.length || (invalid && dirty)
+                }"
+                type="text"
+                name="slug"
+                id="slug"
+                class="input"
+                required
               >
               <div
                 v-text="$trans('global.paragraphs.max_chars', {
                   chars: 32
                 })"
-                class="text-gray-700 dark:text-gray-300 text-sm"
+                class="text-gray-600 dark:text-gray-400 text-sm"
               />
-              <span
-                v-if="invalid"
+              <div
+                v-if="errors.length || (invalid && dirty)"
                 v-text="errors[0]"
-                role="alert"
-                class="text-left text-sm text-red-500"
+                class="text-red-600 text-sm"
               />
-            </div>
-          </ValidationProvider>
-          <div class="flex flex-col md:flex-row mb-2">
-            <ValidationProvider
-              ref="first_name-provider"
-              rules="required"
-              :name="$trans('sign-up.labels.first_name').toLowerCase()"
-              v-slot="{ invalid, errors }"
-              class="md:w-1/2 md:mr-4"
-              slim
-            >
-              <div class="flex flex-col">
-                <label
-                  for="first_name"
-                  class="text-left text-gray-700 dark:text-gray-300 text-base mb-1"
-                >
-                  {{ $trans('sign-up.labels.first_name') }} *
-                </label>
-                <input
-                  v-model="formData.first_name"
-                  :class="{
-                    'input--invalid': invalid && errors[0]
-                  }"
-                  :disabled="$wait.is('updating profile informations')"
-                  type="text"
-                  id="first_name"
-                  class="input mb-1"
-                  required
-                  autocomplete="given-name"
-                >
-                <span
-                  v-if="invalid"
-                  v-text="errors[0]"
-                  role="alert"
-                  class="text-left text-sm text-red-500"
-                />
-              </div>
             </ValidationProvider>
+
             <ValidationProvider
-              ref="last_name-provider"
-              rules="required"
-              :name="$trans('sign-up.labels.last_name').toLowerCase()"
-              v-slot="{ invalid, errors }"
-              class="md:w-1/2"
-              slim
+              rules="max:255"
+              :name="$trans('project.labels.description').toLowerCase()"
+              v-slot="{ errors, invalid, dirty }"
+              tag="div"
+              class="flex flex-col mb-4"
             >
-              <div class="flex flex-col">
-                <label
-                  for="last_name"
-                  class="text-left text-gray-700 dark:text-gray-300 text-base mb-1"
-                >
-                  {{ $trans('sign-up.labels.last_name') }} *
-                </label>
-                <input
-                  v-model="formData.last_name"
-                  :class="{
-                    'input--invalid': invalid && errors[0]
-                  }"
-                  :disabled="$wait.is('updating profile informations')"
-                  type="text"
-                  id="last_name"
-                  class="input mb-1"
-                  required
-                  autocomplete="family-name"
-                >
-                <span
-                  v-if="invalid"
-                  v-text="errors[0]"
-                  role="alert"
-                  class="text-left text-sm text-red-500"
-                />
-              </div>
+              <label
+                for="description"
+                v-text="$trans('project.labels.description')"
+                class="mb-2"
+              />
+              <textarea
+                v-model="formData.description"
+                :class="{
+                  'textarea--invalid': errors.length || (invalid && dirty)
+                }"
+                name="description"
+                id="description"
+                class="textarea"
+              ></textarea>
+              <div
+                v-text="$trans('global.paragraphs.max_chars', {
+                  chars: 255
+                })"
+                class="text-gray-600 dark:text-gray-400 text-sm"
+              />
+              <div
+                v-if="errors.length || (invalid && dirty)"
+                v-text="errors[0]"
+                class="text-red-600 text-sm"
+              />
+            </ValidationProvider>
+
+
+            <ValidationProvider
+              :name="$trans('project.labels.url').toLowerCase()"
+              v-slot="{ errors, invalid, dirty }"
+              tag="div"
+              class="flex flex-col mb-4"
+            >
+              <label
+                for="url"
+                v-text="$trans('project.labels.url')"
+                class="mb-2"
+              />
+              <input
+                v-model="formData.url"
+                :class="{
+                  'input--invalid': errors.length || (invalid && dirty)
+                }"
+                type="url"
+                name="url"
+                id="url"
+                class="input"
+              >
+              <div
+                v-if="errors.length || (invalid && dirty)"
+                v-text="errors[0]"
+                class="text-red-600 text-sm"
+              />
             </ValidationProvider>
           </div>
         </div>
-        <button
-          :disabled="$wait.is('updating profile informations')"
-          v-text="$trans('global.buttons.save')"
-          class="btn btn-primary mt-4 mr-auto"
-          type="submit"
-        />
+        <div>
+          <button
+            :disabled="$wait.is('updating project informations')"
+            type="submit"
+            class="btn btn-primary"
+            v-text="$trans('global.buttons.save')"
+          />
+        </div>
       </form>
-    </ValidationObserver> -->
+    </ValidationObserver>
   </div>
 </template>
 
@@ -150,10 +169,10 @@
   import useAxios from '~/composables/useAxios'
   import useICU from '~/composables/useICU'
   import useToasted from '~/composables/useToasted'
+import { Project } from '~/types/project'
 
   export default defineComponent({
     setup (props, { refs }) {
-      const { parent } = useContext()
       const axios = useAxios()
       const wait = useWait()
       const accessor = useAccessor()
@@ -161,11 +180,7 @@
       const toasted = useToasted()
       const route = useRoute()
 
-      onMounted(() => {
-        console.log('parent on mounted', parent)
-      })
-
-      // const { avatar_url, username, last_name, first_name } = accessor.getAuthUser as User
+      const { name, slug, description, url } = accessor.project.getProject as Project
 
       const formData: Ref<{
         name: string,
@@ -173,10 +188,10 @@
         description: string,
         url: string
       }> = ref({
-        name: '',
-        slug: '',
-        description: '',
-        url: ''
+        name,
+        slug,
+        description,
+        url
       })
 
       function updateProject (data: FormData, loader: string): Promise<any> {
@@ -220,7 +235,7 @@
 
             const { name, slug, description, url } = formData.value
 
-            updateProfile({
+            updateProject({
               name,
               slug,
               description,
