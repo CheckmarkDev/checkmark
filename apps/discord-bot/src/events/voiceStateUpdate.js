@@ -23,7 +23,7 @@ module.exports = async (client, previousVoiceState, nextVoiceState, user) => {
     const actualChannel = previousVoiceState.channel;
     client.logger.info(`${member.user.username} has left channel "${actualChannel.name}"`);
 
-    if (actualChannel.name.startsWith('Coworking de') && actualChannel.id !== process.env.DISCORD_CHANNEL_CREATE_WORKING_ROOM && actualChannel.members.size <= 1) {
+    if (actualChannel.name.startsWith('Coworking de') && actualChannel.id !== process.env.DISCORD_CHANNEL_CREATE_WORKING_ROOM && actualChannel.members.size < 1) {
       await actualChannel.delete();
       client.logger.info(`"${actualChannel.name}" has been deleted after the last user (${member.user.username}) leave`)
     }
