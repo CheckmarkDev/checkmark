@@ -1,17 +1,17 @@
 <template>
   <div
-    class="border border-solid border-gray-300 md:pl-2 rounded text-sm mr-auto"
+    class="border border-solid border-gray-300 dark:border-gray-600 md:pl-2 rounded text-sm mr-auto"
   >
     <div class="flex items-center">
       <div
-        class="hidden md:block mr-2 text-gray-600"
+        class="hidden md:block mr-2 text-gray-600 dark:text-gray-300"
         v-text="$trans('home.buttons.mark-as')"
       />
       <div class="flex">
         <button
           v-if="task.state !== 'doing'"
           :disabled="$wait.is(`marking ${task.uuid} as doing`)"
-          class="hover:bg-gray-200 p-2 border border-solid border-gray-300 border-l-0 md:border-l border-r-0 border-t-0 border-b-0"
+          class="hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-white p-2 border border-solid border-gray-300 dark:border-gray-600 border-l-0 md:border-l border-r-0 border-t-0 border-b-0"
           type="button"
           @click="markAs(TaskState.DOING)"
         >
@@ -28,7 +28,7 @@
         </button>
         <button
           :disabled="$wait.is(`marking ${task.uuid} as done`)"
-          class="hover:bg-gray-200 p-2 border border-solid border-gray-300 border-r-0 md:border-l border-t-0 border-b-0"
+          class="hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-white dark:border-gray-600 p-2 border border-solid border-gray-300 border-r-0 md:border-l border-t-0 border-b-0"
           type="button"
           @click="markAs(TaskState.DONE)"
         >
