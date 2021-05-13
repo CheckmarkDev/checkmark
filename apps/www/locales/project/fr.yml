@@ -6,4 +6,5 @@ project.labels.slug: Hashtag
 project.labels.description: Description
 project.labels.url: URL
 project.paragraphs.created: Votre projet a bien été crée.
+project.paragraphs.updated: Votre projet a bien été mis à jour.
 project.paragraphs.no_tasks: Ce projet n'a aucune tâche.

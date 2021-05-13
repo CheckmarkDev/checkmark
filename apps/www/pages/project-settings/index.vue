@@ -43,7 +43,7 @@
     </div>
     <div class="project-container">
       <div class="container mx-auto flex items-start">
-        <ProjectSideNavigation />
+        <ProjectSettingsSideNavigation />
         <section class="bg-white dark:bg-gray-700 dark:text-white w-full md:w-9/12 rounded-lg p-6">
           <nuxt />
         </section>
@@ -55,12 +55,13 @@
 <script lang="ts">
   import { defineComponent } from '@nuxtjs/composition-api'
   import { Project } from '~/types/project'
-  import ProjectSideNavigation from '@/components/Project/ProjectSideNavigation/index.vue'
+  import ProjectSettingsSideNavigation from '@/components/Project/ProjectSettingsSideNavigation/index.vue'
   import AppAvatar from '@/components/AppAvatar/index.vue'
 
   export default defineComponent({
+    middleware: ['authenticated'],
     components: {
-      ProjectSideNavigation,
+      ProjectSettingsSideNavigation,
       AppAvatar
     },
     data () {
@@ -94,7 +95,7 @@
     async asyncData ({ $axios, route }) {
       const { slug } = route.params
       const [project] = await Promise.all([
-        $axios.$get(`/projects/${slug}`)
+        $axios.$get(`/me/projects/${slug}`)
       ])
 
       return {

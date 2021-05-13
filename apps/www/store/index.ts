@@ -8,6 +8,8 @@ import { NuxtAxiosInstance } from '@nuxtjs/axios'
 import { TaskGroup } from '~/types/taskGroup'
 import { PaginateResponse, PaginateResponseMeta } from '~/types/pagination'
 
+import project from './modules/project'
+
 export interface State {
   auth: {
     token: string | null
@@ -46,10 +48,6 @@ export type Getters<S = RootState> = {
   [GetterTypes.getAuthUser]: (state: S) => User | null
   [GetterTypes.getTaskGroups]: (state: S) => Array<TaskGroup>
   [GetterTypes.getTaskGroupsMeta]: (state: S) => PaginateResponseMeta | null
-}
-
-export type InnerGetter = {
-  [Property in GetterTypes]: ReturnType<Getters<RootState>[Property]>
 }
 
 export const getters: GetterTree<RootState, RootState> & Getters<RootState> = {
