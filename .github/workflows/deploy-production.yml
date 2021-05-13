@@ -35,4 +35,4 @@ jobs:
         kubeconfig: ${{ secrets.KUBE_CONFIG_DATA }}
 
     - name: Deploy
-      run: devspace deploy --namespace checkmark
+      run: devspace deploy --namespace checkmark --force-build
