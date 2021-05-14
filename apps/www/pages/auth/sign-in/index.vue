@@ -133,9 +133,10 @@
               password
             })
               .then(response => {
-                const { token, user } = response.data
+                const { token, user, projects } = response.data
                 this.$accessor.setAuthToken(token)
                 this.$accessor.setAuthUser(user)
+                this.$accessor.setAuthProjects(projects)
                 Cookie.set('token', token)
                 Cookie.set('user', JSON.stringify(user))
 
