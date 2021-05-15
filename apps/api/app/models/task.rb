@@ -71,11 +71,13 @@ class Task < ApplicationRecord
     last_task = last_streak.tasks.order(created_at: :desc).first
     timezone = user.timezone
 
+    # rubocop:disable Layout/LineLength
     if last_task.present? && last_task.created_at.in_time_zone(timezone).to_datetime.beginning_of_day < DateTime.yesterday.in_time_zone(timezone)
       last_streak = Streak.new
       last_streak.user = user
       last_streak.save!
     end
+    # rubocop:enable Layout/LineLength
 
     self.streak = last_streak
   end

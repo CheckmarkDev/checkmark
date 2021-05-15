@@ -38,7 +38,7 @@ class User < ApplicationRecord
         from tasks as t inner join streaks as s on s.id = t.streak_id where s.id = (
           select streaks.id from streaks inner join tasks on tasks.streak_id = streaks.id where streaks.user_id = :user_id order by streaks.created_at desc limit 1
         ) order by t.created_at desc limit 1
-      ", user_id: id, timezone: timezone])
+      ", { user_id: id, timezone: timezone }])
     )
     # rubocop:enable Layout/LineLength
 
@@ -63,7 +63,9 @@ class User < ApplicationRecord
       next unless user.streak.positive?
 
       timezone = user.timezone
+      # rubocop:disable Layout/LineLength
       today_tasks = user.tasks.where(created_at: DateTime.now.in_time_zone(timezone).beginning_of_day...DateTime.now.in_time_zone(timezone).end_of_day)
+      # rubocop:enable Layout/LineLength
       TaskMailer.streak_reminder(user).deliver_later if today_tasks.count.zero?
     end
   end
