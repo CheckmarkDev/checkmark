@@ -85,7 +85,8 @@ class AuthenticationController < ApplicationController
   private
 
   def generate_token(user)
-    @expires_at = (DateTime.now + 1.month).to_i
+    timezone = user.timezone
+    @expires_at = (DateTime.now.in_time_zone(timezone) + 1.month).to_i
     @token = JsonWebToken.encode(
       sub: user.uuid,
       exp: @expires_at

@@ -1,4 +1,5 @@
 import { ActionTree, GetterTree, MutationTree, ActionContext } from 'vuex'
+import jwt from 'jsonwebtoken'
 import cookieparser from 'cookieparser'
 import Cookie from 'js-cookie'
 import { getAccessorType } from 'typed-vuex'
@@ -189,7 +190,7 @@ export const actions: ActionTree<RootState, RootState> & Actions = {
         return res
       })
   },
-  async nuxtServerInit ({ commit, dispatch }, { req }) {
+  async nuxtServerInit ({ commit, dispatch }, { req, redirect }) {
     let token = null
     let user = null
 
@@ -198,6 +199,19 @@ export const actions: ActionTree<RootState, RootState> & Actions = {
       try {
         if (parsed.token) {
           token = parsed.token
+
+          /**
+           * Check if the token is expired
+           */
+          const decodedToken = jwt.decode(token)
+          const expiresAt = (decodedToken.exp * 1000)
+          if (expiresAt <= Date.now()) {
+            redirect({
+              name: 'SignIn'
+            })
+
+            return
+          }
         }
 
         if (parsed.user) {
