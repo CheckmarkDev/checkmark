@@ -31,14 +31,14 @@ class User < ApplicationRecord
     streak = ActiveRecord::Base.connection.select_values(
       ActiveRecord::Base.sanitize_sql_for_conditions(["
         select
-          case t.created_at::timestamp <= timestamp 'yesterday'
+          case t.created_at::timestamp AT TIME ZONE :timezone <= timestamp 'yesterday'
             when true then 0
-            when false then date_part('day', t.created_at::timestamp - s.created_at::timestamp) + 1
+            when false then date_part('day', t.created_at::timestamp AT TIME ZONE :timezone - s.created_at::timestamp AT TIME ZONE :timezone) + 1
           end as streak
         from tasks as t inner join streaks as s on s.id = t.streak_id where s.id = (
-          select streaks.id from streaks inner join tasks on tasks.streak_id = streaks.id where streaks.user_id = ? order by streaks.created_at desc limit 1
+          select streaks.id from streaks inner join tasks on tasks.streak_id = streaks.id where streaks.user_id = :user_id order by streaks.created_at desc limit 1
         ) order by t.created_at desc limit 1
-      ", id])
+      ", { user_id: id, timezone: timezone }])
     )
     # rubocop:enable Layout/LineLength
 
@@ -62,14 +62,18 @@ class User < ApplicationRecord
     User.all.find_each do |user|
       next unless user.streak.positive?
 
-      today_tasks = user.tasks.where(created_at: DateTime.now.beginning_of_day...DateTime.now.end_of_day)
+      timezone = user.timezone
+      # rubocop:disable Layout/LineLength
+      today_tasks = user.tasks.where(created_at: DateTime.now.in_time_zone(timezone).beginning_of_day...DateTime.now.in_time_zone(timezone).end_of_day)
+      # rubocop:enable Layout/LineLength
       TaskMailer.streak_reminder(user).deliver_later if today_tasks.count.zero?
     end
   end
 
   def self.notify_weekly_summary
     User.all.each_with_index do |user, k|
-      date_range = DateTime.now.last_week..DateTime.yesterday.at_midnight
+      timezone = user.timezone
+      date_range = DateTime.now.in_time_zone(timezone).last_week..DateTime.yesterday.in_time_zone(timezone).at_midnight
       tasks = user.tasks.where(created_at: date_range).count
 
       todo = user.tasks.todo.where(created_at: date_range).count
