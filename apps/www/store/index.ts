@@ -1,4 +1,5 @@
 import { ActionTree, GetterTree, MutationTree, ActionContext } from 'vuex'
+import jwt from 'jsonwebtoken'
 import cookieparser from 'cookieparser'
 import Cookie from 'js-cookie'
 import { getAccessorType } from 'typed-vuex'
@@ -126,6 +127,7 @@ type AugmentedActionContext = {
 export interface Actions<R = RootState> {
   [ActionTypes.setAuthToken]({ commit }: AugmentedActionContext, token: string | null): void
   [ActionTypes.setAuthUser]({ commit }: AugmentedActionContext, user: User | null): void
+  [ActionTypes.setAuthProjects]({ commit }: AugmentedActionContext, user: Array<Project>): void
   [ActionTypes.signOut]({ commit }: AugmentedActionContext): void
   [ActionTypes.retrieveMe]({ commit }: AugmentedActionContext): void
   [ActionTypes.retrieveTaskGroups]({ commit }: AugmentedActionContext): Promise<PaginateResponse<Task>>
@@ -188,7 +190,7 @@ export const actions: ActionTree<RootState, RootState> & Actions = {
         return res
       })
   },
-  async nuxtServerInit ({ commit, dispatch }, { req }) {
+  async nuxtServerInit ({ commit, dispatch }, { req, redirect }) {
     let token = null
     let user = null
 
@@ -197,6 +199,19 @@ export const actions: ActionTree<RootState, RootState> & Actions = {
       try {
         if (parsed.token) {
           token = parsed.token
+
+          /**
+           * Check if the token is expired
+           */
+          const decodedToken = jwt.decode(token)
+          const expiresAt = (decodedToken.exp * 1000)
+          if (expiresAt <= Date.now()) {
+            redirect({
+              name: 'SignIn'
+            })
+
+            return
+          }
         }
 
         if (parsed.user) {
