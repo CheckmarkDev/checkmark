@@ -56,6 +56,10 @@ server.get('/', (req, res) => {
     res.send('Everything is OK.');
 });
 
+const streamers = {
+    'aatchouuuum': process.env.DISCORD_CHANNEL_AATCHOUUUUM,
+}
+
 server.post('/webhooks', async (req, res) => {
     const { event, data } = req.body
 
@@ -65,11 +69,11 @@ server.post('/webhooks', async (req, res) => {
 
     switch (event) {
         case 'task.created': {
-            const { url, state, content, images } = data
+            const { url, state, content, images } = data;
             const channel = await client.channels.fetch(process.env.DISCORD_CHANNEL_EVENT);
-            const { first_name, last_name, username, avatar_url } = data.user
-            const fullName = `${first_name} ${last_name} (${username})`
-            const userProfileUrl = `https://www.checkmark.dev/u/${username}`
+            const { first_name, last_name, username, avatar_url } = data.user;
+            const fullName = `${first_name} ${last_name} (${username})`;
+            const userProfileUrl = `https://www.checkmark.dev/u/${username}`;
 
             const message = new MessageEmbed()
                 .setColor(getStateColor(state))
@@ -81,14 +85,22 @@ server.post('/webhooks', async (req, res) => {
                 .setTimestamp();
 
             if (images && images.length) {
-                message.setImage(images[0].url)
+                message.setImage(images[0].url);
 
                 if (images[1]) {
-                    message.setThumbnail(images[1].url)
+                    message.setThumbnail(images[1].url);
                 }
             }
 
-            await channel.send(message)
+            await channel.send(message);
+
+            if (Object.keys(streamers).includes(username)) {
+                const streamerChannel = await client.channels.fetch(streamers[username]);
+
+                const sendedMessage = await streamerChannel.send(message);
+                await sendedMessage.crosspost();
+            }
+
         } break
         case 'weekly_summary.created': {
             const channel = await client.channels.fetch(process.env.DISCORD_CHANNEL_WEEKLY);
