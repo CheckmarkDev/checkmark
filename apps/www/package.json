@@ -11,17 +11,21 @@
     "lint": "npm run lint:js"
   },
   "dependencies": {
+    "@nuxt/cli-edge": "^2.16.0-27017293.a53fd32d",
     "@nuxt/content": "^1.14.0",
     "@nuxt/typescript-runtime": "^2.1.0",
     "@nuxtjs/apollo": "^4.0.1-rc.5",
     "@nuxtjs/axios": "^5.12.2",
     "@nuxtjs/color-mode": "^2.0.5",
+    "@nuxtjs/composition-api": "^0.22.4",
     "@nuxtjs/pwa": "^3.0.2",
     "@nuxtjs/robots": "^2.5.0",
     "@nuxtjs/sentry": "^5.0.3",
     "@nuxtjs/sitemap": "^2.4.0",
-    "@vue/apollo-composable": "^4.0.0-alpha.12",
+    "@nuxtjs/tailwindcss": "^4.1.1",
     "@popperjs/core": "^2.9.2",
+    "@tailwindcss/jit": "^0.1.18",
+    "@vue/apollo-composable": "^4.0.0-alpha.12",
     "@williamdasilva/gtag-module": "^1.0.3",
     "@williamdasilva/vue-sticky-directive": "^0.3.0",
     "apollo-boost": "^0.4.9",
@@ -40,6 +44,7 @@
     "nuxt-stripe-module": "^3.1.7",
     "nuxt-trailingslash-module": "^1.2.0",
     "nuxt-typed-vuex": "^0.1.22",
+    "tailwindcss-dark-mode": "^1.1.7",
     "v-click-outside": "^3.1.2",
     "vee-validate": "^3.4.5",
     "vue-feather-icons": "^5.1.0",
@@ -47,11 +52,7 @@
     "vue-infinite-scroll": "^2.0.2",
     "vue-lazyload": "^1.3.3",
     "vue-toasted": "^1.1.28",
-    "vue-wait": "^1.4.8",
-    "@nuxtjs/tailwindcss": "^4.1.1",
-    "@tailwindcss/jit": "^0.1.18",
-    "@nuxtjs/composition-api": "^0.22.4",
-    "tailwindcss-dark-mode": "^1.1.7"
+    "vue-wait": "^1.4.8"
   },
   "devDependencies": {
     "@nuxt/types": "^2.15.4",
