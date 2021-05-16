@@ -1,11 +1,15 @@
 <template>
-  <div v-infinite-scroll="loadMore">
+  <div
+    v-infinite-scroll="loadMore"
+    class="flex flex-col dark:text-white"
+  >
     <h2 class="font-medium text-2xl mb-4">
       Feed
     </h2>
 
     <DateGroupedTaskGroups
       :task-groups="taskGroups.data"
+      class="mb-8"
     />
   </div>
 </template>
@@ -35,61 +39,37 @@
         }
       }
     },
-    // head () {
-    //   const user = this.user as any
-    //   const fullName = user.fullName.trim()
-    //   const description = this.$trans('user.paragraphs.description', {
-    //     user: fullName || user.username
-    //   })
-
-    //   return {
-    //     title: fullName || user.username,
-    //     meta: [
-    //       { hid: 'description', name: 'description', content: description },
-    //       { hid: 'og:description', property: 'og:description', content: description },
-    //       { hid: 'og:title', property: 'og:title', content: fullName || user.username },
-    //       {
-    //         hid: 'og:image:width', name: 'og:image:width', content: '1200'
-    //       },
-    //       {
-    //         hid: 'og:image:height', name: 'og:image:height', content: '628'
-    //       },
-    //       {
-    //         hid: 'og:image:type', name: 'og:image:type', content: 'image/png'
-    //       }
-    //     ]
-    //   }
-    // },
-    // async asyncData ({ $axios, route }) {
-    //   const { username } = route.params
-    //   const [user, taskGroups] = await Promise.all([
-    //     $axios.$get(`/users/${username}`),
-    //     $axios.$get(`/users/${username}/task_groups`)
-    //   ])
-
-    //   return {
-    //     user,
-    //     taskGroups
-    //   }
-    // },
+    mounted () {
+      this.$mitt.on('update-tasks', this.updateTasks)
+    },
+    beforeDestroy () {
+      this.$mitt.off('update-tasks', this.updateTasks)
+    },
     methods: {
       loadMore () {
-        // if (this.taskGroups.meta.current_page + 1 > this.taskGroups.meta.total_pages) return
+        if (this.taskGroups.meta.current_page + 1 > this.taskGroups.meta.total_pages) return
 
-        // const { username } = this.$route.params
-        // this.$axios.$get(`/users/${username}/task_groups`, {
-        //   params: {
-        //     page: this.taskGroups.meta.current_page + 1
-        //   }
-        // })
-        //   .then(res => {
-        //     this.taskGroups.data = [
-        //       ...this.taskGroups.data,
-        //       ...res.data
-        //     ]
-        //     this.taskGroups.meta = res.meta
-        //   })
-      }
+        const { username } = this.$route.params
+        this.$axios.$get(`/users/${username}/task_groups`, {
+          params: {
+            page: this.taskGroups.meta.current_page + 1
+          }
+        })
+          .then(res => {
+            this.taskGroups.data = [
+              ...this.taskGroups.data,
+              ...res.data
+            ]
+            this.taskGroups.meta = res.meta
+          })
+      },
+      updateTasks () {
+        const { username } = this.$route.params
+        this.$axios.$get(`/users/${username}/task_groups`)
+          .then(res => {
+            this.taskGroups = res
+          })
+      },
     }
   })
 </script>

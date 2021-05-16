@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="container mx-auto pt-4 md:pt-12">
+    <div class="container dark:text-white mx-auto pt-4 md:pt-12">
       <h1 class="text-2xl font-medium">
         {{ $trans('sign-in.titles.main') }}
       </h1>
@@ -17,14 +17,14 @@
           <div class="flex flex-col mb-4 md:mb-0">
             <ValidationProvider
               rules="email|required"
-              :name="$trans('sign-in.labels.email')"
+              :name="$trans('sign-in.labels.email').toLowerCase()"
               v-slot="{ invalid, errors }"
               slim
             >
               <div class="flex flex-col">
                 <label
                   for="email"
-                  class="text-left text-gray-700 text-base mb-1"
+                  class="text-left text-gray-700 dark:text-gray-300 text-base mb-1"
                 >
                   {{ $trans('sign-in.labels.email') }} *
                 </label>
@@ -51,14 +51,14 @@
             <ValidationProvider
               vid="password"
               rules="required"
-              :name="$trans('sign-in.labels.password')"
+              :name="$trans('sign-in.labels.password').toLowerCase()"
               v-slot="{ invalid, errors }"
               slim
             >
               <div class="flex flex-col">
                 <label
                   for="password"
-                  class="text-left text-gray-700 text-base mb-1"
+                  class="text-left text-gray-700 dark:text-gray-300 text-base mb-1"
                 >
                   {{ $trans('sign-in.labels.password') }} *
                 </label>
@@ -133,9 +133,10 @@
               password
             })
               .then(response => {
-                const { token, user } = response.data
+                const { token, user, projects } = response.data
                 this.$accessor.setAuthToken(token)
                 this.$accessor.setAuthUser(user)
+                this.$accessor.setAuthProjects(projects)
                 Cookie.set('token', token)
                 Cookie.set('user', JSON.stringify(user))
 

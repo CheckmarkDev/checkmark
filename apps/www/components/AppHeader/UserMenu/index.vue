@@ -1,56 +1,88 @@
 <template>
   <div class="user-menu relative">
-    <div class="flex items-center">
+    <button
+      type="button"
+      class="user-menu__toggle-button flex items-center rounded hover:cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none text-left"
+      @click="isOpen = true"
+    >
       <UserCard
-        :user="user"
-        class="hover:bg-gray-200 p-1 rounded"
+        :user="$accessor.getAuthUser"
+        class="p-1 rounded dark:text-white"
       />
-      <button
-        type="button"
-        class="user-menu__toggle-button flex justify-center w-8 h-8 rounded hover:cursor-pointer hover:bg-gray-200"
-        @click="isOpen = true"
-      >
-        <div class="flex m-auto">
-          <svg
-            :class="{
-              'rotate-180': isOpen
-            }"
-            class="transform"
-            width="12"
-            height="6"
-            viewBox="0 0 12 6"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M6 6L0.803847 -2.51245e-08L11.1962 8.834e-07L6 6Z" fill="#4A5568"/>
-          </svg>
-        </div>
-      </button>
-    </div>
+      <div class="flex m-auto w-8 h-8 items-center justify-center">
+        <svg
+          :class="{
+            'rotate-180': isOpen
+          }"
+          class="transform"
+          width="12"
+          height="6"
+          viewBox="0 0 12 6"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M6 6L0.803847 -2.51245e-08L11.1962 8.834e-07L6 6Z" fill="#717F98"/>
+        </svg>
+      </div>
+    </button>
 
     <transition
       name="fade"
     >
       <nav
         v-if="isOpen"
-        class="user-menu__dropdown absolute right-0 bg-white rounded p-2"
+        class="user-menu__dropdown absolute right-0 bg-white dark:bg-gray-700 rounded p-2 shadow"
         v-click-outside="() => isOpen = false"
       >
         <ul>
           <li>
             <nuxt-link
               :to="{
+                name: 'User',
+                params: {
+                  username: $accessor.getAuthUser && $accessor.getAuthUser.username
+                }
+              }"
+              class="flex py-2 px-4 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600 rounded mb-2"
+              @click.native="() => isOpen = false"
+            >
+              {{ $trans('global.buttons.profile') }}
+            </nuxt-link>
+          </li>
+          <li>
+            <nuxt-link
+              :to="{
                 name: 'Settings'
               }"
-              class="flex py-2 px-4 hover:bg-gray-200"
+              class="flex py-2 px-4 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600 rounded mb-2"
               @click.native="() => isOpen = false"
             >
               {{ $trans('global.buttons.settings') }}
             </nuxt-link>
           </li>
           <li>
+            <button
+              type="button"
+              class="flex py-2 px-4 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600 rounded mb-2 font-medium w-full"
+              @click="toggleDarkMode"
+            >
+              <div class="flex items-center">
+                <div
+                  :class="{
+                    'user-menu__dropdown__switch--active': $colorMode.preference === 'dark'
+                  }"
+                  class="user-menu__dropdown__switch bg-gray-300 dark:bg-gray-800 w-8 h-6 rounded-full mr-2"
+                >
+                </div>
+                <div
+                  v-text="$trans('global.buttons.dark_mode')"
+                />
+              </div>
+            </button>
+          </li>
+          <li class="border-t border-gray-300 dark:border-gray-600 mt-2 pt-2">
             <a
-              class="flex py-2 px-4 hover:bg-gray-200"
+              class="flex py-2 px-4 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600 rounded"
               href="#"
               @click.prevent="signOut"
             >
@@ -64,7 +96,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, useRouter } from '@nuxtjs/composition-api'
+  import { defineComponent, ref, useContext, useRouter } from '@nuxtjs/composition-api'
   import Cookie from 'js-cookie'
   import { useQuery, useResult } from '@vue/apollo-composable/dist'
   import gql from 'graphql-tag'
@@ -92,15 +124,12 @@
       `)
 
       const user = useResult(result, null)
+      const { $colorMode } = useContext()
 
       const isOpen = ref(false)
 
       function signOut () {
-        Cookie.remove('token')
-        Cookie.remove('user')
-
-        accessor.setAuthToken(null)
-        accessor.setAuthUser(null)
+        accessor.signOut()
 
         router.push({
           name: 'Home'
@@ -109,10 +138,15 @@
         isOpen.value = false
       }
 
+      function toggleDarkMode () {
+        $colorMode.preference = $colorMode.preference === 'light' ? 'dark' : 'light'
+      }
+
       return {
         user,
         isOpen,
-        signOut
+        signOut,
+        toggleDarkMode
       }
     }
   })
@@ -138,5 +172,25 @@
   .user-menu__dropdown {
     top: 64px;
     width: 250px;
+  }
+
+  .user-menu__dropdown__switch {
+    @apply relative;
+  }
+
+  .user-menu__dropdown__switch::after {
+    @apply absolute top-0 bottom-0 m-auto bg-gray-400 rounded-full;
+
+    content: '';
+    width: 14px;
+    height: 14px;
+    left: 4px;
+  }
+
+  .user-menu__dropdown__switch--active::after {
+    @apply bg-blue-500;
+
+    right: 4px;
+    left: auto;
   }
 </style>

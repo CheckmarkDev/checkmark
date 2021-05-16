@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json = {
   meta: {
     current_page: @tasks.current_page,
@@ -14,7 +16,7 @@ json[:data] = @tasks.map do |task|
   }
 
   v[:likes] = task.task_likes.map do |like|
-    User.find_by_id(like.user_id).uuid
+    User.find_by(id: like.user_id).uuid
   end
 
   v

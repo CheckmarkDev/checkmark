@@ -4,6 +4,9 @@ images:
     image: williamdasilva/checkmark-api
     dockerfile: ./apps/api/Dockerfile
     context: ./apps/api
+    tags:
+      - ${DEVSPACE_RANDOM}
+      - latest
     preferSyncOverRebuild: true
     injectRestartHelper: true
     build:
@@ -282,6 +285,31 @@ deployments:
             secretKeyRef:
               name: api-secret
               key: ASSET_HOST
+        - name: S3_ENDPOINT
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: S3_ENDPOINT
+        - name: S3_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: S3_ACCESS_KEY_ID
+        - name: S3_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: S3_SECRET_ACCESS_KEY
+        - name: S3_REGION
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: S3_REGION
+        - name: S3_BUCKET
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: S3_BUCKET
       ingress:
         annotations:
           kubernetes.io/ingress.class: nginx
@@ -413,6 +441,31 @@ deployments:
             secretKeyRef:
               name: api-secret
               key: REDIS_URL
+        - name: S3_ENDPOINT
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: S3_ENDPOINT
+        - name: S3_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: S3_ACCESS_KEY_ID
+        - name: S3_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: S3_SECRET_ACCESS_KEY
+        - name: S3_REGION
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: S3_REGION
+        - name: S3_BUCKET
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: S3_BUCKET
       ingress:
         annotations:
           kubernetes.io/ingress.class: nginx
@@ -464,11 +517,11 @@ deployments:
             secretKeyRef:
               name: www-secret
               key: GOOGLE_ANALYTICS_ID
-        - name: API_BROWSER_BASE_URL
+        - name: API_BASE_URL
           valueFrom:
             secretKeyRef:
               name: www-secret
-              key: API_BROWSER_BASE_URL
+              key: API_BASE_URL
         - name: SENTRY_DSN
           valueFrom:
             secretKeyRef:
@@ -529,29 +582,14 @@ deployments:
             limits:
               cpu: 400m
               memory: 500Mi
+          envFrom:
+            - configMapRef:
+                name: discord-bot-config
           env:
             - name: HOST
               value: "0.0.0.0"
             - name: PORT
               value: "9090"
-            - name: DISCORD_EMOJI_TODO
-              value: "833811566960967681"
-            - name: DISCORD_EMOJI_DOING
-              value: "833811525223317514"
-            - name: DISCORD_EMOJI_DONE
-              value: "833811466456662037"
-            - name: DISCORD_EMOJI_CHECK
-              value: "833811466456662037"
-            - name: DISCORD_CHANNEL_EVENT
-              value: "833824731702231111"
-            - name: DISCORD_CHANNEL_CHANGELOG
-              value: "831484135175880734"
-            - name: DISCORD_CHANNEL_RULES
-              value: "829400652374868000"
-            - name: DISCORD_MESSAGE_RULES
-              value: "834003198926651402"
-            - name: DISCORD_ROLES_USER
-              value: "834183755186438165"
             - name: DISCORD_API_TOKEN
               valueFrom:
                 secretKeyRef:

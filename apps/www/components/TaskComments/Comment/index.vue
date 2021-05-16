@@ -1,16 +1,26 @@
 <template>
   <div>
     <div class="flex justify-between mb-2">
-      <UserCard
-        :user="comment.user"
-        class="mb-2"
-      />
+      <nuxt-link
+        :to="{
+          name: 'User',
+          params: {
+            username: comment.user.username
+          }
+        }"
+        class="dark:text-white"
+      >
+        <UserCard
+          :user="comment.user"
+          class="mb-2"
+        />
+      </nuxt-link>
       <div
         v-text="date"
-        class="text-gray-600 text-sm self-end mb-2"
+        class="text-gray-600 dark:text-gray-400 text-sm self-end mb-2"
       />
     </div>
-    <div class="rounded bg-gray-200 p-4">
+    <div class="rounded bg-gray-200 dark:bg-gray-600 dark:text-white p-4">
       <p
         class="mb-0"
         v-text="comment.content"

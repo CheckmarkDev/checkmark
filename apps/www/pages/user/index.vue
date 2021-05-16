@@ -9,6 +9,8 @@
           >
             <UserAvatar
               :user="user"
+              :width="80"
+              :height="80"
               class="user-hero__avatar mr-8 flex-shrink-0"
             />
             <div class="truncate">
@@ -26,9 +28,11 @@
       </div>
     </div>
     <div class="user-container">
-      <div class="container mx-auto flex items-start">
-        <SideNavigation />
-        <section class="bg-white w-full md:w-9/12 h-56 rounded-lg p-6">
+      <div class="container mx-auto flex flex-col md:flex-row items-start">
+        <UserSideNavigation
+          :user="user"
+        />
+        <section class="bg-white dark:bg-gray-700 w-full md:w-9/12 rounded-lg p-6 flex flex-col">
          <nuxt />
         </section>
       </div>
@@ -43,12 +47,12 @@
 
   import { TaskGroup } from '~/types/taskGroup'
   import { User } from '~/types/user'
-  import SideNavigation from '@/components/Home/SideNavigation/index.vue'
+  import UserSideNavigation from '@/components/User/UserSideNavigation/index.vue'
   import UserAvatar from '@/components/UserAvatar/index.vue'
 
   export default defineComponent({
     components: {
-      SideNavigation,
+      UserSideNavigation,
       UserAvatar
     },
     setup () {
@@ -109,19 +113,8 @@
       height: 400px;
     }
   }
-  .user-hero__avatar {
-    width: 80px;
-    height: 80px;
-  }
 
   .user-container {
     margin-top: -180px;
-  }
-</style>
-
-<style>
-  .user-hero__avatar img{
-    width: 80px;
-    height: 80px;
   }
 </style>

@@ -31,7 +31,7 @@
     <div class="home-container">
       <div class="container mx-auto flex items-start">
         <SideNavigation />
-        <section class="bg-white rounded-lg w-full md:w-9/12 p-6">
+        <section class="flex flex-col bg-white dark:bg-gray-700 dark:text-white rounded-lg w-full md:w-9/12 p-6">
           <h2 class="font-medium text-2xl mb-4">
             Feed
           </h2>
@@ -43,6 +43,7 @@
 
           <DateGroupedTaskGroups
             :task-groups="$accessor.getTaskGroups"
+            class="mb-8"
           />
         </section>
       </div>
@@ -95,12 +96,13 @@
 
 <style scoped>
   .home-hero {
-    height: 320px;
+    min-height: 320px;
     background: rgb(39,109,170);
     background: linear-gradient(69deg, rgba(39,109,170,1) 0%, rgba(41,169,229,1) 100%);
+    padding-bottom: 100px;
 
     @screen md {
-      height: 400px;
+      min-height: 400px;
     }
   }
 

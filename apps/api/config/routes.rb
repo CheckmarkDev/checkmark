@@ -1,8 +1,12 @@
+# frozen_string_literal: true
+
+# rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
   post "/graphql", to: "graphql#execute"
   apipie
 
   defaults format: :json do
+    resources :projects
     resources :task_groups
     resources :tasks do
       member do
@@ -19,11 +23,15 @@ Rails.application.routes.draw do
     get '/users/:id/task_groups', to: 'user_task_groups#index'
     get '/users/:user_id/tasks/:id', to: 'user_tasks#show'
 
+    get '/projects/:id/task_groups', to: 'project_task_groups#index'
+
     namespace 'me' do
       resources :tasks
+      resources :projects
 
       get '/email_notifications', to: 'email_notifications#index'
       put '/email_notifications', to: 'email_notifications#update'
+      put '/profile', to: 'profile#update'
     end
 
     scope '/auth' do
@@ -36,3 +44,6 @@ Rails.application.routes.draw do
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
+# rubocop:enable Metrics/BlockLength
+
+Rails.application.routes.default_url_options[:host] = ENV.fetch('ASSET_HOST', 'https://api.checkmark.dev')

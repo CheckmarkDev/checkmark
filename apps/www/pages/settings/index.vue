@@ -11,22 +11,24 @@
       </div>
     </div>
     <div class="settings-container">
-      <div class="container mx-auto flex items-start">
-        <nav class="bg-white hidden md:flex rounded-lg w-3/12 mr-8 p-4">
-          <ul class="w-full">
-            <li>
+      <div class="container mx-auto flex flex-col md:flex-row items-start">
+        <nav class="bg-white dark:bg-gray-700 dark:text-white flex rounded-lg w-full md:w-3/12 mr-8 p-4 mb-4 md:mb-0">
+          <ul class="w-full flex md:flex-col">
+            <li
+              v-for="(link, k) in links"
+              :key="k"
+              class="mr-2 md:mr-0 md:mb-2"
+            >
               <nuxt-link
-                :to="{
-                  name: 'SettingsNotifications'
-                }"
-                class="hover:bg-gray-200 rounded p-2 w-full flex"
-              >
-                {{ $trans('settings.titles.notifications') }}
-              </nuxt-link>
+                :to="link.to"
+                :active-class="'router-link-active bg-gray-200 dark:bg-gray-600'"
+                class="hover:bg-gray-200 dark:hover:bg-gray-600 rounded p-2 w-full flex"
+                v-text="link.name"
+              />
             </li>
           </ul>
         </nav>
-        <section class="bg-white w-full md:w-9/12 h-56 rounded-lg p-6">
+        <section class="bg-white dark:bg-gray-700 dark:text-white w-full md:w-9/12 rounded-lg p-6">
           <nuxt />
         </section>
       </div>
@@ -35,18 +37,37 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from '@nuxtjs/composition-api'
+  import { defineComponent, readonly } from '@nuxtjs/composition-api'
+  import useICU from '~/composables/useICU'
 
   export default defineComponent({
     middleware: ['authenticated'],
-    head () {
-      const title = this.$trans('settings.titles.notifications')
+    setup () {
+      const trans = useICU()
+
+      const links = readonly([
+        {
+          to: {
+            name: 'SettingsProfile',
+          },
+          name: trans('settings.titles.profile')
+        },
+        {
+          to: {
+            name: 'SettingsAccount',
+          },
+          name: trans('settings.titles.account')
+        },
+        {
+          to: {
+            name: 'SettingsNotifications',
+          },
+          name: trans('settings.titles.notifications')
+        }
+      ])
 
       return {
-        title,
-        meta: [
-          { hid: 'og:title', property: 'og:title', content: title }
-        ]
+        links
       }
     }
   })

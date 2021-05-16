@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 {
   user: {
     uuid: @user.uuid,
@@ -8,6 +10,15 @@
     streak: @user.streak,
     avatar_url: @user.avatar_url
   },
+
+  projects: @user.projects.map do |project|
+    {
+      uuid: project.uuid,
+      slug: project.slug,
+      name: project.name,
+      url: project.url
+    }
+  end,
 
   token: @token,
   expires_at: @expires_at

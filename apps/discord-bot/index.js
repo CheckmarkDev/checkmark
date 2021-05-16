@@ -52,6 +52,10 @@ const getStateEmoji = (state) => {
     }
 }
 
+server.get('/', (req, res) => {
+    res.send('Everything is OK.');
+});
+
 server.post('/webhooks', async (req, res) => {
     const { event, data } = req.body
 
@@ -61,7 +65,7 @@ server.post('/webhooks', async (req, res) => {
 
     switch (event) {
         case 'task.created': {
-            const { url, state, content } = data
+            const { url, state, content, images } = data
             const channel = await client.channels.fetch(process.env.DISCORD_CHANNEL_EVENT);
             const { first_name, last_name, username, avatar_url } = data.user
             const fullName = `${first_name} ${last_name} (${username})`
@@ -76,10 +80,18 @@ server.post('/webhooks', async (req, res) => {
                 .setFooter('Checkmark', 'https://www.checkmark.dev/icon.png')
                 .setTimestamp();
 
+            if (images && images.length) {
+                message.setImage(images[0].url)
+
+                if (images[1]) {
+                    message.setThumbnail(images[1].url)
+                }
+            }
+
             await channel.send(message)
         } break
         case 'weekly_summary.created': {
-            const channel = await client.channels.fetch(process.env.DISCORD_CHANNEL_EVENT);
+            const channel = await client.channels.fetch(process.env.DISCORD_CHANNEL_WEEKLY);
             const { metrics, user, url } = data
             const { first_name, last_name, username, avatar_url } = user
             const fullName = `${first_name} ${last_name}`
@@ -127,8 +139,8 @@ server.post('/webhooks', async (req, res) => {
     res.send('coucou');
 });
 
-server.listen(PORT, HOST, () => console.log('Started express'));
-
-
+server.listen(PORT, HOST, () => {
+    client.logger.info(`Discord bot started on ${HOST}:${PORT}.`)
+});
 
 process.on('unhandledRejection', err => console.log(err));

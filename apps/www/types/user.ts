@@ -1,3 +1,5 @@
+import { Project } from "./project"
+
 export type User = {
   uuid: string
   username: string
@@ -6,4 +8,7 @@ export type User = {
   fullName: string
   streak: number
   avatarUrl: string
+  email: string
+
+  projects?: Array<Project>
 }

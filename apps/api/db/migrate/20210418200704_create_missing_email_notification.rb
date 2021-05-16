@@ -1,19 +1,18 @@
+# frozen_string_literal: true
+
 class CreateMissingEmailNotification < ActiveRecord::Migration[6.0]
   def up
-    begin
-      User.all.each do |user|
-        if user.email_notification.nil?
-          EmailNotification.create(
-            user: user
-          )
-        end
-      end
-    rescue => e
-      # Do nothing if this migration fails
-      puts "Migration failed", e
+    User.all.each do |user|
+      next unless user.email_notification.nil?
+
+      EmailNotification.create(
+        user: user
+      )
     end
+  rescue StandardError => e
+    # Do nothing if this migration fails
+    Rails.logger.debug 'Migration failed', e
   end
 
-  def down
-  end
+  def down; end
 end

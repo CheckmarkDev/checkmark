@@ -1,8 +1,3 @@
-{
-  uuid: @user.uuid,
-  username: @user.username,
-  first_name: @user.first_name,
-  last_name: @user.last_name,
-  streak: @user.streak,
-  avatar_url: @user.avatar_url
-}
+# frozen_string_literal: true
+
+render 'users/user', user: @user

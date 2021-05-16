@@ -1,48 +1,54 @@
 <template>
-  <div class="task flex items-start">
-    <TaskCheck
-      :state="task.state"
-      class="bg-white rounded-full mr-4 mt-1"
-    />
-    <div
-      class="flex flex-col flex-1"
-    >
-      <p>
-        {{ task.content }}
-      </p>
-      <MarkAsButton
-        v-if="$accessor.getAuthUser && user.uuid === $accessor.getAuthUser.uuid && task.state !== 'done'"
-        :task="task"
-        class="my-4"
+  <div class="task flex flex-col">
+    <div class="flex items-start">
+      <TaskCheck
+        :state="task.state"
+        class="bg-white dark:bg-gray-600 rounded-full mr-4 mt-1"
       />
-    </div>
-    <div class="hidden md:flex items-center mt-1">
-      <nuxt-link
-        :to="{
-          name: 'Task',
-          params: {
-            username: user.username,
-            task: task.uuid
-          }
-        }"
-        class="mr-2 text-sm text-gray-600 truncate flex-shrink hover:underline"
+      <div
+        class="flex flex-col flex-1"
       >
-        {{ date }}
-      </nuxt-link>
-      <CommentButton
-        :task="task"
-        :user="user"
-        class="mr-4"
-      />
-      <!-- <LikeButton
-        :task="task"
-        class="mr-4"
-      />
-      <TaskActions
-        v-if="$accessor.getAuthUser && user.uuid === $accessor.getAuthUser.uuid"
-        :task="task"
-      /> -->
+        <TaskContent
+          :task="task"
+        />
+        <MarkAsButton
+          v-if="$accessor.getAuthUser && task.user.uuid === $accessor.getAuthUser.uuid && task.state !== 'done'"
+          :task="task"
+          class="my-4"
+        />
+      </div>
+      <div class="hidden md:flex items-center mt-1">
+        <nuxt-link
+          :to="{
+            name: 'Task',
+            params: {
+              username: task.user.username,
+              task: task.uuid
+            }
+          }"
+          class="mr-2 text-sm text-gray-600 dark:text-gray-400 truncate flex-shrink hover:underline"
+          v-text="date"
+        />
+        <CommentButton
+          :task="task"
+          class="mr-4"
+        />
+        <LikeButton
+          :task="task"
+          class="mr-4"
+        />
+        <TaskActions
+          v-if="$accessor.getAuthUser && task.user.uuid === $accessor.getAuthUser.uuid"
+          :task="task"
+        />
+      </div>
     </div>
+
+    <TaskImages
+      v-if="task.images.length"
+      :task="task"
+      class="my-4"
+    />
 
     <!-- Dialogs -->
     <LikesDialog
@@ -69,6 +75,8 @@
   import LikesDialog from '@/components/Task/LikesDialog/index.vue'
   import EditDialog from '@/components/Task/EditDialog/index.vue'
   import TaskActions from './TaskActions/index.vue'
+  import TaskContent from './TaskContent/index.vue'
+  import TaskImages from './TaskImages/index.vue'
 
   import { Task } from '@/types/task'
   import { User } from '~/types/user'
@@ -82,7 +90,9 @@
       LikesDialog,
       TaskActions,
       EditDialog,
-      MarkAsButton
+      MarkAsButton,
+      TaskContent,
+      TaskImages
     },
     props: {
       task: {

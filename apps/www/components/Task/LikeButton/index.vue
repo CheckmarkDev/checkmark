@@ -5,7 +5,7 @@
       'like-button--liked': hasLiked
     }"
     type="button"
-    class="like-button relative h-8 w-8 border border-solid border-gray-400 hover:bg-gray-200 rounded-full"
+    class="like-button relative h-8 w-8 border border-solid border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full"
     @click="like"
   >
     <div class="flex items-center justify-center">
@@ -24,10 +24,10 @@
         </svg>
       </template>
       <div
-        v-if="task.likesCount > 0"
+        v-if="task.metrics.likes.length > 0"
         class="like-button__badge absolute bg-blue-500 text-white rounded-full w-4 h-4 text-xs"
       >
-        {{ task.likesCount }}
+        {{ task.metrics.likes.length }}
       </div>
     </div>
   </button>
@@ -59,7 +59,7 @@
       const toasted = useToasted()
       const trans = useICU()
 
-      const hasLiked = computed(() => accessor.getAuthUser && task.value.likes.includes(accessor.getAuthUser.uuid))
+      const hasLiked = computed(() => accessor.getAuthUser && task.value.metrics.likes.includes(accessor.getAuthUser.uuid))
       const isSelfTask = computed(() => accessor.getAuthUser && task.value.user.uuid === accessor.getAuthUser.uuid)
 
       function like () {
@@ -108,11 +108,11 @@
 
 <style scoped>
   .like-button path {
-    @apply text-gray-400 stroke-current;
+    @apply text-gray-400 stroke-current dark:text-white;
   }
 
   .like-button--liked {
-    @apply border-blue-500;
+    @apply border-blue-500 dark:bg-blue-500 dark:hover:bg-blue-400 dark:border-blue-500 dark:text-blue-500;
   }
 
   .like-button__badge {

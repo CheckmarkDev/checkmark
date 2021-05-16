@@ -1,26 +1,44 @@
+# frozen_string_literal: true
+
 json = {
   uuid: @task.uuid,
   content: @task.content,
   state: @task.state,
   created_at: @task.created_at,
-  updated_at: @task.updated_at,
-
-  user: {
-    uuid: @task.user.uuid,
-    username: @task.user.username,
-    first_name: @task.user.first_name,
-    last_name: @task.user.last_name,
-    streak: @task.user.streak,
-    avatar_url: @task.user.avatar_url
-  }
+  updated_at: @task.updated_at
 }
 
-json[:likes] = @task.task_likes.active.map do |like|
-  User.find_by_id(like.user_id).uuid
-end
+json[:user] = render('users/user', user: @task.user)
 
 json[:metrics] = {
-  comments: @task.task_comments.count
+  comments: @task.task_comments.count,
+  likes: User.find(@task.task_likes.pluck(:user_id)).pluck(:uuid)
 }
+
+json[:projects] = @task.projects.map do |project|
+  {
+    uuid: project.uuid,
+    slug: project.slug,
+    name: project.name,
+    avatar_url: project.avatar_url,
+    url: project.url
+  }
+end
+
+json[:mentions] = @task.mentions.map do |mention|
+  {
+    username: mention.username,
+    first_name: mention.first_name,
+    last_name: mention.last_name,
+    avatar_url: mention.avatar_url
+  }
+end
+
+json[:images] = @task.images.map do |image|
+  {
+    url: Rails.application.routes.url_helpers.url_for(image),
+    thumbnail_url: Rails.application.routes.url_helpers.url_for(image.variant(resize_to_fit: [720, 720]))
+  }
+end
 
 json

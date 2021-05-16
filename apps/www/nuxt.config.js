@@ -65,6 +65,7 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/composition-api',
+    '@nuxtjs/color-mode',
     ['@nuxt/typescript-build', {
       typeCheck: false
     }],
@@ -138,8 +139,13 @@ export default {
     }
   },
 
-  tailwind: {
-    jit: true
+  tailwindcss: {
+    jit: true,
+    exposeConfig: true
+  },
+
+  colorMode: {
+    classSuffix: ''
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)

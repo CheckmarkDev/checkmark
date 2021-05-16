@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json = {
   meta: {
     current_page: @tasks.current_page,
@@ -23,13 +25,9 @@ json[:data] = @tasks.map do |task|
       avatar_url: task.user.avatar_url
     }
   }
-
-  v[:likes] = task.task_likes.active.map do |like|
-    User.find_by_id(like.user_id).uuid
-  end
-
   v[:metrics] = {
-    comments: task.task_comments.count
+    comments: task.task_comments.count,
+    likes: User.find(task.task_likes.pluck(:user_id)).pluck(:uuid)
   }
 
   v

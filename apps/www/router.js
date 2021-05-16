@@ -5,12 +5,20 @@ import Home from '@/pages/index.vue'
 import Roadmap from '@/pages/roadmap/index.vue'
 import RoadmapProject from '@/pages/roadmap/project/index.vue'
 import User from '@/pages/user/index.vue'
+import Tos from '@/pages/tos/index.vue'
+import Project from '@/pages/project/index.vue'
+import NewProject from '@/pages/new-project/index.vue'
+import ProjectSettings from '@/pages/project-settings/index.vue'
+import ProjectSettingsInformations from '@/pages/project-settings/informations/index.vue'
 import Task from '@/pages/user/task/index.vue'
 import UserTasks from '@/pages/user/tasks/index.vue'
+import ProjectTasks from '@/pages/project/tasks/index.vue'
 import SignIn from '@/pages/auth/sign-in/index.vue'
 import SignUp from '@/pages/auth/sign-up/index.vue'
 import Settings from '@/pages/settings/index.vue'
 import SettingsNotifications from '@/pages/settings/notifications/index.vue'
+import SettingsProfile from '@/pages/settings/profile/index.vue'
+import SettingsAccount from '@/pages/settings/account/index.vue'
 
 Vue.use(VueRouter)
 
@@ -33,13 +41,23 @@ const SETTINGS_ROUTES = [
     path: '/settings',
     component: Settings,
     redirect: {
-      name: 'SettingsNotifications'
+      name: 'SettingsProfile'
     },
     children: [
       {
         name: 'SettingsNotifications',
         path: 'notifications',
         component: SettingsNotifications
+      },
+      {
+        name: 'SettingsProfile',
+        path: 'profile',
+        component: SettingsProfile
+      },
+      {
+        name: 'SettingsAccount',
+        path: 'account',
+        component: SettingsAccount
       }
     ]
   }
@@ -88,6 +106,46 @@ const WEBSITE_ROUTES = [
         component: Task
       }
     ]
+  },
+  {
+    name: 'Project',
+    path: '/p/:slug',
+    component: Project,
+    redirect: {
+      name: 'ProjectTasks'
+    },
+    children: [
+      {
+        name: 'ProjectTasks',
+        path: '',
+        component: ProjectTasks
+      }
+    ]
+  },
+  {
+    name: 'NewProject',
+    path: '/new/project',
+    component: NewProject
+  },
+  {
+    name: 'ProjectSettings',
+    path: '/p/:slug/settings',
+    component: ProjectSettings,
+    redirect: {
+      name: 'ProjectSettingsInformations'
+    },
+    children: [
+      {
+        name: 'ProjectSettingsInformations',
+        component: ProjectSettingsInformations,
+        path: 'informations'
+      }
+    ]
+  },
+  {
+    name: 'Terms',
+    path: '/terms',
+    component: Tos
   },
 ]
 

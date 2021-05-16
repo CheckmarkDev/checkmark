@@ -1,0 +1,57 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: weekly-summary
+  namespace: checkmark
+spec:
+  schedule: "0 8 * * 1"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: cron
+            image: williamdasilva/checkmark-api
+            command: ["/bin/sh"]
+            args:
+            - "-ec"
+            - "rake user:weekly_summary"
+            env:
+            - name: PORT
+              value: "3000"
+            envFrom:
+            - secretRef:
+                name: api-secret
+          restartPolicy: Never
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: streak-reminder
+  namespace: checkmark
+spec:
+  schedule: "0 20 */1 * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: cron
+            image: williamdasilva/checkmark-api
+            command: ["/bin/sh"]
+            args:
+            - "-ec"
+            - "rake user:streak_reminder"
+            env:
+            - name: PORT
+              value: "3000"
+            envFrom:
+            - secretRef:
+                name: api-secret
+          restartPolicy: Never
