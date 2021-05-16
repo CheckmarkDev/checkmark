@@ -58,7 +58,18 @@
                 uuid
                 state
                 content
+                createdAt
                 commentsCount
+                likesCount
+                likes
+                images {
+                  url
+                  thumbnailUrl
+                }
+                user {
+                  uuid
+                  username
+                }
               }
             }
           }
@@ -70,7 +81,7 @@
 
         const taskGroups = useResult(result, [], data => data.allTaskGroups && data.allTaskGroups.nodes)
         taskGroups.value.forEach(taskGroup => {
-          const date = dayjs(taskGroup.created_at).tz('Europe/Paris').format('YYYY-MM-DD')
+          const date = dayjs(taskGroup.createdAt).tz('Europe/Paris').format('YYYY-MM-DD')
 
           const groupIndex = groups.findIndex(group => group.date === date)
           if (groupIndex !== -1) {

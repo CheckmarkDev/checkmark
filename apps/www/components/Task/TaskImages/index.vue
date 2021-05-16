@@ -3,7 +3,7 @@
     <AppLightbox
       v-for="(image, k) in task.images"
       :key="k"
-      :thumbnail="image.thumbnail_url"
+      :thumbnail="image.thumbnailUrl"
       :images="task.images.map(v => v.url).sort(v => v === image.url ? -1 : 0)"
       class="md:w-1/3"
     />

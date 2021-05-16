@@ -23,7 +23,7 @@ module Types
     field :user, UserType, null: false
     field :streak, StreakType, null: false
     field :comments, [TaskCommentType], null: false
-    field :likes, [UserType], null: false
+    field :likes, [String], null: false
 
     field :comments_count, Integer, null: false
     field :likes_count, Integer, null: false
@@ -39,7 +39,7 @@ module Types
     end
 
     def likes
-      object.task_likes
+      User.find(object.task_likes.pluck(:user_id)).pluck(:uuid)
     end
 
     def likes_count

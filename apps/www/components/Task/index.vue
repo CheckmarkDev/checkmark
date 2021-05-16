@@ -31,6 +31,7 @@
         />
         <CommentButton
           :task="task"
+          :user="task.user"
           class="mr-4"
         />
         <LikeButton

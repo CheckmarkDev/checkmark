@@ -20,7 +20,7 @@ export type Task = {
   likesCount: number
   images: Array<{
     url: string
-    thumbnail_url: string
+    thumbnailUrl: string
   }>
   projects?: Array<Project>,
   mentions?: Array<User>,
