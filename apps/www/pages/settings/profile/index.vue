@@ -5,83 +5,6 @@
       class="text-2xl font-medium text-gray-800 dark:text-white mb-8"
     />
 
-    <!-- Profile picture -->
-    <ValidationObserver
-      ref="pictureObserver"
-    >
-      <form
-        :disabled="$wait.is('updating profile picture')"
-        class="flex flex-col md:flex-row mb-12"
-        @submit.prevent="submitted"
-      >
-        <div class="text-gray-700 dark:text-gray-300">
-          <h3
-            v-text="$trans('settings.titles.profile_picture')"
-            class="text-lg font-medium mb-2"
-          />
-          <div class="mb-3 border border-solid border-gray-300 dark:border-gray-600 rounded p-2">
-            <ValidationProvider
-              ref="avatar-provider"
-              rules="image|size:10000"
-              v-slot="{ invalid, errors }"
-            >
-              <input
-                ref="fileInput"
-                type="file"
-                name="image"
-                id="image"
-                accept="image/*"
-                class="w-full"
-                @change="fileChange"
-              >
-              <span
-                v-if="invalid"
-                v-text="errors[0]"
-                role="alert"
-                class="text-left text-sm text-red-500"
-              />
-            </ValidationProvider>
-          </div>
-          <h3
-            v-text="$trans('settings.titles.profile_rules')"
-            class="text-base font-medium mb-2"
-          />
-          <p
-            v-text="$trans('settings.paragraphs.profile_rules')"
-            class="text-base mb-1"
-          />
-          <ul class="text-base list-disc pl-4 mb-8">
-            <li
-              v-text="$trans('settings.paragraphs.profile_rules.racism')"
-            />
-            <li
-              v-text="$trans('settings.paragraphs.profile_rules.nsfw')"
-            />
-          </ul>
-
-          <button
-            :disabled="$wait.is('updating profile picture') || !file"
-            v-text="$trans('global.buttons.save')"
-            type="submit"
-            class="btn btn-primary"
-          />
-        </div>
-        <div class="ml-8 flex-shrink-0 mb-4 md:mb-0">
-          <AppAvatar
-            :src="previewUrl"
-            width="150"
-            height="150"
-          />
-        </div>
-      </form>
-    </ValidationObserver>
-
-    <!-- Profile informations -->
-    <h3
-      v-text="$trans('settings.titles.profile_infos')"
-      class="text-lg text-gray-700 dark:text-white font-medium mb-2"
-    />
-
     <ValidationObserver
       ref="observer"
       slim
@@ -89,9 +12,72 @@
       <form
         :disabled="$wait.is('updating profile informations')"
         class="flex flex-col lg:w-2/3 mt-4"
-        @submit.prevent="submittedInformations"
+        @submit.prevent="submitted"
       >
         <div class="flex flex-col mb-4 md:mb-0">
+          <div
+            class="flex flex-col md:flex-row mb-6"
+          >
+            <div class="text-gray-700 dark:text-gray-300">
+              <h3
+                v-text="$trans('settings.titles.profile_picture')"
+                class="text-lg font-medium mb-2"
+              />
+              <div class="mb-3 border border-solid border-gray-300 dark:border-gray-600 rounded p-2">
+                <ValidationProvider
+                  ref="avatar-provider"
+                  rules="image|size:10000"
+                  v-slot="{ invalid, errors }"
+                >
+                  <input
+                    ref="fileInput"
+                    type="file"
+                    name="image"
+                    id="image"
+                    accept="image/*"
+                    class="w-full"
+                    @change="fileChange"
+                  >
+                  <span
+                    v-if="invalid"
+                    v-text="errors[0]"
+                    role="alert"
+                    class="text-left text-sm text-red-500"
+                  />
+                </ValidationProvider>
+              </div>
+              <h3
+                v-text="$trans('settings.titles.profile_rules')"
+                class="text-base font-medium mb-2"
+              />
+              <p
+                v-text="$trans('settings.paragraphs.profile_rules')"
+                class="text-base mb-1"
+              />
+              <ul class="text-base list-disc pl-4 mb-8">
+                <li
+                  v-text="$trans('settings.paragraphs.profile_rules.racism')"
+                />
+                <li
+                  v-text="$trans('settings.paragraphs.profile_rules.nsfw')"
+                />
+              </ul>
+            </div>
+            <div class="ml-8 flex-shrink-0 mb-4 md:mb-0">
+              <AppAvatar
+                :src="previewUrl"
+                width="150"
+                height="150"
+              />
+            </div>
+          </div>
+
+          <!-- Profile informations -->
+          <h3
+            v-text="$trans('settings.titles.profile_infos')"
+            class="text-lg text-gray-700 dark:text-white font-medium mb-2"
+          />
+
           <ValidationProvider
             ref="username-provider"
             rules="required|min:2|max:32"
@@ -262,6 +248,7 @@
           }
         })
           .then((res) => {
+            clear()
             accessor.setAuthUser(res.data.user)
             toasted.success(trans('settings.paragraphs.settings_saved'))
 
@@ -288,24 +275,6 @@
 
       function submitted () {
         // @ts-ignore
-        refs.pictureObserver.validate()
-          .then((valid: boolean) => {
-            if (!valid) return
-
-            if (!file.value) return
-
-            const data = new FormData()
-            data.append('avatar', file.value)
-
-            updateProfile(data, 'updating profile picture')
-              .then(() => {
-                clear()
-              })
-          })
-      }
-
-      function submittedInformations () {
-        // @ts-ignore
         refs.observer.validate()
           .then((valid: boolean) => {
             if (!valid) return
@@ -318,6 +287,8 @@
               data.append('first_name', first_name)
             }
 
+            if (file.value) data.append('avatar', file.value)
+
             updateProfile(data, 'updating profile picture')
           })
       }
@@ -326,7 +297,6 @@
         file,
         fileChange,
         submitted,
-        submittedInformations,
         previewUrl: preview,
         formData
       }
