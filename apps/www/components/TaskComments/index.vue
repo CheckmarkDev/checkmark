@@ -4,11 +4,11 @@
       {{ $trans('user.titles.comments') }}
     </h2>
 
-    <NewCommentForm
+    <!-- <NewCommentForm
       v-if="$accessor.getAuthUser"
       :task="task"
       class="mb-12"
-    />
+    /> -->
 
     <div
       v-if="allComments.length"
@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, useRoute } from '@nuxtjs/composition-api'
+  import { defineComponent, toRefs, useRoute } from '@nuxtjs/composition-api'
   import { useQuery, useResult } from '@vue/apollo-composable/dist'
   import gql from 'graphql-tag'
 
@@ -57,11 +57,10 @@
       }
     },
     setup (props) {
-      const route = useRoute()
-      const { task: uuid } = route.value.params
+      const { task } = toRefs(props)
       const { result } = useQuery(gql`
         query {
-          allComments (taskUuid: "${uuid}") {
+          allComments (taskUuid: "${task.value.uuid}") {
             uuid
             content
             createdAt

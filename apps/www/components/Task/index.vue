@@ -46,7 +46,7 @@
     </div>
 
     <TaskImages
-      v-if="task.images.length"
+      v-if="task.images && task.images.length"
       :task="task"
       class="my-4"
     />

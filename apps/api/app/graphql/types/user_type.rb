@@ -13,6 +13,8 @@ module Types
     field :avatar_url, String, null: false
     field :full_name, String, null: false
 
+    field :projects, [ProjectType], null: false
+
     def full_name
       object.full_name
     end

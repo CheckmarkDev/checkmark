@@ -25,6 +25,9 @@ module Types
     field :all_comments, [TaskCommentType, null: true], null: true do
       argument :task_uuid, ID, required: true
     end
+    field :all_projects, [ProjectType, null: true], null: true do
+      argument :user_uuid, ID, required: true
+    end
 
     def user (username:)
       User.find_by_username!(username)
@@ -32,6 +35,10 @@ module Types
 
     def task (uuid:)
       Task.find_by_uuid!(uuid)
+    end
+
+    def all_projects (user_uuid:)
+      Project.joins(:user).where(user: { uuid: user_uuid})
     end
 
     def all_tasks

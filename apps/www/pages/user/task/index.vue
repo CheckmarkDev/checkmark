@@ -4,15 +4,60 @@
     class=""
   >
     <div class="border border-gray-300 dark:border-gray-600 rounded mb-8 px-8 py-4">
-      <Task
-        :task="task"
-        :user="user"
-      />
+      <ApolloQuery
+        :query="gql => gql(`
+          query TaskQuery ($uuid: ID!) {
+            task (uuid: $uuid) {
+              uuid
+              state
+              content
+              createdAt
+              commentsCount
+              likesCount
+              likes
+              images {
+                url
+                thumbnailUrl
+              }
+              user {
+                uuid
+                username
+              }
+            }
+          }
+        `)"
+        :variables="{
+          uuid: $route.params.task
+        }"
+        v-slot="{ result: { data, error }, isLoading }"
+      >
+        <template
+          v-if="isLoading"
+        >
+          Loading...
+        </template>
+        <template
+          v-else-if="error"
+        >
+          Fuck - {{ error }}
+        </template>
+        <template
+          v-else-if="data"
+        >
+          <pre>
+            {{ data }}
+          </pre>
+          <!-- <Task
+            :task="task"
+            :user="user"
+          /> -->
+        </template>
+      </ApolloQuery>
     </div>
 
-    <TaskComments
+    <!-- <TaskComments
       :task="task"
-    />
+    /> -->
   </div>
 </template>
 
@@ -34,39 +79,48 @@
       Task: TaskComponent,
       TaskComments
     },
-    setup () {
-      const route = useRoute()
-      const { task: uuid, username } = route.value.params
-      const { result } = useQuery(gql`
-        query {
-          task (uuid: "${uuid}") {
-            uuid
-            content
-            state
-            user {
-              uuid
-              fullName
-              username
-            }
-          }
-          user (username: "${username}") {
-            uuid
-            fullName
-            username
-            streak
-            avatarUrl
-          }
-        }
-      `)
+    // setup () {
+    //   const route = useRoute()
+    //   const { task: uuid, username } = route.value.params
+    //   const { result } = useQuery(gql`
+    //     query {
+    //       task (uuid: "${uuid}") {
+    //         uuid
+    //         state
+    //         content
+    //         createdAt
+    //         commentsCount
+    //         likesCount
+    //         likes
+    //         images {
+    //           url
+    //           thumbnailUrl
+    //         }
+    //         user {
+    //           uuid
+    //           username
+    //         }
+    //       }
+    //       user (username: "${username}") {
+    //         uuid
+    //         fullName
+    //         username
+    //         streak
+    //         avatarUrl
+    //       }
+    //     }
+    //   `)
 
-      const task = useResult(result, null, data => data.task)
-      const user = useResult(result, null, data => data.user)
+    //   const task = useResult(result, null, data => data.task)
+    //   const user = useResult(result, null, data => data.user)
 
-      return {
-        task,
-        user
-      }
-    },
+    //   console.log('here?', task, user)
+
+    //   return {
+    //     task,
+    //     user
+    //   }
+    // },
     // head () {
     //   const user = this.user as any
     //   const task = this.task as any

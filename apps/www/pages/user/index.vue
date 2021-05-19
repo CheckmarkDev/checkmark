@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, useRoute } from '@nuxtjs/composition-api'
+  import { defineComponent, onMounted, ref, useRoute, watch } from '@nuxtjs/composition-api'
   import { useQuery, useResult } from '@vue/apollo-composable/dist'
   import gql from 'graphql-tag'
 
@@ -55,26 +55,36 @@
       UserSideNavigation,
       UserAvatar
     },
-    setup () {
-      const route = useRoute()
-      const { result } = useQuery(gql`
-        query {
-          user (username: "${route.value.params.username}") {
-            uuid
-            fullName
-            username
-            streak
-            avatarUrl
-          }
-        }
-      `)
+    async asyncData ({ app, route }) {
+      const client = app.apolloProvider.defaultClient
 
-      const user = useResult(result, null)
+      const { data } = await client.query({
+        query: gql`
+          query UserQuery ($username: String!) {
+            user (username: $username) {
+              uuid
+              fullName
+              username
+              streak
+              avatarUrl
+              projects {
+                uuid
+                slug
+                name
+                avatarUrl
+              }
+            }
+          }
+        `,
+        variables: {
+          username: route.params.username
+        }
+      })
 
       return {
-        user
+        user: data.user
       }
-    }
+    },
     // head () {
     //   const user = this.user as any
     //   const fullName = user.fullName.trim()
