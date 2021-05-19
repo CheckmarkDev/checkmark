@@ -1,12 +1,14 @@
 import { Ref, ref } from '@nuxtjs/composition-api'
 
 export default function useFileChange (defaultPreview: string) {
+  const targetInput: Ref<HTMLInputElement|null> = ref(null)
   const preview = ref(defaultPreview)
   const file: Ref<File|null> = ref(null)
 
   function fileChange (e: Event) {
     if (e) {
-      const files = (e.target as HTMLInputElement).files
+      targetInput.value = (e.target as HTMLInputElement)
+      const files = targetInput.value.files
       if (files && files.length) {
         file.value = files[0]
         const reader = new FileReader()
@@ -20,8 +22,16 @@ export default function useFileChange (defaultPreview: string) {
     }
   }
 
+  function clear () {
+    file.value = null
+    if (targetInput.value) {
+      targetInput.value.value = ''
+    }
+  }
+
   return {
     fileChange,
+    clear,
     file,
     preview
   }

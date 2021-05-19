@@ -67,7 +67,7 @@
           </ul>
 
           <button
-            :disabled="$wait.is('updating profile picture') || !formData.image"
+            :disabled="$wait.is('updating profile picture') || !file"
             v-text="$trans('global.buttons.save')"
             type="submit"
             class="btn btn-primary"
@@ -227,6 +227,7 @@
   import useAxios from '~/composables/useAxios'
   import useICU from '~/composables/useICU'
   import useToasted from '~/composables/useToasted'
+  import useFileChange from '~/composables/useFileChange'
 
   export default defineComponent({
     components: {
@@ -241,36 +242,17 @@
 
       const { avatar_url, username, last_name, first_name } = accessor.getAuthUser as User
 
-      const previewUrl = ref(avatar_url)
+      const { preview, fileChange, file, clear } = useFileChange(avatar_url)
+
       const formData: Ref<{
-        image: Blob|null,
         username: string,
         first_name: string,
         last_name: string
       }> = ref({
-        image: null,
         username,
         first_name,
         last_name
       })
-
-      function fileChange (e: Event) {
-        if (e) {
-          const files = (e.target as HTMLInputElement).files
-          if (files && files.length) {
-            const file = files[0]
-
-            formData.value.image = file
-            const reader = new FileReader()
-            reader.onload = v => {
-              if (v.target && v.target.result) {
-                previewUrl.value = v.target.result as string
-              }
-            }
-            reader.readAsDataURL(file)
-          }
-        }
-      }
 
       function updateProfile (data: FormData, loader: string): Promise<any> {
         wait.start(loader)
@@ -310,17 +292,14 @@
           .then((valid: boolean) => {
             if (!valid) return
 
-            const { image } = formData.value
-            if (!image) return
+            if (!file.value) return
 
             const data = new FormData()
-            data.append('avatar', image)
+            data.append('avatar', file.value)
 
             updateProfile(data, 'updating profile picture')
               .then(() => {
-                formData.value.image = null
-                const input = refs.fileInput as HTMLInputElement
-                input.value = ''
+                clear()
               })
           })
       }
@@ -344,10 +323,11 @@
       }
 
       return {
+        file,
         fileChange,
         submitted,
         submittedInformations,
-        previewUrl,
+        previewUrl: preview,
         formData
       }
     },

@@ -244,7 +244,7 @@
 
       const { name, slug, description, url, avatar_url } = accessor.project.getProject as Project
 
-      const { preview, fileChange, file } = useFileChange(avatar_url)
+      const { preview, fileChange, file, clear } = useFileChange(avatar_url)
 
       const formData: Ref<{
         name: string,
@@ -262,6 +262,7 @@
         wait.start(loader)
         return accessor.project.updateProject({ slug, data })
           .then(() => {
+            clear()
             toasted.success(trans('project.paragraphs.updated'))
           })
           .catch(err => {
