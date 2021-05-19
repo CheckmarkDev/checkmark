@@ -11,66 +11,52 @@
     >
       <form
         :disabled="$wait.is('updating profile informations')"
-        class="flex flex-col lg:w-2/3 mt-4"
+        class="flex flex-col mt-4"
         @submit.prevent="submitted"
       >
-        <div class="flex flex-col mb-4 md:mb-0">
-          <div
-            class="flex flex-col md:flex-row mb-6"
-          >
-            <div class="text-gray-700 dark:text-gray-300">
-              <h3
-                v-text="$trans('settings.titles.profile_picture')"
-                class="text-lg font-medium mb-2"
-              />
-              <div class="mb-3 border border-solid border-gray-300 dark:border-gray-600 rounded p-2">
-                <ValidationProvider
-                  ref="avatar-provider"
-                  rules="image|size:10000"
-                  v-slot="{ invalid, errors }"
+        <div
+          class="flex flex-col md:flex-row mb-6"
+        >
+          <div class="text-gray-700 dark:text-gray-300">
+            <h3
+              v-text="$trans('settings.titles.profile_picture')"
+              class="text-lg font-medium mb-2"
+            />
+            <div class="mb-3 border border-solid border-gray-300 dark:border-gray-600 rounded p-2">
+              <ValidationProvider
+                ref="avatar-provider"
+                rules="image|size:10000"
+                v-slot="{ invalid, errors }"
+              >
+                <input
+                  ref="fileInput"
+                  type="file"
+                  name="image"
+                  id="image"
+                  accept="image/*"
+                  class="w-full"
+                  @change="fileChange"
                 >
-                  <input
-                    ref="fileInput"
-                    type="file"
-                    name="image"
-                    id="image"
-                    accept="image/*"
-                    class="w-full"
-                    @change="fileChange"
-                  >
-                  <span
-                    v-if="invalid"
-                    v-text="errors[0]"
-                    role="alert"
-                    class="text-left text-sm text-red-500"
-                  />
-                </ValidationProvider>
-              </div>
-              <h3
-                v-text="$trans('settings.titles.profile_rules')"
-                class="text-base font-medium mb-2"
-              />
-              <p
-                v-text="$trans('settings.paragraphs.profile_rules')"
-                class="text-base mb-1"
-              />
-              <ul class="text-base list-disc pl-4 mb-8">
-                <li
-                  v-text="$trans('settings.paragraphs.profile_rules.racism')"
+                <span
+                  v-if="invalid"
+                  v-text="errors[0]"
+                  role="alert"
+                  class="text-left text-sm text-red-500"
                 />
-                <li
-                  v-text="$trans('settings.paragraphs.profile_rules.nsfw')"
-                />
-              </ul>
+              </ValidationProvider>
             </div>
-            <div class="ml-8 flex-shrink-0 mb-4 md:mb-0">
-              <AppAvatar
-                :src="previewUrl"
-                width="150"
-                height="150"
-              />
-            </div>
+            <ImageRules />
           </div>
+          <div class="ml-8 flex-shrink-0 mb-4 md:mb-0">
+            <AppAvatar
+              v-if="previews[0]"
+              :src="previews[0]"
+              width="150"
+              height="150"
+            />
+          </div>
+        </div>
+        <div class="flex flex-col mb-4 md:mb-0 lg:w-2/3">
 
           <!-- Profile informations -->
           <h3
@@ -207,6 +193,7 @@
   import { defineComponent, Ref, ref } from '@nuxtjs/composition-api'
 
   import AppAvatar from '@/components/AppAvatar/index.vue'
+  import ImageRules from '@/components/ImageRules/index.vue'
   import useAccessor from '~/composables/useAccessor'
   import { User } from '~/types/user'
   import useWait from '~/composables/useWait'
@@ -217,7 +204,8 @@
 
   export default defineComponent({
     components: {
-      AppAvatar
+      AppAvatar,
+      ImageRules
     },
     setup (props, { refs }) {
       const axios = useAxios()
@@ -228,7 +216,7 @@
 
       const { avatar_url, username, last_name, first_name } = accessor.getAuthUser as User
 
-      const { preview, fileChange, file, clear } = useFileChange(avatar_url)
+      const { previews, fileChange, files, clear } = useFileChange(avatar_url)
 
       const formData: Ref<{
         username: string,
@@ -287,17 +275,17 @@
               data.append('first_name', first_name)
             }
 
-            if (file.value) data.append('avatar', file.value)
+            if (files.value && files.value[0]) data.append('avatar', files.value[0])
 
             updateProfile(data, 'updating profile picture')
           })
       }
 
       return {
-        file,
+        files,
         fileChange,
         submitted,
-        previewUrl: preview,
+        previews,
         formData
       }
     },

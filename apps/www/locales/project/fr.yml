@@ -1,7 +1,10 @@
 project.titles.new-project: Nouveau projet
 project.titles.informations: Informations
+project.titles.images: Images
 project.titles.settings: Paramètres
 project.titles.logo: Logo
+project.titles.images.upload: Charger des nouvelles images
+project.titles.images.my_images: Mes images
 project.labels.name: Nom
 project.labels.slug: Hashtag
 project.labels.description: Description
