@@ -14,13 +14,6 @@
         class="flex flex-col md:flex-row mb-12"
         @submit.prevent="submitted"
       >
-        <div class="mr-8 flex-shrink-0 mb-4 md:mb-0">
-          <AppAvatar
-            :src="previewUrl"
-            width="150"
-            height="150"
-          />
-        </div>
         <div class="text-gray-700 dark:text-gray-300">
           <h3
             v-text="$trans('settings.titles.profile_picture')"
@@ -71,6 +64,13 @@
             v-text="$trans('global.buttons.save')"
             type="submit"
             class="btn btn-primary"
+          />
+        </div>
+        <div class="ml-8 flex-shrink-0 mb-4 md:mb-0">
+          <AppAvatar
+            :src="previewUrl"
+            width="150"
+            height="150"
           />
         </div>
       </form>
