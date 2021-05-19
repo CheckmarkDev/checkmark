@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h3
+    <h2
       v-text="$trans('project.titles.informations')"
-      class="text-lg text-gray-700 dark:text-white font-medium mb-2"
+      class="text-2xl dark:text-white font-medium mb-6"
     />
 
     <ValidationObserver
@@ -12,10 +12,72 @@
         :disabled="$wait.is('updating project informations')"
         @submit.prevent="submitted"
       >
-        <div class="flex flex-col md:flex-row">
+        <div class="flex flex-col">
+          <div
+            class="flex flex-col md:flex-row mb-6"
+          >
+            <div class="text-gray-700 dark:text-gray-300">
+              <h3
+                v-text="$trans('project.titles.logo')"
+                class="text-lg font-medium mb-2"
+              />
+              <div class="mb-3 border border-solid border-gray-300 dark:border-gray-600 rounded p-2">
+                <ValidationProvider
+                  ref="avatar-provider"
+                  rules="image|size:10000"
+                  v-slot="{ invalid, errors }"
+                >
+                  <input
+                    ref="fileInput"
+                    type="file"
+                    name="image"
+                    id="image"
+                    accept="image/*"
+                    class="w-full"
+                    @change="fileChange"
+                  >
+                  <span
+                    v-if="invalid"
+                    v-text="errors[0]"
+                    role="alert"
+                    class="text-left text-sm text-red-500"
+                  />
+                </ValidationProvider>
+              </div>
+              <h3
+                v-text="$trans('settings.titles.profile_rules')"
+                class="text-base font-medium mb-2"
+              />
+              <p
+                v-text="$trans('settings.paragraphs.profile_rules')"
+                class="text-base mb-1"
+              />
+              <ul class="text-base list-disc pl-4 mb-8">
+                <li
+                  v-text="$trans('settings.paragraphs.profile_rules.racism')"
+                />
+                <li
+                  v-text="$trans('settings.paragraphs.profile_rules.nsfw')"
+                />
+              </ul>
+            </div>
+            <div class="ml-8 flex-shrink-0 mb-4 md:mb-0">
+              <AppAvatar
+                :src="previewUrl"
+                width="150"
+                height="150"
+              />
+            </div>
+          </div>
+
           <div
             class="md:w-2/3 md:mr-8"
           >
+            <h3
+              v-text="$trans('project.titles.informations')"
+              class="text-lg text-gray-700 dark:text-white font-medium mb-6"
+            />
+
             <ValidationProvider
               ref="name-provider"
               rules="required"
@@ -170,6 +232,7 @@
   import useWait from '~/composables/useWait'
   import useICU from '~/composables/useICU'
   import useToasted from '~/composables/useToasted'
+  import useFileChange from '~/composables/useFileChange'
   import { Project } from '~/types/project'
 
   export default defineComponent({
@@ -179,7 +242,9 @@
       const trans = useICU()
       const toasted = useToasted()
 
-      const { name, slug, description, url } = accessor.project.getProject as Project
+      const { name, slug, description, url, avatar_url } = accessor.project.getProject as Project
+
+      const { preview, fileChange, file } = useFileChange(avatar_url)
 
       const formData: Ref<{
         name: string,
@@ -230,12 +295,15 @@
               name,
               slug,
               description,
-              url
+              url,
+              avatar: file.value
             }, 'updating project informations')
           })
       }
 
       return {
+        previewUrl: preview,
+        fileChange,
         submitted,
         formData
       }

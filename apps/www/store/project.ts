@@ -82,7 +82,16 @@ export const actions: ActionTree<State, State> & Actions = {
       })
   },
   [ActionTypes.updateProject] ({ commit }, { slug, data }) {
-    return (this.$axios as NuxtAxiosInstance).put(`/me/projects/${slug}`, data)
+    const formData = new FormData()
+    Object.keys(data).forEach(key => {
+      if (data[key]) formData.append(key, data[key])
+    })
+
+    return (this.$axios as NuxtAxiosInstance).put(`/me/projects/${slug}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
       .then(res => {
         commit(MutationTypes.SET_PROJECT, res.data)
 
