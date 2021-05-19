@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_08_215333) do
+ActiveRecord::Schema.define(version: 2021_05_19_221659) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -23,8 +23,10 @@ ActiveRecord::Schema.define(version: 2021_05_08_215333) do
     t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+    t.index ["uuid"], name: "index_active_storage_attachments_on_uuid", unique: true
   end
 
   create_table "active_storage_blobs", force: :cascade do |t|
