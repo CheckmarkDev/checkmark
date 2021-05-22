@@ -39,6 +39,8 @@ export default function useFileChange (defaultPreview?: string) {
     if (targetInput.value) {
       targetInput.value.value = ''
     }
+
+    previews.value = []
   }
 
   return {

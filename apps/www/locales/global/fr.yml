@@ -9,6 +9,7 @@ global.buttons.sign-out: Déconnexion
 global.buttons.send: Envoyer
 global.buttons.save: Sauvegarder
 global.buttons.upload: Charger
+global.buttons.delete: Supprimer
 global.buttons.settings: Paramètres
 global.buttons.profile: Profil
 global.buttons.dark_mode: Mode sombre

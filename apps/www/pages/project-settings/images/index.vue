@@ -16,7 +16,7 @@
           v-text="$trans('project.titles.images.upload')"
           class="text-lg font-medium mb-2 text-gray-700"
         />
-        <div class="flex flex-col md:flex-row w-full">
+        <div class="flex flex-col md:flex-row w-full mb-4 md:mb-0">
           <div class="mb-3 border border-solid border-gray-300 dark:border-gray-600 rounded p-2 flex-1 md:mr-4">
             <ValidationProvider
               ref="screenshots-provider"
@@ -50,17 +50,17 @@
         </div>
         <div
           v-if="previews.length"
-          class="images__previews flex flex-wrap"
+          class="images__previews flex flex-wrap -m-2 mb-4"
         >
           <div
             v-for="(preview, k) in previews"
             :key="k"
-            class="m-2 "
+            class="m-2"
           >
             <img
               :src="preview"
               alt=""
-              class="object-cover w-full"
+              class="object-cover w-full border border-gray-300 rounded"
             >
           </div>
         </div>
@@ -72,6 +72,35 @@
         </div>
       </form>
     </ValidationObserver>
+
+    <div>
+      <h3
+        v-text="$trans('project.titles.images.my_images')"
+        class="text-lg font-medium mb-2 text-gray-700"
+      />
+      <template
+        v-if="$accessor.project.getProject.screenshots.length"
+      >
+        <div
+          class="flex flex-wrap -m-4"
+        >
+          <ProjectSettingsScreenshot
+            v-for="(image, k) in $accessor.project.getProject.screenshots"
+            :key="k"
+            :screenshot="image"
+            :project="$accessor.project.getProject"
+            class="m-4"
+          />
+        </div>
+      </template>
+      <template
+        v-else
+      >
+        <p
+          v-text="$trans('project.paragraphs.no_screenshots')"
+        />
+      </template>
+    </div>
   </div>
 </template>
 
@@ -79,6 +108,7 @@
   import { defineComponent, Ref, ref, useRoute } from '@nuxtjs/composition-api'
 
   import ImageRules from '@/components/ImageRules/index.vue'
+  import ProjectSettingsScreenshot from '@/components/Project/ProjectSettingsScreenshot/index.vue'
   import useAccessor from '~/composables/useAccessor'
   import useWait from '~/composables/useWait'
   import useICU from '~/composables/useICU'
@@ -88,41 +118,17 @@
 
   export default defineComponent({
     components: {
-      ImageRules
+      ImageRules,
+      ProjectSettingsScreenshot
     },
     setup (props, { refs }) {
       const wait = useWait()
       const accessor = useAccessor()
       const trans = useICU()
       const toasted = useToasted()
+      const route = useRoute()
 
       const { previews, fileChange, files, clear } = useFileChange()
-
-      // function updateProject (data: any, loader: string): Promise<any> {
-      //   wait.start(loader)
-      //   return accessor.project.updateProject({ slug, data })
-      //     .then(() => {
-      //       clear()
-      //       toasted.success(trans('project.paragraphs.updated'))
-      //     })
-      //     .catch(err => {
-      //       if (!err.response) return
-
-      //       const { errors } = err.response.data
-      //       if (errors) {
-      //         Object.keys(errors).forEach(key => {
-      //           const provider = refs[`${key}-provider`]
-      //           if (provider) {
-      //             // @ts-ignore
-      //             provider.setErrors(errors[key])
-      //           }
-      //         })
-      //       }
-      //     })
-      //     .finally(() => {
-      //       wait.end(loader)
-      //     })
-      // }
 
       function submitted () {
         // @ts-ignore
@@ -130,13 +136,29 @@
           .then((valid: boolean) => {
             if (!valid) return
 
-            // updateProject({
-            //   name,
-            //   slug,
-            //   description,
-            //   url,
-            //   avatar: file.value
-            // }, 'adding project images')
+            wait.start('adding project images')
+            accessor.project.addImages({ slug: route.value.params.slug, images: files.value })
+              .then(() => {
+                clear()
+                toasted.success(trans('project.paragraphs.updated'))
+              })
+              .catch(err => {
+                if (!err.response) return
+
+                const { errors } = err.response.data
+                if (errors) {
+                  Object.keys(errors).forEach(key => {
+                    const provider = refs[`${key}-provider`]
+                    if (provider) {
+                      // @ts-ignore
+                      provider.setErrors(errors[key])
+                    }
+                  })
+                }
+              })
+              .finally(() => {
+                wait.end('adding project images')
+              })
           })
       }
 
@@ -159,10 +181,13 @@
   })
 </script>
 
-<style>
-  .images__previews {
+<style scoped>
+  .project-settings-screenshot {
+    flex: 1 0 calc(31% - 1rem);
   }
+</style>
 
+<style>
   .images__previews > div {
     flex: 1 0 calc(31% - 16px);
   }
