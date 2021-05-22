@@ -3,6 +3,12 @@
     v-infinite-scroll="loadMore"
     class="flex flex-col"
   >
+    <!-- Screenshots -->
+    <ProjectScreenshots
+      v-if="$accessor.project.getProject.screenshots.length > 0"
+      class="mb-8"
+    />
+
     <h2 class="font-medium text-2xl mb-4">
       Feed
     </h2>
@@ -29,11 +35,13 @@
   import { defineComponent } from '@nuxtjs/composition-api'
   import { TaskGroup } from '~/types/taskGroup'
   import DateGroupedTaskGroups from '@/components/DateGroupedTaskGroups/index.vue'
+  import ProjectScreenshots from '@/components/Project/ProjectScreenshots/index.vue'
   import { PaginateResponse } from '~/types/pagination'
 
   export default defineComponent({
     components: {
-      DateGroupedTaskGroups
+      DateGroupedTaskGroups,
+      ProjectScreenshots
     },
     data () {
       return {

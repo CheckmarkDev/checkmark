@@ -9,8 +9,9 @@ project.labels.name: Nom
 project.labels.slug: Hashtag
 project.labels.description: Description
 project.labels.url: URL
+project.buttons.view_images: Voir toute les images ({count})
 project.paragraphs.created: Votre projet a bien été crée.
 project.paragraphs.updated: Votre projet a bien été mis à jour.
 project.paragraphs.no_tasks: Ce projet n'a aucune tâche.
-project.paragraphs.no_screenshots: Aucun screenshot
+project.paragraphs.no_screenshots: Ce projet n'a aucune image.
 project.paragraphs.screenshot_delete: Etes-vous sûr de vouloir supprimer cette image ?
