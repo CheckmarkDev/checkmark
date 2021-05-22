@@ -43,9 +43,11 @@
     </div>
     <div class="project-container">
       <div class="container mx-auto flex flex-col md:flex-row items-start">
-        <ProjectSideNavigation />
+        <ProjectSideNavigation
+          class="flex-1"
+        />
         <div
-          class="w-full md:w-9/12"
+          class="flex flex-col w-full md:w-9/12"
         >
           <ProjectSettingsSideNavigation />
           <section class="bg-white dark:bg-gray-700 dark:text-white rounded-lg p-6">

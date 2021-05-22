@@ -14,7 +14,7 @@
       >
         <h3
           v-text="$trans('project.titles.images.upload')"
-          class="text-lg font-medium mb-2 text-gray-700"
+          class="text-lg font-medium mb-2 text-gray-700 dark:text-white "
         />
         <div class="flex flex-col md:flex-row w-full mb-4 md:mb-0">
           <div class="mb-3 border border-solid border-gray-300 dark:border-gray-600 rounded p-2 flex-1 md:mr-4">
@@ -76,7 +76,7 @@
     <div>
       <h3
         v-text="$trans('project.titles.images.my_images')"
-        class="text-lg font-medium mb-2 text-gray-700"
+        class="text-lg font-medium mb-2 text-gray-700 dark:text-white "
       />
       <template
         v-if="$accessor.project.getProject.screenshots.length"
