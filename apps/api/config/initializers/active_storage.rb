@@ -19,7 +19,7 @@ module ActiveStorageAttachmentList
 end
 
 Rails.configuration.to_prepare do
-  ActiveStorage::Attachment.send :include, ActiveStorageAttachmentList
+  ActiveStorage::Attachment.include ActiveStorageAttachmentList
 end
 
 ActiveStorage::Current.host = ENV.fetch('ASSET_HOST', 'https://api.checkmark.dev')
