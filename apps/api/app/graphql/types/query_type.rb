@@ -50,7 +50,7 @@ module Types
     end
 
     def all_task_groups
-      TaskGroup.includes(:tasks, :user).joins(:user, :tasks).order(created_at: :desc)
+      TaskGroup.all
     end
   end
 end

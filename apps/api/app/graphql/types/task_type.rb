@@ -23,27 +23,36 @@ module Types
     field :user, UserType, null: false
     field :streak, StreakType, null: false
     field :comments, [TaskCommentType], null: false
-    field :likes, [String], null: false
+    field :likes, [TaskLikeType], null: false
 
     field :comments_count, Integer, null: false
     field :likes_count, Integer, null: false
 
     field :images, [ImageTaskType], null: false
 
+    def user
+      RecordLoader.for(User).load(object.user_id)
+    end
+
+    def streak
+      RecordLoader.for(Streak).load(object.streak_id)
+    end
+
     def comments
-      object.task_comments
+      AssociationLoader.for(Task, :task_comments).load(object)
     end
 
     def comments_count
-      object.task_comments.count
+      object.task_comments.pluck(:id).size
     end
 
     def likes
-      User.find(object.task_likes.pluck(:user_id)).pluck(:uuid)
+      puts "object", object
+      AssociationLoader.for(Task, :task_likes).load(object)
     end
 
     def likes_count
-      object.task_likes.count
+      AssociationLoader.for(Task, :task_likes).load(object)
     end
 
     def images
