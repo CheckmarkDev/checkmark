@@ -4,7 +4,6 @@
   />
 </template>
 
-
 <script>
   import { defineComponent, ref, useRoute } from '@nuxtjs/composition-api'
 

@@ -1,11 +1,11 @@
 <template>
-  <div class="app-side-navigation w-full md:flex md:flex-col md:w-3/12 mr-8">
+  <div class="app-inline-navigation w-full">
     <nav class="bg-white dark:bg-gray-700 rounded-lg p-4 mb-4">
-      <ul class="flex md:flex-col">
+      <ul class="flex">
         <li
           v-for="(item, k) in items"
           :key="k"
-          class="md:mb-1 mr-2 md:mr-0"
+          class="mr-2"
         >
           <nuxt-link
             :to="item.to"
