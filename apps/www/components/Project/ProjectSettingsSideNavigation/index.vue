@@ -1,5 +1,5 @@
 <template>
-  <AppSideNavigation
+  <AppInlineNavigation
     :items="items"
   />
 </template>
@@ -8,11 +8,11 @@
   import { defineComponent, readonly, useRoute } from '@nuxtjs/composition-api'
 
   import useICU from '~/composables/useICU'
-  import AppSideNavigation from '@/components/AppSideNavigation/index.vue'
+  import AppInlineNavigation from '@/components/AppInlineNavigation/index.vue'
 
   export default defineComponent({
     components: {
-      AppSideNavigation
+      AppInlineNavigation
     },
     setup () {
       const route = useRoute()
@@ -47,3 +47,9 @@
     }
   })
 </script>
+
+<style>
+  .app-side-navigation {
+    @apply w-full;
+  }
+</style>
