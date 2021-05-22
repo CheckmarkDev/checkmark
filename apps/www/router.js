@@ -14,6 +14,7 @@ import ProjectSettingsImages from '@/pages/project-settings/images/index.vue'
 import Task from '@/pages/user/task/index.vue'
 import UserTasks from '@/pages/user/tasks/index.vue'
 import ProjectTasks from '@/pages/project/tasks/index.vue'
+import ProjectImages from '@/pages/project/images/index.vue'
 import SignIn from '@/pages/auth/sign-in/index.vue'
 import SignUp from '@/pages/auth/sign-up/index.vue'
 import Settings from '@/pages/settings/index.vue'
@@ -120,6 +121,11 @@ const WEBSITE_ROUTES = [
         name: 'ProjectTasks',
         path: '',
         component: ProjectTasks
+      },
+      {
+        name: 'ProjectImages',
+        path: 'images',
+        component: ProjectImages
       }
     ]
   },

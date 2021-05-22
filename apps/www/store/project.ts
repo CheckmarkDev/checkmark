@@ -76,7 +76,7 @@ export interface Actions<R = State> {
 
 export const actions: ActionTree<State, State> & Actions = {
   [ActionTypes.retrieveProject] ({ commit }, slug) {
-    return (this.$axios as NuxtAxiosInstance).$get(`/me/projects/${slug}`)
+    return (this.$axios as NuxtAxiosInstance).$get(`/projects/${slug}`)
       .then((project: Project) => {
         commit(MutationTypes.SET_PROJECT, project)
 

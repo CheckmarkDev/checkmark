@@ -6,7 +6,12 @@
       </h2>
 
       <nuxt-link
-        to="/"
+        :to="{
+          name: 'ProjectImages',
+          params: {
+            slug: $accessor.project.getProject.slug
+          }
+        }"
         class="flex items-center p-2"
       >
         <div

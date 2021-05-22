@@ -42,7 +42,7 @@
       </div>
     </div>
     <div class="project-container">
-      <div class="container mx-auto flex items-start">
+       <div class="container mx-auto flex flex-col md:flex-row items-start">
         <ProjectSideNavigation />
         <section class="bg-white dark:bg-gray-700 dark:text-white w-full md:w-9/12 rounded-lg p-6">
           <nuxt />
