@@ -26,7 +26,9 @@ Rails.application.routes.draw do
 
     namespace 'me' do
       resources :tasks
-      resources :projects
+      resources :projects do
+        resources :project_screenshots, path: 'screenshots'
+      end
 
       get '/email_notifications', to: 'email_notifications#index'
       put '/email_notifications', to: 'email_notifications#update'

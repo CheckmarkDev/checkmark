@@ -54,7 +54,8 @@ export const getters: GetterTree<State, State> & Getters<State> = {
 
 export enum ActionTypes {
   retrieveProject = 'retrieveProject',
-  updateProject = 'updateProject'
+  updateProject = 'updateProject',
+  addImages = 'addImages'
 }
 
 type AugmentedActionContext = {
@@ -70,6 +71,7 @@ export interface Actions<R = State> {
   [ActionTypes.retrieveProject]({ commit }: AugmentedActionContext, slug: string): Promise<any>
   // TODO: Use type for data
   [ActionTypes.updateProject]({ commit }: AugmentedActionContext, params: { slug: string, data: any }): Promise<any>
+  [ActionTypes.addImages]({ commit }: AugmentedActionContext, params: { slug: string, images: any }): Promise<any>
 }
 
 export const actions: ActionTree<State, State> & Actions = {
@@ -88,6 +90,23 @@ export const actions: ActionTree<State, State> & Actions = {
     })
 
     return (this.$axios as NuxtAxiosInstance).put(`/me/projects/${slug}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+      .then(res => {
+        commit(MutationTypes.SET_PROJECT, res.data)
+
+        return res
+      })
+  },
+  [ActionTypes.addImages] ({ commit }, { slug, images }) {
+    const formData = new FormData()
+    images.forEach((image: any) => {
+      formData.append('screenshots[]', image)
+    })
+
+    return (this.$axios as NuxtAxiosInstance).post(`/me/projects/${slug}/screenshots`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }

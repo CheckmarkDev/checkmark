@@ -6,5 +6,12 @@
   name: @project.name,
   description: @project.description,
   url: @project.url,
-  avatar_url: @project.avatar_url
+  avatar_url: @project.avatar_url,
+  screenshots: @project.screenshots.map do |screenshot|
+    {
+      uuid: screenshot.uuid,
+      url: Rails.application.routes.url_helpers.url_for(screenshot),
+      thumbnail_url: Rails.application.routes.url_helpers.url_for(screenshot.variant(resize_to_fit: [720, 720]))
+    }
+  end
 }
