@@ -4,7 +4,7 @@
       :thumbnail="screenshot.thumbnail_url"
       :images="[screenshot.url]"
     />
-    <div class="flex justify-end border border-gray-300 p-1">
+    <div class="flex justify-end border border-gray-300 dark:border-gray-600 p-1">
       <button
         :disabled="$wait.is(`deleting screenshot ${screenshot.uuid}`)"
         type="button"

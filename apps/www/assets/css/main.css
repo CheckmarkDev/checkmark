@@ -18,11 +18,11 @@ html, body {
 }
 
 .btn-danger {
-  @apply bg-white text-red-500;
+  @apply bg-white text-red-500 dark:bg-red-500 dark:text-white;
 }
 
 .btn-danger:hover {
-  @apply bg-red-500 bg-opacity-10;
+  @apply bg-red-500 bg-opacity-10 dark:bg-opacity-100;
 }
 
 .btn[disabled=disabled] {
