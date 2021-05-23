@@ -8,10 +8,5 @@ module.exports = async (client, message) => {
 
     if (!client.commands.has(command)) return;
 
-    try {
-        await client.commands.get(command).execute(message, args);
-    } catch (error) {
-        this.logger.error(error);
-        message.reply('there was an error trying to execute that command!');
-    }
+    await client.commands.get(command).execute(client, message, args);
 }
