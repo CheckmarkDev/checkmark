@@ -15,6 +15,7 @@ export type Task = {
   created_at: string
   likes: string[]
   images: Array<{
+    uuid: string
     url: string
     thumbnail_url: string
   }>

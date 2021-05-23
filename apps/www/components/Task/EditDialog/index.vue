@@ -43,6 +43,18 @@
                     class="w-full mb-2 p-2 rounded-bl rounded-br rounded-tr appearance-none leading-relaxed border border-gray-300 border-solid"
                   ></textarea>
                 </div>
+
+                <!-- Images -->
+                <h2
+                  v-text="$trans('project.titles.images')"
+                  class="text-lg mb-2"
+                />
+                <!-- TODO: Add images form -->
+                <TaskImageEdition
+                  :task="task"
+                  class="mb-6"
+                />
+
                 <button
                   :disabled="$wait.is('updating task')"
                   class="btn btn-primary w-full md:w-auto"
@@ -65,12 +77,14 @@
   import { Task } from '~/types/task'
   import UserCard from '@/components/UserCard/index.vue'
   import TaskStateSwitch from './TaskStateSwitch/index.vue'
+  import TaskImageEdition from './TaskImageEdition/index.vue'
 
   export default defineComponent({
     components: {
       XIcon,
       UserCard,
-      TaskStateSwitch
+      TaskStateSwitch,
+      TaskImageEdition
     },
     props: {
       task: {
@@ -98,10 +112,15 @@
 
             const { content, state } = this.formData
 
+            const formData = new FormData()
+            formData.append('content', content.trim() || null)
+            formData.append('state', state)
+
             this.$wait.start('updating task')
-            this.$axios.put(`/me/tasks/${this.task.uuid}`, {
-              content: content.trim() || null,
-              state: state
+            this.$axios.put(`/me/tasks/${this.task.uuid}`, formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
             })
               .then(() => {
                 this.formData.content = ''

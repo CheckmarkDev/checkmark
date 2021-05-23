@@ -21,6 +21,7 @@ json = {
     images: @task.images.map do |image|
       ActiveStorage::Current.set(host: ENV.fetch('ASSET_HOST')) do
         {
+          uuid: image.uuid,
           url: image.url,
           thumbnail_url: image.variant(resize_to_fit: [720, 720]).url
         }
