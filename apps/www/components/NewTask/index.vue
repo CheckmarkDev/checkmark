@@ -175,8 +175,8 @@
 </script>
 
 <style scoped>
-  .new-task__toggle {
-    @screen md {
+  @screen md {
+    .new-task__toggle {
       min-width: 100px;
     }
   }

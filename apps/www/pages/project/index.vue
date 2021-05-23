@@ -99,10 +99,14 @@
     background: linear-gradient(69deg, rgba(39,109,170,1) 0%, rgba(41,169,229,1) 100%);
     padding-bottom: 180px;
 
-    @screen md {
+  }
+
+  @screen md {
+    .project-hero {
       min-height: 400px;
     }
   }
+
   .project-hero__avatar {
     width: 80px;
     height: 80px;

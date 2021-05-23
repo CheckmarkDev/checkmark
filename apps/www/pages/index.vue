@@ -103,16 +103,19 @@
     background: rgb(39,109,170);
     background: linear-gradient(69deg, rgba(39,109,170,1) 0%, rgba(41,169,229,1) 100%);
     padding-bottom: 100px;
-
-    @screen md {
+  }
+  @screen md {
+    .home-hero {
       min-height: 400px;
     }
   }
 
   .home-container {
     margin-top: -100px;
+  }
 
-    @screen md {
+  @screen md {
+    .home-container {
       margin-top: -180px;
     }
   }

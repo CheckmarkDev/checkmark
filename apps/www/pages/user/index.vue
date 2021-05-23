@@ -102,8 +102,10 @@
     height: 320px;
     background: rgb(39,109,170);
     background: linear-gradient(69deg, rgba(39,109,170,1) 0%, rgba(41,169,229,1) 100%);
+  }
 
-    @screen md {
+  @screen md {
+    .user-hero {
       height: 400px;
     }
   }
