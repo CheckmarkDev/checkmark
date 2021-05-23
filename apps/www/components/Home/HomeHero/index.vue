@@ -12,8 +12,8 @@
             v-text="$trans('home.titles.subtitle')"
           />
         </div>
-        <!-- v-if="!$accessor.isAuthenticated" -->
         <div
+          v-if="!$accessor.isAuthenticated"
           class="mt-8 flex items-center"
         >
           <nuxt-link
