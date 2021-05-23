@@ -3,7 +3,6 @@
 class ApplicationController < ActionController::API
   before_action :set_raven_context
 
-  # rubocop:disable Metrics/CyclomaticComplexity
   def authorize_request
     header = request.headers['Authorization']
     token = header.split(' ').last if header
@@ -35,7 +34,6 @@ class ApplicationController < ActionController::API
       render json: { errors: e.message }, status: :unauthorized
     end
   end
-  # rubocop:enable Metrics/CyclomaticComplexity
 
   private
 
