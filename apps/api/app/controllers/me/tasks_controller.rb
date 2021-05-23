@@ -35,18 +35,18 @@ module Me
     def update
       if task_params[:images].present?
         @task.images.each do |image|
-          image.purge if !task_params[:images].include?(image.uuid)
+          image.purge unless task_params[:images].include?(image.uuid)
         end
 
         task_params[:images].each do |image|
-          @task.images.attach(image) if !image.is_a? String
+          @task.images.attach(image) unless image.is_a? String
         end
       else
-        @task.images.each { |image| image.purge }
+        @task.images.each(&:purge)
       end
 
       if @task.update(task_params.except(:images))
-        render json: {}, status: :ok
+        render :show, status: :created
       else
         render json: @task.errors, status: :unprocessable_entity
       end
