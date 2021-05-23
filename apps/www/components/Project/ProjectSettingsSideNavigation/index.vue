@@ -47,9 +47,3 @@
     }
   })
 </script>
-
-<style>
-  .app-side-navigation {
-    @apply w-full;
-  }
-</style>
