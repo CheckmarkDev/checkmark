@@ -26,3 +26,9 @@ Layout/MultilineMethodCallIndentation:
 
 Layout/FirstArrayElementIndentation:
   Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false

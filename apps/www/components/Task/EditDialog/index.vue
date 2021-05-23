@@ -43,6 +43,18 @@
                     class="w-full mb-2 p-2 rounded-bl rounded-br rounded-tr appearance-none leading-relaxed border border-gray-300 border-solid"
                   ></textarea>
                 </div>
+
+                <!-- Images -->
+                <h2
+                  v-text="$trans('project.titles.images')"
+                  class="text-lg mb-2"
+                />
+                <TaskImageEdition
+                  :images.sync="editableImages"
+                  class="mb-6"
+                  @remove="remove"
+                />
+
                 <button
                   :disabled="$wait.is('updating task')"
                   class="btn btn-primary w-full md:w-auto"
@@ -60,17 +72,19 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, toRefs, reactive } from '@nuxtjs/composition-api'
+  import { defineComponent, toRefs, reactive, ref } from '@nuxtjs/composition-api'
   import { XIcon } from 'vue-feather-icons'
   import { Task } from '~/types/task'
   import UserCard from '@/components/UserCard/index.vue'
   import TaskStateSwitch from './TaskStateSwitch/index.vue'
+  import TaskImageEdition from './TaskImageEdition/index.vue'
 
   export default defineComponent({
     components: {
       XIcon,
       UserCard,
-      TaskStateSwitch
+      TaskStateSwitch,
+      TaskImageEdition
     },
     props: {
       task: {
@@ -85,8 +99,19 @@
         state: task.value.state
       })
 
+      const editableImages = ref(Array.from(task.value.images))
+
+      function remove (image) {
+        const index = editableImages.value.findIndex(v => v === image)
+        if (index !== -1) {
+          editableImages.value.splice(index, 1)
+        }
+      }
+
       return {
-        formData
+        formData,
+        editableImages,
+        remove
       }
     },
     methods: {
@@ -98,10 +123,18 @@
 
             const { content, state } = this.formData
 
+            const formData = new FormData()
+            formData.append('state', state)
+            if (content.trim()) formData.append('content', content.trim())
+            this.editableImages.forEach(image => {
+              formData.append('images[]', image.uuid || image.file)
+            })
+
             this.$wait.start('updating task')
-            this.$axios.put(`/me/tasks/${this.task.uuid}`, {
-              content: content.trim() || null,
-              state: state
+            this.$axios.put(`/me/tasks/${this.task.uuid}`, formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
             })
               .then(() => {
                 this.formData.content = ''
