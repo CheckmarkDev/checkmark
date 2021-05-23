@@ -1,38 +1,52 @@
 import { Ref, ref } from '@nuxtjs/composition-api'
 
-export default function useFileChange (defaultPreview: string) {
+export default function useFileChange (defaultPreview?: string) {
   const targetInput: Ref<HTMLInputElement|null> = ref(null)
-  const preview = ref(defaultPreview)
-  const file: Ref<File|null> = ref(null)
+  const previews: Ref<Array<string>> = ref([])
+  const files: Ref<Array<File>> = ref([])
+
+  if (defaultPreview) {
+    previews.value = [
+      defaultPreview
+    ]
+  }
 
   function fileChange (e: Event) {
     if (e) {
       targetInput.value = (e.target as HTMLInputElement)
-      const files = targetInput.value.files
-      if (files && files.length) {
-        file.value = files[0]
-        const reader = new FileReader()
-        reader.onload = v => {
-          if (v.target && v.target.result) {
-            preview.value = v.target.result as string
+      const inputFiles = targetInput.value.files
+
+      if (inputFiles && inputFiles.length) {
+        previews.value = []
+
+        files.value = Array.from(inputFiles)
+        files.value.forEach(file => {
+          const reader = new FileReader()
+          reader.onload = v => {
+            if (v.target && v.target.result) {
+              previews.value.push(v.target.result as string)
+            }
           }
-        }
-        reader.readAsDataURL(files[0])
+
+          reader.readAsDataURL(file)
+        })
       }
     }
   }
 
   function clear () {
-    file.value = null
+    files.value = []
     if (targetInput.value) {
       targetInput.value.value = ''
     }
+
+    previews.value = []
   }
 
   return {
     fileChange,
     clear,
-    file,
-    preview
+    files,
+    previews
   }
 }

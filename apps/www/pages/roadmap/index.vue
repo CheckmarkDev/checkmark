@@ -85,8 +85,10 @@
 <style scoped>
   .roadmap__timeline::before {
     @apply md:absolute md:w-full md:h-2 md:bg-blue-600 md:z-0;
+  }
 
-    @screen md {
+  @screen md {
+    .roadmap__timeline::before {
       content: '';
       top: 55px;
     }
@@ -97,8 +99,10 @@
     background: rgb(39,109,170);
     background: linear-gradient(69deg, rgba(39,109,170,1) 0%, rgba(41,169,229,1) 100%);
     padding-bottom: 100px;
+  }
 
-    @screen md {
+  @screen md {
+    .home-hero {
       min-height: 400px;
       padding-bottom: 180px;
     }
@@ -106,8 +110,10 @@
 
   .home-container {
     margin-top: -100px;
+  }
 
-    @screen md {
+  @screen md {
+    .home-container {
       margin-top: -180px;
     }
   }

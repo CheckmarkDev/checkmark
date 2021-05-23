@@ -43,10 +43,17 @@
     </div>
     <div class="project-container">
       <div class="container mx-auto flex flex-col md:flex-row items-start">
-        <ProjectSettingsSideNavigation />
-        <section class="bg-white dark:bg-gray-700 dark:text-white w-full md:w-9/12 rounded-lg p-6">
-          <nuxt />
-        </section>
+        <ProjectSideNavigation
+          class="flex-1"
+        />
+        <div
+          class="flex flex-col w-full md:w-9/12"
+        >
+          <ProjectSettingsSideNavigation />
+          <section class="bg-white dark:bg-gray-700 dark:text-white rounded-lg p-6">
+            <nuxt />
+          </section>
+        </div>
       </div>
     </div>
   </main>
@@ -54,6 +61,7 @@
 
 <script lang="ts">
   import { defineComponent } from '@nuxtjs/composition-api'
+  import ProjectSideNavigation from '@/components/Project/ProjectSideNavigation/index.vue'
   import ProjectSettingsSideNavigation from '@/components/Project/ProjectSettingsSideNavigation/index.vue'
   import AppAvatar from '@/components/AppAvatar/index.vue'
 
@@ -65,6 +73,7 @@
       ])
     }],
     components: {
+      ProjectSideNavigation,
       ProjectSettingsSideNavigation,
       AppAvatar
     }
@@ -77,11 +86,14 @@
     background: rgb(39,109,170);
     background: linear-gradient(69deg, rgba(39,109,170,1) 0%, rgba(41,169,229,1) 100%);
     padding-bottom: 180px;
+  }
 
-    @screen md {
+  @screen md {
+    .project-hero {
       min-height: 400px;
     }
   }
+
   .project-hero__avatar {
     width: 80px;
     height: 80px;

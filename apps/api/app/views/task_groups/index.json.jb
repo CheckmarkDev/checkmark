@@ -26,7 +26,10 @@ json[:data] = @task_groups.map do |task_group|
     user: user
   }
 
-  v[:tasks] = task_group.tasks.map do |task|
+  tasks = task_group.tasks
+  tasks = tasks.where(state: params[:state]) if params[:state].present?
+
+  v[:tasks] = tasks.map do |task|
     t = {
       uuid: task.uuid,
       content: task.content,
