@@ -33,8 +33,20 @@ module Me
     param :content, String, desc: 'Content of the task'
     param :state, String, desc: 'State'
     def update
-      if @task.update(task_params)
-        render :show, status: :ok
+      if task_params[:images].present?
+        @task.images.each do |image|
+          image.purge if !task_params[:images].include?(image.uuid)
+        end
+
+        task_params[:images].each do |image|
+          @task.images.attach(image) if !image.is_a? String
+        end
+      else
+        @task.images.each { |image| image.purge }
+      end
+
+      if @task.update(task_params.except(:images))
+        render json: {}, status: :ok
       else
         render json: @task.errors, status: :unprocessable_entity
       end

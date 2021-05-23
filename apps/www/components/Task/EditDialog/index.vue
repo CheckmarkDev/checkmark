@@ -49,10 +49,10 @@
                   v-text="$trans('project.titles.images')"
                   class="text-lg mb-2"
                 />
-                <!-- TODO: Add images form -->
                 <TaskImageEdition
-                  :task="task"
+                  :images.sync="editableImages"
                   class="mb-6"
+                  @remove="remove"
                 />
 
                 <button
@@ -72,7 +72,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, toRefs, reactive } from '@nuxtjs/composition-api'
+  import { defineComponent, toRefs, reactive, ref } from '@nuxtjs/composition-api'
   import { XIcon } from 'vue-feather-icons'
   import { Task } from '~/types/task'
   import UserCard from '@/components/UserCard/index.vue'
@@ -99,8 +99,19 @@
         state: task.value.state
       })
 
+      const editableImages = ref(Array.from(task.value.images))
+
+      function remove (image) {
+        const index = editableImages.value.findIndex(v => v === image)
+        if (index !== -1) {
+          editableImages.value.splice(index, 1)
+        }
+      }
+
       return {
-        formData
+        formData,
+        editableImages,
+        remove
       }
     },
     methods: {
@@ -113,8 +124,11 @@
             const { content, state } = this.formData
 
             const formData = new FormData()
-            formData.append('content', content.trim() || null)
             formData.append('state', state)
+            if (content.trim()) formData.append('content', content.trim())
+            this.editableImages.forEach(image => {
+              formData.append('images[]', image.uuid || image.file)
+            })
 
             this.$wait.start('updating task')
             this.$axios.put(`/me/tasks/${this.task.uuid}`, formData, {

@@ -1,10 +1,27 @@
 <template>
   <div class="task-image-edition">
-    <div>
+    <div
+      class="flex flex-col border border-gray-300 dark:border-gray-600 border-solid rounded p-2 mb-4"
+    >
+      <label
+        for="file"
+        class="text-sm text-gray-700 dark:text-gray-300 mb-2"
+      >
+        {{ $trans('home.labels.images') }}
+      </label>
+      <input
+        id="file"
+        ref="files"
+        type="file"
+        name="images[]"
+        accept="image/*"
+        multiple
+        @change="fileChange"
+      >
     </div>
     <div class="flex flex-wrap -m-2">
       <div
-        v-for="image in editableImages"
+        v-for="image in images"
         :key="image.uuid"
         class="task-image-edition__image m-2"
       >
@@ -17,7 +34,7 @@
           <button
             type="button"
             class="btn btn-danger btn-sm w-full"
-            @click="remove(image)"
+            @click="$emit('remove', image)"
           >
             {{ $trans('global.buttons.delete') }}
           </button>
@@ -28,31 +45,54 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, toRefs } from '@nuxtjs/composition-api'
+  import { defineComponent, watch, toRefs } from '@nuxtjs/composition-api'
 
-  import Task from '@/types/task'
+  import useFileChange from '@/composables/useFileChange'
 
   export default defineComponent({
     props: {
-      task: {
-        type: Object as () => Task,
+      images: {
+        type: Array,
         required: true
       }
     },
-    setup (props) {
-      const { task } = toRefs(props)
-      const editableImages = ref(Array.from(task.value.images))
+    setup (props, { emit }) {
+      const { images } = toRefs(props)
+      const { fileChange, files, previews } = useFileChange()
 
-      function remove (image) {
-        const index = editableImages.value.findIndex(v => v === image)
-        if (index !== -1) {
-          editableImages.value.splice(index, 1)
-        }
-      }
+      watch(files, (v) => {
+        const filePromises = []
+        Array.from(v).forEach(file => {
+          const filePromise = new Promise(resolve => {
+            const reader = new FileReader()
+            reader.onload = e => {
+              if (e.target && e.target.result) {
+                resolve({
+                  file,
+                  thumbnail_url: e.target.result as string
+                })
+              }
+            }
+
+            reader.readAsDataURL(file)
+          })
+
+          filePromises.push(filePromise)
+        })
+
+        Promise.all(filePromises)
+          .then(files => {
+            emit('update:images', [
+              ...images.value,
+              ...files
+            ])
+          })
+      })
 
       return {
-        editableImages,
-        remove
+        fileChange,
+        files,
+        previews
       }
     }
   })
