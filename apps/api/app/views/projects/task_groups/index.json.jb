@@ -8,7 +8,7 @@ json = {
   }
 }
 
-# rubocop:disable Metrics/BlockLength, Layout/LineLength
+# rubocop:disable Metrics/BlockLength
 json[:data] = @task_groups.map do |task_group|
   user = {
     uuid: task_group.user.uuid,
@@ -26,12 +26,20 @@ json[:data] = @task_groups.map do |task_group|
     user: user
   }
 
-  v[:tasks] = task_group.tasks.includes(:projects,
-                                        :task_comments,
-                                        :task_likes,
-                                        :mentions,
-                                        images_attachments: :blob,
-                                        projects: [avatar_attachment: :blob]).where(projects: { id: [@project.id] }).map do |task|
+  tasks = task_group.tasks
+    .includes(
+      :projects,
+      :task_comments,
+      :task_likes,
+      :mentions,
+      images_attachments: :blob,
+      projects: [avatar_attachment: :blob]
+    )
+    .where(projects: { id: [@project.id] })
+
+  tasks = tasks.where(state: params[:state]) if params[:state].present?
+
+  v[:tasks] = tasks.map do |task|
     t = {
       uuid: task.uuid,
       content: task.content,
@@ -77,6 +85,6 @@ json[:data] = @task_groups.map do |task_group|
 
   v
 end
-# rubocop:enable Metrics/BlockLength, Layout/LineLength
+# rubocop:enable Metrics/BlockLength
 
 json
