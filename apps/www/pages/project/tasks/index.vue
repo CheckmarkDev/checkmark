@@ -9,9 +9,13 @@
       class="mb-8"
     />
 
-    <h2 class="font-medium text-2xl mb-4">
-      Feed
-    </h2>
+    <div class="flex items-center justify-between">
+      <h2 class="font-medium text-2xl mb-4">
+        {{ $trans('global.titles.feed') }}
+      </h2>
+
+      <TaskGroupFilter />
+    </div>
 
     <template
       v-if="filteredTaskGroups.data.length"
@@ -25,7 +29,9 @@
       v-else
     >
       <p
-        v-text="$trans('project.paragraphs.no_tasks')"
+        v-text="$accessor.project.getFilters.state
+          ? $trans('project.paragraphs.no_tasks_filter')
+          : $trans('project.paragraphs.no_tasks')"
       />
     </template>
   </div>
@@ -36,10 +42,12 @@
   import { TaskGroup } from '~/types/taskGroup'
   import DateGroupedTaskGroups from '@/components/DateGroupedTaskGroups/index.vue'
   import ProjectScreenshots from '@/components/Project/ProjectScreenshots/index.vue'
+  import TaskGroupFilter from '@/components/TaskGroupFilter/index.vue'
   import { PaginateResponse } from '~/types/pagination'
 
   export default defineComponent({
     components: {
+      TaskGroupFilter,
       DateGroupedTaskGroups,
       ProjectScreenshots
     },
@@ -87,9 +95,14 @@
     },
     methods: {
       fetchTaskGroups (params = {}) {
+        const { state } = this.$accessor.project.getFilters
+
         const { slug } = this.$route.params
         return this.$axios.$get(`/projects/${slug}/task_groups`, {
-          params
+          params: {
+            ...params,
+            state
+          }
         })
           .then(res => {
             this.taskGroups = res
@@ -98,10 +111,14 @@
       loadMore () {
         if (this.taskGroups.meta.current_page + 1 > this.taskGroups.meta.total_pages) return
 
+        const { state } = this.$accessor.project.getFilters
+
         const { slug } = this.$route.params
+        this.$wait.start('fetching task groups')
         this.$axios.$get(`/projects/${slug}/task_groups`, {
           params: {
-            page: this.taskGroups.meta.current_page + 1
+            page: this.taskGroups.meta.current_page + 1,
+            state
           }
         })
           .then(res => {
@@ -110,6 +127,9 @@
               ...res.data
             ]
             this.taskGroups.meta = res.meta
+          })
+          .finally(() => {
+            this.$wait.end('fetching task groups')
           })
       }
     }
