@@ -4,4 +4,6 @@ user.paragraphs.description: Découvrez et suivez la progression de {user} sur s
 user.paragraphs.no_comments: Aucun commentaire !
 user.paragraphs.commented: Votre commentaire a bien été publié.
 user.paragraphs.no_projects: Vous n'avez aucun projet.
+user.paragraphs.no_tasks: Cet utilisateur n'a aucune tâche.
+user.paragraphs.no_tasks_filter: Aucune tâche pour le filtre appliqué.
 user.buttons.add_project: Nouveau projet
