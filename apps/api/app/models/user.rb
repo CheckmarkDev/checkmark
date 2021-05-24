@@ -27,24 +27,26 @@ class User < ApplicationRecord
   end
 
   def streak
-    # rubocop:disable Layout/LineLength
-    streak = ActiveRecord::Base.connection.select_values(
-      ActiveRecord::Base.sanitize_sql_for_conditions(["
-        select
-          case t.created_at::timestamp AT TIME ZONE :timezone <= timestamp 'yesterday'
-            when true then 0
-            when false then date_part('day', t.created_at::timestamp AT TIME ZONE :timezone - s.created_at::timestamp AT TIME ZONE :timezone) + 1
-          end as streak
-        from tasks as t inner join streaks as s on s.id = t.streak_id where s.id = (
-          select streaks.id from streaks inner join tasks on tasks.streak_id = streaks.id where streaks.user_id = :user_id order by streaks.created_at desc limit 1
-        ) order by t.created_at desc limit 1
-      ", { user_id: id, timezone: timezone }])
-    )
-    # rubocop:enable Layout/LineLength
+    Rails.cache.fetch([self, :streak], expires_in: 12.hours) do
+      # rubocop:disable Layout/LineLength
+      streak = ActiveRecord::Base.connection.select_values(
+        ActiveRecord::Base.sanitize_sql_for_conditions(["
+          select
+            case t.created_at::timestamp AT TIME ZONE :timezone <= timestamp 'yesterday'
+              when true then 0
+              when false then date_part('day', t.created_at::timestamp AT TIME ZONE :timezone - s.created_at::timestamp AT TIME ZONE :timezone) + 1
+            end as streak
+          from tasks as t inner join streaks as s on s.id = t.streak_id where s.id = (
+            select streaks.id from streaks inner join tasks on tasks.streak_id = streaks.id where streaks.user_id = :user_id order by streaks.created_at desc limit 1
+          ) order by t.created_at desc limit 1
+        ", { user_id: id, timezone: timezone }])
+      )
+      # rubocop:enable Layout/LineLength
 
-    return 0 if streak.nil? || streak[0].nil?
+      return 0 if streak.nil? || streak[0].nil?
 
-    streak[0].to_int
+      streak[0].to_int
+    end
   end
 
   def avatar_url

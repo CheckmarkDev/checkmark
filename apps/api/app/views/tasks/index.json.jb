@@ -26,8 +26,8 @@ json[:data] = @tasks.map do |task|
     }
   }
   v[:metrics] = {
-    comments: task.task_comments.count,
-    likes: User.find(task.task_likes.pluck(:user_id)).pluck(:uuid)
+    comments: task.comments,
+    likes: task.likes
   }
 
   v
