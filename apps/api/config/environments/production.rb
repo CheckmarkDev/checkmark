@@ -1,5 +1,13 @@
 # frozen_string_literal: true
 
+Rails.application.config.middleware.insert_before 0, Rack::Cors do
+  allow do
+    origins 'https://www.checkmark.dev', 'https://checkmark.dev', 'https://bot.checkmark.dev'
+
+    resource '*', headers: :any, methods: %i[get post put patch delete options head]
+  end
+end
+
 # rubocop:disable Metrics/BlockLength
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
