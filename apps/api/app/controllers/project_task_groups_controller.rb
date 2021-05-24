@@ -7,8 +7,14 @@ class ProjectTaskGroupsController < ApplicationController
   def index
     @task_groups = TaskGroup
       .includes([
-        tasks: :projects,
-        user: [:streaks, { avatar_attachment: :blob }]
+        user: [avatar_attachment: :blob],
+        tasks: [
+          :task_comments,
+          :task_likes,
+          { images_attachments: :blob,
+            projects: [avatar_attachment: :blob],
+            mentions: [avatar_attachment: :blob] }
+        ]
       ])
       .joins(tasks: :projects)
       .where(projects: { id: @project.id })
