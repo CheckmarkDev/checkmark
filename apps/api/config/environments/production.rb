@@ -2,7 +2,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins 'https://www.checkmark.dev', 'https://checkmark.dev', 'https://bot.checkmark.dev'
+    origins 'https://www.checkmark.dev', 'https://checkmark.dev', 'http://www.checkmark.dev', 'http://checkmark.dev', 'https://bot.checkmark.dev'
 
     resource '*', headers: :any, methods: %i[get post put patch delete options head]
   end
