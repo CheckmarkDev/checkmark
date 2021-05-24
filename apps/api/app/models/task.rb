@@ -84,13 +84,13 @@ class Task < ApplicationRecord
 
   def likes
     Rails.cache.fetch([self, :likes]) do
-      User.find(self.task_likes.pluck(:user_id)).pluck(:uuid)
+      User.find(task_likes.pluck(:user_id)).pluck(:uuid)
     end
   end
 
   def comments
     Rails.cache.fetch([self, :comments]) do
-      self.task_comments.pluck(:id).size
+      task_comments.pluck(:id).size
     end
   end
 
