@@ -82,6 +82,18 @@ class Task < ApplicationRecord
     self.streak = last_streak
   end
 
+  def likes
+    Rails.cache.fetch([self, :likes]) do
+      User.find(task_likes.pluck(:user_id)).pluck(:uuid)
+    end
+  end
+
+  def comments
+    Rails.cache.fetch([self, :comments]) do
+      task_comments.pluck(:id).size
+    end
+  end
+
   # Delete the associated task group if the task
   # we are deleting is the last one associated to that task group.
   def delete_remaining_task_group
