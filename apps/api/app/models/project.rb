@@ -9,6 +9,7 @@ class Project < ApplicationRecord
   validates :name, presence: true
   validates :slug, presence: true, uniqueness: true, length: { minimum: 2, maximum: 32 }
   validates :description, length: { maximum: 255 }
+  validates :main_color, presence: true, format: { with: /#(?:[0-9a-fA-F]{3}){1,2}/i }
 
   before_save :format_slug
 
