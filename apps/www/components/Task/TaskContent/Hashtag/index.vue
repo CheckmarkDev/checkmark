@@ -9,7 +9,7 @@
         }
       }"
       v-text="`#${project.slug}`"
-      class="inline text-blue-600 dark:text-white dark:bg-gray-600 p-1 rounded font-medium whitespace-no-wrap"
+      class="inline text-blue-600 dark:text-white dark:bg-gray-600 bg-blue-400 bg-opacity-10 p-1 rounded font-medium whitespace-no-wrap"
       @mouseenter.native="togglePopup(true)"
       @mouseleave.native="togglePopup(false)"
     />
