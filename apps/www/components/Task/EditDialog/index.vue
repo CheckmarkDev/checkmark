@@ -1,6 +1,6 @@
 <template>
   <div class="flex fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 z-20">
-    <div class="edit-dialog__content w-full bg-white m-auto p-4 md:p-8">
+    <div class="edit-dialog__content w-full bg-white dark:bg-gray-700 dark:text-white m-auto p-4 md:p-8">
       <div class="flex items-center justify-between mb-8">
         <h1 class="font-medium text-xl">
           {{ $trans('global.titles.edit_task') }}
@@ -40,7 +40,7 @@
                     v-model="formData.content"
                     :placeholder="$trans('home.labels.done_placeholder')"
                     name=""
-                    class="w-full mb-2 p-2 rounded-bl rounded-br rounded-tr appearance-none leading-relaxed border border-gray-300 border-solid"
+                    class="textarea w-full mb-2 p-2 rounded-bl rounded-br rounded-tr appearance-none leading-relaxed border border-gray-300 border-solid"
                   ></textarea>
                 </div>
 
