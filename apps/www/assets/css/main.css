@@ -40,7 +40,7 @@ html, body {
 
 input::placeholder,
 textarea::placeholder {
-  @apply text-gray-600;
+  @apply text-gray-600 dark:text-gray-400;
 }
 
 .textarea {
