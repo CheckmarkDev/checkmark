@@ -2,6 +2,7 @@
 
 json = {
   event: 'task.created',
+  secret: @secret,
   data: {
     uuid: @task.uuid,
     content: @task.content,
