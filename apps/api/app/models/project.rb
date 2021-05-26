@@ -5,6 +5,7 @@ class Project < ApplicationRecord
   has_and_belongs_to_many :tasks
   has_many_attached :screenshots
   has_one_attached :avatar
+  has_many :webhooks, dependent: :destroy
 
   validates :name, presence: true
   validates :slug, presence: true, uniqueness: true, length: { minimum: 2, maximum: 32 }
