@@ -2,7 +2,7 @@
 
 class TaskLike < ApplicationRecord
   belongs_to :user
-  belongs_to :task
+  belongs_to :task, touch: true
 
   after_commit :send_like_email, on: :create
 

@@ -27,7 +27,7 @@ class Task < ApplicationRecord
 
   def assign_mentions
     self.mentions = []
-    matches = content.scan(/@(\w*)/)
+    matches = content.scan(/@([\w|\-]*)/)
 
     matches.each do |match|
       user = User.find_by(username: match)
@@ -37,7 +37,7 @@ class Task < ApplicationRecord
 
   def assign_projects
     self.projects = []
-    matches = content.scan(/#(\w*)/)
+    matches = content.scan(/#([\w|\-]*)/)
 
     matches.each do |match|
       project = Project.find_by(slug: match)
