@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_25_232157) do
+ActiveRecord::Schema.define(version: 2021_05_26_144553) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -167,6 +167,18 @@ ActiveRecord::Schema.define(version: 2021_05_25_232157) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
     t.index ["uuid"], name: "index_users_on_uuid", unique: true
+  end
+
+  create_table "webhook_requests", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.integer "state", default: 0, null: false
+    t.string "event", null: false
+    t.bigint "webhook_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["state"], name: "index_webhook_requests_on_state"
+    t.index ["uuid"], name: "index_webhook_requests_on_uuid", unique: true
+    t.index ["webhook_id"], name: "index_webhook_requests_on_webhook_id"
   end
 
   create_table "webhooks", force: :cascade do |t|

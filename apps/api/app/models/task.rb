@@ -110,11 +110,16 @@ class Task < ApplicationRecord
 
   def notify_webhooks
     Webhook.all.find_each do |webhook|
-      data = ApplicationController.render(template: 'webhook_job/task_created', assigns: {
-                                            task: self
-                                          })
+      webhook_request = webhook.webhook_requests.create(
+        event: 'task.created',
+        state: WebhookRequest.states[:pending]
+      )
 
-      WebhookJob.perform_later(webhook, 'task.created', data)
+      data = ApplicationController.render(template: 'webhook_job/task_created', assigns: {
+        task: self
+      })
+
+      WebhookJob.perform_later(webhook, webhook_request, data)
     end
   end
 end
