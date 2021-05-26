@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WebhookRequest < ApplicationRecord
   belongs_to :webhook
 
@@ -6,5 +8,4 @@ class WebhookRequest < ApplicationRecord
     delivered: 1,
     failed: 2
   }
-
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddProjectAndUserReferenceToWebhook < ActiveRecord::Migration[6.1]
   def up
     add_reference(:webhooks, :user, index: true, null: true, foreign_key: true)

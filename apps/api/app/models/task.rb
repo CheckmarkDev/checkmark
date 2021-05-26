@@ -110,27 +110,27 @@ class Task < ApplicationRecord
 
   def notify_webhooks
     # Notify globally all the events for the Checkmark platform.
-    Webhook.where(project: nil, user: nil).find_each { |webhook| self.notify_webhook(webhook) }
+    Webhook.where(project: nil, user: nil).find_each { |webhook| notify_webhook(webhook) }
 
     # Notify locally for the task owner
-    self.user.webhooks.find_each { |webhook| self.notify_webhook(webhook) }
+    user.webhooks.find_each { |webhook| notify_webhook(webhook) }
 
     # For every project associated with this task, send the webhook
-    self.projects.find_each do |project|
-      project.webhooks.find_each { |webhook| self.notify_webhook(webhook) }
+    projects.find_each do |project|
+      project.webhooks.find_each { |webhook| notify_webhook(webhook) }
     end
   end
 
-  def notify_webhook (webhook)
+  def notify_webhook(webhook)
     webhook_request = webhook.webhook_requests.create(
       event: 'task.created',
       state: WebhookRequest.states[:pending]
     )
 
     data = ApplicationController.render(template: 'webhook_job/task_created', assigns: {
-      task: self,
-      secret: webhook.secret
-    })
+                                          task: self,
+                                          secret: webhook.secret
+                                        })
 
     WebhookJob.perform_later(webhook, webhook_request, data)
   end

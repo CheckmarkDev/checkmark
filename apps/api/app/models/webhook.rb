@@ -4,8 +4,8 @@ require 'securerandom'
 
 class Webhook < ApplicationRecord
   has_many :webhook_requests, dependent: :destroy
-  belongs_to :user, required: false
-  belongs_to :project, required: false
+  belongs_to :user, optional: true
+  belongs_to :project, optional: true
 
   before_create :assign_secret
 
@@ -14,5 +14,4 @@ class Webhook < ApplicationRecord
   def assign_secret
     self.secret = SecureRandom.hex
   end
-
 end

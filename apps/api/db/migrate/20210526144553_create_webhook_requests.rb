@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateWebhookRequests < ActiveRecord::Migration[6.1]
   def up
     create_table :webhook_requests do |t|
