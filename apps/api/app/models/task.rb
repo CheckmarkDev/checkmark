@@ -116,7 +116,8 @@ class Task < ApplicationRecord
       )
 
       data = ApplicationController.render(template: 'webhook_job/task_created', assigns: {
-        task: self
+        task: self,
+        secret: webhook.secret
       })
 
       WebhookJob.perform_later(webhook, webhook_request, data)
