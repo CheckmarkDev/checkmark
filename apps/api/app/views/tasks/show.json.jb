@@ -20,6 +20,7 @@ json[:projects] = @task.projects.map do |project|
     uuid: project.uuid,
     slug: project.slug,
     name: project.name,
+    main_color: project.main_color,
     avatar_url: project.avatar_url,
     url: project.url
   }
