@@ -12,7 +12,7 @@
     {
       uuid: screenshot.uuid,
       url: Rails.application.routes.url_helpers.url_for(screenshot),
-      thumbnail_url: Rails.application.routes.url_helpers.url_for(screenshot.variant(resize_to_fit: [720, 720]))
+      thumbnail_url: Rails.application.routes.url_helpers.url_for(screenshot.variant(resize_to_fill: [720, 405]))
     }
   end
 }
