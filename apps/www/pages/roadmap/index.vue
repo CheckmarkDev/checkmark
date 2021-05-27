@@ -15,21 +15,30 @@
           </div>
         </div>
       </div>
-      <div class="relative roadmap__timeline">
-        <div class="container mx-auto pb-8">
-          <div class="flex flex-col md:flex-row items-start">
+
+      <div class="relative roadmap__timeline mb-4">
+        <Carousel
+          :space-padding="80"
+          :pagination-enabled="false"
+          :perPageCustom="[
+            [768, 3],
+            [1024, 4]
+          ]"
+        >
+          <Slide
+            v-for="(item, k) in projects"
+            :key="k"
+          >
             <RoadmapItem
-              v-for="(item, k) in projects"
-              :key="k"
               :slug="item.slug"
               :icon="item.icon"
               :title="item.title"
               :description="item.description"
               :state="item.state"
-              class="md:w-1/4 z-10"
+              class="z-10"
             />
-          </div>
-        </div>
+          </Slide>
+        </Carousel>
       </div>
     </div>
     <div class="home-container">
@@ -44,15 +53,19 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, readonly, useContext } from '@nuxtjs/composition-api'
+  import { defineComponent } from '@nuxtjs/composition-api'
 
   import RoadmapItem from '@/components/Roadmap/RoadmapItem/index.vue'
   import SideNavigation from '@/components/Home/SideNavigation/index.vue'
+  import Carousel from '@/components/AppCarousel/Carousel.vue'
+  import Slide from '@/components/AppCarousel/Slide.vue'
 
   export default defineComponent({
     components: {
+      Carousel,
+      Slide,
       RoadmapItem,
-      SideNavigation
+      SideNavigation,
     },
     data () {
       return {
