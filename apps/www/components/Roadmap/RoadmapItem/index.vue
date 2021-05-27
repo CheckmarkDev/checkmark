@@ -6,7 +6,7 @@
         slug: slug
       }
     }"
-    class="roadmap-item flex md:flex-col rounded-lg p-4"
+    class="roadmap-item flex flex-col rounded-lg p-4"
   >
     <div class="flex items-center justify-center bg-white rounded-full w-12 h-12 md:w-20 md:h-20 relative mb-4 flex-shrink-0 mr-4 md:mr-0">
       <img
