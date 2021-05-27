@@ -1,13 +1,13 @@
 <template>
-  <div class="task-state-switch rounded border border-gray-300 flex items-center mr-auto">
+  <div class="task-state-switch rounded border border-gray-300 dark:border-gray-600 flex items-center mr-auto">
     <button
       v-for="state in states"
       :key="state.key"
       :class="{
-        'task-state-switch__item--active bg-gray-300 hover:bg-gray-300': state.key === value
+        'task-state-switch__item--active bg-gray-300 hover:bg-gray-300 dark:bg-gray-600': state.key === value
       }"
       type="button"
-      class="task-state-switch__item focus:outline-none flex p-2 hover:bg-gray-200"
+      class="task-state-switch__item focus:outline-none flex p-2 hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-white dark:border-gray-600"
       @click="$emit('input', state.key)"
     >
       <div class="flex items-center">
@@ -65,7 +65,7 @@
 
 <style scoped>
   .task-state-switch__item:not(:last-child) {
-    @apply border-gray-300;
+    @apply border-gray-300 dark:border-gray-600;
 
     border-right-style: solid;
     border-right-width: 1px;

@@ -24,6 +24,7 @@ module Me
     param :slug, String, desc: 'Slug of the project'
     param :name, String, desc: 'Name of the project'
     param :description, String, desc: 'Description of the project'
+    param :main_color, String, desc: 'Main color of the project'
     param :url, String, desc: 'Url of the project'
     def create
       @project = Project.new(project_params)
@@ -72,7 +73,7 @@ module Me
 
     # Only allow a trusted parameter "white list" through.
     def project_params
-      params.permit(:slug, :name, :description, :url, :avatar)
+      params.permit(:slug, :name, :description, :url, :main_color, :avatar)
     end
   end
 end

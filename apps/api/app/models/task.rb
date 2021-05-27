@@ -27,7 +27,7 @@ class Task < ApplicationRecord
 
   def assign_mentions
     self.mentions = []
-    matches = content.scan(/@(\w*)/)
+    matches = content.scan(/@([\w|\-]*)/)
 
     matches.each do |match|
       user = User.find_by(username: match)
@@ -37,7 +37,7 @@ class Task < ApplicationRecord
 
   def assign_projects
     self.projects = []
-    matches = content.scan(/#(\w*)/)
+    matches = content.scan(/#([\w|\-]*)/)
 
     matches.each do |match|
       project = Project.find_by(slug: match)
@@ -82,6 +82,18 @@ class Task < ApplicationRecord
     self.streak = last_streak
   end
 
+  def likes
+    Rails.cache.fetch([self, :likes]) do
+      User.find(task_likes.pluck(:user_id)).pluck(:uuid)
+    end
+  end
+
+  def comments
+    Rails.cache.fetch([self, :comments]) do
+      task_comments.pluck(:id).size
+    end
+  end
+
   # Delete the associated task group if the task
   # we are deleting is the last one associated to that task group.
   def delete_remaining_task_group
@@ -97,12 +109,29 @@ class Task < ApplicationRecord
   private
 
   def notify_webhooks
-    Webhook.all.find_each do |webhook|
-      data = ApplicationController.render(template: 'webhook_job/task_created', assigns: {
-                                            task: self
-                                          })
+    # Notify globally all the events for the Checkmark platform.
+    Webhook.where(project: nil, user: nil).find_each { |webhook| notify_webhook(webhook) }
 
-      WebhookJob.perform_later(webhook, 'task.created', data)
+    # Notify locally for the task owner
+    user.webhooks.find_each { |webhook| notify_webhook(webhook) }
+
+    # For every project associated with this task, send the webhook
+    projects.find_each do |project|
+      project.webhooks.find_each { |webhook| notify_webhook(webhook) }
     end
+  end
+
+  def notify_webhook(webhook)
+    webhook_request = webhook.webhook_requests.create(
+      event: 'task.created',
+      state: WebhookRequest.states[:pending]
+    )
+
+    data = ApplicationController.render(template: 'webhook_job/task_created', assigns: {
+                                          task: self,
+                                          secret: webhook.secret
+                                        })
+
+    WebhookJob.perform_later(webhook, webhook_request, data)
   end
 end

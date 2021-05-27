@@ -1,6 +1,6 @@
 <template>
   <div class="flex fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 z-20">
-    <div class="likes-dialog__content w-full bg-white m-auto p-4 md:p-8">
+    <div class="likes-dialog__content w-full bg-white dark:bg-gray-700 dark:text-white m-auto p-4 md:p-8">
       <div class="flex items-center justify-between mb-8">
         <h1 class="font-medium text-xl">
           {{ $trans('global.titles.reactions') }}

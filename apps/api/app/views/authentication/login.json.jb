@@ -16,6 +16,7 @@
       uuid: project.uuid,
       slug: project.slug,
       name: project.name,
+      main_color: project.main_color,
       url: project.url
     }
   end,

@@ -61,7 +61,7 @@
           return parts
         }
 
-        const tagRegx = /([#|@]\w+)/gm
+        const tagRegx = /([#|@]([\w|\-]*))/gm
         const tags = [...content.matchAll(tagRegx)]
 
         /**

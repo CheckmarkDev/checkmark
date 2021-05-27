@@ -44,6 +44,7 @@ json[:data] = @task_groups.map do |task_group|
         uuid: project.uuid,
         slug: project.slug,
         name: project.name,
+        main_color: project.main_color,
         avatar_url: project.avatar_url,
         url: project.url
       }
@@ -59,8 +60,8 @@ json[:data] = @task_groups.map do |task_group|
     end
 
     t[:metrics] = {
-      comments: task.task_comments.pluck(:id).size,
-      likes: User.find(task.task_likes.pluck(:user_id)).pluck(:uuid)
+      comments: task.comments,
+      likes: task.likes
     }
 
     t[:images] = task.images.map do |image|
