@@ -19,6 +19,12 @@ class User < ApplicationRecord
   validates :username, presence: true, uniqueness: true, length: { minimum: 2 }
   # validates :password, length: { minimum: 6 }
 
+  enum status: {
+    pending_validation: 0,
+    validated: 1,
+    blocked: 2
+  }
+
   before_create :create_email_notification
   before_save :format_username
   after_commit :send_welcome, on: :create
@@ -74,7 +80,7 @@ class User < ApplicationRecord
   end
 
   def self.notify_weekly_summary
-    User.all.each_with_index do |user, k|
+    User.validated.each_with_index do |user, k|
       timezone = user.timezone
       date_range = DateTime.now.in_time_zone(timezone).last_week..DateTime.yesterday.in_time_zone(timezone).at_midnight
       tasks = user.tasks.where(created_at: date_range).count
