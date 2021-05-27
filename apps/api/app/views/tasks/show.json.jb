@@ -39,7 +39,7 @@ json[:images] = @task.images.map do |image|
   {
     uuid: image.uuid,
     url: Rails.application.routes.url_helpers.url_for(image),
-    thumbnail_url: Rails.application.routes.url_helpers.url_for(image.variant(resize_to_fit: [720, 720]))
+    thumbnail_url: Rails.application.routes.url_helpers.url_for(image.variant(resize_to_fill: [720, 405]))
   }
 end
 
