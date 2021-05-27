@@ -1,6 +1,6 @@
 <template>
   <div class="home-hero">
-    <div class="home-hero__avatars-container absolute w-full hidden md:block overflow-x-hidden">
+    <div class="home-hero__avatars-container absolute w-full hidden md:block overflow-x-hidden pointer-events-none">
       <div class="home-hero__avatars container mx-auto relative">
         <HomeHeroAvatars
           :users="computedUsers.slice(0, 5)"
