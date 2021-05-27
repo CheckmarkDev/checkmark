@@ -3,13 +3,13 @@
     <div class="home-hero">
       <div class="container mx-auto">
         <div class="flex flex-col md:flex-row md:items-center justify-between py-8">
-          <div class="md:w-1/2">
+          <div class="md:w-1/2 mb-8 md:mb-0">
             <h1
               class="text-4xl font-medium text-white leading-tight mb-4"
               v-text="$trans('roadmap.titles.main')"
             />
             <h2
-              class="text-2xl text-gray-300"
+              class="text-2xl text-white text-opacity-70"
               v-text="$trans('roadmap.paragraphs.main')"
             />
           </div>
@@ -18,10 +18,11 @@
 
       <div class="relative roadmap__timeline mb-4">
         <Carousel
-          :space-padding="80"
+          :space-padding="32"
           :pagination-enabled="false"
           :perPageCustom="[
-            [768, 3],
+            [0, 1],
+            [770, 3],
             [1024, 4]
           ]"
         >
