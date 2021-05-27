@@ -5,8 +5,8 @@
       :key="user.user.uuid"
       class="w-1/3 mb-4"
     >
-      <AppAvatar
-        :src="user.user.avatar_url"
+      <UserAvatar
+        :user="user.user"
         :width="user.size"
         :height="user.size"
       />
@@ -17,15 +17,18 @@
 <script lang="ts">
   import { defineComponent } from '@vue/composition-api'
 
+  import UserAvatar from '@/components/UserAvatar/index.vue'
+
   export default defineComponent({
+    components: {
+      UserAvatar
+    },
     props: {
       users: {
         type: Array,
         required: true
       }
-    },
-    setup() {
-    },
+    }
   })
 </script>
 
