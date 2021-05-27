@@ -1,5 +1,17 @@
 <template>
   <div class="home-hero">
+    <div class="home-hero__avatars-container absolute w-full hidden md:block overflow-x-hidden">
+      <div class="home-hero__avatars container mx-auto relative">
+        <HomeHeroAvatars
+          :users="computedUsers.slice(0, 5)"
+          class="home-hero__avatars--left"
+        />
+        <HomeHeroAvatars
+          :users="computedUsers.slice(5, 10)"
+          class="home-hero__avatars--right"
+        />
+      </div>
+    </div>
     <div class="container mx-auto">
       <div class="flex items-center text-center flex-col py-8">
         <div class="home-hero__wrapper">
@@ -45,10 +57,36 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from '@vue/composition-api'
+  import { defineComponent, computed, onMounted, ref } from '@vue/composition-api'
+
+  import AppAvatar from '@/components/AppAvatar/index.vue'
+  import HomeHeroAvatars from './HomeHeroAvatars/index.vue'
+  import useAxios from '~/composables/useAxios'
 
   export default defineComponent({
+    components: {
+      AppAvatar,
+      HomeHeroAvatars
+    },
     setup() {
+      const users = ref([])
+      const axios = useAxios()
+
+      onMounted(async () => {
+        const res = await axios.get('/users/random')
+        users.value = res.data
+      })
+
+      const computedUsers = computed(() => {
+        return users.value.map(user => ({
+          size: 50 + Math.round(Math.random() * 20),
+          user
+        }))
+      })
+
+      return {
+        computedUsers
+      }
     }
   })
 </script>
@@ -67,6 +105,34 @@
 
   .home-hero__wrapper {
     max-width: 550px;
+  }
+
+  .home-hero__avatars {
+    min-height: 320px;
+  }
+
+  @screen md {
+    .home-hero__avatars--left {
+      left: -150px;
+    }
+  }
+
+  @screen lg {
+    .home-hero__avatars--left {
+      left: -80px;
+    }
+  }
+
+  @screen md {
+    .home-hero__avatars--right {
+      right: -150px;
+    }
+  }
+
+  @screen lg {
+    .home-hero__avatars--right {
+      right: -80px;
+    }
   }
 
   @screen md {
