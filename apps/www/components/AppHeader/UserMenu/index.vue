@@ -31,7 +31,7 @@
     >
       <nav
         v-if="isOpen"
-        class="user-menu__dropdown absolute right-0 bg-white dark:bg-gray-700 rounded p-2 shadow"
+        class="user-menu__dropdown absolute right-0 bg-white dark:bg-gray-700 rounded p-2 shadow z-10"
         v-click-outside="() => isOpen = false"
       >
         <ul>

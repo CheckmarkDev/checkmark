@@ -16,7 +16,11 @@ Rails.application.routes.draw do
       resources :task_comments, path: 'comments'
       resources :task_likes, path: 'likes'
     end
-    resources :users
+    resources :users do
+      collection do
+        get :random, to: 'users#random'
+      end
+    end
 
     get '/users/:id/tasks', to: 'user_tasks#index'
     get '/users/:id/task_groups', to: 'user_task_groups#index'
