@@ -257,8 +257,8 @@
             const { name, slug, description, url, logo } = this.formData
 
             const formData = new FormData()
-            formData.append('name', name)
-            formData.append('slug', slug)
+            formData.append('name', name as string)
+            formData.append('slug', slug as string)
             if (description) formData.append('description', description)
             if (url) formData.append('url', url)
             if (logo) formData.append('avatar', logo)
@@ -270,6 +270,8 @@
               }
             })
               .then((res) => {
+                this.$accessor.pushAuthProject(res.data)
+
                 this.$router.push({
                   name: 'Project',
                   params: {
