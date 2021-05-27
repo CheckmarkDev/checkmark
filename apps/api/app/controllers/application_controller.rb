@@ -23,9 +23,9 @@ class ApplicationController < ActionController::API
       raise StandardError, 'Token is invalid' if saved_token.nil?
 
       @current_user = User.includes([
-                                      :streaks,
-                                      { avatar_attachment: :blob }
-                                    ]).find_by(uuid: @decoded[:sub])
+        :streaks,
+        { avatar_attachment: :blob }
+      ]).validated.find_by!(uuid: @decoded[:sub])
     rescue ActiveRecord::RecordNotFound => e
       render json: { errors: e.message }, status: :unauthorized
     rescue JWT::DecodeError => e

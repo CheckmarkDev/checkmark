@@ -14,6 +14,9 @@ class TaskGroupsController < ApplicationController
             mentions: [avatar_attachment: :blob] }
         ]
       ])
+      .where(user: {
+        status: User.statuses[:validated]
+      })
       .order(created_at: :desc)
 
     @task_groups = @task_groups.where(tasks: { state: params[:state] }) if params[:state].present?

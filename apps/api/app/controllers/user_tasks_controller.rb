@@ -19,7 +19,7 @@ class UserTasksController < ApplicationController
   private
 
   def set_user
-    @user = User.find_by!(username: params[:id])
+    @user = User.validated.find_by!(username: params[:id])
   end
 
   def set_task

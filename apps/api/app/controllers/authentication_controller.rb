@@ -12,7 +12,7 @@ class AuthenticationController < ApplicationController
   param :email, String, desc: 'E-mail'
   param :password, String, desc: 'Password'
   def login
-    @user = User.includes(:projects).find_by(email: login_params[:email])
+    @user = User.validated.includes(:projects).find_by(email: login_params[:email])
     if @user.nil?
       render json: { errors: 'unauthorized' }, status: :unauthorized
       return false
