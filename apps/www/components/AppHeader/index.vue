@@ -3,9 +3,9 @@
     <div class="flex items-center container mx-auto">
       <SideMenu />
 
-      <nav>
-        <ul>
-          <li>
+      <nav class="font-medium text-base">
+        <ul class="flex items-center">
+          <li class="mr-6">
             <nuxt-link
               :to="{
                 path: '/'
@@ -41,6 +41,28 @@
                   height="30"
                 >
               </picture>
+            </nuxt-link>
+          </li>
+
+          <li class="hidden md:block mr-4">
+            <nuxt-link
+              :to="{
+                name: 'Home'
+              }"
+              class="dark:text-white"
+            >
+              {{ $trans('global.titles.feed') }}
+            </nuxt-link>
+          </li>
+
+          <li class="hidden md:block">
+            <nuxt-link
+              :to="{
+                name: 'Roadmap'
+              }"
+              class="dark:text-white"
+            >
+              {{ $trans('roadmap.titles.main') }}
             </nuxt-link>
           </li>
         </ul>
