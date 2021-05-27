@@ -8,9 +8,17 @@ class UsersController < ApplicationController
 
   api :GET, '/users/random'
   def random
-    @users = User.includes([avatar_attachment: :blob]).order("RANDOM()").limit(10).page(params[:page])
+    @users = Rails.cache.fetch('random_users', expires_in: 24.hours) do
+      users = User.includes([avatar_attachment: :blob]).order("RANDOM()").limit(10)
 
-    render "users/index", status: :ok
+      data = ApplicationController.render(template: 'users/random', assigns: {
+        users: users
+      })
+
+      data
+    end
+
+    render json: @users, status: :ok
   end
 
   private
