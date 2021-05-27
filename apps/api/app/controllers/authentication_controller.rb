@@ -94,7 +94,8 @@ class AuthenticationController < ApplicationController
 
     Token.create!(
       token: @token,
-      user: user
+      user: user,
+      ip: request.remote_ip || nil
     )
   end
 
