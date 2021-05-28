@@ -109,6 +109,31 @@ class Task < ApplicationRecord
   private
 
   def notify_webhooks
+    # Apply some conditions on the user and the task to avoid
+    # kiddos to post things right away on the Discord.
+    user_time_diff = DateTime.now.in_time_zone(user.timezone) - user.created_at
+    if (user_time_diff / 1.hour).round < 3
+      return
+    end
+
+    # Ignore webhook for the first task
+    first_task = user.tasks.order(created_at: :asc).unscope(:order).first
+    if first_task.id == id
+      return
+    end
+
+    # Do not send webhook event if the few first tasks contain images
+    contains_image = false
+    user.tasks.order(created_at: :asc).unscope(:order).limit(10).each do |task|
+      if task.id == id && task.images.attached?
+        contains_image = true
+      end
+    end
+
+    if contains_image
+      return
+    end
+
     # Notify globally all the events for the Checkmark platform.
     Webhook.where(project: nil, user: nil).find_each { |webhook| notify_webhook(webhook) }
 
