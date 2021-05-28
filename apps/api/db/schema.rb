@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_25_232157) do
+ActiveRecord::Schema.define(version: 2021_05_27_235429) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -146,10 +146,13 @@ ActiveRecord::Schema.define(version: 2021_05_25_232157) do
 
   create_table "tokens", force: :cascade do |t|
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
-    t.string "token"
+    t.string "token", null: false
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "ip"
+    t.integer "status", default: 0, null: false
+    t.index ["token"], name: "index_tokens_on_token", unique: true
     t.index ["user_id"], name: "index_tokens_on_user_id"
     t.index ["uuid"], name: "index_tokens_on_uuid", unique: true
   end
@@ -164,9 +167,23 @@ ActiveRecord::Schema.define(version: 2021_05_25_232157) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "timezone", default: "Europe/Paris"
+    t.integer "status", default: 0, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["status"], name: "index_users_on_status"
     t.index ["username"], name: "index_users_on_username", unique: true
     t.index ["uuid"], name: "index_users_on_uuid", unique: true
+  end
+
+  create_table "webhook_requests", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.integer "state", default: 0, null: false
+    t.string "event", null: false
+    t.bigint "webhook_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["state"], name: "index_webhook_requests_on_state"
+    t.index ["uuid"], name: "index_webhook_requests_on_uuid", unique: true
+    t.index ["webhook_id"], name: "index_webhook_requests_on_webhook_id"
   end
 
   create_table "webhooks", force: :cascade do |t|
@@ -174,6 +191,11 @@ ActiveRecord::Schema.define(version: 2021_05_25_232157) do
     t.string "url"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "secret"
+    t.bigint "user_id"
+    t.bigint "project_id"
+    t.index ["project_id"], name: "index_webhooks_on_project_id"
+    t.index ["user_id"], name: "index_webhooks_on_user_id"
     t.index ["uuid"], name: "index_webhooks_on_uuid", unique: true
   end
 
@@ -195,4 +217,6 @@ ActiveRecord::Schema.define(version: 2021_05_25_232157) do
   add_foreign_key "tasks", "task_groups"
   add_foreign_key "tasks", "users"
   add_foreign_key "tokens", "users"
+  add_foreign_key "webhooks", "projects"
+  add_foreign_key "webhooks", "users"
 end

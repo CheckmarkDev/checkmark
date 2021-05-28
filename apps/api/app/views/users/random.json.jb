@@ -1,0 +1,16 @@
+# frozen_string_literal: true
+
+users = @users.map do |user|
+  v = {
+    uuid: user.uuid,
+    username: user.username,
+    first_name: user.first_name,
+    last_name: user.last_name,
+    streak: user.streak,
+    avatar_url: user.avatar_url
+  }
+
+  v
+end
+
+users

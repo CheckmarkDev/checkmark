@@ -66,6 +66,7 @@ export enum MutationTypes {
   SET_AUTH_TOKEN = 'SET_AUTH_TOKEN',
   SET_AUTH_USER = 'SET_AUTH_USER',
   SET_AUTH_PROJECTS = 'SET_AUTH_PROJECTS',
+  PUSH_AUTH_PROJECT = 'PUSH_AUTH_PROJECT',
   SET_TASK_GROUPS = 'SET_TASK_GROUPS',
   PUSH_TASK_GROUPS = 'PUSH_TASK_GROUPS',
   SET_TASK_GROUPS_META = 'SET_TASK_GROUPS_META'
@@ -75,6 +76,7 @@ export type Mutations<S = RootState> = {
   [MutationTypes.SET_AUTH_TOKEN](state: S, token: string | null): void
   [MutationTypes.SET_AUTH_USER](state: S, user: User | null): void
   [MutationTypes.SET_AUTH_PROJECTS](state: S, projects: Array<Project>): void
+  [MutationTypes.PUSH_AUTH_PROJECT](state: S, project: Project): void
   [MutationTypes.SET_TASK_GROUPS](state: S, taskGroups: Array<TaskGroup>): void
   [MutationTypes.PUSH_TASK_GROUPS](state: S, taskGroups: Array<TaskGroup>): void
   [MutationTypes.SET_TASK_GROUPS_META](state: S, meta: PaginateResponseMeta): void
@@ -93,6 +95,9 @@ export const mutations: MutationTree<RootState> & Mutations = {
   [MutationTypes.SET_TASK_GROUPS] (state, taskGroups) {
     state.taskGroups.items = taskGroups
   },
+  [MutationTypes.PUSH_AUTH_PROJECT] (state, project) {
+    state.auth.projects.push(project)
+  },
   [MutationTypes.PUSH_TASK_GROUPS] (state, taskGroups) {
     state.taskGroups.items = [
       ...state.taskGroups.items,
@@ -108,6 +113,7 @@ export enum ActionTypes {
   setAuthToken = 'setAuthToken',
   setAuthUser = 'setAuthUser',
   setAuthProjects = 'setAuthProjects',
+  pushAuthProject = 'pushAuthProject',
   signOut = 'signOut',
   retrieveMe = 'retrieveMe',
   retrieveTaskGroups = 'retrieveTaskGroups',
@@ -128,6 +134,7 @@ export interface Actions<R = RootState> {
   [ActionTypes.setAuthToken]({ commit }: AugmentedActionContext, token: string | null): void
   [ActionTypes.setAuthUser]({ commit }: AugmentedActionContext, user: User | null): void
   [ActionTypes.setAuthProjects]({ commit }: AugmentedActionContext, user: Array<Project>): void
+  [ActionTypes.pushAuthProject]({ commit }: AugmentedActionContext, project: Project): void
   [ActionTypes.signOut]({ commit }: AugmentedActionContext): void
   [ActionTypes.retrieveMe]({ commit }: AugmentedActionContext): void
   [ActionTypes.retrieveTaskGroups]({ commit }: AugmentedActionContext): Promise<PaginateResponse<Task>>
@@ -143,6 +150,9 @@ export const actions: ActionTree<RootState, RootState> & Actions = {
   },
   [ActionTypes.setAuthProjects] ({ commit }, projects) {
     commit(MutationTypes.SET_AUTH_PROJECTS, projects)
+  },
+  [ActionTypes.pushAuthProject] ({ commit }, project) {
+    commit(MutationTypes.PUSH_AUTH_PROJECT, project)
   },
   [ActionTypes.signOut] ({ dispatch }) {
     Cookie.remove('token')

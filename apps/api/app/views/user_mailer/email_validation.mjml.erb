@@ -1,0 +1,28 @@
+<mj-section background-color="#2589C7" padding-top="32px" padding-bottom="32px" border-radius="4px 4px 0 0">
+  <mj-column>
+    <mj-text color="white" font-size="20px" font-weight="medium" align="center">
+      <h1>
+        Validez votre adresse e-mail
+      </h1>
+    </mj-text>
+  </mj-column>
+</mj-section>
+<mj-section background-color="#FFFFFF" border-radius="0px 0px 4px 4px" border-left="1px solid #CBD5E0" border-right="1px solid #CBD5E0" border-bottom="1px solid #CBD5E0">
+  <mj-column>
+    <mj-text>
+      <p>
+        Bienvenue <%= @name %> sur Checkmark.dev !
+      </p>
+      <p>
+        Pour rejoindre la plateforme Checkmark.dev, vous devez valider votre adresse e-mail.
+      </p>
+    </mj-text>
+    <mj-button
+      href="<%= ENV['WEB_BASE'] %>/auth/email-validation?token=<%= @token %>"
+      align="left"
+      padding-bottom="32px"
+    >
+      Valider mon e-mail
+    </mj-button>
+  </mj-column>
+</mj-section>

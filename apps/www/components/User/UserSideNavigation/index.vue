@@ -53,7 +53,7 @@
         >
           <p
             v-text="$trans('user.paragraphs.no_projects')"
-            class="text-gray-700 mb-3"
+            class="text-gray-700 dark:text-gray-300 mb-3"
           />
         </template>
 
@@ -84,7 +84,7 @@
             :exact-active-class="'router-link-active bg-gray-200 dark:bg-gray-600 dark:text-white'"
             class="hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-white rounded p-2 w-full flex mb-1"
           >
-            Feed
+            {{ $trans('global.titles.feed') }}
           </nuxt-link>
         </li>
       </ul>

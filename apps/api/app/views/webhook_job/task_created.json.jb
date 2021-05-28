@@ -2,6 +2,7 @@
 
 json = {
   event: 'task.created',
+  secret: @secret,
   data: {
     uuid: @task.uuid,
     content: @task.content,
@@ -23,7 +24,7 @@ json = {
         {
           uuid: image.uuid,
           url: image.url,
-          thumbnail_url: image.variant(resize_to_fit: [720, 720]).url
+          thumbnail_url: image.variant(resize_to_fill: [720, 405]).url
         }
       end
     end,

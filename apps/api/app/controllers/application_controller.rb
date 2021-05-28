@@ -13,19 +13,19 @@ class ApplicationController < ActionController::API
     end
 
     begin
-      @decoded = JsonWebToken.decode(token)
+      @decoded_token = JsonWebToken.decode(token)
 
-      raise StandardError, 'Token is invalid' if @decoded[:exp].nil? || @decoded[:sub].nil?
+      raise StandardError, 'Token is invalid' if @decoded_token[:exp].nil? || @decoded_token[:sub].nil?
 
-      raise StandardError, 'Token is expired' if Time.zone.at(@decoded[:exp]) < Time.zone.now
+      raise StandardError, 'Token is expired' if Time.zone.at(@decoded_token[:exp]) < Time.zone.now
 
-      saved_token = Token.find_by(token: token)
-      raise StandardError, 'Token is invalid' if saved_token.nil?
+      @saved_token = Token.confirmed.find_by(token: token)
+      raise StandardError, 'Token is invalid' if @saved_token.nil?
 
       @current_user = User.includes([
-                                      :streaks,
-                                      { avatar_attachment: :blob }
-                                    ]).find_by(uuid: @decoded[:sub])
+        :streaks,
+        { avatar_attachment: :blob }
+      ]).where.not(status: User.statuses[:blocked]).find_by!(uuid: @decoded_token[:sub])
     rescue ActiveRecord::RecordNotFound => e
       render json: { errors: e.message }, status: :unauthorized
     rescue JWT::DecodeError => e
