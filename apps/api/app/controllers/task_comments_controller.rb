@@ -17,10 +17,10 @@ class TaskCommentsController < ApplicationController
     @task_comment.task = @task
     @task_comment.user = @current_user
 
-    if @task_comment.save!
+    if @task_comment.save
       render 'tasks/task_comments/show', status: :created
     else
-      render json: @task_comment.errors, status: :unprocessable_entity
+      render json: { errors: @task_comment.errors }, status: :unprocessable_entity
     end
   end
 

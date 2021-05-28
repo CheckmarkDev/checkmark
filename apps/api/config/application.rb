@@ -45,6 +45,10 @@ module Api
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
     config.eager_load_paths += Dir["#{config.root}/lib/**/"]
 
+    config.autoload_paths += %W[#{config.root}/app/validators]
+    config.autoload_paths += Dir["#{config.root}/app/validators/**/"]
+    config.eager_load_paths += Dir["#{config.root}/app/validators/**/"]
+
     config.active_job.queue_adapter = :sidekiq
 
     Raven.configure do |config|
