@@ -25,6 +25,8 @@ class Task < ApplicationRecord
   after_commit :delete_remaining_task_group, on: :destroy
   after_commit :delete_remaining_streak, on: :destroy
 
+  validates :content, presence: true, length: { minimum: 2, maximum: 1000 }, profanity: true
+
   def assign_mentions
     self.mentions = []
     matches = content.scan(/@([\w|\-]*)/)

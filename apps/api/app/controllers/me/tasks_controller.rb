@@ -22,10 +22,10 @@ module Me
       @task = Task.new(task_params)
       @task.user = @current_user
 
-      if @task.save!
+      if @task.save
         render :show, status: :created
       else
-        render json: @task.errors, status: :unprocessable_entity
+        render json: { errors: @task.errors }, status: :unprocessable_entity
       end
     end
 
