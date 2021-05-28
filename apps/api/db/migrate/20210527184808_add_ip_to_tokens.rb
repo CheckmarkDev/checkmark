@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddIpToTokens < ActiveRecord::Migration[6.1]
   def up
     add_column :tokens, :ip, :string, null: true

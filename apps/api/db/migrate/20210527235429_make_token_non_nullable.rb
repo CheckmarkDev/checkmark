@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MakeTokenNonNullable < ActiveRecord::Migration[6.1]
   def up
     change_column :tokens, :token, :string, null: false
