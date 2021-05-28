@@ -17,9 +17,9 @@ class UserTaskGroupsController < ApplicationController
         ]
       ])
       .where(user: {
-        id: @user.id,
-        status: User.statuses[:validated]
-      })
+               id: @user.id,
+               status: User.statuses[:validated]
+             })
       .order(created_at: :desc)
 
     @task_groups = @task_groups.where(tasks: { state: params[:state] }) if params[:state].present?

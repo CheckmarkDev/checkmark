@@ -28,6 +28,11 @@ class User < ApplicationRecord
   before_create :create_email_notification
   before_save :format_username
   after_commit :send_welcome, on: :create
+  after_commit :send_email_validation, on: :create
+
+  def full_name
+    "#{first_name} #{last_name}"
+  end
 
   def last_streak
     streaks.joins(:tasks).order(created_at: :desc).first
@@ -62,10 +67,6 @@ class User < ApplicationRecord
     ActionController::Base.helpers.image_url('default-avatar.png')
   end
 
-  def send_welcome
-    UserMailer.welcome(self).deliver_later
-  end
-
   # For every user that has a current streak
   def self.notify_streak_reminder
     User.all.find_each do |user|
@@ -80,7 +81,7 @@ class User < ApplicationRecord
   end
 
   def self.notify_weekly_summary
-    User.validated.each_with_index do |user, k|
+    User.where.not(status: User.statuses[:blocked]).each_with_index do |user, k|
       timezone = user.timezone
       date_range = DateTime.now.in_time_zone(timezone).last_week..DateTime.yesterday.in_time_zone(timezone).at_midnight
       tasks = user.tasks.where(created_at: date_range).count
@@ -105,6 +106,26 @@ class User < ApplicationRecord
   end
 
   private
+
+  def send_welcome
+    UserMailer.welcome(self).deliver_later
+  end
+
+  def send_email_validation
+    expires_at = (DateTime.now.in_time_zone(timezone) + 1.month).to_i
+    token = JsonWebToken.encode(
+      sub: uuid,
+      type: 'email_validation',
+      exp: expires_at
+    )
+
+    Token.create!(
+      token: token,
+      user: self
+    )
+
+    UserMailer.email_validation(self, token).deliver_later
+  end
 
   def create_email_notification
     self.email_notification = EmailNotification.new

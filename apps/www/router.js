@@ -17,6 +17,7 @@ import ProjectTasks from '@/pages/project/tasks/index.vue'
 import ProjectImages from '@/pages/project/images/index.vue'
 import SignIn from '@/pages/auth/sign-in/index.vue'
 import SignUp from '@/pages/auth/sign-up/index.vue'
+import EmailValidation from '@/pages/auth/email-validation/index.vue'
 import Settings from '@/pages/settings/index.vue'
 import SettingsNotifications from '@/pages/settings/notifications/index.vue'
 import SettingsProfile from '@/pages/settings/profile/index.vue'
@@ -34,6 +35,11 @@ const AUTH_ROUTES = [
     name: 'SignUp',
     path: '/auth/sign-up',
     component: SignUp
+  },
+  {
+    name: 'EmailValidation',
+    path: '/auth/email-validation',
+    component: EmailValidation
   }
 ]
 

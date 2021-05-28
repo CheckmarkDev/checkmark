@@ -1,0 +1,5 @@
+Bienvenue <%= @name %> sur Checkmark.dev !
+
+Pour rejoindre la plateforme Checkmark.dev, vous devez valider votre adresse e-mail.
+
+Lien de validation : <%= ENV['WEB_BASE'] %>/auth/email-validation?token=<%= @token %>
