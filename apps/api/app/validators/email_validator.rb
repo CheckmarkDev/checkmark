@@ -2,8 +2,6 @@
 
 class EmailValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
-    unless MailChecker.valid?(value)
-      record.errors.add attribute, (options[:message] || "is an invalid email")
-    end
+    record.errors.add attribute, (options[:message] || 'is an invalid email') unless MailChecker.valid?(value)
   end
 end

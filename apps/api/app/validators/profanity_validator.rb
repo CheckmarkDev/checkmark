@@ -2,8 +2,6 @@
 
 class ProfanityValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
-    unless Profanity.valid?(value)
-      record.errors.add attribute, (options[:message] || "cannot contain certain words")
-    end
+    record.errors.add attribute, (options[:message] || 'cannot contain certain words') unless Profanity.valid?(value)
   end
 end
