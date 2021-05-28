@@ -1,5 +1,13 @@
 # frozen_string_literal: true
 
+class EmailValidator < ActiveModel::EachValidator
+  def validate_each(record, attribute, value)
+    unless MailChecker.valid?(value)
+      record.errors.add attribute, (options[:message] || "is an invalid email")
+    end
+  end
+end
+
 class User < ApplicationRecord
   has_secure_password
   has_one_attached :avatar
@@ -15,7 +23,7 @@ class User < ApplicationRecord
   has_one :email_notification, dependent: :destroy
   has_and_belongs_to_many :mentions, class_name: 'Task', join_table: 'task_mentions'
 
-  validates :email, presence: true, uniqueness: true
+  validates :email, presence: true, uniqueness: true, email: true
   validates :username, presence: true, uniqueness: true, length: { minimum: 2 }
   # validates :password, length: { minimum: 6 }
 
