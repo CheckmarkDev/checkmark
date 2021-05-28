@@ -6,6 +6,7 @@ module Profanity
   end
 
   def self.blacklisted?(text)
-    BLACKLIST.include?(text.downcase)
+    blacklisted = BLACKLIST.select { |word| text.downcase.include?(word.downcase) }
+    blacklisted.size > 0
   end
 end

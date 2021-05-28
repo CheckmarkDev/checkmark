@@ -7,10 +7,11 @@ class Project < ApplicationRecord
   has_one_attached :avatar
   has_many :webhooks, dependent: :destroy
 
-  validates :name, presence: true
-  validates :slug, presence: true, uniqueness: true, length: { minimum: 2, maximum: 32 }
-  validates :description, length: { maximum: 255 }
+  validates :name, presence: true, length: { minimum: 2, maximum: 32 }, profanity: true
+  validates :slug, presence: true, uniqueness: true, length: { minimum: 2, maximum: 32 }, profanity: true
+  validates :description, length: { maximum: 255 }, profanity: true
   validates :main_color, presence: true, format: { with: /#(?:[0-9a-fA-F]{3}){1,2}/i }
+  validates :url, url: { allow_nil: true, no_local: true, public_suffix: true, allow_blank: false }
 
   before_save :format_slug
 
