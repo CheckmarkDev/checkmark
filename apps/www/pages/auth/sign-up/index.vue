@@ -56,7 +56,7 @@
               rules="required|min:2|max:32"
               :name="$trans('sign-up.labels.username').toLowerCase()"
               v-slot="{ invalid, errors }"
-              class="mb-2"
+              class="mb-4"
               slim
             >
               <div class="flex flex-col">
@@ -75,6 +75,8 @@
                   type="text"
                   id="username"
                   class="input mb-1"
+                  minlength="2"
+                  maxlength="32"
                   required
                   autocomplete="username"
                   @change="verifyUsername"
@@ -96,7 +98,7 @@
             <div class="flex flex-col md:flex-row mb-2">
               <ValidationProvider
                 ref="first_name-provider"
-                rules="required"
+                rules="required|min:2|max:32"
                 :name="$trans('sign-up.labels.first_name').toLowerCase()"
                 v-slot="{ invalid, errors }"
                 class="md:w-1/2 md:mr-4"
@@ -118,6 +120,8 @@
                     type="text"
                     id="first_name"
                     class="input mb-1"
+                    minlength="2"
+                    maxlength="32"
                     required
                     autocomplete="given-name"
                   >
@@ -131,7 +135,7 @@
               </ValidationProvider>
               <ValidationProvider
                 ref="last_name-provider"
-                rules="required"
+                rules="required|min:2|max:32"
                 :name="$trans('sign-up.labels.last_name').toLowerCase()"
                 v-slot="{ invalid, errors }"
                 class="md:w-1/2"
@@ -153,6 +157,8 @@
                     type="text"
                     id="last_name"
                     class="input mb-1"
+                    minlength="2"
+                    maxlength="32"
                     required
                     autocomplete="family-name"
                   >
@@ -190,6 +196,7 @@
                   type="password"
                   id="password"
                   class="input mb-1"
+                  minlength="6"
                   autocomplete="new-password"
                   required
                 >
