@@ -11,5 +11,11 @@ module Rack
         req.params['email'].to_s.downcase.gsub(/\s+/, '')
       end
     end
+
+    throttle('limit username & email validation', limit: 20, period: 1.minute) do |req|
+      if (req.path == '/users/verify_email' || req.path == '/users/verify_username') && req.post?
+        req.ip
+      end
+    end
   end
 end

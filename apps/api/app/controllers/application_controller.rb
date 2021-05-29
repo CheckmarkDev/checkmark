@@ -35,6 +35,10 @@ class ApplicationController < ActionController::API
     end
   end
 
+  rescue_from Apipie::ParamError do |e|
+    render json: { title: e.message }, status: :unprocessable_entity
+  end
+
   private
 
   def set_raven_context
