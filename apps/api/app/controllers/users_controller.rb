@@ -13,7 +13,7 @@ class UsersController < ApplicationController
     if users.size.zero?
       render json: {}, status: :no_content
     else
-      render json: { title: 'E-mail already taken'}, status: :unprocessable_entity
+      render json: { title: 'E-mail already taken' }, status: :unprocessable_entity
     end
   end
 
@@ -24,7 +24,7 @@ class UsersController < ApplicationController
     if users.size.zero?
       render json: {}, status: :no_content
     else
-      render json: { title: 'Username already taken'}, status: :unprocessable_entity
+      render json: { title: 'Username already taken' }, status: :unprocessable_entity
     end
   end
 

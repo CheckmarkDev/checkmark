@@ -34,12 +34,6 @@ class AuthenticationController < ApplicationController
   param :first_name, String, desc: 'first_name'
   param :last_name, String, desc: 'last_name'
   def register
-    @user = User.includes(:projects).find_by(email: register_params[:email])
-    unless @user.nil?
-      render json: { errors: 'An account with this e-mail already exists' }, status: :unauthorized
-      return false
-    end
-
     @user = User.new(
       email: register_params[:email],
       password: register_params[:password],

@@ -9,8 +9,12 @@ module Profanity
     !blacklisted?(text)
   end
 
+  def self.blacklist(text)
+    BLACKLIST.select { |word| text.downcase.include?(word.downcase) }
+  end
+
   def self.blacklisted?(text)
-    blacklisted = BLACKLIST.select { |word| text.downcase.include?(word.downcase) }
-    blacklisted.size.positive?
+    blacklist = blacklist(text)
+    blacklist.size.positive?
   end
 end
