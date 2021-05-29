@@ -19,6 +19,8 @@ Rails.application.routes.draw do
     resources :users do
       collection do
         get :random, to: 'users#random'
+        post :verify_email, to: 'users#verify_email'
+        post :verify_username, to: 'users#verify_username'
       end
     end
 

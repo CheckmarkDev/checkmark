@@ -6,6 +6,8 @@ class TaskComment < ApplicationRecord
 
   after_commit :send_comment_email, on: :create
 
+  validates :content, presence: true, length: { minimum: 2, maximum: 1000 }, profanity: true
+
   private
 
   def send_comment_email

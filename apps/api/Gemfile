@@ -33,6 +33,7 @@ gem 'rack-cors'
 gem 'redis'
 gem 'sentry-raven'
 gem 'sidekiq'
+gem 'validate_url'
 gem 'whenever', require: false
 
 group :development, :test do

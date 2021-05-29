@@ -15,9 +15,10 @@ class User < ApplicationRecord
   has_one :email_notification, dependent: :destroy
   has_and_belongs_to_many :mentions, class_name: 'Task', join_table: 'task_mentions'
 
-  validates :email, presence: true, uniqueness: true
-  validates :username, presence: true, uniqueness: true, length: { minimum: 2 }
-  # validates :password, length: { minimum: 6 }
+  validates :email, presence: true, uniqueness: true, email: true
+  validates :username, presence: true, uniqueness: true, length: { minimum: 2, maximum: 32 }, profanity: true
+  validates :first_name, presence: true, length: { minimum: 2, maximum: 32 }, profanity: true
+  validates :last_name, presence: true, length: { minimum: 2, maximum: 32 }, profanity: true
 
   enum status: {
     pending_validation: 0,

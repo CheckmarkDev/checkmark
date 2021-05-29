@@ -1,5 +1,7 @@
 sign-up.titles.main: S'inscrire
 sign-up.paragraphs.description: Créez-vous un compte et rejoingnez une communauté de développeurs passionnés. Discutez, partagez votre progression et faites avancer vos projets.
+sign-up.paragraphs.email_in_use: E-mail déjà utilisée.
+sign-up.paragraphs.username_in_use: Nom d'utilisateur déjà utilisée.
 sign-up.labels.email: E-mail
 sign-up.labels.username: Nom d'utilisateur
 sign-up.labels.first_name: Prénom
