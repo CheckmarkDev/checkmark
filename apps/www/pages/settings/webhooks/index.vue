@@ -66,7 +66,7 @@
         v-else
       >
         <p
-          v-text="$trans('project.paragraphs.no_webhooks')"
+          v-text="$trans('settings.paragraphs.no_webhooks')"
         />
       </template>
     </div>
@@ -151,8 +151,6 @@
       const toasted = useToasted()
       const axios = useAxios()
 
-      const { slug } = accessor.project.getProject as Project
-
       const webhooks: Ref<Array<Webhook>> = ref([])
       const formData = reactive({
         url: null
@@ -160,7 +158,7 @@
 
       function fetchWebhooks () {
         wait.start('fetching project webhooks')
-        axios.$get(`/me/projects/${slug}/webhooks`)
+        axios.$get(`/me/webhooks`)
           .then((res: PaginateResponse<Webhook>) => {
             webhooks.value = res.data.map(webhook => ({
               ...webhook,
@@ -178,7 +176,7 @@
 
       function remove (uuid: string) {
         wait.start(`deleting ${uuid}`)
-        axios.delete(`/me/projects/${slug}/webhooks/${uuid}`)
+        axios.delete(`/me/webhooks/${uuid}`)
           .then(() => {
             fetchWebhooks()
           })
@@ -196,7 +194,7 @@
             const { url } = formData
 
             wait.start('creating a webhook')
-            axios.post(`/me/projects/${slug}/webhooks`, {
+            axios.post(`/me/webhooks`, {
               url
             })
               .then(() => {
