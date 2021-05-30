@@ -201,6 +201,7 @@
   import useICU from '~/composables/useICU'
   import useToasted from '~/composables/useToasted'
   import useFileChange from '~/composables/useFileChange'
+  import useValidationProvider from '~/composables/useValidationProvider'
 
   export default defineComponent({
     components: {
@@ -245,16 +246,7 @@
           .catch(err => {
             if (!err.response) return
 
-            const { errors } = err.response.data
-            if (errors) {
-              Object.keys(errors).forEach(key => {
-                const provider = refs[`${key}-provider`]
-                if (provider) {
-                  // @ts-ignore
-                  provider.setErrors(errors[key])
-                }
-              })
-            }
+            useValidationProvider(err, refs)
           })
           .finally(() => {
             wait.end(loader)

@@ -34,6 +34,7 @@ Rails.application.routes.draw do
       resources :tasks
       resources :projects do
         resources :project_screenshots, path: 'screenshots'
+        resources :project_webhooks, path: 'webhooks'
       end
 
       get '/email_notifications', to: 'email_notifications#index'

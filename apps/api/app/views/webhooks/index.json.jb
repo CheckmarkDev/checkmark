@@ -1,0 +1,23 @@
+# frozen_string_literal: true
+
+json = {
+  meta: {
+    current_page: @webhooks.current_page,
+    total_pages: @webhooks.total_pages,
+    count: @webhooks.count
+  }
+}
+
+json[:data] = @webhooks.map do |webhook|
+  v = {
+    uuid: webhook.uuid,
+    url: webhook.url,
+    secret: webhook.secret,
+    created_at: webhook.created_at,
+    updated_at: webhook.updated_at
+  }
+
+  v
+end
+
+json
