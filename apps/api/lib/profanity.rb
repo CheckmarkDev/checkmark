@@ -10,7 +10,7 @@ module Profanity
   end
 
   def self.blacklist(text)
-    BLACKLIST.select { |word| text.downcase.include?(word.downcase) }
+    BLACKLIST.select { |word| text.split(' ').map { |w| w.downcase }.include?(word.downcase) }
   end
 
   def self.blacklisted?(text)
