@@ -8,9 +8,9 @@ module Me
 
     api :GET, '/me/projects/:slug/webhooks'
     def index
-      @webhooks = @project.webhooks
+      @webhooks = @project.webhooks.page(params[:page])
 
-      render 'projects/show'
+      render 'webhooks/index'
     end
 
     api :POST, '/me/projects/:slug/webhooks'
@@ -19,7 +19,7 @@ module Me
       @webhook.project = @project
 
       if @webhook.save!
-        render 'projects/show'
+        render 'webhooks/show'
       else
         render json: { errors: @project.errors }, status: :unprocessable_entity
       end

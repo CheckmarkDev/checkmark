@@ -1,0 +1,6 @@
+{
+  uuid: @webhook.uuid,
+  url: @webhook.url,
+  secret: @webhook.secret,
+  created_at: @webhook.created_at
+}
