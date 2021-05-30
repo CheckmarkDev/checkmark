@@ -38,6 +38,15 @@
             }
           },
           name: trans('project.titles.images')
+        },
+        {
+          to: {
+            name: 'ProjectSettingsWebhooks',
+            params: {
+              slug
+            }
+          },
+          name: trans('project.titles.webhooks')
         }
       ])
 
