@@ -18,10 +18,10 @@ module Me
       @webhook = Webhook.new(webhook_params)
       @webhook.project = @project
 
-      if @webhook.save!
+      if @webhook.save
         render 'webhooks/show'
       else
-        render json: { errors: @project.errors }, status: :unprocessable_entity
+        render json: { errors: @webhook.errors }, status: :unprocessable_entity
       end
     end
 

@@ -242,6 +242,7 @@
   import useAxios from '~/composables/useAxios'
   import useICU from '~/composables/useICU'
   import { ProviderInstance } from 'vee-validate/dist/types/types'
+  import useValidationProvider from '~/composables/useValidationProvider'
 
   export default defineComponent({
     middleware: ['notAuthenticated'],
@@ -334,16 +335,7 @@
               .catch(err => {
                 if (!err.response) return
 
-                const { errors } = err.response.data
-                if (errors) {
-                  Object.keys(errors).forEach(key => {
-                    const provider = this.$refs[`${key}-provider`]
-                    if (provider) {
-                      // @ts-ignore
-                      provider.setErrors(errors[key])
-                    }
-                  })
-                }
+                useValidationProvider(err, this.$refs)
               })
               .finally(() => {
                 this.$wait.end('signing up')

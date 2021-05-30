@@ -21,7 +21,9 @@
       />
     </div>
 
-    <div>
+    <div
+      class="mb-6"
+    >
       <h3
         class="font-medium text-base mb-3"
         v-text="$trans('project.titles.webhooks')"
@@ -68,12 +70,61 @@
         />
       </template>
     </div>
+
+    <ValidationObserver
+      ref="observer"
+      class="md:w-2/3"
+      tag="div"
+    >
+      <h3
+        v-text="$trans('project.titles.new_webhook')"
+        class="font-medium text-base mb-3"
+      />
+
+      <form
+        :disabled="$wait.is('creating a webhook')"
+        @submit.prevent="submitted"
+      >
+        <ValidationProvider
+          ref="url-provider"
+          rules="required"
+          v-slot="{ invalid, errors }"
+        >
+          <label
+            for="url"
+            v-text="`${$trans('project.labels.url')} *`"
+          />
+          <input
+            v-model="formData.url"
+            :disabled="$wait.is('creating a webhook')"
+            class="input"
+            type="url"
+            name="url"
+            id="url"
+            required
+          >
+          <span
+            v-if="invalid"
+            v-text="errors[0]"
+            class="text-red-500 text-sm"
+            role="alert"
+          />
+        </ValidationProvider>
+
+        <button
+          :disabled="$wait.is('creating a webhook')"
+          class="btn btn-primary mt-6"
+        >
+          {{ $trans('global.buttons.save') }}
+        </button>
+      </form>
+    </ValidationObserver>
   </div>
 </template>
 
 <script lang="ts">
   import dayjs from 'dayjs'
-  import { defineComponent, onMounted, Ref, ref, useRoute } from '@nuxtjs/composition-api'
+  import { defineComponent, onMounted, reactive, Ref, ref } from '@nuxtjs/composition-api'
 
   import ImageRules from '@/components/ImageRules/index.vue'
   import AppSecretKey from '@/components/AppSecretKey/index.vue'
@@ -81,11 +132,12 @@
   import useWait from '~/composables/useWait'
   import useICU from '~/composables/useICU'
   import useToasted from '~/composables/useToasted'
-  import useFileChange from '~/composables/useFileChange'
+  import useValidationProvider from '~/composables/useValidationProvider'
   import { Project } from '~/types/project'
   import useAxios from '~/composables/useAxios'
   import { Webhook } from '~/types/webhook'
   import { PaginateResponse } from '~/types/pagination'
+  import { ProviderInstance } from 'vee-validate/dist/types/types'
 
   export default defineComponent({
     components: {
@@ -99,9 +151,12 @@
       const toasted = useToasted()
       const axios = useAxios()
 
-      const { name, slug, description, url, avatar_url } = accessor.project.getProject as Project
+      const { slug } = accessor.project.getProject as Project
 
       const webhooks: Ref<Array<Webhook>> = ref([])
+      const formData = reactive({
+        url: null
+      })
 
       function fetchWebhooks () {
         wait.start('fetching project webhooks')
@@ -133,25 +188,39 @@
       }
 
       function submitted () {
-        // @ts-ignore
-        refs.observer.validate()
-          .then((valid: boolean) => {
+        const observer = refs.observer as ProviderInstance
+        observer.validate()
+          .then(valid => {
             if (!valid) return
 
-            // const { name, slug, description, url } = formData.value
+            const { url } = formData
 
-            // updateProject({
-            //   name,
-            //   slug,
-            //   description,
-            //   url,
-            //   avatar: files.value[0]
-            // }, 'updating project informations')
+            wait.start('creating a webhook')
+            axios.post(`/me/projects/${slug}/webhooks`, {
+              url
+            })
+              .then(() => {
+                formData.url = null
+                observer.reset()
+
+                fetchWebhooks()
+
+                toasted.success(trans('project.paragraphs.webhook_created'))
+              })
+              .catch(err => {
+                if (!err.response) return
+
+                useValidationProvider(err, refs)
+              })
+              .finally(() => {
+                wait.end('creating a webhook')
+              })
           })
       }
 
       return {
         submitted,
+        formData,
         remove,
         webhooks
       }

@@ -2,6 +2,7 @@ project.titles.new-project: Nouveau projet
 project.titles.informations: Informations
 project.titles.webhooks: Webhooks
 project.titles.webhooks_how_it_works: Comment ça fonctionne ?
+project.titles.new_webhook: Nouveau webhook
 project.titles.images: Images
 project.titles.settings: Paramètres
 project.titles.logo: Logo
@@ -24,3 +25,4 @@ project.paragraphs.screenshot_delete: Etes-vous sûr de vouloir supprimer cette 
 project.paragraphs.webhooks.purpose: Grâce aux webhooks, nous pouvons vous envoyer des informations dès qu’un évenement se produit sur la plateforme (création d’une tâche, nouveau commentaire, ...)
 project.paragraphs.webhooks.request: Pour se faire, vous devez être capable de recevoir ces informations. Cette communication se fait en HTTP. La plateforme Checkmark fera une requête POST sur une URL que vous avez au préalable communiqué.
 project.paragraphs.no_webhooks: Ce projet n'a aucun webhook de configuré.
+project.paragraphs.webhook_created: Le webhook a bien été crée
