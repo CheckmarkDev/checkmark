@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 {
   uuid: @webhook.uuid,
   url: @webhook.url,
