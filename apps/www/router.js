@@ -11,6 +11,7 @@ import NewProject from '@/pages/new-project/index.vue'
 import ProjectSettings from '@/pages/project-settings/index.vue'
 import ProjectSettingsInformations from '@/pages/project-settings/informations/index.vue'
 import ProjectSettingsImages from '@/pages/project-settings/images/index.vue'
+import ProjectSettingsWebhooks from '@/pages/project-settings/webhooks/index.vue'
 import Task from '@/pages/user/task/index.vue'
 import UserTasks from '@/pages/user/tasks/index.vue'
 import ProjectTasks from '@/pages/project/tasks/index.vue'
@@ -22,6 +23,7 @@ import Settings from '@/pages/settings/index.vue'
 import SettingsNotifications from '@/pages/settings/notifications/index.vue'
 import SettingsProfile from '@/pages/settings/profile/index.vue'
 import SettingsAccount from '@/pages/settings/account/index.vue'
+import SettingsWebhooks from '@/pages/settings/webhooks/index.vue'
 
 Vue.use(VueRouter)
 
@@ -66,6 +68,11 @@ const SETTINGS_ROUTES = [
         name: 'SettingsAccount',
         path: 'account',
         component: SettingsAccount
+      },
+      {
+        name: 'SettingsWebhooks',
+        path: 'webhooks',
+        component: SettingsWebhooks
       }
     ]
   }
@@ -157,6 +164,11 @@ const WEBSITE_ROUTES = [
         name: 'ProjectSettingsImages',
         component: ProjectSettingsImages,
         path: 'images'
+      },
+      {
+        name: 'ProjectSettingsWebhooks',
+        component: ProjectSettingsWebhooks,
+        path: 'webhooks'
       }
     ]
   },

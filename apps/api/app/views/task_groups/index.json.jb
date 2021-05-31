@@ -29,7 +29,7 @@ json[:data] = @task_groups.map do |task_group|
   tasks = task_group.tasks
   tasks = tasks.where(state: params[:state]) if params[:state].present?
 
-  v[:tasks] = tasks.map do |task|
+  v[:tasks] = tasks.sort_by(&:created_at).reverse!.map do |task|
     t = {
       uuid: task.uuid,
       content: task.content,

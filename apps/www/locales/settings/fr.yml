@@ -1,6 +1,7 @@
 settings.titles.main: Paramètres
 settings.titles.notifications: Notifications
 settings.titles.profile: Profil
+settings.titles.webhooks: Webhooks
 settings.titles.profile_picture: Photo de profil
 settings.titles.profile_rules: Règles
 settings.titles.profile_infos: Informations
@@ -12,3 +13,4 @@ settings.paragraphs.settings_saved: Vos paramètres ont bien été sauvegardés.
 settings.paragraphs.profile_rules: "Dans le but de garder une communauté saine et bienveillante, nous avons quelques règles à respecter dans le cadre des photos :"
 settings.paragraphs.profile_rules.racism: "Photos insultantes, discriminatoires en vers n'importe quelle ethnie sont interdites."
 settings.paragraphs.profile_rules.nsfw: "Les photos pornographiques, gores ou tout contenu NSFW sont interdites."
+settings.paragraphs.no_webhooks: Vous n'avez aucun webhook de configuré.
