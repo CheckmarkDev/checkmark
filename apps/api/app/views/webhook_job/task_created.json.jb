@@ -24,7 +24,7 @@ json = {
         {
           uuid: image.uuid,
           url: image.url,
-          thumbnail_url: image.variant(resize_to_fill: [720, 405]).url
+          thumbnail_url: image.variable? ? image.variant(resize_to_fill: [720, 405]).url : image.url
         }
       end
     end,

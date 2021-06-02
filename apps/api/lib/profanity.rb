@@ -6,7 +6,11 @@ module Profanity
   BLACKLIST = YAML.load_file('./lib/profanity.yml').freeze
 
   def self.valid?(text)
-    !blacklisted?(text)
+    if text.nil?
+      return true
+    end
+
+    return !blacklisted?(text)
   end
 
   def self.blacklist(text)

@@ -16,7 +16,11 @@ class Project < ApplicationRecord
   before_save :format_slug
 
   def avatar_url
-    return Rails.application.routes.url_helpers.url_for(avatar.variant(resize_to_fill: [100, 100])) if avatar.attached?
+    return Rails.application.routes.url_helpers.url_for(avatar.variable? ? avatar.variant(
+        resize_and_pad: [100, 100, gravity: 'center', background: '#FFFFFF'],
+        format: :jpg
+      ) : avatar
+    ) if avatar.attached?
 
     ActionController::Base.helpers.image_url('default-avatar.png')
   end
