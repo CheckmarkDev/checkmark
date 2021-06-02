@@ -12,8 +12,26 @@ class Project < ApplicationRecord
   validates :description, length: { maximum: 255 }, profanity: true
   validates :main_color, presence: true, format: { with: /#(?:[0-9a-fA-F]{3}){1,2}/i }
   validates :url, url: { allow_nil: true, no_local: true, public_suffix: true, allow_blank: false }
+  validate :avatar_mime
+  validate :screenshots_mime
 
   before_save :format_slug
+
+  def screenshots_mime
+    if screenshots.attached?
+      screenshots.each do |screenshot|
+        if !screenshot.content_type.in?(%w(image/jpeg image/png))
+          errors.add(:screenshots, 'Must be a JPG or a PNG')
+        end
+      end
+    end
+  end
+
+  def avatar_mime
+    if avatar.attached? && !avatar.content_type.in?(%w(image/jpeg image/png))
+      errors.add(:avatar, 'Must be a JPG or a PNG')
+    end
+  end
 
   def avatar_url
     return Rails.application.routes.url_helpers.url_for(avatar.variable? ? avatar.variant(

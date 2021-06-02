@@ -19,6 +19,7 @@ class User < ApplicationRecord
   validates :username, presence: true, uniqueness: true, length: { minimum: 2, maximum: 32 }, profanity: true
   validates :first_name, presence: true, length: { minimum: 2, maximum: 32 }, profanity: true
   validates :last_name, presence: true, length: { minimum: 2, maximum: 32 }, profanity: true
+  validate :avatar_mime
 
   enum status: {
     pending_validation: 0,
@@ -110,6 +111,11 @@ class User < ApplicationRecord
   end
 
   private
+  def avatar_mime
+    if avatar.attached? && !avatar.content_type.in?(%w(image/jpeg image/png))
+      errors.add(:avatar, 'Must be a JPG or a PNG')
+    end
+  end
 
   def send_welcome
     UserMailer.welcome(self).deliver_later
