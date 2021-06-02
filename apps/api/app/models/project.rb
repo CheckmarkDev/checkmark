@@ -18,28 +18,37 @@ class Project < ApplicationRecord
   before_save :format_slug
 
   def screenshots_mime
+    # rubocop:disable Style/GuardClause Layout/LineLength
     if screenshots.attached?
       screenshots.each do |screenshot|
-        if !screenshot.content_type.in?(%w(image/jpeg image/png))
-          errors.add(:screenshots, 'Must be a JPG or a PNG')
-        end
+        errors.add(:screenshots, 'Must be a JPG or a PNG') unless screenshot.content_type.in?(%w[image/jpeg image/png])
       end
     end
+    # rubocop:enable Style/GuardClause Layout/LineLength
   end
 
   def avatar_mime
-    if avatar.attached? && !avatar.content_type.in?(%w(image/jpeg image/png))
+    # rubocop:disable Style/GuardClause
+    if avatar.attached? && !avatar.content_type.in?(%w[image/jpeg image/png])
       errors.add(:avatar, 'Must be a JPG or a PNG')
     end
+    # rubocop:enable Style/GuardClause
   end
 
   def avatar_url
-    return Rails.application.routes.url_helpers.url_for(avatar.variable? ? avatar.variant(
-        resize_and_pad: [100, 100, gravity: 'center', background: '#FFFFFF'],
-        format: :jpg
-      ) : avatar
-    ) if avatar.attached?
-
+    if avatar.attached?
+      # rubocop:disable Layout/LineLength
+      return Rails.application.routes.url_helpers.url_for(if avatar.variable?
+                                                            avatar.variant(
+                                                              resize_and_pad: [100, 100,
+                                                                               { gravity: 'center', background: '#FFFFFF' }],
+                                                              format: :jpg
+                                                            )
+                                                          else
+                                                            avatar
+                                                          end)
+      # rubocop:enable Layout/LineLength
+    end
     ActionController::Base.helpers.image_url('default-avatar.png')
   end
 

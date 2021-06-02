@@ -64,11 +64,19 @@ class User < ApplicationRecord
   end
 
   def avatar_url
-    return Rails.application.routes.url_helpers.url_for(avatar.variable? ? avatar.variant(
-      resize_and_pad: [100, 100, gravity: 'center', background: '#FFFFFF'],
-      format: :jpg
-    ) : avatar) if avatar.attached?
-
+    if avatar.attached?
+      # rubocop:disable Layout/LineLength
+      return Rails.application.routes.url_helpers.url_for(if avatar.variable?
+                                                            avatar.variant(
+                                                              resize_and_pad: [100, 100,
+                                                                               { gravity: 'center', background: '#FFFFFF' }],
+                                                              format: :jpg
+                                                            )
+                                                          else
+                                                            avatar
+                                                          end)
+      # rubocop:enable Layout/LineLength
+    end
     ActionController::Base.helpers.image_url('default-avatar.png')
   end
 
@@ -111,10 +119,13 @@ class User < ApplicationRecord
   end
 
   private
+
   def avatar_mime
-    if avatar.attached? && !avatar.content_type.in?(%w(image/jpeg image/png))
+    # rubocop:disable Style/GuardClause
+    if avatar.attached? && !avatar.content_type.in?(%w[image/jpeg image/png])
       errors.add(:avatar, 'Must be a JPG or a PNG')
     end
+    # rubocop:enable Style/GuardClause
   end
 
   def send_welcome
