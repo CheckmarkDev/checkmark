@@ -19,6 +19,7 @@ class User < ApplicationRecord
   validates :username, presence: true, uniqueness: true, length: { minimum: 2, maximum: 32 }, profanity: true
   validates :first_name, presence: true, length: { minimum: 2, maximum: 32 }, profanity: true
   validates :last_name, presence: true, length: { minimum: 2, maximum: 32 }, profanity: true
+  validate :avatar_mime
 
   enum status: {
     pending_validation: 0,
@@ -63,8 +64,19 @@ class User < ApplicationRecord
   end
 
   def avatar_url
-    return Rails.application.routes.url_helpers.url_for(avatar.variant(resize_to_fill: [100, 100])) if avatar.attached?
-
+    if avatar.attached?
+      # rubocop:disable Layout/LineLength
+      return Rails.application.routes.url_helpers.url_for(if avatar.variable?
+                                                            avatar.variant(
+                                                              resize_and_pad: [100, 100,
+                                                                               { gravity: 'center', background: '#FFFFFF' }],
+                                                              format: :jpg
+                                                            )
+                                                          else
+                                                            avatar
+                                                          end)
+      # rubocop:enable Layout/LineLength
+    end
     ActionController::Base.helpers.image_url('default-avatar.png')
   end
 
@@ -107,6 +119,14 @@ class User < ApplicationRecord
   end
 
   private
+
+  def avatar_mime
+    # rubocop:disable Style/GuardClause
+    if avatar.attached? && !avatar.content_type.in?(%w[image/jpeg image/png])
+      errors.add(:avatar, 'Must be a JPG or a PNG')
+    end
+    # rubocop:enable Style/GuardClause
+  end
 
   def send_welcome
     UserMailer.welcome(self).deliver_later
