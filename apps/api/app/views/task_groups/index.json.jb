@@ -68,7 +68,13 @@ json[:data] = @task_groups.map do |task_group|
       {
         uuid: image.uuid,
         url: Rails.application.routes.url_helpers.url_for(image),
-        thumbnail_url: Rails.application.routes.url_helpers.url_for(image.variant(resize_to_fill: [720, 405]))
+        thumbnail_url: Rails.application.routes.url_helpers.url_for(if image.variable?
+                                                                      image.variant(resize_to_fill: [
+                                                                    720, 405
+                                                                    ])
+                                                                    else
+                                                                      image
+                                                                    end)
       }
     end
 

@@ -12,12 +12,43 @@ class Project < ApplicationRecord
   validates :description, length: { maximum: 255 }, profanity: true
   validates :main_color, presence: true, format: { with: /#(?:[0-9a-fA-F]{3}){1,2}/i }
   validates :url, url: { allow_nil: true, no_local: true, public_suffix: true, allow_blank: false }
+  validate :avatar_mime
+  validate :screenshots_mime
 
   before_save :format_slug
 
-  def avatar_url
-    return Rails.application.routes.url_helpers.url_for(avatar.variant(resize_to_fill: [100, 100])) if avatar.attached?
+  def screenshots_mime
+    # rubocop:disable Style/GuardClause Layout/LineLength
+    if screenshots.attached?
+      screenshots.each do |screenshot|
+        errors.add(:screenshots, 'Must be a JPG or a PNG') unless screenshot.content_type.in?(%w[image/jpeg image/png])
+      end
+    end
+    # rubocop:enable Style/GuardClause Layout/LineLength
+  end
 
+  def avatar_mime
+    # rubocop:disable Style/GuardClause
+    if avatar.attached? && !avatar.content_type.in?(%w[image/jpeg image/png])
+      errors.add(:avatar, 'Must be a JPG or a PNG')
+    end
+    # rubocop:enable Style/GuardClause
+  end
+
+  def avatar_url
+    if avatar.attached?
+      # rubocop:disable Layout/LineLength
+      return Rails.application.routes.url_helpers.url_for(if avatar.variable?
+                                                            avatar.variant(
+                                                              resize_and_pad: [100, 100,
+                                                                               { gravity: 'center', background: '#FFFFFF' }],
+                                                              format: :jpg
+                                                            )
+                                                          else
+                                                            avatar
+                                                          end)
+      # rubocop:enable Layout/LineLength
+    end
     ActionController::Base.helpers.image_url('default-avatar.png')
   end
 

@@ -10,7 +10,7 @@ module Me
     def create
       @project.screenshots.attach(screenshot_params[:screenshots])
 
-      if @project.save!
+      if @project.save
         render 'projects/show'
       else
         render json: { errors: @project.errors }, status: :unprocessable_entity
