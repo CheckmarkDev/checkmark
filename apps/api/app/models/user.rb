@@ -46,7 +46,7 @@ class User < ApplicationRecord
       streak = ActiveRecord::Base.connection.select_values(
         ActiveRecord::Base.sanitize_sql_for_conditions(["
           select
-            case t.created_at::timestamp AT TIME ZONE :timezone <= timestamp 'yesterday'
+            case t.created_at::timestamp AT TIME ZONE :timezone <= timestamp 'yesterday' AT TIME ZONE :timezone
               when true then 0
               when false then date_part('day', t.created_at::timestamp AT TIME ZONE :timezone - s.created_at::timestamp AT TIME ZONE :timezone) + 1
             end as streak
