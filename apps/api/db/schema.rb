@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_27_235429) do
+ActiveRecord::Schema.define(version: 2021_06_08_192223) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -181,6 +181,7 @@ ActiveRecord::Schema.define(version: 2021_05_27_235429) do
     t.bigint "webhook_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.json "data"
     t.index ["state"], name: "index_webhook_requests_on_state"
     t.index ["uuid"], name: "index_webhook_requests_on_uuid", unique: true
     t.index ["webhook_id"], name: "index_webhook_requests_on_webhook_id"
