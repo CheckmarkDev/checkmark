@@ -20,7 +20,6 @@ class WebhookJob < ApplicationJob
     )
 
     Raven.captureException(e)
-    Rails.logger.debug 'An error occured while sending webhook event', e
 
     raise e
   end
