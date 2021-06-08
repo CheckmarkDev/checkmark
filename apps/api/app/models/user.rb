@@ -94,7 +94,7 @@ class User < ApplicationRecord
   end
 
   def self.notify_weekly_summary
-    User.where.not(status: User.statuses[:blocked]).each_with_index do |user|
+    User.where.not(status: User.statuses[:blocked]).find_each do |user|
       timezone = user.timezone
       date_range = DateTime.now.in_time_zone(timezone).last_week..DateTime.yesterday.in_time_zone(timezone).at_midnight
       tasks = user.tasks.where(created_at: date_range).count
