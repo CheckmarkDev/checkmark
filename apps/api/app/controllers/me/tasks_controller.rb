@@ -7,7 +7,7 @@ module Me
 
     api :GET, '/me/tasks'
     def index
-      @tasks = Task.includes(:user, :task_likes).where(user_id: @current_user.id).page(params[:page])
+      @tasks = Task.includes(:user, :likes).where(user_id: @current_user.id).page(params[:page])
     end
 
     # GET /tasks/1

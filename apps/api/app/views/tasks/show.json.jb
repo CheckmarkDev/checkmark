@@ -12,7 +12,7 @@ json[:user] = render('users/user', user: @task.user)
 
 json[:metrics] = {
   comments: @task.comments,
-  likes: @task.likes
+  likes: @task.user_likes
 }
 
 json[:projects] = @task.projects.map do |project|

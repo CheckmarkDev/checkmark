@@ -10,7 +10,7 @@ class UserTaskGroupsController < ApplicationController
         user: [avatar_attachment: :blob],
         tasks: [
           :task_comments,
-          :task_likes,
+          :likes,
           { images_attachments: :blob,
             projects: [avatar_attachment: :blob],
             mentions: [avatar_attachment: :blob] }

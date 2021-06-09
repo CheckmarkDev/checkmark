@@ -5,7 +5,7 @@ class Task < ApplicationRecord
   belongs_to :task_group, optional: true
   belongs_to :streak, optional: true
 
-  has_many :task_likes, dependent: :destroy
+  has_many :likes, dependent: :destroy, as: :likeable
   has_many :task_comments, dependent: :destroy
   has_and_belongs_to_many :projects
   has_and_belongs_to_many :mentions, class_name: 'User', join_table: 'task_mentions'
@@ -84,9 +84,9 @@ class Task < ApplicationRecord
     self.streak = last_streak
   end
 
-  def likes
+  def user_likes
     Rails.cache.fetch([self, :likes]) do
-      User.find(task_likes.pluck(:user_id)).pluck(:uuid)
+      User.find(likes.pluck(:user_id)).pluck(:uuid)
     end
   end
 
