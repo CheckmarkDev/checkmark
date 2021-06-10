@@ -46,7 +46,7 @@ class User < ApplicationRecord
       streak = ActiveRecord::Base.connection.select_values(
         ActiveRecord::Base.sanitize_sql_for_conditions(["
           select
-            case t.created_at::timestamp AT TIME ZONE :timezone <= timestamp 'yesterday'
+            case t.created_at::timestamp AT TIME ZONE :timezone <= timestamp 'yesterday' AT TIME ZONE :timezone
               when true then 0
               when false then date_part('day', t.created_at::timestamp AT TIME ZONE :timezone - s.created_at::timestamp AT TIME ZONE :timezone) + 1
             end as streak
@@ -94,7 +94,7 @@ class User < ApplicationRecord
   end
 
   def self.notify_weekly_summary
-    User.where.not(status: User.statuses[:blocked]).each_with_index do |user, k|
+    User.where.not(status: User.statuses[:blocked]).find_each do |user|
       timezone = user.timezone
       date_range = DateTime.now.in_time_zone(timezone).last_week..DateTime.yesterday.in_time_zone(timezone).at_midnight
       tasks = user.tasks.where(created_at: date_range).count
@@ -105,15 +105,21 @@ class User < ApplicationRecord
 
       next unless tasks.positive?
 
-      Webhook.all.find_each do |webhook|
+      # Notify globally all the events for the Checkmark platform.
+      Webhook.where(project: nil, user: nil).find_each do |webhook|
         data = ApplicationController.render(template: 'webhook_job/weekly_summary', assigns: {
                                               user: user,
                                               todo: todo,
                                               doing: doing,
-                                              done: done
+                                              done: done,
+                                              secret: webhook.secret
                                             })
 
-        WebhookJob.set(wait: k * 30.seconds).perform_later(webhook, 'weekly_summary.created', data)
+        webhook.webhook_requests.create(
+          event: 'weekly_summary.created',
+          state: WebhookRequest.states[:pending],
+          data: data
+        )
       end
     end
   end

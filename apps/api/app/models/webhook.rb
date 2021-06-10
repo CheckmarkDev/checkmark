@@ -9,7 +9,12 @@ class Webhook < ApplicationRecord
 
   before_create :assign_secret
 
-  validates :url, url: { allow_nil: true, no_local: true, public_suffix: true, allow_blank: false }
+  validates :url, url: {
+    allow_nil: true,
+    no_local: Rails.env.production?,
+    public_suffix: Rails.env.production?,
+    allow_blank: false
+  }
 
   private
 
