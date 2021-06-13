@@ -11,7 +11,7 @@ json = {
 json[:user] = render('users/user', user: @task.user)
 
 json[:metrics] = {
-  comments: @task.comments,
+  comments: @task.user_comments,
   likes: @task.user_likes
 }
 

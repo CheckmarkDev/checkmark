@@ -26,7 +26,7 @@ json[:data] = @tasks.map do |task|
     }
   }
   v[:metrics] = {
-    comments: task.comments,
+    comments: task.user_comments,
     likes: task.user_likes
   }
 
