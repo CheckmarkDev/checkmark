@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MakeCommentsPolymorphic < ActiveRecord::Migration[6.1]
   def up
     rename_table(:task_comments, :comments)

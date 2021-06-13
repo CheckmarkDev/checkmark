@@ -49,12 +49,12 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'active_record_doctor'
   gem 'bullet'
+  gem 'graphiql-rails'
   gem 'rubocop', require: false
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
-  gem 'graphiql-rails'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

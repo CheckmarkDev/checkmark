@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Copied from https://github.com/Shopify/graphql-batch/blob/6eabbf8f914510e1c6965cbb6b19c14df250433f/examples/association_loader.rb
 class AssociationLoader < GraphQL::Batch::Loader
   def self.validate(model, association_name)
@@ -6,7 +8,7 @@ class AssociationLoader < GraphQL::Batch::Loader
   end
 
   def initialize(model, association_name)
-    puts "ok", model, association_name
+    super
     @model = model
     @association_name = association_name
     validate
@@ -15,6 +17,7 @@ class AssociationLoader < GraphQL::Batch::Loader
   def load(record)
     raise TypeError, "#{@model} loader can't load association for #{record.class}" unless record.is_a?(@model)
     return Promise.resolve(read_association(record)) if association_loaded?(record)
+
     super
   end
 
@@ -31,9 +34,11 @@ class AssociationLoader < GraphQL::Batch::Loader
   private
 
   def validate
+    # rubocop:disable Style/GuardClause
     unless @model.reflect_on_association(@association_name)
       raise ArgumentError, "No association #{@association_name} on #{@model}"
     end
+    # rubocop:enable Style/GuardClause
   end
 
   def preload_association(records)
