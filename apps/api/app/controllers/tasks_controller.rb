@@ -6,17 +6,16 @@ class TasksController < ApplicationController
 
   api :GET, '/tasks'
   def index
-    @tasks = Task.includes(:task_likes, :user).order(created_at: :desc).page(params[:page])
+    @tasks = Task.includes(:likes, :user).order(created_at: :desc).page(params[:page])
   end
 
   api :POST, '/tasks/:uuid/like'
   def like
-    @like = TaskLike.where(
-      task: @task,
+    @like = @task.likes.where(
       user: @current_user
     ).first
     if @like.present?
-      @like.state = TaskLike.states[:active]
+      @like.state = Like.states[:active]
     else
       if @task.user == @current_user
         return render json: {
@@ -24,10 +23,11 @@ class TasksController < ApplicationController
         }, status: :forbidden
       end
 
-      @like = TaskLike.new(
-        task: @task,
+      @like = Like.new(
         user: @current_user,
-        state: TaskLike.states[:active]
+        state: Like.states[:active],
+        likeable_type: 'Task',
+        likeable_id: @task.id
       )
     end
 
@@ -40,14 +40,13 @@ class TasksController < ApplicationController
 
   api :DELETE, '/tasks/:uuid/like'
   def dislike
-    @like = TaskLike.where(
+    @like = @task.likes.where(
       user: @current_user,
-      task: @task,
-      state: TaskLike.states[:active]
+      state: Like.states[:active]
     ).first
 
     if @like.present?
-      @like.update(state: TaskLike.states[:inactive])
+      @like.update(state: Like.states[:inactive])
 
       render :show, status: :no_content
     else
