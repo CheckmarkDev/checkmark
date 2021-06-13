@@ -7,7 +7,7 @@ module Me
 
     api :GET, '/me/tasks'
     def index
-      @tasks = Task.includes(:user, :task_likes).where(user_id: @current_user.id).page(params[:page])
+      @tasks = Task.includes(:user, :likes).where(user_id: @current_user.id).page(params[:page])
     end
 
     # GET /tasks/1
@@ -41,8 +41,6 @@ module Me
         task_params[:images].each do |image|
           @task.images.attach(image) unless image.is_a? String
         end
-      else
-        @task.images.each(&:purge)
       end
 
       if @task.update(task_params.except(:images))

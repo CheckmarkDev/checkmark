@@ -60,8 +60,8 @@ json[:data] = @task_groups.map do |task_group|
     end
 
     t[:metrics] = {
-      comments: task.comments,
-      likes: task.likes
+      comments: task.user_comments,
+      likes: task.user_likes
     }
 
     t[:images] = task.images.map do |image|

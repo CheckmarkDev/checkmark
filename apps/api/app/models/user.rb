@@ -6,8 +6,8 @@ class User < ApplicationRecord
 
   has_many :tokens, dependent: :destroy
   has_many :tasks, dependent: :destroy
-  has_many :task_likes, dependent: :destroy
-  has_many :task_comments, dependent: :destroy
+  has_many :likes, dependent: :destroy
+  has_many :comments, dependent: :destroy
   has_many :task_groups, dependent: :destroy
   has_many :streaks, dependent: :destroy
   has_many :projects, dependent: :destroy
