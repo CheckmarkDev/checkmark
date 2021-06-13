@@ -2,6 +2,7 @@
 
 # rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
+  post "/graphql", to: "graphql#execute"
   apipie
 
   defaults format: :json do
