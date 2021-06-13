@@ -2,13 +2,13 @@
 
 json = {
   meta: {
-    current_page: @task_likes.current_page,
-    total_pages: @task_likes.total_pages,
-    count: @task_likes.count
+    current_page: @likes.current_page,
+    total_pages: @likes.total_pages,
+    count: @likes.count
   }
 }
 
-json[:data] = @task_likes.map do |like|
+json[:data] = @likes.map do |like|
   v = {
     uuid: like.uuid,
     created_at: like.created_at,

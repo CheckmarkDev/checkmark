@@ -5,11 +5,11 @@ class TaskLikesController < ApplicationController
 
   api :GET, '/tasks/:task_uuid/likes'
   def index
-    @task_likes = @task.task_likes.includes([
+    @likes = @task.likes.includes([
                                               user: [:streaks, { avatar_attachment: :blob }]
                                             ]).order(created_at: :desc).page(params[:page])
 
-    render 'tasks/task_likes/index'
+    render 'likes/index'
   end
 
   private

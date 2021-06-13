@@ -19,6 +19,7 @@ export type Task = {
   commentsCount: number
   likesCount: number
   images: Array<{
+    uuid: string
     url: string
     thumbnailUrl: string
   }>

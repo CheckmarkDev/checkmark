@@ -53,8 +53,10 @@
 <style scoped>
   .task-group__content {
     padding-left: 0;
+  }
 
-    @screen md {
+  @screen md {
+    .task-group__content {
       padding-left: 64px;
     }
   }

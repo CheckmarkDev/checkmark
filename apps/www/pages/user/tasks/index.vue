@@ -3,9 +3,13 @@
     v-infinite-scroll="loadMore"
     class="flex flex-col dark:text-white"
   >
-    <h2 class="font-medium text-2xl mb-4">
-      Feed
-    </h2>
+    <div class="flex items-center justify-between">
+      <h2 class="font-medium text-2xl mb-4">
+        {{ $trans('global.titles.feed') }}
+      </h2>
+
+      <TaskGroupFilter />
+    </div>
 
     <DateGroupedTaskGroups
       :task-groups="taskGroups.data"
@@ -18,11 +22,13 @@
   import { defineComponent } from '@nuxtjs/composition-api'
   import { TaskGroup } from '~/types/taskGroup'
   import { User } from '~/types/user'
+  import TaskGroupFilter from '@/components/TaskGroupFilter/index.vue'
   import DateGroupedTaskGroups from '@/components/DateGroupedTaskGroups/index.vue'
 
   export default defineComponent({
     components: {
-      DateGroupedTaskGroups
+      DateGroupedTaskGroups,
+      TaskGroupFilter
     },
     data () {
       return {
@@ -50,9 +56,11 @@
         if (this.taskGroups.meta.current_page + 1 > this.taskGroups.meta.total_pages) return
 
         const { username } = this.$route.params
+        const { state } = this.$accessor.project.getFilters
         this.$axios.$get(`/users/${username}/task_groups`, {
           params: {
-            page: this.taskGroups.meta.current_page + 1
+            page: this.taskGroups.meta.current_page + 1,
+            state
           }
         })
           .then(res => {
@@ -65,7 +73,12 @@
       },
       updateTasks () {
         const { username } = this.$route.params
-        this.$axios.$get(`/users/${username}/task_groups`)
+        const { state } = this.$accessor.project.getFilters
+        this.$axios.$get(`/users/${username}/task_groups`, {
+          params: {
+            state
+          }
+        })
           .then(res => {
             this.taskGroups = res
           })

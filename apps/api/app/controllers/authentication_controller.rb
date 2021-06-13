@@ -12,7 +12,7 @@ class AuthenticationController < ApplicationController
   param :email, String, desc: 'E-mail'
   param :password, String, desc: 'Password'
   def login
-    @user = User.includes(:projects).find_by(email: login_params[:email])
+    @user = User.where.not(status: User.statuses[:blocked]).includes(:projects).find_by(email: login_params[:email])
     if @user.nil?
       render json: { errors: 'unauthorized' }, status: :unauthorized
       return false
@@ -34,12 +34,6 @@ class AuthenticationController < ApplicationController
   param :first_name, String, desc: 'first_name'
   param :last_name, String, desc: 'last_name'
   def register
-    @user = User.includes(:projects).find_by(email: register_params[:email])
-    unless @user.nil?
-      render json: { errors: 'An account with this e-mail already exists' }, status: :unauthorized
-      return false
-    end
-
     @user = User.new(
       email: register_params[:email],
       password: register_params[:password],
@@ -48,10 +42,28 @@ class AuthenticationController < ApplicationController
       last_name: register_params[:last_name]
     )
 
-    if @user.save!
+    if @user.save
       generate_token(@user)
 
       render status: :created
+    else
+      render json: { errors: @user.errors }, status: :unprocessable_entity
+    end
+  end
+
+  api :POST, '/auth/email_validation'
+  def email_validation
+    if @decoded_token[:type] != 'email_validation'
+      return render json: { errors: 'Token is invalid' }, status: :unauthorized
+    end
+
+    @current_user.status = User.statuses[:validated]
+    @saved_token.update!(
+      status: Token.statuses[:revoked]
+    )
+
+    if @current_user.save!
+      render json: {}, status: :created
     else
       render json: {}, status: :unprocessable_entity
     end
@@ -89,12 +101,14 @@ class AuthenticationController < ApplicationController
     @expires_at = (DateTime.now.in_time_zone(timezone) + 1.month).to_i
     @token = JsonWebToken.encode(
       sub: user.uuid,
+      type: 'auth',
       exp: @expires_at
     )
 
     Token.create!(
       token: @token,
-      user: user
+      user: user,
+      ip: request.remote_ip || nil
     )
   end
 

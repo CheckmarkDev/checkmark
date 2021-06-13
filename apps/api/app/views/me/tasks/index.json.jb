@@ -15,9 +15,7 @@ json[:data] = @tasks.map do |task|
     state: task.state
   }
 
-  v[:likes] = task.task_likes.map do |like|
-    User.find_by(id: like.user_id).uuid
-  end
+  v[:likes] = task.user_likes
 
   v
 end

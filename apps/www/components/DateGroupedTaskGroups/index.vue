@@ -1,22 +1,35 @@
 <template>
   <div>
-    <div
-      v-for="(group, k) in groups"
-      :key="k"
+    <template
+      v-if="groups.length"
     >
-      <div class="flex items-center mb-4">
-        <div
-          class="text-2xl mr-3"
-          v-text="dayjs(group.date).format('LL')"
+      <div
+        v-for="(group, k) in groups"
+        :key="k"
+      >
+        <div class="flex items-center mb-4">
+          <div
+            class="text-2xl mr-3"
+            v-text="dayjs(group.date).format('LL')"
+          />
+        </div>
+        <TaskGroup
+          v-for="taskGroup in group.taskGroups"
+          :key="taskGroup.uuid"
+          :task-group="taskGroup"
+          class="mb-4"
         />
       </div>
-      <TaskGroup
-        v-for="taskGroup in group.taskGroups"
-        :key="taskGroup.uuid"
-        :task-group="taskGroup"
-        class="mb-4"
+    </template>
+    <template
+      v-else
+    >
+      <p
+        v-text="$accessor.project.getFilters.state
+          ? $trans('user.paragraphs.no_tasks_filter')
+          : $trans('user.paragraphs.no_tasks')"
       />
-    </div>
+    </template>
   </div>
 </template>
 

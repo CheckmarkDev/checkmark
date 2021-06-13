@@ -17,7 +17,13 @@ Rails.application.routes.draw do
       resources :task_comments, path: 'comments'
       resources :task_likes, path: 'likes'
     end
-    resources :users
+    resources :users do
+      collection do
+        get :random, to: 'users#random'
+        post :verify_email, to: 'users#verify_email'
+        post :verify_username, to: 'users#verify_username'
+      end
+    end
 
     get '/users/:id/tasks', to: 'user_tasks#index'
     get '/users/:id/task_groups', to: 'user_task_groups#index'
@@ -27,7 +33,11 @@ Rails.application.routes.draw do
 
     namespace 'me' do
       resources :tasks
-      resources :projects
+      resources :webhooks
+      resources :projects do
+        resources :project_screenshots, path: 'screenshots'
+        resources :project_webhooks, path: 'webhooks'
+      end
 
       get '/email_notifications', to: 'email_notifications#index'
       put '/email_notifications', to: 'email_notifications#update'
@@ -37,6 +47,7 @@ Rails.application.routes.draw do
     scope '/auth' do
       get '/me', to: 'authentication#me'
       post '/register', to: 'authentication#register'
+      post '/email_validation', to: 'authentication#email_validation'
       post '/login', to: 'authentication#login'
       # post '/password-forgot', to: 'authentication#password_forgot'
       # post '/password-reset', to: 'authentication#password_reset'

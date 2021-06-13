@@ -17,6 +17,7 @@ json[:projects] = @current_user.projects.map do |project|
     uuid: project.uuid,
     slug: project.slug,
     name: project.name,
+    main_color: project.main_color,
     url: project.url
   }
 end

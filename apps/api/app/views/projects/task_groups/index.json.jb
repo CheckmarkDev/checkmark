@@ -8,7 +8,7 @@ json = {
   }
 }
 
-# rubocop:disable Metrics/BlockLength, Layout/LineLength
+# rubocop:disable Metrics/BlockLength
 json[:data] = @task_groups.map do |task_group|
   user = {
     uuid: task_group.user.uuid,
@@ -26,12 +26,20 @@ json[:data] = @task_groups.map do |task_group|
     user: user
   }
 
-  v[:tasks] = task_group.tasks.includes(:projects,
-                                        :task_comments,
-                                        :task_likes,
-                                        :mentions,
-                                        images_attachments: :blob,
-                                        projects: [avatar_attachment: :blob]).where(projects: { id: [@project.id] }).map do |task|
+  tasks = task_group.tasks
+    .includes(
+      :projects,
+      :comments,
+      :likes,
+      :mentions,
+      images_attachments: :blob,
+      projects: [avatar_attachment: :blob]
+    )
+    .where(projects: { id: [@project.id] })
+
+  tasks = tasks.where(state: params[:state]) if params[:state].present?
+
+  v[:tasks] = tasks.sort_by(&:created_at).reverse!.map do |task|
     t = {
       uuid: task.uuid,
       content: task.content,
@@ -46,6 +54,7 @@ json[:data] = @task_groups.map do |task_group|
         uuid: project.uuid,
         slug: project.slug,
         name: project.name,
+        main_color: project.main_color,
         avatar_url: project.avatar_url,
         url: project.url
       }
@@ -61,14 +70,21 @@ json[:data] = @task_groups.map do |task_group|
     end
 
     t[:metrics] = {
-      comments: task.task_comments.pluck(:id).size,
-      likes: User.find(task.task_likes.pluck(:user_id)).pluck(:uuid)
+      comments: task.user_comments,
+      likes: task.user_likes
     }
 
     t[:images] = task.images.map do |image|
       {
+        uuid: image.uuid,
         url: Rails.application.routes.url_helpers.url_for(image),
-        thumbnail_url: Rails.application.routes.url_helpers.url_for(image.variant(resize_to_fit: [720, 720]))
+        thumbnail_url: Rails.application.routes.url_helpers.url_for(if image.variable?
+                                                                      image.variant(resize_to_fill: [
+                                                                    720, 405
+                                                                    ])
+                                                                    else
+                                                                      image
+                                                                    end)
       }
     end
 
@@ -77,6 +93,6 @@ json[:data] = @task_groups.map do |task_group|
 
   v
 end
-# rubocop:enable Metrics/BlockLength, Layout/LineLength
+# rubocop:enable Metrics/BlockLength
 
 json

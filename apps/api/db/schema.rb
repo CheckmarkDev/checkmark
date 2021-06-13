@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_08_215333) do
+ActiveRecord::Schema.define(version: 2021_06_13_105713) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -23,8 +23,10 @@ ActiveRecord::Schema.define(version: 2021_05_08_215333) do
     t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+    t.index ["uuid"], name: "index_active_storage_attachments_on_uuid", unique: true
   end
 
   create_table "active_storage_blobs", force: :cascade do |t|
@@ -45,6 +47,20 @@ ActiveRecord::Schema.define(version: 2021_05_08_215333) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "comments", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.bigint "user_id", null: false
+    t.bigint "task_id"
+    t.text "content"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "commentable_type"
+    t.bigint "commentable_id"
+    t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable"
+    t.index ["user_id"], name: "index_comments_on_user_id"
+    t.index ["uuid"], name: "index_comments_on_uuid", unique: true
+  end
+
   create_table "email_notifications", force: :cascade do |t|
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.boolean "like", default: true
@@ -53,6 +69,21 @@ ActiveRecord::Schema.define(version: 2021_05_08_215333) do
     t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_email_notifications_on_user_id"
     t.index ["uuid"], name: "index_email_notifications_on_uuid", unique: true
+  end
+
+  create_table "likes", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.bigint "user_id", null: false
+    t.bigint "task_id"
+    t.integer "state", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "likeable_type"
+    t.bigint "likeable_id"
+    t.index ["likeable_type", "likeable_id"], name: "index_likes_on_likeable"
+    t.index ["state"], name: "index_likes_on_state"
+    t.index ["user_id"], name: "index_likes_on_user_id"
+    t.index ["uuid"], name: "index_likes_on_uuid", unique: true
   end
 
   create_table "projects", force: :cascade do |t|
@@ -64,6 +95,7 @@ ActiveRecord::Schema.define(version: 2021_05_08_215333) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_id", null: false
+    t.string "main_color", default: "#2589C7", null: false
     t.index ["slug"], name: "index_projects_on_slug", unique: true
     t.index ["user_id"], name: "index_projects_on_user_id"
     t.index ["uuid"], name: "index_projects_on_uuid", unique: true
@@ -85,18 +117,6 @@ ActiveRecord::Schema.define(version: 2021_05_08_215333) do
     t.index ["uuid"], name: "index_streaks_on_uuid", unique: true
   end
 
-  create_table "task_comments", force: :cascade do |t|
-    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
-    t.bigint "user_id", null: false
-    t.bigint "task_id", null: false
-    t.text "content"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["task_id"], name: "index_task_comments_on_task_id"
-    t.index ["user_id"], name: "index_task_comments_on_user_id"
-    t.index ["uuid"], name: "index_task_comments_on_uuid", unique: true
-  end
-
   create_table "task_groups", force: :cascade do |t|
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.bigint "user_id", null: false
@@ -104,19 +124,6 @@ ActiveRecord::Schema.define(version: 2021_05_08_215333) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_task_groups_on_user_id"
     t.index ["uuid"], name: "index_task_groups_on_uuid", unique: true
-  end
-
-  create_table "task_likes", force: :cascade do |t|
-    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
-    t.bigint "user_id", null: false
-    t.bigint "task_id", null: false
-    t.integer "state", default: 0, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["state"], name: "index_task_likes_on_state"
-    t.index ["task_id"], name: "index_task_likes_on_task_id"
-    t.index ["user_id"], name: "index_task_likes_on_user_id"
-    t.index ["uuid"], name: "index_task_likes_on_uuid", unique: true
   end
 
   create_table "task_mentions", id: false, force: :cascade do |t|
@@ -143,10 +150,13 @@ ActiveRecord::Schema.define(version: 2021_05_08_215333) do
 
   create_table "tokens", force: :cascade do |t|
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
-    t.string "token"
+    t.string "token", null: false
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "ip"
+    t.integer "status", default: 0, null: false
+    t.index ["token"], name: "index_tokens_on_token", unique: true
     t.index ["user_id"], name: "index_tokens_on_user_id"
     t.index ["uuid"], name: "index_tokens_on_uuid", unique: true
   end
@@ -161,9 +171,24 @@ ActiveRecord::Schema.define(version: 2021_05_08_215333) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "timezone", default: "Europe/Paris"
+    t.integer "status", default: 0, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["status"], name: "index_users_on_status"
     t.index ["username"], name: "index_users_on_username", unique: true
     t.index ["uuid"], name: "index_users_on_uuid", unique: true
+  end
+
+  create_table "webhook_requests", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.integer "state", default: 0, null: false
+    t.string "event", null: false
+    t.bigint "webhook_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.json "data"
+    t.index ["state"], name: "index_webhook_requests_on_state"
+    t.index ["uuid"], name: "index_webhook_requests_on_uuid", unique: true
+    t.index ["webhook_id"], name: "index_webhook_requests_on_webhook_id"
   end
 
   create_table "webhooks", force: :cascade do |t|
@@ -171,25 +196,32 @@ ActiveRecord::Schema.define(version: 2021_05_08_215333) do
     t.string "url"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "secret"
+    t.bigint "user_id"
+    t.bigint "project_id"
+    t.index ["project_id"], name: "index_webhooks_on_project_id"
+    t.index ["user_id"], name: "index_webhooks_on_user_id"
     t.index ["uuid"], name: "index_webhooks_on_uuid", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "comments", "tasks"
+  add_foreign_key "comments", "users"
   add_foreign_key "email_notifications", "users"
+  add_foreign_key "likes", "tasks"
+  add_foreign_key "likes", "users"
   add_foreign_key "projects", "users"
   add_foreign_key "projects_tasks", "projects"
   add_foreign_key "projects_tasks", "tasks"
   add_foreign_key "streaks", "users"
-  add_foreign_key "task_comments", "tasks"
-  add_foreign_key "task_comments", "users"
   add_foreign_key "task_groups", "users"
-  add_foreign_key "task_likes", "tasks"
-  add_foreign_key "task_likes", "users"
   add_foreign_key "task_mentions", "tasks"
   add_foreign_key "task_mentions", "users"
   add_foreign_key "tasks", "streaks"
   add_foreign_key "tasks", "task_groups"
   add_foreign_key "tasks", "users"
   add_foreign_key "tokens", "users"
+  add_foreign_key "webhooks", "projects"
+  add_foreign_key "webhooks", "users"
 end

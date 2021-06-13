@@ -1,5 +1,13 @@
 # frozen_string_literal: true
 
+Rails.application.config.middleware.insert_before 0, Rack::Cors do
+  allow do
+    origins 'https://www.checkmark.dev', 'https://checkmark.dev', 'http://www.checkmark.dev', 'http://checkmark.dev', 'https://bot.checkmark.dev'
+
+    resource '*', headers: :any, methods: %i[get post put patch delete options head]
+  end
+end
+
 # rubocop:disable Metrics/BlockLength
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -51,7 +59,7 @@ Rails.application.configure do
   config.log_tags = [:request_id]
 
   # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
+  config.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'] }
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque

@@ -6,36 +6,38 @@ class TaskCommentsController < ApplicationController
 
   api :GET, '/tasks/:task_uuid/comments'
   def index
-    @task_comments = @task.task_comments.order(created_at: :desc).page(params[:page])
+    @comments = @task.comments.order(created_at: :desc).page(params[:page])
 
-    render 'tasks/task_comments/index'
+    render 'comments/index'
   end
 
   api :POST, '/tasks/:task_uuid/comments'
   def create
-    @task_comment = TaskComment.new(task_comment_params)
-    @task_comment.task = @task
-    @task_comment.user = @current_user
+    @comment = Comment.new(
+      user: @current_user,
+      commentable_type: 'Task',
+      commentable_id: @task.id
+    )
 
-    if @task_comment.save!
-      render 'tasks/task_comments/show', status: :created
+    if @comment.save
+      render 'comments/show', status: :created
     else
-      render json: @task_comment.errors, status: :unprocessable_entity
+      render json: { errors: @comment.errors }, status: :unprocessable_entity
     end
   end
 
   # api :PUT, '/tasks/:task_uuid/comments/:comment_uuid'
   # def update
-  #   if @task_comment.update(task_comment_params)
-  #     render json: @task_comment
+  #   if @comment.update(comment_params)
+  #     render json: @comment
   #   else
-  #     render json: @task_comment.errors, status: :unprocessable_entity
+  #     render json: @comment.errors, status: :unprocessable_entity
   #   end
   # end
 
   # api :DELETE, '/tasks/:task_uuid/comments/:comment_uuid'
   # def destroy
-  #   @task_comment.destroy
+  #   @comment.destroy
   # end
 
   private
@@ -44,12 +46,12 @@ class TaskCommentsController < ApplicationController
     @task = Task.find_by!(uuid: params[:task_id])
   end
 
-  def set_task_comment
-    @task_comment = TaskComment.find(params[:id])
+  def set_comment
+    @comment = TaskComment.find(params[:id])
   end
 
   # Only allow a trusted parameter "white list" through.
-  def task_comment_params
+  def comment_params
     params.permit(:content)
   end
 end

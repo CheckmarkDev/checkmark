@@ -1,14 +1,21 @@
 # frozen_string_literal: true
 
-class TaskComment < ApplicationRecord
+class Comment < ApplicationRecord
   belongs_to :user
-  belongs_to :task
+  belongs_to :task, touch: true, optional: true
+  belongs_to :likeable, polymorphic: true
 
   after_commit :send_comment_email, on: :create
+
+  validates :content, presence: true, length: { minimum: 2, maximum: 1000 }, profanity: true
 
   private
 
   def send_comment_email
+    # rubocop:disable Rails/Blank
+    return unless task.present?
+    # rubocop:enable Rails/Blank
+
     # Do not send the e-mail if we're commenting our own task.
     return false if task.user == user
 

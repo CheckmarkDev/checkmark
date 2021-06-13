@@ -13,7 +13,7 @@
     <div class="settings-container">
       <div class="container mx-auto flex flex-col md:flex-row items-start">
         <nav class="bg-white dark:bg-gray-700 dark:text-white flex rounded-lg w-full md:w-3/12 mr-8 p-4 mb-4 md:mb-0">
-          <ul class="w-full flex md:flex-col">
+          <ul class="w-full flex md:flex-col overflow-x-auto">
             <li
               v-for="(link, k) in links"
               :key="k"
@@ -63,6 +63,12 @@
             name: 'SettingsNotifications',
           },
           name: trans('settings.titles.notifications')
+        },
+        {
+          to: {
+            name: 'SettingsWebhooks',
+          },
+          name: trans('settings.titles.webhooks')
         }
       ])
 

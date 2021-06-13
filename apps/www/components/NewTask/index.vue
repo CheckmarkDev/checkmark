@@ -8,11 +8,7 @@
         :disabled="$wait.is('creating task')"
         @submit.prevent="submitted"
       >
-        <ValidationProvider
-          rules="required"
-          :name="$trans('sign-in.labels.email')"
-          class="flex flex-col"
-        >
+        <div>
           <label
             for="task"
             class="text-base text-gray-800 dark:text-gray-300 mb-2"
@@ -37,14 +33,31 @@
                 </div>
               </button>
               <div class="flex flex-col flex-1">
-                <textarea
-                  :disabled="$wait.is('creating task')"
-                  id="task"
-                  v-model="formData.content"
-                  :placeholder="$trans('home.labels.done_placeholder')"
-                  name=""
-                  class="p-2 rounded-bl rounded-br rounded-tr appearance-none leading-relaxed border border-gray-300 dark:border-gray-600 border-solid mb-2 dark:bg-gray-600 dark:text-white"
-                ></textarea>
+                <ValidationProvider
+                  ref="content-provider"
+                  rules="required|min:2|max:1000"
+                  :name="$trans('home.fields.content')"
+                  class="flex flex-col"
+                  v-slot="{ invalid, errors }"
+                >
+                  <textarea
+                    :disabled="$wait.is('creating task')"
+                    :placeholder="$trans('home.labels.done_placeholder')"
+                    id="task"
+                    v-model="formData.content"
+                    name="content"
+                    minlength="2"
+                    maxlength="1000"
+                    class="p-2 rounded-bl rounded-br rounded-tr appearance-none leading-relaxed border border-gray-300 dark:border-gray-600 border-solid mb-2 dark:bg-gray-600 dark:text-white"
+                    required
+                  ></textarea>
+                  <span
+                    v-if="invalid"
+                    v-text="errors[0]"
+                    role="alert"
+                    class="text-left text-sm text-red-500 mb-3"
+                  />
+                </ValidationProvider>
 
                 <div
                   v-if="formData.content.length > 0"
@@ -76,7 +89,7 @@
               {{ $trans('home.buttons.send') }}
             </button>
           </div>
-        </ValidationProvider>
+        </div>
       </form>
     </ValidationObserver>
   </div>
@@ -86,6 +99,7 @@
   import { defineComponent } from '@nuxtjs/composition-api'
   import TaskCheck from '@/components/TaskCheck/index.vue'
   import { TaskState } from '~/types/task'
+  import useValidationProvider from '~/composables/useValidationProvider'
 
   export default defineComponent({
     components: {
@@ -161,9 +175,17 @@
             })
               .then(() => {
                 this.formData.content = ''
-                this.formData.images = ''
+                this.formData.images = []
                 this.$toasted.success(this.$trans('home.paragraphs.task_added'))
                 this.$mitt.emit('update-tasks')
+
+                // @ts-ignore
+                this.$refs.observer.reset()
+              })
+              .catch(err => {
+                if (!err.response) return
+
+                useValidationProvider(err, this.$refs)
               })
               .finally(() => {
                 this.$wait.end('creating task')
@@ -175,8 +197,8 @@
 </script>
 
 <style scoped>
-  .new-task__toggle {
-    @screen md {
+  @screen md {
+    .new-task__toggle {
       min-width: 100px;
     }
   }

@@ -11,8 +11,8 @@ json = {
 json[:user] = render('users/user', user: @task.user)
 
 json[:metrics] = {
-  comments: @task.task_comments.count,
-  likes: User.find(@task.task_likes.pluck(:user_id)).pluck(:uuid)
+  comments: @task.user_comments,
+  likes: @task.user_likes
 }
 
 json[:projects] = @task.projects.map do |project|
@@ -20,6 +20,7 @@ json[:projects] = @task.projects.map do |project|
     uuid: project.uuid,
     slug: project.slug,
     name: project.name,
+    main_color: project.main_color,
     avatar_url: project.avatar_url,
     url: project.url
   }
@@ -36,8 +37,14 @@ end
 
 json[:images] = @task.images.map do |image|
   {
+    uuid: image.uuid,
     url: Rails.application.routes.url_helpers.url_for(image),
-    thumbnail_url: Rails.application.routes.url_helpers.url_for(image.variant(resize_to_fit: [720, 720]))
+    thumbnail_url: Rails.application.routes.url_helpers.url_for(if image.variable?
+                                                                  image.variant(resize_to_fill: [720,
+                                                                                                 405])
+                                                                else
+                                                                  image
+                                                                end)
   }
 end
 

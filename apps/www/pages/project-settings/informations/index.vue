@@ -44,26 +44,12 @@
                   />
                 </ValidationProvider>
               </div>
-              <h3
-                v-text="$trans('settings.titles.profile_rules')"
-                class="text-base font-medium mb-2"
-              />
-              <p
-                v-text="$trans('settings.paragraphs.profile_rules')"
-                class="text-base mb-1"
-              />
-              <ul class="text-base list-disc pl-4 mb-8">
-                <li
-                  v-text="$trans('settings.paragraphs.profile_rules.racism')"
-                />
-                <li
-                  v-text="$trans('settings.paragraphs.profile_rules.nsfw')"
-                />
-              </ul>
+              <ImageRules />
             </div>
             <div class="ml-8 flex-shrink-0 mb-4 md:mb-0">
               <AppAvatar
-                :src="previewUrl"
+                v-if="previews[0]"
+                :src="previews[0]"
                 width="150"
                 height="150"
               />
@@ -228,14 +214,19 @@
 <script lang="ts">
   import { defineComponent, Ref, ref, useRoute } from '@nuxtjs/composition-api'
 
+  import ImageRules from '@/components/ImageRules/index.vue'
   import useAccessor from '~/composables/useAccessor'
   import useWait from '~/composables/useWait'
   import useICU from '~/composables/useICU'
   import useToasted from '~/composables/useToasted'
   import useFileChange from '~/composables/useFileChange'
+  import useValidationProvider from '~/composables/useValidationProvider'
   import { Project } from '~/types/project'
 
   export default defineComponent({
+    components: {
+      ImageRules
+    },
     setup (props, { refs }) {
       const wait = useWait()
       const accessor = useAccessor()
@@ -244,7 +235,7 @@
 
       const { name, slug, description, url, avatar_url } = accessor.project.getProject as Project
 
-      const { preview, fileChange, file, clear } = useFileChange(avatar_url)
+      const { previews, fileChange, files, clear } = useFileChange(avatar_url)
 
       const formData: Ref<{
         name: string,
@@ -268,16 +259,7 @@
           .catch(err => {
             if (!err.response) return
 
-            const { errors } = err.response.data
-            if (errors) {
-              Object.keys(errors).forEach(key => {
-                const provider = refs[`${key}-provider`]
-                if (provider) {
-                  // @ts-ignore
-                  provider.setErrors(errors[key])
-                }
-              })
-            }
+            useValidationProvider(err, refs)
           })
           .finally(() => {
             wait.end(loader)
@@ -297,13 +279,13 @@
               slug,
               description,
               url,
-              avatar: file.value
+              avatar: files.value[0]
             }, 'updating project informations')
           })
       }
 
       return {
-        previewUrl: preview,
+        previews,
         fileChange,
         submitted,
         formData

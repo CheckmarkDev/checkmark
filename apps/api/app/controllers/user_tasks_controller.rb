@@ -6,7 +6,7 @@ class UserTasksController < ApplicationController
 
   api :GET, '/users/:username/tasks'
   def index
-    @tasks = @user.tasks.includes(:user, :task_likes).order(created_at: :desc).page(params[:page])
+    @tasks = @user.tasks.includes(:user, :likes).order(created_at: :desc).page(params[:page])
 
     render 'tasks/index'
   end
@@ -19,7 +19,7 @@ class UserTasksController < ApplicationController
   private
 
   def set_user
-    @user = User.find_by!(username: params[:id])
+    @user = User.where.not(status: User.statuses[:blocked]).find_by!(username: params[:id])
   end
 
   def set_task

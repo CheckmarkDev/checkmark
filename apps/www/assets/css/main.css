@@ -9,8 +9,20 @@ html, body {
   @apply flex items-center justify-center h-12 rounded text-base font-medium px-4;
 }
 
+.btn-sm {
+  @apply h-10;
+}
+
 .btn-primary {
   @apply bg-blue-500 text-white;
+}
+
+.btn-danger {
+  @apply bg-white text-red-500 dark:bg-red-500 dark:text-white;
+}
+
+.btn-danger:hover {
+  @apply bg-red-500 bg-opacity-10 dark:bg-opacity-100;
 }
 
 .btn[disabled=disabled] {
@@ -28,7 +40,7 @@ html, body {
 
 input::placeholder,
 textarea::placeholder {
-  @apply text-gray-600;
+  @apply text-gray-600 dark:text-gray-400;
 }
 
 .textarea {

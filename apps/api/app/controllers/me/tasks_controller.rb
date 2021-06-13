@@ -7,7 +7,7 @@ module Me
 
     api :GET, '/me/tasks'
     def index
-      @tasks = Task.includes(:user, :task_likes).where(user_id: @current_user.id).page(params[:page])
+      @tasks = Task.includes(:user, :likes).where(user_id: @current_user.id).page(params[:page])
     end
 
     # GET /tasks/1
@@ -22,10 +22,10 @@ module Me
       @task = Task.new(task_params)
       @task.user = @current_user
 
-      if @task.save!
+      if @task.save
         render :show, status: :created
       else
-        render json: @task.errors, status: :unprocessable_entity
+        render json: { errors: @task.errors }, status: :unprocessable_entity
       end
     end
 
@@ -33,8 +33,20 @@ module Me
     param :content, String, desc: 'Content of the task'
     param :state, String, desc: 'State'
     def update
-      if @task.update(task_params)
-        render :show, status: :ok
+      if task_params[:images].present?
+        @task.images.each do |image|
+          image.purge unless task_params[:images].include?(image.uuid)
+        end
+
+        task_params[:images].each do |image|
+          @task.images.attach(image) unless image.is_a? String
+        end
+      else
+        @task.images.each(&:purge)
+      end
+
+      if @task.update(task_params.except(:images))
+        render :show, status: :created
       else
         render json: @task.errors, status: :unprocessable_entity
       end

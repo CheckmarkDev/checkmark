@@ -1,5 +1,6 @@
 global.titles.reactions: Réactions
 global.titles.edit_task: Modifier une tâche
+global.titles.feed: Feed
 global.paragraphs.no_reactions: Aucune réaction pour cette tâche.
 global.paragraphs.no_self_like: Vous ne pouvez pas liker vos propres tâches.
 global.paragraphs.max_chars: "{chars} caractères max."
@@ -8,7 +9,12 @@ global.buttons.sign-up: S'inscrire
 global.buttons.sign-out: Déconnexion
 global.buttons.send: Envoyer
 global.buttons.save: Sauvegarder
+global.buttons.upload: Charger
+global.buttons.delete: Supprimer
 global.buttons.settings: Paramètres
 global.buttons.profile: Profil
 global.buttons.dark_mode: Mode sombre
 global.labels.comment: Commentaire
+global.labels.all_tasks: Toute les tâches
+global.labels.filter: Filtrer
+global.labels.filter_value: "Filtrer : {value}"

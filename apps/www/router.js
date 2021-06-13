@@ -10,15 +10,20 @@ import Project from '@/pages/project/index.vue'
 import NewProject from '@/pages/new-project/index.vue'
 import ProjectSettings from '@/pages/project-settings/index.vue'
 import ProjectSettingsInformations from '@/pages/project-settings/informations/index.vue'
+import ProjectSettingsImages from '@/pages/project-settings/images/index.vue'
+import ProjectSettingsWebhooks from '@/pages/project-settings/webhooks/index.vue'
 import Task from '@/pages/user/task/index.vue'
 import UserTasks from '@/pages/user/tasks/index.vue'
 import ProjectTasks from '@/pages/project/tasks/index.vue'
+import ProjectImages from '@/pages/project/images/index.vue'
 import SignIn from '@/pages/auth/sign-in/index.vue'
 import SignUp from '@/pages/auth/sign-up/index.vue'
+import EmailValidation from '@/pages/auth/email-validation/index.vue'
 import Settings from '@/pages/settings/index.vue'
 import SettingsNotifications from '@/pages/settings/notifications/index.vue'
 import SettingsProfile from '@/pages/settings/profile/index.vue'
 import SettingsAccount from '@/pages/settings/account/index.vue'
+import SettingsWebhooks from '@/pages/settings/webhooks/index.vue'
 
 Vue.use(VueRouter)
 
@@ -32,6 +37,11 @@ const AUTH_ROUTES = [
     name: 'SignUp',
     path: '/auth/sign-up',
     component: SignUp
+  },
+  {
+    name: 'EmailValidation',
+    path: '/auth/email-validation',
+    component: EmailValidation
   }
 ]
 
@@ -58,6 +68,11 @@ const SETTINGS_ROUTES = [
         name: 'SettingsAccount',
         path: 'account',
         component: SettingsAccount
+      },
+      {
+        name: 'SettingsWebhooks',
+        path: 'webhooks',
+        component: SettingsWebhooks
       }
     ]
   }
@@ -119,6 +134,11 @@ const WEBSITE_ROUTES = [
         name: 'ProjectTasks',
         path: '',
         component: ProjectTasks
+      },
+      {
+        name: 'ProjectImages',
+        path: 'images',
+        component: ProjectImages
       }
     ]
   },
@@ -139,6 +159,16 @@ const WEBSITE_ROUTES = [
         name: 'ProjectSettingsInformations',
         component: ProjectSettingsInformations,
         path: 'informations'
+      },
+      {
+        name: 'ProjectSettingsImages',
+        component: ProjectSettingsImages,
+        path: 'images'
+      },
+      {
+        name: 'ProjectSettingsWebhooks',
+        component: ProjectSettingsWebhooks,
+        path: 'webhooks'
       }
     ]
   },

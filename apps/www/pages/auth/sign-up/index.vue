@@ -16,6 +16,7 @@
         >
           <div class="flex flex-col mb-4 md:mb-0">
             <ValidationProvider
+              ref="email-provider"
               rules="email|required"
               :name="$trans('sign-up.labels.email').toLowerCase()"
               v-slot="{ invalid, errors }"
@@ -40,6 +41,7 @@
                   class="input mb-1"
                   required
                   autocomplete="email"
+                  @change="verifyEmail"
                 >
                 <span
                   v-if="invalid"
@@ -50,10 +52,11 @@
               </div>
             </ValidationProvider>
             <ValidationProvider
+              ref="username-provider"
               rules="required|min:2|max:32"
               :name="$trans('sign-up.labels.username').toLowerCase()"
               v-slot="{ invalid, errors }"
-              class="mb-2"
+              class="mb-4"
               slim
             >
               <div class="flex flex-col">
@@ -72,8 +75,11 @@
                   type="text"
                   id="username"
                   class="input mb-1"
+                  minlength="2"
+                  maxlength="32"
                   required
                   autocomplete="username"
+                  @change="verifyUsername"
                 >
                 <div
                   v-text="$trans('global.paragraphs.max_chars', {
@@ -91,7 +97,8 @@
             </ValidationProvider>
             <div class="flex flex-col md:flex-row mb-2">
               <ValidationProvider
-                rules="required"
+                ref="first_name-provider"
+                rules="required|min:2|max:32"
                 :name="$trans('sign-up.labels.first_name').toLowerCase()"
                 v-slot="{ invalid, errors }"
                 class="md:w-1/2 md:mr-4"
@@ -113,6 +120,8 @@
                     type="text"
                     id="first_name"
                     class="input mb-1"
+                    minlength="2"
+                    maxlength="32"
                     required
                     autocomplete="given-name"
                   >
@@ -125,7 +134,8 @@
                 </div>
               </ValidationProvider>
               <ValidationProvider
-                rules="required"
+                ref="last_name-provider"
+                rules="required|min:2|max:32"
                 :name="$trans('sign-up.labels.last_name').toLowerCase()"
                 v-slot="{ invalid, errors }"
                 class="md:w-1/2"
@@ -147,6 +157,8 @@
                     type="text"
                     id="last_name"
                     class="input mb-1"
+                    minlength="2"
+                    maxlength="32"
                     required
                     autocomplete="family-name"
                   >
@@ -160,6 +172,7 @@
               </ValidationProvider>
             </div>
             <ValidationProvider
+              ref="password-provider"
               vid="password"
               rules="required|min:6"
               :name="$trans('sign-up.labels.password').toLowerCase()"
@@ -183,6 +196,7 @@
                   type="password"
                   id="password"
                   class="input mb-1"
+                  minlength="6"
                   autocomplete="new-password"
                   required
                 >
@@ -222,8 +236,13 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from '@nuxtjs/composition-api'
+  import { defineComponent, reactive } from '@nuxtjs/composition-api'
   import Cookie from 'js-cookie'
+  import { useDebounceFn } from '@vueuse/core'
+  import useAxios from '~/composables/useAxios'
+  import useICU from '~/composables/useICU'
+  import { ProviderInstance } from 'vee-validate/dist/types/types'
+  import useValidationProvider from '~/composables/useValidationProvider'
 
   export default defineComponent({
     middleware: ['notAuthenticated'],
@@ -235,16 +254,52 @@
         ]
       }
     },
-    data () {
-      return {
-        formData: {
-          tos: false,
-          email: null,
-          username: null,
-          first_name: null,
-          last_name: null,
-          password: null
+    setup (props, { refs }) {
+      const axios = useAxios()
+      const trans = useICU()
+
+      const formData = reactive({
+        tos: false,
+        email: null,
+        username: null,
+        first_name: null,
+        last_name: null,
+        password: null
+      })
+
+      function useAsyncValidation (field: 'email'|'username', endpoint: string, providerName: string, errorName: string) {
+        const verify = useDebounceFn(() => {
+          const provider = refs[providerName] as ProviderInstance
+          if (provider) {
+            provider.validate()
+            if (provider.errors.length === 0) {
+              axios.post(endpoint, {
+                [field]: formData[field]
+              })
+                .then(() => {
+                  provider.setErrors([])
+                })
+                .catch(err => {
+                  if (!err.response) return
+
+                  provider.setErrors([errorName])
+                })
+            }
+          }
+        }, 1500)
+
+        return {
+          verify
         }
+      }
+
+      const { verify: verifyEmail } = useAsyncValidation('email', '/users/verify_email', 'email-provider', trans('sign-up.paragraphs.email_in_use'))
+      const { verify: verifyUsername } = useAsyncValidation('username', '/users/verify_username', 'username-provider', trans('sign-up.paragraphs.username_in_use'))
+
+      return {
+        formData,
+        verifyEmail,
+        verifyUsername
       }
     },
     methods: {
@@ -276,6 +331,11 @@
                   name: 'Home'
                 })
                   .catch(() => {})
+              })
+              .catch(err => {
+                if (!err.response) return
+
+                useValidationProvider(err, this.$refs)
               })
               .finally(() => {
                 this.$wait.end('signing up')

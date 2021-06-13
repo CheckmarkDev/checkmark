@@ -15,6 +15,7 @@ module.exports = async (client, previousVoiceState, nextVoiceState, user) => {
         parent: actualChannel.parent,
       })
       await member.voice.setChannel(newChannel)
+      await member.roles.add(process.env.DISCORD_ROLES_VOCAL)
     }
   }
 
@@ -22,6 +23,7 @@ module.exports = async (client, previousVoiceState, nextVoiceState, user) => {
   if ((previousVoiceState.channelID && null === nextVoiceState.channelID) || (previousVoiceState.channelID && nextVoiceState.channelID && previousVoiceState.channelID !== nextVoiceState.channelID)) {
     const actualChannel = previousVoiceState.channel;
     client.logger.info(`${member.user.username} has left channel "${actualChannel.name}"`);
+    await member.roles.remove(process.env.DISCORD_ROLES_VOCAL)
 
     if (actualChannel.name.startsWith('Coworking de') && actualChannel.id !== process.env.DISCORD_CHANNEL_CREATE_WORKING_ROOM && actualChannel.members.size < 1) {
       await actualChannel.delete();

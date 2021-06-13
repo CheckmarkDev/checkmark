@@ -5,8 +5,8 @@ class Task < ApplicationRecord
   belongs_to :task_group, optional: true
   belongs_to :streak, optional: true
 
-  has_many :task_likes, dependent: :destroy
-  has_many :task_comments, dependent: :destroy
+  has_many :likes, dependent: :destroy, as: :likeable
+  has_many :comments, dependent: :destroy, as: :commentable
   has_and_belongs_to_many :projects
   has_and_belongs_to_many :mentions, class_name: 'User', join_table: 'task_mentions'
   has_many_attached :images
@@ -25,9 +25,11 @@ class Task < ApplicationRecord
   after_commit :delete_remaining_task_group, on: :destroy
   after_commit :delete_remaining_streak, on: :destroy
 
+  validates :content, presence: true, length: { minimum: 2, maximum: 1000 }, profanity: true
+
   def assign_mentions
     self.mentions = []
-    matches = content.scan(/@(\w*)/)
+    matches = content.scan(/@([\w|\-]*)/)
 
     matches.each do |match|
       user = User.find_by(username: match)
@@ -37,7 +39,7 @@ class Task < ApplicationRecord
 
   def assign_projects
     self.projects = []
-    matches = content.scan(/#(\w*)/)
+    matches = content.scan(/#([\w|\-]*)/)
 
     matches.each do |match|
       project = Project.find_by(slug: match)
@@ -82,6 +84,18 @@ class Task < ApplicationRecord
     self.streak = last_streak
   end
 
+  def user_likes
+    Rails.cache.fetch([self, :likes]) do
+      User.find(likes.pluck(:user_id)).pluck(:uuid)
+    end
+  end
+
+  def user_comments
+    Rails.cache.fetch([self, :comments]) do
+      comments.pluck(:id).size
+    end
+  end
+
   # Delete the associated task group if the task
   # we are deleting is the last one associated to that task group.
   def delete_remaining_task_group
@@ -97,12 +111,45 @@ class Task < ApplicationRecord
   private
 
   def notify_webhooks
-    Webhook.all.find_each do |webhook|
-      data = ApplicationController.render(template: 'webhook_job/task_created', assigns: {
-                                            task: self
-                                          })
+    # Apply some conditions on the user and the task to avoid
+    # kiddos to post things right away on the Discord.
+    user_time_diff = DateTime.now.in_time_zone(user.timezone) - user.created_at
+    return if (user_time_diff / 1.hour).round < 3
 
-      WebhookJob.perform_later(webhook, 'task.created', data)
+    # Ignore webhook for the first task
+    first_task = user.tasks.order(created_at: :asc).unscope(:order).first
+    return if first_task.id == id
+
+    # Do not send webhook event if the few first tasks contain images
+    contains_image = false
+    user.tasks.order(created_at: :asc).unscope(:order).limit(10).each do |task|
+      contains_image = true if task.id == id && task.images.attached?
     end
+
+    return if contains_image
+
+    # Notify globally all the events for the Checkmark platform.
+    Webhook.where(project: nil, user: nil).find_each { |webhook| notify_webhook(webhook) }
+
+    # Notify locally for the task owner
+    user.webhooks.find_each { |webhook| notify_webhook(webhook) }
+
+    # For every project associated with this task, send the webhook
+    projects.find_each do |project|
+      project.webhooks.find_each { |webhook| notify_webhook(webhook) }
+    end
+  end
+
+  def notify_webhook(webhook)
+    data = ApplicationController.render(template: 'webhook_job/task_created', assigns: {
+                                          task: self,
+                                          secret: webhook.secret
+                                        })
+
+    webhook.webhook_requests.create(
+      event: 'task.created',
+      state: WebhookRequest.states[:pending],
+      data: data
+    )
   end
 end

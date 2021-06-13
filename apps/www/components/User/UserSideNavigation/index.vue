@@ -117,6 +117,46 @@
           </ul>
         </template>
       </ApolloQuery>
+        <template
+          v-else-if="$accessor.isAuthenticated && $accessor.getAuthUser.username === $route.params.username"
+        >
+          <p
+            v-text="$trans('user.paragraphs.no_projects')"
+            class="text-gray-700 dark:text-gray-300 mb-3"
+          />
+        </template>
+
+        <nuxt-link
+          v-if="$accessor.isAuthenticated && $accessor.getAuthUser.username === $route.params.username"
+          :to="{
+            name: 'NewProject'
+          }"
+          class="btn btn-primary mb-6"
+          v-text="$trans('user.buttons.add_project')"
+        />
+      </div>
+
+      <ul
+        :class="{
+          'mt-2 border-t border-gray-300 dark:border-gray-600 pt-4': user.projects.length || $accessor.isAuthenticated && $accessor.getAuthUser.username === $route.params.username
+        }"
+        class="w-full"
+      >
+        <li class="mb-1">
+          <nuxt-link
+            :to="{
+              name: 'User',
+              params: {
+                username: $route.params.username
+              }
+            }"
+            :exact-active-class="'router-link-active bg-gray-200 dark:bg-gray-600 dark:text-white'"
+            class="hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-white rounded p-2 w-full flex mb-1"
+          >
+            {{ $trans('global.titles.feed') }}
+          </nuxt-link>
+        </li>
+      </ul>
     </nav>
   </div>
 </template>
