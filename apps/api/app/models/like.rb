@@ -2,7 +2,7 @@
 
 class Like < ApplicationRecord
   belongs_to :user
-  belongs_to :task, touch: true
+  belongs_to :task, touch: true, optional: true
   belongs_to :likeable, polymorphic: true
 
   after_commit :send_like_email, on: :create
@@ -16,7 +16,9 @@ class Like < ApplicationRecord
   private
 
   def send_like_email
-    notification = task.user.email_notification.like
-    TaskMailer.like(task, user).deliver_later if notification
+    if task.present?
+      notification = task.user.email_notification.like
+      TaskMailer.like(task, user).deliver_later if notification
+    end
   end
 end

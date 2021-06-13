@@ -9,7 +9,7 @@ class TaskLikesController < ApplicationController
                                               user: [:streaks, { avatar_attachment: :blob }]
                                             ]).order(created_at: :desc).page(params[:page])
 
-    render 'tasks/likes/index'
+    render 'likes/index'
   end
 
   private
