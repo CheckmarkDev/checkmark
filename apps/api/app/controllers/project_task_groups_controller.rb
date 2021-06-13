@@ -9,7 +9,7 @@ class ProjectTaskGroupsController < ApplicationController
       .includes([
         user: [avatar_attachment: :blob],
         tasks: [
-          :task_comments,
+          :comments,
           :likes,
           { images_attachments: :blob,
             projects: [avatar_attachment: :blob],

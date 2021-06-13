@@ -2,13 +2,13 @@
 
 json = {
   meta: {
-    current_page: @task_comments.current_page,
-    total_pages: @task_comments.total_pages,
-    count: @task_comments.count
+    current_page: @comments.current_page,
+    total_pages: @comments.total_pages,
+    count: @comments.count
   }
 }
 
-json[:data] = @task_comments.map do |comment|
+json[:data] = @comments.map do |comment|
   v = {
     uuid: comment.uuid,
     content: comment.content,

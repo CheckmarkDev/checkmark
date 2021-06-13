@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_08_214009) do
+ActiveRecord::Schema.define(version: 2021_06_13_105713) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -45,6 +45,20 @@ ActiveRecord::Schema.define(version: 2021_06_08_214009) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.bigint "user_id", null: false
+    t.bigint "task_id"
+    t.text "content"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "commentable_type"
+    t.bigint "commentable_id"
+    t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable"
+    t.index ["user_id"], name: "index_comments_on_user_id"
+    t.index ["uuid"], name: "index_comments_on_uuid", unique: true
   end
 
   create_table "email_notifications", force: :cascade do |t|
@@ -101,18 +115,6 @@ ActiveRecord::Schema.define(version: 2021_06_08_214009) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_streaks_on_user_id"
     t.index ["uuid"], name: "index_streaks_on_uuid", unique: true
-  end
-
-  create_table "task_comments", force: :cascade do |t|
-    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
-    t.bigint "user_id", null: false
-    t.bigint "task_id", null: false
-    t.text "content"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["task_id"], name: "index_task_comments_on_task_id"
-    t.index ["user_id"], name: "index_task_comments_on_user_id"
-    t.index ["uuid"], name: "index_task_comments_on_uuid", unique: true
   end
 
   create_table "task_groups", force: :cascade do |t|
@@ -204,6 +206,8 @@ ActiveRecord::Schema.define(version: 2021_06_08_214009) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "comments", "tasks"
+  add_foreign_key "comments", "users"
   add_foreign_key "email_notifications", "users"
   add_foreign_key "likes", "tasks"
   add_foreign_key "likes", "users"
@@ -211,8 +215,6 @@ ActiveRecord::Schema.define(version: 2021_06_08_214009) do
   add_foreign_key "projects_tasks", "projects"
   add_foreign_key "projects_tasks", "tasks"
   add_foreign_key "streaks", "users"
-  add_foreign_key "task_comments", "tasks"
-  add_foreign_key "task_comments", "users"
   add_foreign_key "task_groups", "users"
   add_foreign_key "task_mentions", "tasks"
   add_foreign_key "task_mentions", "users"

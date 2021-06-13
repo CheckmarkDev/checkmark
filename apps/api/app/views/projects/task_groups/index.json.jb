@@ -29,7 +29,7 @@ json[:data] = @task_groups.map do |task_group|
   tasks = task_group.tasks
     .includes(
       :projects,
-      :task_comments,
+      :comments,
       :likes,
       :mentions,
       images_attachments: :blob,
@@ -70,7 +70,7 @@ json[:data] = @task_groups.map do |task_group|
     end
 
     t[:metrics] = {
-      comments: task.comments,
+      comments: task.user_comments,
       likes: task.user_likes
     }
 
