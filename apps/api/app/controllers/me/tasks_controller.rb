@@ -41,8 +41,6 @@ module Me
         task_params[:images].each do |image|
           @task.images.attach(image) unless image.is_a? String
         end
-      else
-        @task.images.each(&:purge)
       end
 
       if @task.update(task_params.except(:images))
