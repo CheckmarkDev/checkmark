@@ -13,6 +13,7 @@ json[:data] = @tasks.map do |task|
     uuid: task.uuid,
     content: task.content,
     state: task.state,
+    source: task.source,
     created_at: task.created_at,
     updated_at: task.updated_at,
 
