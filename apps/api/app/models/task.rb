@@ -12,6 +12,7 @@ class Task < ApplicationRecord
   has_many_attached :images
 
   enum state: { todo: 0, doing: 1, done: 2 }
+  enum source: { checkmark: 0, github: 1 }
 
   default_scope { order(created_at: :desc) }
 

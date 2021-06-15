@@ -20,6 +20,7 @@ module Me
     param :state, String, desc: 'State'
     def create
       @task = Task.new(task_params)
+      @task.source = Task.sources[:checkmark]
       @task.user = @current_user
 
       if @task.save

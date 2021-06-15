@@ -17,6 +17,7 @@ module Webhooks
         task = Task.new(
           content: "Release : \"#{params[:release][:name]}\" (#{params[:release][:tag_name]}) \##{@project.slug}",
           state: Task.states[:done],
+          source: Task.sources[:github],
           user: user
         )
       end
@@ -30,6 +31,7 @@ module Webhooks
         task = Task.new(
           content: "#{content} \n\n\##{@project.slug}",
           state: Task.states[:done],
+          source: Task.sources[:github],
           user: user
         )
       end
@@ -39,6 +41,7 @@ module Webhooks
         task = Task.new(
           content: "Pull-request : #{params[:pull_request][:title]} ##{@project.slug}",
           state: Task.states[:done],
+          source: Task.sources[:github],
           user: user
         )
       end
