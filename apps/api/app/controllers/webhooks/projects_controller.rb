@@ -26,7 +26,7 @@ module Webhooks
       if params[:ref].present? && params[:commits].present?
         content = params[:commits]
           .map { |commit| "Commit : #{commit[:message]} par #{commit[:author][:name]} (#{params[:ref]})"  }
-          .join('\n')
+          .join('\\n')
 
         task = Task.new(
           content: "#{content} \n\n\##{@project.slug}",
