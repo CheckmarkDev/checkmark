@@ -9,27 +9,27 @@ module Webhooks
     def github
       # Use the first user available for this project.
       # This should be changed when a project will have multiple users.
-      user = @project.users.first
+      user = @project.user
 
       # Handle releases
       task = nil
       if params[:action].present? && params[:release].present?
         task = Task.new(
           content: "Release : \"#{params[:release][:name]}\" (#{params[:release][:tag_name]}) \##{@project.slug}",
-          status: Task.statuses[:done],
+          state: Task.states[:done],
           user: user
         )
       end
 
       # When a commit is pushed
       if params[:ref].present? && params[:commits].present?
-        content = params[:commit]
+        content = params[:commits]
           .map { |commit| "Commit : #{commit[:message]} par #{commit[:author][:name]}"  }
           .join('\n')
 
         task = Task.new(
           content: "#{content} \n\n\##{@project.slug}",
-          status: Task.statuses[:done],
+          state: Task.states[:done],
           user: user
         )
       end
@@ -37,8 +37,8 @@ module Webhooks
       # When a pull request is created
       if params[:action].present? && params[:action] == 'opened' && params[:pull_request].present?
         task = Task.new(
-          content: "Pull-request : #{params[:pull_request][:name]} ##{@project.slug}",
-          status: Task.statuses[:done],
+          content: "Pull-request : #{params[:pull_request][:title]} ##{@project.slug}",
+          state: Task.states[:done],
           user: user
         )
       end
