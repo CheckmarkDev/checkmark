@@ -14,7 +14,7 @@
       />
 
       <div>
-        URL: https://api.checkmark.dev/webhooks/projects/{{ slug }}
+        URL: https://api.checkmark.dev/webhooks/projects/{{ slug }}/github
       </div>
       <div
         v-if="secret"
