@@ -112,6 +112,8 @@ class Task < ApplicationRecord
   private
 
   def notify_webhooks
+    return if github?
+
     # Apply some conditions on the user and the task to avoid
     # kiddos to post things right away on the Discord.
     user_time_diff = DateTime.now.in_time_zone(user.timezone) - user.created_at
