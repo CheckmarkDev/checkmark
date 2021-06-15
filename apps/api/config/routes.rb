@@ -37,6 +37,10 @@ Rails.application.routes.draw do
       resources :projects do
         resources :project_screenshots, path: 'screenshots'
         resources :project_webhooks, path: 'webhooks'
+
+        member do
+          get :github, to: 'projects#github'
+        end
       end
 
       get '/email_notifications', to: 'email_notifications#index'

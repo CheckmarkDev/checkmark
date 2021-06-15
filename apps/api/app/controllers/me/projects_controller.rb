@@ -3,7 +3,7 @@
 module Me
   class ProjectsController < ApplicationController
     before_action :authorize_request
-    before_action :set_project, only: %i[show update destroy]
+    before_action :set_project, only: %i[show update destroy github]
 
     # GET /projects
     api :GET, '/me/projects'
@@ -17,6 +17,14 @@ module Me
     api :GET, '/me/projects/:id'
     def show
       render 'projects/show'
+    end
+
+    # GET /projects/1
+    api :GET, '/me/projects/:id/github'
+    def github
+      render json: {
+        secret: @project.github_secret
+      }, status: :ok
     end
 
     # POST /projects

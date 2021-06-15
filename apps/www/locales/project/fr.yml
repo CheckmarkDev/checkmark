@@ -2,6 +2,8 @@ project.titles.new-project: Nouveau projet
 project.titles.informations: Informations
 project.titles.webhooks: Webhooks
 project.titles.webhooks_how_it_works: Comment ça fonctionne ?
+project.titles.integrations: Integrations
+project.titles.github: Github
 project.titles.new_webhook: Nouveau webhook
 project.titles.images: Images
 project.titles.settings: Paramètres
