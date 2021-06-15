@@ -52,6 +52,14 @@ Rails.application.routes.draw do
       # post '/password-forgot', to: 'authentication#password_forgot'
       # post '/password-reset', to: 'authentication#password_reset'
     end
+
+    namespace 'webhooks' do
+      resources :projects do
+        member do
+          post :github, to: 'projects#github'
+        end
+      end
+    end
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
