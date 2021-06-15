@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_13_105713) do
+ActiveRecord::Schema.define(version: 2021_06_15_204035) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -96,6 +96,7 @@ ActiveRecord::Schema.define(version: 2021_06_13_105713) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_id", null: false
     t.string "main_color", default: "#2589C7", null: false
+    t.string "github_secret"
     t.index ["slug"], name: "index_projects_on_slug", unique: true
     t.index ["user_id"], name: "index_projects_on_user_id"
     t.index ["uuid"], name: "index_projects_on_uuid", unique: true
@@ -142,6 +143,8 @@ ActiveRecord::Schema.define(version: 2021_06_13_105713) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "task_group_id", null: false
     t.bigint "streak_id"
+    t.integer "source", default: 0, null: false
+    t.index ["source"], name: "index_tasks_on_source"
     t.index ["streak_id"], name: "index_tasks_on_streak_id"
     t.index ["task_group_id"], name: "index_tasks_on_task_group_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"

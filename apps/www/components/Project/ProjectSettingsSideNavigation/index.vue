@@ -47,6 +47,15 @@
             }
           },
           name: trans('project.titles.webhooks')
+        },
+        {
+          to: {
+            name: 'ProjectSettingsIntegrations',
+            params: {
+              slug
+            }
+          },
+          name: trans('project.titles.integrations')
         }
       ])
 

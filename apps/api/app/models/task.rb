@@ -12,6 +12,7 @@ class Task < ApplicationRecord
   has_many_attached :images
 
   enum state: { todo: 0, doing: 1, done: 2 }
+  enum source: { checkmark: 0, github: 1 }
 
   default_scope { order(created_at: :desc) }
 
@@ -111,6 +112,8 @@ class Task < ApplicationRecord
   private
 
   def notify_webhooks
+    return if github?
+
     # Apply some conditions on the user and the task to avoid
     # kiddos to post things right away on the Discord.
     user_time_diff = DateTime.now.in_time_zone(user.timezone) - user.created_at

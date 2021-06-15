@@ -9,11 +9,14 @@
           ? 'Mention' : 'Hashtag'"
       :project="block.project"
       :mention="block.mention"
+      class="whitespace-pre-line"
     >
       <template
         v-if="block.type === 'text'"
       >
-        {{ block.content }}
+        <span
+          v-html="block.content"
+        />
       </template>
     </component>
   </div>

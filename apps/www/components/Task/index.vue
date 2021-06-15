@@ -3,6 +3,7 @@
     <div class="flex items-start">
       <TaskCheck
         :state="task.state"
+        :source="task.source"
         class="bg-white dark:bg-gray-600 rounded-full mr-4 mt-1"
       />
       <div

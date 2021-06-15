@@ -18,6 +18,7 @@
           <div class="flex items-center">
             <task-check
               state="doing"
+              source="checkmark"
               class="w-4 h-4 mr-2"
             />
             <div
@@ -35,6 +36,7 @@
           <div class="flex items-center">
             <task-check
               state="done"
+              source="checkmark"
               class="w-4 h-4 mr-2"
             />
             <div

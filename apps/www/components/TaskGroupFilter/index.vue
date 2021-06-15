@@ -50,6 +50,7 @@
               <TaskCheck
                 v-if="filter.state"
                 :state="filter.state"
+                :source="'checkmark'"
                 class="mr-4"
               />
               <div
