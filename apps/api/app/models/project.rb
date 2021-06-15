@@ -16,6 +16,7 @@ class Project < ApplicationRecord
   validate :screenshots_mime
 
   before_save :format_slug
+  before_create :assign_secret
 
   def screenshots_mime
     # rubocop:disable Style/GuardClause Layout/LineLength
@@ -50,6 +51,10 @@ class Project < ApplicationRecord
       # rubocop:enable Layout/LineLength
     end
     ActionController::Base.helpers.image_url('default-avatar.png')
+  end
+
+  def assign_secret
+    self.github_secret = SecureRandom.hex
   end
 
   private

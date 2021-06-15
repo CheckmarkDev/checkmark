@@ -13,6 +13,7 @@
       <div class="flex items-center">
         <TaskCheck
           :state="state.key"
+          :source="'checkmark'"
           class="mr-2"
         />
         <div

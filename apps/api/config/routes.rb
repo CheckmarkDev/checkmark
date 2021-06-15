@@ -37,6 +37,10 @@ Rails.application.routes.draw do
       resources :projects do
         resources :project_screenshots, path: 'screenshots'
         resources :project_webhooks, path: 'webhooks'
+
+        member do
+          get :github, to: 'projects#github'
+        end
       end
 
       get '/email_notifications', to: 'email_notifications#index'
@@ -51,6 +55,14 @@ Rails.application.routes.draw do
       post '/login', to: 'authentication#login'
       # post '/password-forgot', to: 'authentication#password_forgot'
       # post '/password-reset', to: 'authentication#password_reset'
+    end
+
+    namespace 'webhooks' do
+      resources :projects do
+        member do
+          post :github, to: 'projects#github'
+        end
+      end
     end
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

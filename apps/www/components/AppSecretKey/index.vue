@@ -9,7 +9,7 @@
     <button
       :title="$trans('project.labels.toggle_secret')"
       type="button"
-      class="ml-2 focus:outline-none hover:bg-gray-200 p-1 text-gray-700 rounded"
+      class="ml-2 focus:outline-none hover:bg-gray-200 p-1 text-gray-700 rounded dark:hover:bg-gray-800 dark:text-gray-300"
       @click="toggle"
     >
       <EyeOffIcon

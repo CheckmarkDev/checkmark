@@ -25,6 +25,7 @@
                 <div class="flex items-center px-4">
                   <task-check
                     :state="formData.state"
+                    source="checkmark"
                     class="md:mr-2"
                   />
                   <div class="hidden md:inline-block whitespace-no-wrap">

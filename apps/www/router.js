@@ -12,6 +12,7 @@ import ProjectSettings from '@/pages/project-settings/index.vue'
 import ProjectSettingsInformations from '@/pages/project-settings/informations/index.vue'
 import ProjectSettingsImages from '@/pages/project-settings/images/index.vue'
 import ProjectSettingsWebhooks from '@/pages/project-settings/webhooks/index.vue'
+import ProjectSettingsIntegrations from '@/pages/project-settings/integrations/index.vue'
 import Task from '@/pages/user/task/index.vue'
 import UserTasks from '@/pages/user/tasks/index.vue'
 import ProjectTasks from '@/pages/project/tasks/index.vue'
@@ -169,6 +170,11 @@ const WEBSITE_ROUTES = [
         name: 'ProjectSettingsWebhooks',
         component: ProjectSettingsWebhooks,
         path: 'webhooks'
+      },
+      {
+        name: 'ProjectSettingsIntegrations',
+        component: ProjectSettingsIntegrations,
+        path: 'integrations'
       }
     ]
   },

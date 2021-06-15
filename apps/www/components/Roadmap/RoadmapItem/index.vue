@@ -17,6 +17,7 @@
       >
       <TaskCheck
         :state="state"
+        :source="'checkmark'"
         class="absolute bottom-0 right-0 bg-white rounded-full p-1"
       />
     </div>
