@@ -29,7 +29,7 @@ module Webhooks
           .join("\n")
 
         task = Task.new(
-          content: "#{content} \n\n\##{@project.slug}",
+          content: "#{content}\n\##{@project.slug}",
           state: Task.states[:done],
           source: Task.sources[:github],
           user: user
