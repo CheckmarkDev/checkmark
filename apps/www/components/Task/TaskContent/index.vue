@@ -9,6 +9,7 @@
           ? 'Mention' : 'Hashtag'"
       :project="block.project"
       :mention="block.mention"
+      class="whitespace-pre"
     >
       <template
         v-if="block.type === 'text'"
