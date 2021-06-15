@@ -14,7 +14,9 @@
       <template
         v-if="block.type === 'text'"
       >
-        {{ block.content }}
+        <span
+          v-html="block.content"
+        />
       </template>
     </component>
   </div>
