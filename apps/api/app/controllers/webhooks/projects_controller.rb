@@ -25,7 +25,7 @@ module Webhooks
       # When a commit is pushed
       if params[:ref].present? && params[:commits].present?
         content = params[:commits]
-          .map { |commit| "Commit : #{commit[:message]} par #{commit[:author][:name]} (#{params[:ref]})"  }
+          .map { |commit| "Commit : #{commit[:message]} par #{commit[:author][:name]} (#{params[:ref]})" }
           .join("\n")
 
         task = Task.new(
@@ -47,11 +47,9 @@ module Webhooks
       end
 
       if task.present?
-        if task.save!
-          return render json: {}, status: :ok
-        else
-          return render json: { error: task.errors }, status: :unprocessable_entity
-        end
+        return render json: {}, status: :ok if task.save!
+
+        return render json: { error: task.errors }, status: :unprocessable_entity
       end
 
       render json: {}, status: :ok
@@ -66,7 +64,10 @@ module Webhooks
         raise StandardError, 'Secret is missing' if secret.nil?
 
         # See how it's done by Github (https://docs.github.com/en/developers/webhooks-and-events/webhooks/securing-your-webhooks)
-        signature = 'sha256=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), @project.github_secret, request.body.read)
+        # rubocop:disable Style/StringConcatenation
+        signature = 'sha256=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), @project.github_secret,
+                                                        request.body.read)
+        # rubocop:enable Style/StringConcatenation
 
         raise StandardError, 'Secret do not match Github signature' unless Rack::Utils.secure_compare(signature, secret)
       rescue StandardError => e

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddSourceToTasks < ActiveRecord::Migration[6.1]
   def up
     add_column :tasks, :source, :integer, null: false, default: 0
