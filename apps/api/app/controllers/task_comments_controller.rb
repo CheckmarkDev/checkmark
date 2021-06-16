@@ -15,6 +15,7 @@ class TaskCommentsController < ApplicationController
   def create
     @comment = Comment.new(
       user: @current_user,
+      content: comment_params[:content],
       commentable_type: 'Task',
       commentable_id: @task.id
     )
