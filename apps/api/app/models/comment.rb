@@ -3,7 +3,7 @@
 class Comment < ApplicationRecord
   belongs_to :user
   belongs_to :task, touch: true, optional: true
-  belongs_to :likeable, polymorphic: true
+  belongs_to :likeable, polymorphic: true, optional: true
 
   after_commit :send_comment_email, on: :create
 
