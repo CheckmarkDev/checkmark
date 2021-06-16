@@ -78,7 +78,12 @@
           }
         })
 
-        return groups
+        return groups.map(group => ({
+          ...group,
+          taskGroups: group.taskGroups.sort((a, b) => {
+            return dayjs(b.updated_at).isAfter(dayjs(a.updated_at)) ? -1 : 1
+          })
+        }))
       })
 
       return {
