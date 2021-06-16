@@ -143,7 +143,8 @@ class User < ApplicationRecord
     token = JsonWebToken.encode(
       sub: uuid,
       type: 'email_validation',
-      exp: expires_at
+      exp: expires_at,
+      jti: SecureRandom.hex
     )
 
     Token.create!(
