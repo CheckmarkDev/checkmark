@@ -102,7 +102,8 @@ class AuthenticationController < ApplicationController
     @token = JsonWebToken.encode(
       sub: user.uuid,
       type: 'auth',
-      exp: @expires_at
+      exp: @expires_at,
+      jti: SecureRandom.hex
     )
 
     Token.create!(

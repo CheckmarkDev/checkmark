@@ -2,7 +2,7 @@
 
 class Task < ApplicationRecord
   belongs_to :user
-  belongs_to :task_group, optional: true
+  belongs_to :task_group, optional: true, touch: true
   belongs_to :streak, optional: true
 
   has_many :likes, dependent: :destroy, as: :likeable

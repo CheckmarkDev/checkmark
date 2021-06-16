@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
 json = {
-  uuid: @comments.uuid,
-  content: @comments.content,
-  created_at: @comments.created_at,
-  updated_at: @comments.updated_at,
+  uuid: @comment.uuid,
+  content: @comment.content,
+  created_at: @comment.created_at,
+  updated_at: @comment.updated_at,
 
   user: {
-    uuid: @comments.user.uuid,
-    username: @comments.user.username,
-    first_name: @comments.user.first_name,
-    last_name: @comments.user.last_name,
-    streak: @comments.user.streak,
-    avatar_url: @comments.user.avatar_url
+    uuid: @comment.user.uuid,
+    username: @comment.user.username,
+    first_name: @comment.user.first_name,
+    last_name: @comment.user.last_name,
+    streak: @comment.user.streak,
+    avatar_url: @comment.user.avatar_url
   }
 }
 
