@@ -1,7 +1,7 @@
 ---
 title: Récaps. hebdomadaire
 description: Avoir un récapitulatif par semaine des tâches faîtes sur la plateforme.
-state: doing
+state: done
 icon: memo.png
 createdAt: "2021-04-25T00:00:00.000Z"
 ---

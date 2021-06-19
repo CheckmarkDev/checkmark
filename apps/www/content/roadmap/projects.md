@@ -1,7 +1,7 @@
 ---
 title: Projets
 description: Avoir un endroit où l’on peut indiquer les projets faits par les membres de la communauté.
-state: todo
+state: done
 icon: folder.png
 createdAt: "2021-04-26T00:00:00.000Z"
 ---
