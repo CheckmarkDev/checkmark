@@ -20,6 +20,7 @@ class User < ApplicationRecord
   validates :first_name, presence: true, length: { minimum: 2, maximum: 32 }, profanity: true
   validates :last_name, presence: true, length: { minimum: 2, maximum: 32 }, profanity: true
   validate :avatar_mime
+  validates :description, length: { minimum: 2, maximum: 255 }, profanity: true
 
   enum status: {
     pending_validation: 0,
