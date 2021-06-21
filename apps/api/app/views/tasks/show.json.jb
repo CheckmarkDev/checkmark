@@ -12,8 +12,12 @@ json = {
 json[:user] = render('users/user', user: @task.user)
 
 json[:metrics] = {
-  comments: @task.user_comments,
-  likes: @task.user_likes
+  comments: Rails.cache.fetch([@task, :comments]) do
+    @task.user_comments
+  end,
+  likes: Rails.cache.fetch([@task, :likes]) do
+    @task.user_likes
+  end
 }
 
 json[:projects] = @task.projects.map do |project|

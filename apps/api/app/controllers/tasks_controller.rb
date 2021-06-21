@@ -30,6 +30,8 @@ class TasksController < ApplicationController
     end
 
     if @like.save!
+      Rails.cache.write([@task, :likes], @task.user_likes)
+
       render :show, status: :created
     else
       render json: @like.errors, status: :unprocessable_entity
@@ -45,6 +47,8 @@ class TasksController < ApplicationController
 
     if @like.present?
       @like.update(state: Like.states[:inactive])
+
+      Rails.cache.write([@task, :likes], @task.user_likes)
 
       render :show, status: :no_content
     else
