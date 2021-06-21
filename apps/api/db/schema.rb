@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_15_204035) do
+ActiveRecord::Schema.define(version: 2021_06_21_185617) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -50,7 +50,6 @@ ActiveRecord::Schema.define(version: 2021_06_15_204035) do
   create_table "comments", force: :cascade do |t|
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.bigint "user_id", null: false
-    t.bigint "task_id"
     t.text "content"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -74,7 +73,6 @@ ActiveRecord::Schema.define(version: 2021_06_15_204035) do
   create_table "likes", force: :cascade do |t|
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.bigint "user_id", null: false
-    t.bigint "task_id"
     t.integer "state", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -209,10 +207,8 @@ ActiveRecord::Schema.define(version: 2021_06_15_204035) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "comments", "tasks"
   add_foreign_key "comments", "users"
   add_foreign_key "email_notifications", "users"
-  add_foreign_key "likes", "tasks"
   add_foreign_key "likes", "users"
   add_foreign_key "projects", "users"
   add_foreign_key "projects_tasks", "projects"
