@@ -23,15 +23,13 @@ class TasksController < ApplicationController
         }, status: :forbidden
       end
 
-      @like = Like.new(
+      @like = @task.likes.new(
         user: @current_user,
-        state: Like.states[:active],
-        likeable_type: 'Task',
-        likeable_id: @task.id
+        state: Like.states[:active]
       )
     end
 
-    if @like.save
+    if @like.save!
       render :show, status: :created
     else
       render json: @like.errors, status: :unprocessable_entity

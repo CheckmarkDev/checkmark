@@ -16,9 +16,9 @@ class Like < ApplicationRecord
   private
 
   def send_like_email
-    # rubocop:disable Rails/Blank
-    return unless task.present?
-    # rubocop:enable Rails/Blank
+    return unless likeable_type == 'Task'
+
+    task = Task.find(likeable_id)
 
     notification = task.user.email_notification.like
     TaskMailer.like(task, user).deliver_later if notification
