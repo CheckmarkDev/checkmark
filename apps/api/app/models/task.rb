@@ -86,15 +86,11 @@ class Task < ApplicationRecord
   end
 
   def user_likes
-    Rails.cache.fetch([self, :likes]) do
-      User.find(likes.pluck(:user_id)).pluck(:uuid)
-    end
+    User.find(likes.pluck(:user_id)).pluck(:uuid)
   end
 
   def user_comments
-    Rails.cache.fetch([self, :comments]) do
-      comments.pluck(:id).size
-    end
+    comments.pluck(:id).size
   end
 
   # Delete the associated task group if the task

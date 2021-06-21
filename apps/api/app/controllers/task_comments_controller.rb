@@ -21,6 +21,8 @@ class TaskCommentsController < ApplicationController
     )
 
     if @comment.save
+      Rails.cache.write([@task, :comments], @task.user_comments)
+
       render 'comments/show', status: :created
     else
       render json: { errors: @comment.errors }, status: :unprocessable_entity
