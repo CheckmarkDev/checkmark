@@ -2,7 +2,7 @@
 
 class RecordLoader < GraphQL::Batch::Loader
   def initialize(model)
-    super
+    super()
     @model = model
   end
 
