@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_21_185617) do
+ActiveRecord::Schema.define(version: 2021_06_27_165559) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -82,6 +82,18 @@ ActiveRecord::Schema.define(version: 2021_06_21_185617) do
     t.index ["state"], name: "index_likes_on_state"
     t.index ["user_id"], name: "index_likes_on_user_id"
     t.index ["uuid"], name: "index_likes_on_uuid", unique: true
+  end
+
+  create_table "links", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.bigint "user_id", null: false
+    t.string "title", null: false
+    t.string "description"
+    t.string "url", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_links_on_user_id"
+    t.index ["uuid"], name: "index_links_on_uuid", unique: true
   end
 
   create_table "projects", force: :cascade do |t|
@@ -173,6 +185,7 @@ ActiveRecord::Schema.define(version: 2021_06_21_185617) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "timezone", default: "Europe/Paris"
     t.integer "status", default: 0, null: false
+    t.text "description"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["status"], name: "index_users_on_status"
     t.index ["username"], name: "index_users_on_username", unique: true
@@ -210,6 +223,7 @@ ActiveRecord::Schema.define(version: 2021_06_21_185617) do
   add_foreign_key "comments", "users"
   add_foreign_key "email_notifications", "users"
   add_foreign_key "likes", "users"
+  add_foreign_key "links", "users"
   add_foreign_key "projects", "users"
   add_foreign_key "projects_tasks", "projects"
   add_foreign_key "projects_tasks", "tasks"

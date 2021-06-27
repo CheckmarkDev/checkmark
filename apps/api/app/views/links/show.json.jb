@@ -1,0 +1,7 @@
+{
+  title: @link.title,
+  description: @link.description,
+  url: @link.url,
+  created_at: @link.created_at,
+  updated_at: @link.updated_at
+}

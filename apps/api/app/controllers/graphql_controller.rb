@@ -10,10 +10,33 @@ class GraphqlController < ApplicationController
     variables = prepare_variables(params[:variables])
     query = params[:query]
     operation_name = params[:operationName]
-    context = {
-      # Query context goes here, for example:
-      # current_user: current_user,
-    }
+
+    context = {}
+
+    # Authorization
+    header = request.headers['Authorization']
+    token = header.split(' ').last if header
+
+    if token.present?
+      begin
+        decoded_token = JsonWebToken.decode(token)
+
+        raise StandardError, 'Token is invalid' if decoded_token[:exp].nil? || decoded_token[:sub].nil?
+
+        raise StandardError, 'Token is expired' if Time.zone.at(decoded_token[:exp]) < Time.zone.now
+
+        @saved_token = Token.confirmed.find_by(token: token)
+        raise StandardError, 'Token is invalid' if @saved_token.nil?
+
+        context[:current_user] = User.includes([
+          :streaks,
+          { avatar_attachment: :blob }
+        ]).where.not(status: User.statuses[:blocked]).find_by!(uuid: decoded_token[:sub])
+      rescue StandardError => e
+        render json: { errors: e.message }, status: :unauthorized
+      end
+    end
+
     result = ApiSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
     render json: result
   rescue StandardError => e
