@@ -12,7 +12,7 @@ module Types
     field :all_links, [Types::LinkType], null: false, description: 'Return all links'
 
     def all_links
-      Link.all
+      Link.order(created_at: :desc).all
     end
   end
 end

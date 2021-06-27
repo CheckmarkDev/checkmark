@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 class RecordLoader < GraphQL::Batch::Loader
   def initialize(model)
+    super
     @model = model
   end
 

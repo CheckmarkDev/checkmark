@@ -25,6 +25,7 @@ import SettingsNotifications from '@/pages/settings/notifications/index.vue'
 import SettingsProfile from '@/pages/settings/profile/index.vue'
 import SettingsAccount from '@/pages/settings/account/index.vue'
 import SettingsWebhooks from '@/pages/settings/webhooks/index.vue'
+import Links from '@/pages/links/index.vue'
 
 Vue.use(VueRouter)
 
@@ -177,6 +178,11 @@ const WEBSITE_ROUTES = [
         path: 'integrations'
       }
     ]
+  },
+  {
+    name: 'Links',
+    path: '/links',
+    component: Links
   },
   {
     name: 'Terms',

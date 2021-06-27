@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class UserType < Types::BaseObject
     field :uuid, ID, null: false
@@ -10,5 +12,9 @@ module Types
     field :timezone, String, null: true
     field :status, Integer, null: false
     field :description, String, null: true
+
+    field :avatar_url, String, null: false
+
+    delegate :avatar_url, to: :object
   end
 end
