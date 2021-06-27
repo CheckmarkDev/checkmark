@@ -10,5 +10,11 @@ module Types
     field :timezone, String, null: true
     field :status, Integer, null: false
     field :description, String, null: true
+
+    field :avatar_url, String, null: false
+
+    def avatar_url
+      object.avatar_url
+    end
   end
 end

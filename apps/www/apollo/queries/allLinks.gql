@@ -4,5 +4,12 @@
     title
     url
     createdAt
+    user {
+      uuid
+      username
+      firstName
+      lastName
+      avatarUrl
+    }
   }
 }
