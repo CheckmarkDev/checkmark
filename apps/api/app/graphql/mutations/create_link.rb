@@ -4,23 +4,19 @@ module Mutations
   class CreateLink < Mutations::BaseMutation
     null true
 
-    argument :title, String, required: true
     argument :url, String, required: true
 
     field :link, Types::LinkType, null: false
     field :errors, [String], null: false
 
-    def ready?(**args)
-      if context[:current_user].nil?
-        raise GraphQL::ExecutionError, "Authentication is required"
-      end
+    def ready?(**_args)
+      raise GraphQL::ExecutionError, 'Authentication is required' if context[:current_user].nil?
 
-      return true
+      true
     end
 
-    def resolve(title:, description:, url:)
+    def resolve(url:)
       link = context[:current_user].links.build(
-        title: title,
         url: url
       )
 
@@ -28,7 +24,7 @@ module Mutations
         # Successful creation, return the created object with no errors
         {
           link: link,
-          errors: [],
+          errors: []
         }
       else
         # Failed save, return the errors to the client

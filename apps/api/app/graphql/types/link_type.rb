@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class LinkType < Types::BaseObject
     field :uuid, ID, null: false

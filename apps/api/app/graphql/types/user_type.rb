@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class UserType < Types::BaseObject
     field :uuid, ID, null: false
@@ -13,8 +15,6 @@ module Types
 
     field :avatar_url, String, null: false
 
-    def avatar_url
-      object.avatar_url
-    end
+    delegate :avatar_url, to: :object
   end
 end
