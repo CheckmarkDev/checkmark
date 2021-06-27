@@ -5,7 +5,6 @@ module Mutations
     null true
 
     argument :title, String, required: true
-    argument :description, String, required: true
     argument :url, String, required: true
 
     field :link, Types::LinkType, null: false
@@ -22,7 +21,6 @@ module Mutations
     def resolve(title:, description:, url:)
       link = context[:current_user].links.build(
         title: title,
-        description: description,
         url: url
       )
 
