@@ -13,6 +13,7 @@
   "dependencies": {
     "@nuxt/content": "^1.14.0",
     "@nuxt/typescript-runtime": "^2.1.0",
+    "@nuxtjs/apollo": "^4.0.1-rc.5",
     "@nuxtjs/axios": "^5.12.2",
     "@nuxtjs/color-mode": "^2.0.5",
     "@nuxtjs/composition-api": "^0.22.4",

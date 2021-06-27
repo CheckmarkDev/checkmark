@@ -86,8 +86,15 @@ export default {
     '@nuxtjs/pwa',
     '@nuxtjs/robots',
     '@nuxtjs/sitemap',
-    ['vue-wait/nuxt', { useVuex: true }]
+    ['vue-wait/nuxt', { useVuex: true }],
+    '@nuxtjs/apollo',
   ],
+
+  apollo: {
+    clientConfigs: {
+      default: '~/apollo.config.js'
+    }
+  },
 
   // // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   // stripe: {

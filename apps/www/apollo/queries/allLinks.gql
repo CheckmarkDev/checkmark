@@ -1,0 +1,8 @@
+{
+  allLinks {
+    uuid
+    title
+    url
+    createdAt
+  }
+}
