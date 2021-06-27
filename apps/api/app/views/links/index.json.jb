@@ -1,0 +1,25 @@
+# frozen_string_literal: true
+
+json = {
+  meta: {
+    current_page: @links.current_page,
+    total_pages: @links.total_pages,
+    count: @links.pluck(:id).count
+  }
+}
+
+json[:data] = @links.map do |link|
+  {
+    title: link.title,
+    url: link.url,
+    user: {
+      uuid: link.user.uuid,
+      first_name: link.user.first_name,
+      last_name: link.user.last_name,
+      username: link.user.username
+    },
+    created_at: link.created_at
+  }
+end
+
+json

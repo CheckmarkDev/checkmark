@@ -1,0 +1,57 @@
+<template>
+  <main>
+    <HomeHero />
+    <div class="links-container">
+      <div class="container mx-auto flex items-start">
+        <SideNavigation />
+        <section class="flex flex-col bg-white dark:bg-gray-700 dark:text-white rounded-lg w-full md:w-9/12 p-6">
+          <h2 class="font-medium text-2xl mb-4">
+            Liens
+          </h2>
+
+          <Link
+            v-for="link in allLinks"
+            :key="link.uuid"
+            :link="link"
+            class="mb-4"
+          />
+        </section>
+      </div>
+    </div>
+  </main>
+</template>
+
+<script lang="ts">
+  import { defineComponent } from '@nuxtjs/composition-api'
+  import allLinks from '~/apollo/queries/allLinks'
+
+  import Link from '@/components/Links/Link/index.vue'
+  import SideNavigation from '@/components/Home/SideNavigation/index.vue'
+  import HomeHero from '@/components/Home/HomeHero/index.vue'
+
+  export default defineComponent({
+    apollo: {
+      allLinks: {
+        prefetch: true,
+        query: allLinks
+      }
+    },
+    components: {
+      HomeHero,
+      Link,
+      SideNavigation
+    }
+  })
+</script>
+
+<style scoped>
+  .links-container {
+    margin-top: -100px;
+  }
+
+  @screen md {
+    .links-container {
+      margin-top: -180px;
+    }
+  }
+</style>
