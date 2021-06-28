@@ -57,11 +57,13 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed, onMounted, ref } from '@vue/composition-api'
+  import { defineComponent, computed } from '@vue/composition-api'
+  import { useQuery, useResult } from '@vue/apollo-composable/dist'
+  import gql from 'graphql-tag'
 
   import AppAvatar from '@/components/AppAvatar/index.vue'
   import HomeHeroAvatars from './HomeHeroAvatars/index.vue'
-  import useAxios from '~/composables/useAxios'
+  import { User } from '~/types/user'
 
   export default defineComponent({
     components: {
@@ -69,18 +71,28 @@
       HomeHeroAvatars
     },
     setup() {
-      const users = ref([])
-      const axios = useAxios()
+      const { result } = useQuery(gql`
+        {
+          randomUsers {
+            uuid
+            avatarUrl
+            streak
+          }
+        }
+      `)
 
-      onMounted(async () => {
-        const res = await axios.get('/users/random')
-        users.value = res.data
-      })
-
+      const users = useResult(result, null, data => data.randomUsers)
       const computedUsers = computed(() => {
-        return users.value.map(user => ({
+        if (!users.value) return []
+
+        return users.value.map((user: User & { avatarUrl: string }) => ({
           size: 50 + Math.round(Math.random() * 20),
-          user
+          user: {
+            ...user,
+            // We have different casing from the API vs GraphQL, so quickly remapping
+            // in the meantime.
+            avatar_url: user.avatarUrl
+          }
         }))
       })
 
