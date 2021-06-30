@@ -16,7 +16,7 @@
     "@nuxtjs/apollo": "^4.0.1-rc.5",
     "@nuxtjs/axios": "^5.12.2",
     "@nuxtjs/color-mode": "^2.0.5",
-    "@nuxtjs/composition-api": "^0.22.4",
+    "@nuxtjs/composition-api": "^0.24.5",
     "@nuxtjs/pwa": "^3.0.2",
     "@nuxtjs/robots": "^2.5.0",
     "@nuxtjs/sentry": "^5.0.3",
