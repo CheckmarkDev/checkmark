@@ -21,9 +21,9 @@
       />
     </div>
     <div class="rounded bg-gray-200 dark:bg-gray-600 dark:text-white p-4">
-      <p
+      <div
         class="mb-0"
-        v-text="comment.content"
+        v-html="parsedComment"
       />
     </div>
   </div>
@@ -35,6 +35,7 @@
 
   import { Comment } from '@/types/comment'
   import UserCard from '@/components/UserCard/index.vue'
+  import useLinkify from '@/composables/useLinkify'
 
   export default defineComponent({
     components: {
@@ -50,8 +51,13 @@
       const { comment } = toRefs(props)
       const date = computed(() => dayjs(comment.value.created_at).format('LLL'))
 
+      const parsedComment = computed(() => {
+        return useLinkify(comment.value.content)
+      })
+
       return {
-        date
+        date,
+        parsedComment
       }
     },
   })
