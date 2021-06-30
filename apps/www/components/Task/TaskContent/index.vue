@@ -23,10 +23,13 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from '@nuxtjs/composition-api'
+  import { computed, defineComponent } from '@nuxtjs/composition-api'
+  import { toRefs } from '@vueuse/core'
+
   import { Task } from '~/types/task'
   import Hashtag from './Hashtag/index.vue'
   import Mention from './Mention/index.vue'
+  import useLinkify from '@/composables/useLinkify'
 
   export default defineComponent({
     components: {
@@ -39,9 +42,11 @@
         required: true
       }
     },
-    computed: {
-      blocks () {
-        const { projects, mentions, content } = this.task
+    setup (props) {
+      const { task } = toRefs(props)
+
+      const blocks = computed(() => {
+        const { projects, mentions, content } = task.value
         const parts: Array<{
           type: string
           content: string
@@ -58,7 +63,7 @@
         if ((projects && projects.length === 0) && (mentions && mentions.length === 0)) {
           parts.push({
             type: 'text',
-            content
+            content: useLinkify(content)
           })
 
           return parts
@@ -73,7 +78,7 @@
         if (tags.length === 0) {
           parts.push({
             type: 'text',
-            content
+            content: useLinkify(content)
           })
 
           return parts
@@ -83,7 +88,7 @@
         tags.forEach(tag => {
           parts.push({
             type: 'text',
-            content: content.slice(index, tag.index).replace(tagRegx, '')
+            content: useLinkify(content.slice(index, tag.index).replace(tagRegx, ''))
           })
 
           const isMention = tag[0].startsWith('@')
@@ -116,10 +121,14 @@
 
         parts.push({
           type: 'text',
-          content: content.slice(index)
+          content: useLinkify(content.slice(index))
         })
 
         return parts
+      })
+
+      return {
+        blocks
       }
     }
   })

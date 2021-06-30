@@ -29,6 +29,7 @@ export default {
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
+    '~/plugins/apollo',
     '~/plugins/axios',
     '~/plugins/vee-validate',
     '~/plugins/vue-icu.js',
@@ -150,7 +151,8 @@ export default {
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
     transpile: [
-      'vee-validate/dist/rules'
+      'vee-validate/dist/rules',
+      '@vue/apollo-composable'
     ],
 
     extend (config, { isDev, isClient }) {

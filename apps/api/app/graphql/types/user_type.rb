@@ -14,7 +14,9 @@ module Types
     field :description, String, null: true
 
     field :avatar_url, String, null: false
+    field :streak, Integer, null: false
 
     delegate :avatar_url, to: :object
+    delegate :streak, to: :object
   end
 end
