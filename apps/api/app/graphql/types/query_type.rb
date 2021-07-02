@@ -17,12 +17,17 @@ module Types
     end
 
     def random_users
-      Rails.cache.fetch('random_users', expires_in: 24.hours) do
-        return User.where.not(status: User.statuses[:blocked])
+      users = Rails.cache.fetch('random_users', expires_in: 24.hours) do
+        data = User
+          .where.not(status: User.statuses[:blocked])
           .includes([avatar_attachment: :blob])
-          .order('RANDOM()')
-          .limit(10)
+          .order('RANDOM()').limit(10)
+          .pluck(:id)
+
+        data
       end
+
+      User.includes([avatar_attachment: :blob]).find(users)
     end
   end
 end
