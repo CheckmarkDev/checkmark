@@ -9,6 +9,11 @@
             Liens
           </h2>
 
+          <NewLink
+            v-if="$accessor.isAuthenticated"
+            class="mb-8"
+          />
+
           <Link
             v-for="link in allLinks"
             :key="link.uuid"
@@ -28,6 +33,7 @@
   import Link from '@/components/Links/Link/index.vue'
   import SideNavigation from '@/components/Home/SideNavigation/index.vue'
   import HomeHero from '@/components/Home/HomeHero/index.vue'
+  import NewLink from '@/components/Links/NewLink/index.vue'
 
   export default defineComponent({
     apollo: {
@@ -39,7 +45,8 @@
     components: {
       HomeHero,
       Link,
-      SideNavigation
+      SideNavigation,
+      NewLink
     }
   })
 </script>

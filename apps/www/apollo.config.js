@@ -1,4 +1,3 @@
-import { consoleSandbox } from '@sentry/utils'
 import cookieparser from 'cookieparser'
 import jwt from 'jsonwebtoken'
 
@@ -42,7 +41,7 @@ export default function(ctx) {
         }
       }
 
-      return `Bearer ${token}`
+      return token ? `Bearer ${token}` : null
     }
   }
 }
