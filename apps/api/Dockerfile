@@ -1,22 +1,21 @@
-FROM ruby:2.7.1 as release
+ARG RUBY_VERSION="2.7.1"
+
+FROM ruby:${RUBY_VERSION} as release
 
 WORKDIR /api
 
-RUN apt-get update -qq && apt-get install -y libxslt-dev libxml2-dev build-essential patch ruby-dev zlib1g-dev liblzma-dev libpq-dev
+RUN apt-get update -qq && \
+  apt-get install -y libxslt-dev libxml2-dev build-essential patch ruby-dev zlib1g-dev liblzma-dev libpq-dev
 
 COPY Gemfile Gemfile.lock ./
 
 RUN bundle install
 
+COPY entrypoint.sh sidekiq-entrypoint.sh /usr/bin/
+
+RUN chmod +x /usr/bin/entrypoint.sh /usr/bin/sidekiq-entrypoint.sh
+
 COPY . .
-
-COPY entrypoint.sh /usr/bin/
-
-RUN chmod +x /usr/bin/entrypoint.sh
-
-COPY sidekiq-entrypoint.sh /usr/bin/
-
-RUN chmod +x /usr/bin/sidekiq-entrypoint.sh
 
 ENTRYPOINT ["entrypoint.sh"]
 
