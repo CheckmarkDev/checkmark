@@ -26,9 +26,9 @@ FROM node:14-alpine AS release
 
 WORKDIR /www
 
-COPY . .
-
 COPY --from=build /www/.nuxt ./.nuxt
+
+COPY package.json package-lock.json ./
 
 RUN npm ci --only=production
 
