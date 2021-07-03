@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ApiSchema < GraphQL::Schema
+  default_max_page_size 10
+
   mutation(Types::MutationType)
   query(Types::QueryType)
 

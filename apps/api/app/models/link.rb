@@ -11,14 +11,18 @@ class Link < ApplicationRecord
   before_validation :fetch_title
 
   def fetch_title
-    title
-    conn = Faraday.new do |f|
-      f.request :retry
-      f.response :follow_redirects
-    end
+    title = nil
+    begin
+      conn = Faraday.new do |f|
+        f.request :retry
+        f.response :follow_redirects
+      end
 
-    response = conn.get url
-    title = Nokogiri::HTML(response.body).at_css('title').text
+      response = conn.get url
+      title = Nokogiri::HTML(response.body).at_css('title').text
+    rescue StandardError => e
+      Rails.logger.info e
+    end
 
     self.title = title
   end

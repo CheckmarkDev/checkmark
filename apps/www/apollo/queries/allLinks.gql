@@ -1,15 +1,21 @@
-{
-  allLinks {
-    uuid
-    title
-    url
-    createdAt
-    user {
+query GetAllLinks ($cursor: String) {
+  allLinks (after: $cursor) {
+    nodes {
       uuid
-      username
-      firstName
-      lastName
-      avatarUrl
+      title
+      url
+      createdAt
+      user {
+        uuid
+        username
+        firstName
+        lastName
+        avatarUrl
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
     }
   }
 }
