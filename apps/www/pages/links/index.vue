@@ -6,7 +6,7 @@
         <SideNavigation />
         <section class="flex flex-col bg-white dark:bg-gray-700 dark:text-white rounded-lg w-full md:w-9/12 p-6">
           <h2 class="font-medium text-2xl mb-4">
-            Liens
+            {{ $trans('links.titles.main') }}
           </h2>
 
           <NewLink
@@ -44,7 +44,7 @@
                   class="btn btn-primary w-full"
                   @click="loadMore(query, data.allLinks.pageInfo.endCursor)"
                 >
-                  Charger plus de liens
+                  {{ $trans('links.buttons.load_more') }}
                 </button>
               </template>
             </template>

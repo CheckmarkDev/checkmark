@@ -8,6 +8,7 @@ const TRANSLATION_FILES = [
   'user',
   'project',
   'settings',
+  'links',
   'roadmap'
 ]
 

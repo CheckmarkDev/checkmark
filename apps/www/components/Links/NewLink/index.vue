@@ -20,7 +20,7 @@
             for="url"
             class="mb-2"
           >
-            Partagez un lien avec la communauté
+            {{ $trans('links.labels.link') }}
           </label>
           <ValidationProvider
             rules="required"
@@ -42,7 +42,7 @@
               type="submit"
               class="btn btn-primary"
             >
-              Publier
+              {{ $trans('links.buttons.publish') }}
             </button>
           </ValidationProvider>
         </form>
