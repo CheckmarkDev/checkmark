@@ -2,6 +2,9 @@ import cookieparser from 'cookieparser'
 import jwt from 'jsonwebtoken'
 
 export default function(ctx) {
+  console.log('context', ctx)
+  console.log('config', ctx.$config)
+  console.log('axios', ctx.$config.axios)
   const { baseURL, browserBaseURL } = ctx.$config.axios
 
   return {
