@@ -7,7 +7,7 @@
     :update="updateCache"
     @done="done"
   >
-    <template v-slot="{ mutate, loading }">
+    <template v-slot="{ mutate, loading, error }">
       <ValidationObserver
         ref="observer"
       >
@@ -45,6 +45,11 @@
               {{ $trans('links.buttons.publish') }}
             </button>
           </ValidationProvider>
+          <div
+            v-if="error"
+            class="text-red-500"
+            v-text="error"
+          />
         </form>
       </ValidationObserver>
     </template>

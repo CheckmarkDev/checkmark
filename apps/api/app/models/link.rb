@@ -20,8 +20,8 @@ class Link < ApplicationRecord
 
       response = conn.get url
       title = Nokogiri::HTML(response.body).at_css('title').text
-    rescue => e
-      puts "Failed to fetch", e
+    rescue StandardError => e
+      Rails.logger.info e
     end
 
     self.title = title
