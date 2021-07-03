@@ -14,12 +14,32 @@
             class="mb-8"
           />
 
-          <Link
-            v-for="link in allLinks"
-            :key="link.uuid"
-            :link="link"
-            class="mb-4"
-          />
+          <apollo-query
+            :query="allLinks"
+          >
+            <template v-slot="{ result: { loading, error, data } }">
+              <template
+                v-if="loading"
+              >
+                Loading...
+              </template>
+              <template
+                v-else-if="error"
+              >
+                Error: {{ error }}
+              </template>
+              <template
+                v-else
+              >
+                <Link
+                  v-for="link in data.allLinks"
+                  :key="link.uuid"
+                  :link="link"
+                  class="mb-4"
+                />
+              </template>
+            </template>
+          </apollo-query>
         </section>
       </div>
     </div>
@@ -36,17 +56,16 @@
   import NewLink from '@/components/Links/NewLink/index.vue'
 
   export default defineComponent({
-    apollo: {
-      allLinks: {
-        prefetch: true,
-        query: allLinks
-      }
-    },
     components: {
       HomeHero,
       Link,
       SideNavigation,
       NewLink
+    },
+    setup () {
+      return {
+        allLinks
+      }
     }
   })
 </script>
