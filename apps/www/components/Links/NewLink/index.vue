@@ -1,62 +1,68 @@
 <template>
-  <ValidationObserver
-    ref="observer"
+  <apollo-mutation
+    :mutation="createLink"
+    :variables="{
+      url: formData.url
+    }"
+    :update="updateCache"
+    @done="done"
   >
-    <form
-      :disabled="$wait.is('creating link')"
-      class="flex flex-col"
-      @submit.prevent="submitted"
-    >
-      <label
-        for="url"
-        class="mb-2"
+    <template v-slot="{ mutate, loading }">
+      <ValidationObserver
+        ref="observer"
       >
-        Partagez un lien avec la communauté
-      </label>
-      <ValidationProvider
-        rules="required"
-        class="flex flex-col md:flex-row md:items-center"
-        tag="div"
-      >
-        <input
-          v-model="formData.url"
-          type="url"
-          name="url"
-          id="url"
-          class="input mr-4 mb-4 md:mb-0"
-          placeholder="URL"
+        <form
+          :disabled="loading"
+          class="flex flex-col"
+          @submit.prevent="mutate"
         >
+          <label
+            for="url"
+            class="mb-2"
+          >
+            Partagez un lien avec la communauté
+          </label>
+          <ValidationProvider
+            rules="required"
+            class="flex flex-col md:flex-row md:items-center"
+            tag="div"
+          >
+            <input
+              v-model="formData.url"
+              type="url"
+              name="url"
+              id="url"
+              class="input mr-4 mb-4 md:mb-0"
+              placeholder="URL"
+            >
 
-        <button
-          :disabled="$wait.is('creating link')"
-          type="submit"
-          class="btn btn-primary"
-        >
-          Publier
-        </button>
-      </ValidationProvider>
-    </form>
-  </ValidationObserver>
+            <button
+              :disabled="loading"
+              type="submit"
+              class="btn btn-primary"
+            >
+              Publier
+            </button>
+          </ValidationProvider>
+        </form>
+      </ValidationObserver>
+    </template>
+  </apollo-mutation>
 </template>
 
 <script lang="ts">
-  import { useMutation } from '@vue/apollo-composable/dist'
   import { defineComponent, reactive } from '@vue/composition-api'
-  import gql from 'graphql-tag'
   import allLinks from '~/apollo/queries/allLinks'
-  import useToasted from '~/composables/useToasted'
 
-  import useWait from '~/composables/useWait'
+  import gql from 'graphql-tag'
 
   export default defineComponent({
     setup () {
-      const wait = useWait()
-      const toasted = useToasted()
       const formData = reactive({
         url: null
       })
 
-      const { mutate: createLink } = useMutation(gql`
+      const createLink = gql`
         mutation ($url: String!) {
           createLink(input: { url: $url }) {
             link {
@@ -74,35 +80,27 @@
             }
           }
         }
-      `)
+      `
 
-      async function submitted () {
-        wait.start('creating link')
-        createLink({
-          url: formData.url
-        }, {
-          update: (cache, { data: { createLink: link } }) => {
-            /**
-             * Once we have the data, we want to update the list of links.
-             * Fetch the allLinks query to append on top of the list the new link
-             */
-            const data = cache.readQuery({ query: allLinks })
-            data.allLinks.unshift(link.link)
-            cache.writeQuery({ query: allLinks, data })
-          }
-        })
-          .catch(err => {
-            toasted.error('Impossible de publier ce lien.')
-            console.error('err', err)
-          })
-          .finally(() => {
-            wait.end('creating link')
-          })
+      /**
+       * Once we have the data, we want to update the list of links.
+       * Fetch the allLinks query to append on top of the list the new link
+       */
+      function updateCache (cache, { data: { createLink: link } }) {
+        const data = cache.readQuery({ query: allLinks })
+        data.allLinks.unshift(link.link)
+        cache.writeQuery({ query: allLinks, data })
+      }
+
+      function done () {
+        formData.url = null
       }
 
       return {
+        done,
         formData,
-        submitted
+        createLink,
+        updateCache
       }
     }
   })
