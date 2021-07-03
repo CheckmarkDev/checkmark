@@ -55,6 +55,17 @@
             </nuxt-link>
           </li>
 
+          <li class="hidden md:block mr-4">
+            <nuxt-link
+              :to="{
+                name: 'Links'
+              }"
+              class="dark:text-white"
+            >
+              {{ $trans('links.titles.main') }}
+            </nuxt-link>
+          </li>
+
           <li class="hidden md:block">
             <nuxt-link
               :to="{

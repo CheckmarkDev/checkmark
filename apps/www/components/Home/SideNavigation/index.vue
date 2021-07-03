@@ -10,7 +10,16 @@
             :exact-active-class="'router-link-active bg-gray-200 dark:bg-gray-600'"
             class="hover:bg-gray-200 dark:hover:bg-gray-600 rounded p-2 w-full flex mb-1"
           >
-            Feed
+            {{ $trans('global.titles.feed') }}
+          </nuxt-link>
+          <nuxt-link
+            :to="{
+              name: 'Links'
+            }"
+            :exact-active-class="'router-link-active bg-gray-200 dark:bg-gray-600'"
+            class="hover:bg-gray-200 dark:hover:bg-gray-600 rounded p-2 w-full flex mb-1"
+          >
+            {{ $trans('links.titles.main') }}
           </nuxt-link>
           <nuxt-link
             :to="{
@@ -19,7 +28,7 @@
             :active-class="'router-link-active bg-gray-200 dark:bg-gray-600'"
             class="hover:bg-gray-200 dark:hover:bg-gray-600 rounded p-2 w-full flex"
           >
-            Roadmap
+            {{ $trans('roadmap.titles.main') }}
           </nuxt-link>
         </li>
       </ul>

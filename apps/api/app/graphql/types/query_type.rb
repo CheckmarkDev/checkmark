@@ -9,11 +9,11 @@ module Types
     # Add root-level fields here.
     # They will be entry points for queries on your schema.
 
-    field :all_links, [Types::LinkType], null: false, description: 'Return all links'
+    field :all_links, Types::LinkType.connection_type, null: false, description: 'Return all links'
     field :random_users, [Types::UserType], null: false, description: 'Return 10 random users'
 
     def all_links
-      Link.order(created_at: :desc).all
+      Link.order(created_at: :desc)
     end
 
     def random_users

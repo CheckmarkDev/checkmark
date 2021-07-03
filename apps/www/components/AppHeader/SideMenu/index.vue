@@ -31,6 +31,17 @@
           <li>
             <nuxt-link
               :to="{
+                name: 'Links'
+              }"
+              class="flex py-2"
+              @click.native="close"
+            >
+              Liens
+            </nuxt-link>
+          </li>
+          <li>
+            <nuxt-link
+              :to="{
                 name: 'Roadmap'
               }"
               class="flex py-2"
