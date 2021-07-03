@@ -44,12 +44,14 @@
   import { defineComponent, reactive } from '@vue/composition-api'
   import gql from 'graphql-tag'
   import allLinks from '~/apollo/queries/allLinks'
+  import useToasted from '~/composables/useToasted'
 
   import useWait from '~/composables/useWait'
 
   export default defineComponent({
     setup () {
       const wait = useWait()
+      const toasted = useToasted()
       const formData = reactive({
         url: null
       })
@@ -89,6 +91,10 @@
             cache.writeQuery({ query: allLinks, data })
           }
         })
+          .catch(err => {
+            toasted.error('Impossible de publier ce lien.')
+            console.error('err', err)
+          })
           .finally(() => {
             wait.end('creating link')
           })
