@@ -10,20 +10,25 @@ ARG YARN_VERSION
 # As root user, gives "node" the permission to npm files
 RUN chown -R node /usr/local/lib/node_modules /usr/local/bin
 
+# Uses the "node" user by default
+USER node
+
 RUN npm install -g yarn@${YARN_VERSION} --force
 
 WORKDIR /www
 
 RUN mkdir ./node_modules && chown node ./node_modules
 
-COPY package.json yarn.lock ./
+COPY --chown=node package.json yarn.lock ./
+
+RUN yarn cache clean
 
 RUN yarn install --prod --frozen-lockfile
 
 # Copy the necessary files. As we only have src and index, don't
 # copy the rest.
-COPY src ./src
-COPY index.js ./index.js
+COPY --chown=node src ./src
+COPY --chown=node index.js ./index.js
 
 EXPOSE 9090
 
