@@ -7,14 +7,9 @@ FROM node:${NODE_VERSION} AS release
 ARG NODE_ENV
 ARG YARN_VERSION
 
-# As root user, gives "node" the permission to npm files
-RUN chown -R node /usr/local/lib/node_modules /usr/local/bin
-
 RUN npm install -g yarn@${YARN_VERSION} --force
 
 WORKDIR /www
-
-RUN mkdir ./node_modules && chown node ./node_modules
 
 COPY package.json yarn.lock ./
 

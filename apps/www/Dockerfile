@@ -6,17 +6,19 @@ FROM node:${NODE_VERSION} AS base
 
 ARG NPM_VERSION
 
-# As root user, gives "node" the permission to npm files
-RUN chown -R node /usr/local/lib/node_modules /usr/local/bin /usr/local/share
-
-# Uses the "node" user by default
-USER node
-
-RUN npm install -g npm@${NPM_VERSION}
+RUN mkdir /www && chown -R node /www
 
 WORKDIR /www
 
+RUN npm install -g npm@${NPM_VERSION}
+
+# As root user, gives "node" the permission to npm files
+RUN chown -R node /usr/local/lib/node_modules /usr/local/bin /usr/local/share
+
 COPY --chown=node package.json package-lock.json ./
+
+# Uses the "node" user by default
+USER node
 
 RUN npm ci
 
@@ -42,16 +44,18 @@ ARG NPM_VERSION
 # As root user, gives "node" the permission to npm files
 RUN chown -R node /usr/local/lib/node_modules /usr/local/bin /usr/local/share
 
-# Uses the "node" user by default
-USER node
-
 RUN npm install -g npm@${NPM_VERSION}
+
+RUN mkdir /www && chown -R node /www
 
 WORKDIR /www
 
 COPY --chown=node --from=build /www/.nuxt ./.nuxt
 
 COPY --chown=node package.json package-lock.json ./
+
+# Uses the "node" user by default
+USER node
 
 RUN npm ci --only=production
 
