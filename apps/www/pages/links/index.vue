@@ -17,7 +17,7 @@
           <apollo-query
             :query="allLinks"
           >
-            <template v-slot="{ result: { loading, error, data } }">
+            <template v-slot="{ result: { loading, error, data }, query }">
               <template
                 v-if="loading"
               >
@@ -32,11 +32,20 @@
                 v-else
               >
                 <Link
-                  v-for="link in data.allLinks"
+                  v-for="link in data.allLinks.nodes"
                   :key="link.uuid"
                   :link="link"
                   class="mb-4"
                 />
+
+                <button
+                  v-if="data.allLinks && data.allLinks.pageInfo.hasNextPage"
+                  key="load-more"
+                  class="btn btn-primary w-full"
+                  @click="loadMore(query, data.allLinks.pageInfo.endCursor)"
+                >
+                  Charger plus de liens
+                </button>
               </template>
             </template>
           </apollo-query>
@@ -63,8 +72,39 @@
       NewLink
     },
     setup () {
+      // @ts-ignore
+      async function loadMore (query, cursor: string) {
+        await query.fetchMore({
+          variables: {
+            cursor
+          },
+          // @ts-ignore
+          updateQuery: (prev, { fetchMoreResult }) => {
+            if (!fetchMoreResult || fetchMoreResult.allLinks.nodes.length === 0) {
+              return prev
+            }
+
+            /**
+             * Here we take the current "allLinks" data and append our new fetched
+             * data. Keep the pageInfo from the last fetch.
+             */
+            return Object.assign({}, prev, {
+              allLinks: {
+                ...prev.allLinks,
+                nodes: [
+                  ...prev.allLinks.nodes,
+                  ...fetchMoreResult.allLinks.nodes
+                ],
+                pageInfo: fetchMoreResult.allLinks.pageInfo
+              }
+            })
+          }
+        })
+      }
+
       return {
-        allLinks
+        allLinks,
+        loadMore
       }
     }
   })

@@ -34,6 +34,7 @@
               id="url"
               class="input mr-4 mb-4 md:mb-0"
               placeholder="URL"
+              required
             >
 
             <button
@@ -88,7 +89,7 @@
        */
       function updateCache (cache, { data: { createLink: link } }) {
         const data = cache.readQuery({ query: allLinks })
-        data.allLinks.unshift(link.link)
+        data.allLinks.nodes.unshift(link.link)
         cache.writeQuery({ query: allLinks, data })
       }
 
