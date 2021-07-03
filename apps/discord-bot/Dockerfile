@@ -17,11 +17,7 @@ RUN npm install -g yarn@${YARN_VERSION} --force
 
 WORKDIR /www
 
-RUN mkdir ./node_modules && chown node ./node_modules
-
 COPY --chown=node package.json yarn.lock ./
-
-RUN yarn cache clean
 
 RUN yarn install --prod --frozen-lockfile
 
