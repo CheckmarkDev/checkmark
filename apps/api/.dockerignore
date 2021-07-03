@@ -1,5 +1,3 @@
 log/
 tmp/
 storage/
-.byebug_history
-.env.*

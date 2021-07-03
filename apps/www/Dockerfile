@@ -1,57 +1,34 @@
-ARG NODE_VERSION="14.16.1"
-ARG NPM_VERSION="7.19.1"
-
 # Base
-FROM node:${NODE_VERSION} AS base
-
-ARG NPM_VERSION
-
-# As root user, gives "node" the permission to npm files
-RUN chown -R node /usr/local/lib/node_modules /usr/local/bin /usr/local/share
-
-# Uses the "node" user by default
-USER node
-
-RUN npm install -g npm@${NPM_VERSION}
+FROM node:14.16.1 AS base
 
 WORKDIR /www
 
-COPY --chown=node package.json package-lock.json ./
+COPY package.json package-lock.json ./
 
 RUN npm ci
 
 # Dev
 FROM base AS dev
 
-COPY --chown=node . .
+COPY . .
 
 CMD ["npm", "run", "dev"]
 
 # Build
 FROM base AS build
 
-COPY --chown=node . .
+COPY . .
 
 RUN npm run build
 
 # Release
-FROM node:${NODE_VERSION}-alpine AS release
-
-ARG NPM_VERSION
-
-# As root user, gives "node" the permission to npm files
-RUN chown -R node /usr/local/lib/node_modules /usr/local/bin /usr/local/share
-
-# Uses the "node" user by default
-USER node
-
-RUN npm install -g npm@${NPM_VERSION}
+FROM node:14-alpine AS release
 
 WORKDIR /www
 
-COPY --chown=node --from=build /www/.nuxt ./.nuxt
+COPY . .
 
-COPY --chown=node package.json package-lock.json ./
+COPY --from=build /www/.nuxt ./.nuxt
 
 RUN npm ci --only=production
 
