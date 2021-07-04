@@ -1,0 +1,16 @@
+query GetAllLikes ($taskUuid: String!) {
+  all_likes (taskUuid: $taskUuid) {
+    nodes {
+      uuid
+      created_at
+      user {
+        uuid
+        username
+        first_name
+        last_name
+        streak
+        avatar_url
+      }
+    }
+  }
+}
