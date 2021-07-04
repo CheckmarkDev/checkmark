@@ -16,6 +16,10 @@ module Types
       argument :task_uuid, String, required: true
     end
 
+    field :all_likes, Types::LikeType.connection_type, null: false, description: 'Return all likes for a task' do
+      argument :task_uuid, String, required: true
+    end
+
     def all_links
       Link.order(created_at: :desc)
     end
@@ -36,6 +40,10 @@ module Types
 
     def all_comments(task_uuid:)
       Task.find_by(uuid: task_uuid).comments.order(created_at: :desc)
+    end
+
+    def all_likes(task_uuid:)
+      Task.find_by(uuid: task_uuid).likes.order(created_at: :desc)
     end
   end
 end

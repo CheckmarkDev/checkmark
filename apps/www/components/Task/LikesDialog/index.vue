@@ -15,52 +15,67 @@
         </button>
       </div>
       <div>
-        <template
-          v-if="likes"
+        <apollo-query
+          :query="allLikes"
+          :variables="{
+            taskUuid: task.uuid
+          }"
         >
           <template
-            v-if="likes.data.length > 0"
+            v-slot="{ result: { data, loading, error } }"
           >
-            <div
-              v-for="like in likes.data"
-              :key="like.uuid"
-              class="mb-8"
+            <template
+              v-if="loading"
             >
-              <nuxt-link
-                :to="{
-                  name: 'User',
-                  params: {
-                    username: like.user.username
-                  }
-                }"
+              Loading
+            </template>
+            <template
+              v-else-if="error"
+            >
+              Error
+            </template>
+            <template
+              v-else-if="data && data.all_likes.nodes.length > 0"
+            >
+              <div
+                v-for="like in data.all_likes.nodes"
+                :key="like.uuid"
+                class="mb-8"
               >
-                <UserCard
-                  :user="like.user"
-                />
-              </nuxt-link>
-            </div>
+                <nuxt-link
+                  :to="{
+                    name: 'User',
+                    params: {
+                      username: like.user.username
+                    }
+                  }"
+                >
+                  <UserCard
+                    :user="like.user"
+                  />
+                </nuxt-link>
+              </div>
+            </template>
+            <template
+              v-else
+            >
+              <p>
+                {{ $trans('global.paragraphs.no_reactions') }}
+              </p>
+            </template>
           </template>
-          <template
-            v-else
-          >
-            <p>
-              {{ $trans('global.paragraphs.no_reactions') }}
-            </p>
-          </template>
-        </template>
+        </apollo-query>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, onMounted, ref, toRefs, Ref } from '@nuxtjs/composition-api'
+  import { defineComponent } from '@nuxtjs/composition-api'
   import { XIcon } from 'vue-feather-icons'
-  import { PaginateResponse } from '~/types/pagination'
   import { Task } from '~/types/task'
-  import { Like } from '~/types/like'
-  import useAxios from '~/composables/useAxios'
   import UserCard from '@/components/UserCard/index.vue'
+  import allLikesQuery from '@/apollo/queries/allLikes.gql'
 
   export default defineComponent({
     components: {
@@ -73,21 +88,9 @@
         required: true
       }
     },
-    setup (props) {
-      const { task } = toRefs(props)
-      const axios = useAxios()
-
-      const likes: Ref<PaginateResponse<Like>|null> = ref(null)
-
-      onMounted(() => {
-        axios.$get(`/tasks/${task.value.uuid}/likes`)
-          .then((res) => {
-            likes.value = res
-          })
-      })
-
+    setup () {
       return {
-        likes
+        allLikes: allLikesQuery
       }
     }
   })

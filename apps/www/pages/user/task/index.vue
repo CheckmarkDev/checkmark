@@ -1,6 +1,5 @@
 <template>
   <div
-    v-infinite-scroll="loadMore"
     class=""
   >
     <div class="border border-gray-300 dark:border-gray-600 rounded mb-8 px-8 py-4">
@@ -11,7 +10,6 @@
 
     <TaskComments
       :task="task"
-      :comments="comments"
     />
   </div>
 </template>
@@ -36,18 +34,10 @@
     data () {
       return {
         user: null,
-        task: null,
-        comments: {
-          data: [],
-          meta: {}
-        }
+        task: null
       } as {
         user: User | null,
-        task: Task | null,
-        comments: {
-          data: Array<Comment>,
-          meta: any
-        }
+        task: Task | null
       }
     },
     head () {
@@ -89,40 +79,23 @@
     },
     async asyncData ({ $axios, route }) {
       const { username, task: taskUuid } = route.params
-      const [user, task, comments] = await Promise.all([
+      const [user, task] = await Promise.all([
         $axios.$get(`/users/${username}`),
-        $axios.$get(`/users/${username}/tasks/${taskUuid}`),
-        $axios.$get(`/tasks/${taskUuid}/comments`),
+        $axios.$get(`/users/${username}/tasks/${taskUuid}`)
       ])
 
       return {
         user,
         task,
-        comments
       }
     },
-    methods: {
-      loadMore () {
-        const { task: taskUuid } = this.$route.params
-        const meta = this.comments.meta as PaginateResponseMeta
-        if (!meta) return
-        if (meta.current_page + 1 > meta.total_pages) return
-
-        return (this.$axios as NuxtAxiosInstance).$get(`/tasks/${taskUuid}/comments`, {
-          params: {
-            page: meta.current_page + 1
-          }
-        })
-          .then((res: PaginateResponse<Comment>) => {
-            this.comments.data = [
-              ...this.comments.data,
-              ...res.data
-            ]
-            this.comments.meta = res.meta
-
-            return res
-          })
-      }
+    mounted () {
+      this.$mitt.on('update-task', (task) => {
+        this.task = task
+      })
+    },
+    beforeDestroy () {
+      this.$mitt.off('update-task')
     }
   })
 </script>
