@@ -70,18 +70,18 @@
 
       const createLink = gql`
         mutation ($url: String!) {
-          createLink(input: { url: $url }) {
+          create_link(input: { url: $url }) {
             link {
               uuid
               title
               url
-              createdAt
+              created_at
               user {
                 uuid
                 username
-                firstName
-                lastName
-                avatarUrl
+                first_name
+                last_name
+                avatar_url
               }
             }
           }
@@ -92,9 +92,9 @@
        * Once we have the data, we want to update the list of links.
        * Fetch the allLinks query to append on top of the list the new link
        */
-      function updateCache (cache, { data: { createLink: link } }) {
+      function updateCache (cache, { data: { create_link: link } }) {
         const data = cache.readQuery({ query: allLinks })
-        data.allLinks.nodes.unshift(link.link)
+        data.all_links.nodes.unshift(link.link)
         cache.writeQuery({ query: allLinks, data })
       }
 

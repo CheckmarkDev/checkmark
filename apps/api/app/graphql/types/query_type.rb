@@ -8,9 +8,24 @@ module Types
 
     # Add root-level fields here.
     # They will be entry points for queries on your schema.
+    field :user, Types::UserType, null: true do
+      argument :uuid, String, required: true
+    end
 
     field :all_links, Types::LinkType.connection_type, null: false, description: 'Return all links'
     field :random_users, [Types::UserType], null: false, description: 'Return 10 random users'
+    field :all_comments, Types::CommentType.connection_type, null: false,
+                                                             description: 'Return all comments for a task' do
+      argument :task_uuid, String, required: true
+    end
+
+    field :all_likes, Types::LikeType.connection_type, null: false, description: 'Return all likes for a task' do
+      argument :task_uuid, String, required: true
+    end
+
+    def user(uuid:)
+      User.find_by(uuid: uuid)
+    end
 
     def all_links
       Link.order(created_at: :desc)
@@ -28,6 +43,14 @@ module Types
       end
 
       User.includes([avatar_attachment: :blob]).find(users)
+    end
+
+    def all_comments(task_uuid:)
+      Task.find_by(uuid: task_uuid).comments.order(created_at: :desc)
+    end
+
+    def all_likes(task_uuid:)
+      Task.find_by(uuid: task_uuid).likes.order(created_at: :desc)
     end
   end
 end

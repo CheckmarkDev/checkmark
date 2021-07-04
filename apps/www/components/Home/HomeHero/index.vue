@@ -73,26 +73,21 @@
     setup() {
       const { result } = useQuery(gql`
         {
-          randomUsers {
+          random_users {
             uuid
-            avatarUrl
+            avatar_url
             streak
           }
         }
       `)
 
-      const users = useResult(result, null, data => data.randomUsers)
+      const users = useResult(result, null, data => data.random_users)
       const computedUsers = computed(() => {
         if (!users.value) return []
 
         return users.value.map((user: User & { avatarUrl: string }) => ({
           size: 50 + Math.round(Math.random() * 20),
-          user: {
-            ...user,
-            // We have different casing from the API vs GraphQL, so quickly remapping
-            // in the meantime.
-            avatar_url: user.avatarUrl
-          }
+          user: user
         }))
       })
 

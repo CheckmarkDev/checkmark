@@ -29,7 +29,7 @@
         class="flex items-center mr-3"
       >
         <AppAvatar
-          :src="link.user.avatarUrl"
+          :src="link.user.avatar_url"
           :alt="link.user.username"
           width="20"
           height="20"
@@ -40,7 +40,7 @@
         />
       </nuxt-link>
       <time
-        :datetime="link.createdAt"
+        :datetime="link.created_at"
         v-text="date"
       />
     </div>
@@ -65,7 +65,7 @@
     },
     setup (props) {
       const { link } = toRefs(props)
-      const date = computed(() => dayjs(link.value.createdAt).format('lll'))
+      const date = computed(() => dayjs(link.value.created_at).format('lll'))
 
       return {
         date

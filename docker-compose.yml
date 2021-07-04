@@ -53,6 +53,7 @@ services:
       - 8080:8080
     volumes:
       - ./apps/www:/www
+      - /www/node_modules
     links:
       - api
 

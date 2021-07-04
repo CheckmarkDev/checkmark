@@ -1,21 +1,16 @@
-query GetAllLinks ($cursor: String) {
-  all_links (after: $cursor) {
+query GetAllLikes ($taskUuid: String!) {
+  all_likes (taskUuid: $taskUuid) {
     nodes {
       uuid
-      title
-      url
       created_at
       user {
         uuid
         username
         first_name
         last_name
+        streak
         avatar_url
       }
-    }
-    pageInfo {
-      endCursor
-      hasNextPage
     }
   }
 }

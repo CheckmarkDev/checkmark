@@ -1,21 +1,17 @@
-query GetAllLinks ($cursor: String) {
-  all_links (after: $cursor) {
+query GetAllComments ($taskUuid: String!) {
+  all_comments (taskUuid: $taskUuid) {
     nodes {
       uuid
-      title
-      url
+      content
       created_at
       user {
         uuid
         username
         first_name
         last_name
+        streak
         avatar_url
       }
-    }
-    pageInfo {
-      endCursor
-      hasNextPage
     }
   }
 }

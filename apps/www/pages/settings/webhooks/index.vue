@@ -5,7 +5,7 @@
       class="text-2xl dark:text-white font-medium mb-6"
     />
 
-    <div class="text-gray-700 mb-4">
+    <div class="text-gray-700 dark:text-gray-300 mb-4">
       <h3
         class="font-medium text-base mb-3"
         v-text="$trans('project.titles.webhooks_how_it_works')"
