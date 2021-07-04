@@ -14,10 +14,23 @@
             class="mb-8"
           />
 
-          <DateGroupedTaskGroups
+          <apollo-query
+            :query="allTaskGroups"
+          >
+            <template
+              v-slot="{ result: { data, loading } }"
+            >
+              <DateGroupedTaskGroups
+                v-if="data"
+                :task-groups="data.all_task_groups.nodes"
+                class="mb-8"
+              />
+            </template>
+          </apollo-query>
+          <!-- <DateGroupedTaskGroups
             :task-groups="$accessor.getTaskGroups"
             class="mb-8"
-          />
+          /> -->
         </section>
       </div>
     </div>
@@ -26,10 +39,13 @@
 
 <script lang="ts">
   import { defineComponent } from '@nuxtjs/composition-api'
+  import gql from 'graphql-tag'
+
   import DateGroupedTaskGroups from '@/components/DateGroupedTaskGroups/index.vue'
   import NewTask from '@/components/NewTask/index.vue'
   import SideNavigation from '@/components/Home/SideNavigation/index.vue'
   import HomeHero from '@/components/Home/HomeHero/index.vue'
+  import user from '@/apollo/fragments/user.gql'
 
   export default defineComponent({
     components: {
@@ -52,19 +68,52 @@
         ]
       }
     },
-    async middleware ({ store }) {
-      await store.dispatch('retrieveTaskGroups')
+    setup () {
+      const allTaskGroups = gql`
+        query GetAllTaskGroups {
+          all_task_groups {
+            nodes {
+              uuid
+              created_at
+              updated_at
+              user {
+                ...user
+              }
+              tasks {
+                uuid
+                content
+                state
+                source
+                created_at
+                updated_at
+                user {
+                  ...user
+                }
+              }
+            }
+          }
+        }
+
+        ${user}
+      `
+
+      return {
+        allTaskGroups
+      }
     },
-    mounted () {
-      this.$mitt.on('update-tasks', this.updateTasks)
-    },
-    beforeDestroy () {
-      this.$mitt.off('update-tasks', this.updateTasks)
-    },
+    // async middleware ({ store }) {
+    //   await store.dispatch('retrieveTaskGroups')
+    // },
+    // mounted () {
+    //   this.$mitt.on('update-tasks', this.updateTasks)
+    // },
+    // beforeDestroy () {
+    //   this.$mitt.off('update-tasks', this.updateTasks)
+    // },
     methods: {
-      updateTasks () {
-        this.$accessor.retrieveTaskGroups()
-      },
+      // updateTasks () {
+      //   this.$accessor.retrieveTaskGroups()
+      // },
       loadMore () {
         this.$accessor.retrieveMoreTaskGroups()
       }
