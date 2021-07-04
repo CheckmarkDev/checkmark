@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class ProjectType < Types::BaseObject
     field :uuid, ID, null: false
@@ -17,8 +19,6 @@ module Types
       RecordLoader.for(User).load(object.user_id)
     end
 
-    def avatar_url
-      object.avatar_url
-    end
+    delegate :avatar_url, to: :object
   end
 end
