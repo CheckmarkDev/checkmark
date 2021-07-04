@@ -34,7 +34,7 @@ module Types
     end
 
     def all_comments (task_uuid:)
-      Task.find_by(uuid: task_uuid).comments
+      Task.find_by(uuid: task_uuid).comments.order(created_at: :desc)
     end
   end
 end

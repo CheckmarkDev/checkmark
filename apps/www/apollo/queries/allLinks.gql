@@ -1,16 +1,16 @@
 query GetAllLinks ($cursor: String) {
-  allLinks (after: $cursor) {
+  all_links (after: $cursor) {
     nodes {
       uuid
       title
       url
-      createdAt
+      created_at
       user {
         uuid
         username
-        firstName
-        lastName
-        avatarUrl
+        first_name
+        last_name
+        avatar_url
       }
     }
     pageInfo {
