@@ -30,7 +30,7 @@
           class="mr-2 text-sm text-gray-600 dark:text-gray-400 truncate flex-shrink hover:underline"
           v-text="date"
         />
-        <!-- <CommentButton
+        <CommentButton
           :task="task"
           class="mr-4"
         />
@@ -41,15 +41,15 @@
         <TaskActions
           v-if="$accessor.getAuthUser && task.user.uuid === $accessor.getAuthUser.uuid"
           :task="task"
-        /> -->
+        />
       </div>
     </div>
 
-    <!-- <TaskImages
+    <TaskImages
       v-if="task.images.length"
       :task="task"
       class="my-4"
-    /> -->
+    />
 
     <!-- Dialogs -->
     <LikesDialog

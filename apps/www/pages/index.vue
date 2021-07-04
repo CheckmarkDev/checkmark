@@ -89,6 +89,24 @@
                 user {
                   ...user
                 }
+                images {
+                  uuid
+                  url
+                  thumbnail_url
+                }
+                comments {
+                  nodes {
+                    uuid
+                  }
+                }
+                likes {
+                  nodes {
+                    uuid
+                    user {
+                      uuid
+                    }
+                  }
+                }
               }
             }
           }
@@ -101,19 +119,7 @@
         allTaskGroups
       }
     },
-    // async middleware ({ store }) {
-    //   await store.dispatch('retrieveTaskGroups')
-    // },
-    // mounted () {
-    //   this.$mitt.on('update-tasks', this.updateTasks)
-    // },
-    // beforeDestroy () {
-    //   this.$mitt.off('update-tasks', this.updateTasks)
-    // },
     methods: {
-      // updateTasks () {
-      //   this.$accessor.retrieveTaskGroups()
-      // },
       loadMore () {
         this.$accessor.retrieveMoreTaskGroups()
       }
