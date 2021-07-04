@@ -8,9 +8,16 @@ module Types
     field :likeable_id, Integer, null: true
 
     field :user, Types::UserType, null: false
+    field :task, Types::TaskType, null: true
 
     def user
       RecordLoader.for(User).load(object.user_id)
+    end
+
+    def task
+      if object.likeable_type == 'Task'
+        RecordLoader.for(Task).load(object.likeable_id)
+      end
     end
   end
 end

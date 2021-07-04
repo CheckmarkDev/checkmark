@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { ActionTree, GetterTree, MutationTree, ActionContext } from 'vuex'
 import jwt from 'jsonwebtoken'
 import cookieparser from 'cookieparser'
@@ -69,7 +70,8 @@ export enum MutationTypes {
   PUSH_AUTH_PROJECT = 'PUSH_AUTH_PROJECT',
   SET_TASK_GROUPS = 'SET_TASK_GROUPS',
   PUSH_TASK_GROUPS = 'PUSH_TASK_GROUPS',
-  SET_TASK_GROUPS_META = 'SET_TASK_GROUPS_META'
+  SET_TASK_GROUPS_META = 'SET_TASK_GROUPS_META',
+  SET_TASK = 'SET_TASK'
 }
 
 export type Mutations<S = RootState> = {
@@ -80,6 +82,7 @@ export type Mutations<S = RootState> = {
   [MutationTypes.SET_TASK_GROUPS](state: S, taskGroups: Array<TaskGroup>): void
   [MutationTypes.PUSH_TASK_GROUPS](state: S, taskGroups: Array<TaskGroup>): void
   [MutationTypes.SET_TASK_GROUPS_META](state: S, meta: PaginateResponseMeta): void
+  [MutationTypes.SET_TASK](state: S, task: Task): void
 }
 
 export const mutations: MutationTree<RootState> & Mutations = {
@@ -106,6 +109,15 @@ export const mutations: MutationTree<RootState> & Mutations = {
   },
   [MutationTypes.SET_TASK_GROUPS_META] (state, meta) {
     state.taskGroups.meta = meta
+  },
+  [MutationTypes.SET_TASK] (state, task) {
+    state.taskGroups.items.forEach((taskGroup, i) => {
+      taskGroup.tasks.forEach((t, k) => {
+        if (t.uuid === task.uuid) {
+          Vue.set(state.taskGroups.items[i].tasks, k, task)
+        }
+      })
+    })
   }
 }
 
@@ -118,6 +130,7 @@ export enum ActionTypes {
   retrieveMe = 'retrieveMe',
   retrieveTaskGroups = 'retrieveTaskGroups',
   retrieveMoreTaskGroups = 'retrieveMoreTaskGroups',
+  setTask = 'setTask',
   createTask = 'createTask',
 }
 
@@ -139,6 +152,7 @@ export interface Actions<R = RootState> {
   [ActionTypes.retrieveMe]({ commit }: AugmentedActionContext): void
   [ActionTypes.retrieveTaskGroups]({ commit }: AugmentedActionContext): Promise<PaginateResponse<Task>>
   [ActionTypes.retrieveMoreTaskGroups]({ commit }: AugmentedActionContext): Promise<PaginateResponse<Task>> | void
+  [ActionTypes.setTask]({ commit }: AugmentedActionContext, task: Task): void
 }
 
 export const actions: ActionTree<RootState, RootState> & Actions = {
@@ -153,6 +167,9 @@ export const actions: ActionTree<RootState, RootState> & Actions = {
   },
   [ActionTypes.pushAuthProject] ({ commit }, project) {
     commit(MutationTypes.PUSH_AUTH_PROJECT, project)
+  },
+  [ActionTypes.setTask] ({ commit }, task) {
+    commit(MutationTypes.SET_TASK, task)
   },
   [ActionTypes.signOut] ({ dispatch }) {
     Cookie.remove('token')

@@ -58,10 +58,8 @@
 </template>
 
 <script lang="ts">
-  import { gql } from '@apollo/client/core'
   import { defineComponent } from '@nuxtjs/composition-api'
 
-  import { PaginateResponse } from '~/types/pagination'
   import { Task } from '~/types/task'
   import Comment from './Comment/index.vue'
   import allCommentsQuery from '@/apollo/queries/allComments.gql'
@@ -74,10 +72,6 @@
       NewCommentForm
     },
     props: {
-      comments: {
-        type: Object as () => PaginateResponse<Comment>,
-        required: true
-      },
       task: {
         type: Object as () => Task,
         required: true
