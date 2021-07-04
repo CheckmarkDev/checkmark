@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Mutations
   class CreateLike < BaseMutation
     null true
@@ -20,15 +22,13 @@ module Mutations
       ).first
 
       if like.present?
-        if like.active?
-          like.state = Like.states[:inactive]
-        else
-          like.state = Like.states[:active]
-        end
+        like.state = if like.active?
+                       Like.states[:inactive]
+                     else
+                       Like.states[:active]
+                     end
       else
-        if task.user == context[:current_user]
-          raise GraphQL::ExecutionError, 'Not allowed to like your own task.'
-        end
+        raise GraphQL::ExecutionError, 'Not allowed to like your own task.' if task.user == context[:current_user]
 
         like = task.likes.build(
           user: context[:current_user],

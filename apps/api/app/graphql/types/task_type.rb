@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class TaskType < Types::BaseObject
     field :uuid, ID, null: false
@@ -9,8 +11,6 @@ module Types
 
     field :likes, Types::LikeType.connection_type, null: true
 
-    def likes
-      object.likes
-    end
+    delegate :likes, to: :object
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class LikeType < Types::BaseObject
     field :uuid, ID, null: false
@@ -15,9 +17,7 @@ module Types
     end
 
     def task
-      if object.likeable_type == 'Task'
-        RecordLoader.for(Task).load(object.likeable_id)
-      end
+      RecordLoader.for(Task).load(object.likeable_id) if object.likeable_type == 'Task'
     end
   end
 end

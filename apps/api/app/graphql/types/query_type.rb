@@ -12,7 +12,7 @@ module Types
     field :all_links, Types::LinkType.connection_type, null: false, description: 'Return all links'
     field :random_users, [Types::UserType], null: false, description: 'Return 10 random users'
     field :all_comments, Types::CommentType.connection_type, null: false,
-    description: 'Return all comments for a task' do
+                                                             description: 'Return all comments for a task' do
       argument :task_uuid, String, required: true
     end
 
