@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex justify-between mb-2">
+    <div class="flex flex-col md:flex-row justify-between mb-2">
       <nuxt-link
         :to="{
           name: 'User',
