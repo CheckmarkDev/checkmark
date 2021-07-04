@@ -8,6 +8,9 @@ module Types
 
     # Add root-level fields here.
     # They will be entry points for queries on your schema.
+    field :user, Types::UserType, null: true do
+      argument :uuid, String, required: true
+    end
 
     field :all_links, Types::LinkType.connection_type, null: false, description: 'Return all links'
     field :random_users, [Types::UserType], null: false, description: 'Return 10 random users'
@@ -18,6 +21,10 @@ module Types
 
     field :all_likes, Types::LikeType.connection_type, null: false, description: 'Return all likes for a task' do
       argument :task_uuid, String, required: true
+    end
+
+    def user(uuid:)
+      User.find_by(uuid: uuid)
     end
 
     def all_links

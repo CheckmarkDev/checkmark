@@ -16,6 +16,8 @@ module Types
     field :avatar_url, String, null: false
     field :streak, Integer, null: false
 
+    field :projects, Types::ProjectType.connection_type, null: false
+
     delegate :avatar_url, to: :object
     delegate :streak, to: :object
   end
