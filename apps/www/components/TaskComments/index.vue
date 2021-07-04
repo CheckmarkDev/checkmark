@@ -59,11 +59,12 @@
 
 <script lang="ts">
   import { gql } from '@apollo/client/core'
-import { defineComponent } from '@nuxtjs/composition-api'
+  import { defineComponent } from '@nuxtjs/composition-api'
 
   import { PaginateResponse } from '~/types/pagination'
   import { Task } from '~/types/task'
   import Comment from './Comment/index.vue'
+  import allCommentsQuery from '@/apollo/queries/allComments.gql'
 
   import NewCommentForm from './NewCommentForm/index.vue'
 
@@ -83,28 +84,8 @@ import { defineComponent } from '@nuxtjs/composition-api'
       }
     },
     setup () {
-      const allComments = gql`
-        query GetAllComments ($taskUuid: String!) {
-          all_comments (taskUuid: $taskUuid) {
-            nodes {
-              uuid
-              content
-              created_at
-              user {
-                uuid
-                username
-                first_name
-                last_name
-                streak
-                avatar_url
-              }
-            }
-          }
-        }
-      `
-
       return {
-        allComments
+        allComments: allCommentsQuery
       }
     }
   })
