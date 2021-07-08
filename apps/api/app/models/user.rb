@@ -13,6 +13,7 @@ class User < ApplicationRecord
   has_many :streaks, dependent: :destroy
   has_many :projects, dependent: :destroy
   has_many :webhooks, dependent: :destroy
+  has_many :socials, dependent: :destroy
   has_one :email_notification, dependent: :destroy
   has_and_belongs_to_many :mentions, class_name: 'Task', join_table: 'task_mentions'
 

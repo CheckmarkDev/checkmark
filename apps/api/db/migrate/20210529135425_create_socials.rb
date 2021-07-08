@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateSocials < ActiveRecord::Migration[6.1]
   def up
     create_table :socials do |t|
@@ -5,6 +7,8 @@ class CreateSocials < ActiveRecord::Migration[6.1]
       t.string :name, index: { unique: true }, null: false
       t.string :title
       t.string :url, null: false
+      t.references :user, index: true, null: true
+      t.references :project, index: true, null: true
 
       t.timestamps
     end

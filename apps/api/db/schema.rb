@@ -118,6 +118,21 @@ ActiveRecord::Schema.define(version: 2021_06_27_210415) do
     t.index ["task_id"], name: "index_projects_tasks_on_task_id"
   end
 
+  create_table "socials", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.string "name", null: false
+    t.string "title"
+    t.string "url", null: false
+    t.bigint "user_id"
+    t.bigint "project_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_socials_on_name", unique: true
+    t.index ["project_id"], name: "index_socials_on_project_id"
+    t.index ["user_id"], name: "index_socials_on_user_id"
+    t.index ["uuid"], name: "index_socials_on_uuid", unique: true
+  end
+
   create_table "streaks", force: :cascade do |t|
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.bigint "user_id", null: false
