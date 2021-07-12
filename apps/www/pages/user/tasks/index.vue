@@ -1,29 +1,60 @@
 <template>
-  <div
-    v-infinite-scroll="loadMore"
-    class="flex flex-col dark:text-white"
-  >
-    <div class="flex items-center justify-between">
-      <h2 class="font-medium text-2xl mb-4">
-        {{ $trans('global.titles.feed') }}
-      </h2>
+  <div>
+    <apollo-query
+      :query="allTaskGroups"
+      :variables="{
+        username: $route.params.username
+      }"
+    >
+      <template
+        v-slot="{ result: { data, loading }, query, isLoading }"
+      >
+        <div
+          class="flex flex-col dark:text-white"
+        >
+          <div class="flex items-center justify-between">
+            <h2 class="font-medium text-2xl mb-4">
+              {{ $trans('global.titles.feed') }}
+            </h2>
 
-      <TaskGroupFilter />
-    </div>
+            <TaskGroupFilter />
+          </div>
 
-    <DateGroupedTaskGroups
-      :task-groups="taskGroups.data"
-      class="mb-8"
-    />
+          <template
+            v-if="data"
+          >
+            <DateGroupedTaskGroups
+              :task-groups="data.all_user_task_groups.nodes"
+              class="mb-8"
+            />
+
+            <button
+              v-if="data.all_user_task_groups.pageInfo.hasNextPage"
+              :disabled="!!(loading || isLoading)"
+              type="button"
+              class="btn btn-primary"
+              @click="loadMore(query, data, !!(loading || isLoading))"
+            >
+              Charger plus...
+            </button>
+          </template>
+        </div>
+      </template>
+    </apollo-query>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from '@nuxtjs/composition-api'
-  import { TaskGroup } from '~/types/taskGroup'
+  import { defineComponent, useRoute } from '@nuxtjs/composition-api'
+  import gql from 'graphql-tag'
+  import { UseQueryReturn } from '@vue/apollo-composable/dist'
+
   import { User } from '~/types/user'
   import TaskGroupFilter from '@/components/TaskGroupFilter/index.vue'
   import DateGroupedTaskGroups from '@/components/DateGroupedTaskGroups/index.vue'
+
+  // @ts-ignore
+  import user from '@/apollo/fragments/user.gql'
 
   export default defineComponent({
     components: {
@@ -32,17 +63,9 @@
     },
     data () {
       return {
-        user: null,
-        taskGroups: {
-          data: [],
-          meta: null
-        }
+        user: null
       } as {
-        user: User | null,
-        taskGroups: {
-          data: Array<TaskGroup>,
-          meta: any
-        }
+        user: User | null
       }
     },
     head () {
@@ -70,56 +93,105 @@
         ]
       }
     },
+    setup () {
+      const allTaskGroups = gql`
+        query GetUserAllTaskGroups ($username: String!, $after: String) {
+          all_user_task_groups (username: $username, after: $after) {
+            pageInfo {
+              hasNextPage
+              endCursor
+            }
+            nodes {
+              uuid
+              created_at
+              updated_at
+              user {
+                ...user
+              }
+              tasks {
+                uuid
+                content
+                state
+                source
+                created_at
+                updated_at
+                user {
+                  ...user
+                }
+                images {
+                  uuid
+                  url
+                  thumbnail_url
+                }
+                comments {
+                  nodes {
+                    uuid
+                  }
+                }
+                likes {
+                  nodes {
+                    uuid
+                    user {
+                      uuid
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        ${user}
+      `
+
+      const route = useRoute()
+      const username = route.value.params.username as string
+
+      function loadMore (query: UseQueryReturn<any, {
+        username: string,
+        endCursor: string
+      }>, data: any, loading: boolean) {
+        console.log('load more called', data)
+        if (loading) return
+        if (!data) return
+
+        const { endCursor } = data.all_user_task_groups.pageInfo
+
+        query.fetchMore({
+          variables: {
+            // @ts-ignore
+            after: endCursor,
+            username
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            console.log('ok', previousResult, fetchMoreResult)
+            return fetchMoreResult.all_user_task_groups.nodes.length ? {
+              all_user_task_groups: {
+                ...fetchMoreResult.all_user_task_groups,
+                nodes: [
+                  ...previousResult.all_user_task_groups.nodes,
+                  ...fetchMoreResult.all_user_task_groups.nodes
+                ]
+              }
+            } : previousResult
+          }
+        })
+      }
+
+      return {
+        loadMore,
+        allTaskGroups
+      }
+    },
     async asyncData ({ $axios, route }) {
       const { username } = route.params
-      const [user, taskGroups] = await Promise.all([
+      const [user] = await Promise.all([
         $axios.$get(`/users/${username}`),
-        $axios.$get(`/users/${username}/task_groups`)
       ])
 
       return {
         user,
-        taskGroups
       }
-    },
-    mounted () {
-      this.$mitt.on('update-tasks', this.updateTasks)
-    },
-    beforeDestroy () {
-      this.$mitt.off('update-tasks', this.updateTasks)
-    },
-    methods: {
-      loadMore () {
-        if (this.taskGroups.meta.current_page + 1 > this.taskGroups.meta.total_pages) return
-
-        const { username } = this.$route.params
-        const { state } = this.$accessor.project.getFilters
-        this.$axios.$get(`/users/${username}/task_groups`, {
-          params: {
-            page: this.taskGroups.meta.current_page + 1,
-            state
-          }
-        })
-          .then(res => {
-            this.taskGroups.data = [
-              ...this.taskGroups.data,
-              ...res.data
-            ]
-            this.taskGroups.meta = res.meta
-          })
-      },
-      updateTasks () {
-        const { username } = this.$route.params
-        const { state } = this.$accessor.project.getFilters
-        this.$axios.$get(`/users/${username}/task_groups`, {
-          params: {
-            state
-          }
-        })
-          .then(res => {
-            this.taskGroups = res
-          })
-      },
     }
   })
 </script>

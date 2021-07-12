@@ -17,6 +17,9 @@ module Types
     end
 
     field :all_task_groups, Types::TaskGroupType.connection_type, null: false
+    field :all_user_task_groups, Types::TaskGroupType.connection_type, null: false do
+      argument :username, String, required: true
+    end
     field :all_links, Types::LinkType.connection_type, null: false, description: 'Return all links'
     field :random_users, [Types::UserType], null: false, description: 'Return 10 random users'
     field :all_comments, Types::CommentType.connection_type, null: false,
@@ -67,6 +70,18 @@ module Types
         .includes([:user])
         .where(user: {
           status: User.statuses[:validated]
+        })
+        .order(created_at: :desc)
+    end
+
+    def all_user_task_groups(username:)
+      TaskGroup
+        .includes([:user])
+        .where(user: {
+          status: User.statuses[:validated],
+          user: {
+            username: username
+          }
         })
         .order(created_at: :desc)
     end

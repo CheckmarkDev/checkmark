@@ -42,6 +42,8 @@
   import NewTask from '@/components/NewTask/index.vue'
   import SideNavigation from '@/components/Home/SideNavigation/index.vue'
   import HomeHero from '@/components/Home/HomeHero/index.vue'
+
+  // @ts-ignore
   import user from '@/apollo/fragments/user.gql'
 
   export default defineComponent({
@@ -119,6 +121,8 @@
       const { fetchMore, result } = useQuery(allTaskGroups)
 
       function loadMore () {
+        if (!result.value) return
+
         fetchMore({
           variables: {
             after: result.value.all_task_groups.pageInfo.endCursor
