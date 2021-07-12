@@ -12,6 +12,10 @@ module Types
       argument :uuid, String, required: true
     end
 
+    field :task, Types::TaskType, null: true do
+      argument :uuid, String, required: true
+    end
+
     field :all_task_groups, Types::TaskGroupType.connection_type, null: false
     field :all_links, Types::LinkType.connection_type, null: false, description: 'Return all links'
     field :random_users, [Types::UserType], null: false, description: 'Return 10 random users'
@@ -22,6 +26,10 @@ module Types
 
     field :all_likes, Types::LikeType.connection_type, null: false, description: 'Return all likes for a task' do
       argument :task_uuid, String, required: true
+    end
+
+    def task(uuid:)
+      Task.find_by(uuid: uuid)
     end
 
     def user(uuid:)

@@ -18,7 +18,7 @@
             :query="allTaskGroups"
           >
             <template
-              v-slot="{ result: { data, loading } }"
+              v-slot="{ result: { data } }"
             >
               <DateGroupedTaskGroups
                 v-if="data"
@@ -27,10 +27,6 @@
               />
             </template>
           </apollo-query>
-          <!-- <DateGroupedTaskGroups
-            :task-groups="$accessor.getTaskGroups"
-            class="mb-8"
-          /> -->
         </section>
       </div>
     </div>
@@ -38,7 +34,8 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from '@nuxtjs/composition-api'
+  import { defineComponent, ref } from '@nuxtjs/composition-api'
+  import { useQuery, useResult } from '@vue/apollo-composable/dist'
   import gql from 'graphql-tag'
 
   import DateGroupedTaskGroups from '@/components/DateGroupedTaskGroups/index.vue'
@@ -70,8 +67,12 @@
     },
     setup () {
       const allTaskGroups = gql`
-        query GetAllTaskGroups {
-          all_task_groups {
+        query GetAllTaskGroups ($after: String) {
+          all_task_groups (after: $after) {
+            pageInfo {
+              hasNextPage
+              endCursor
+            }
             nodes {
               uuid
               created_at
@@ -115,13 +116,30 @@
         ${user}
       `
 
-      return {
-        allTaskGroups
+      const { fetchMore, result } = useQuery(allTaskGroups)
+
+      function loadMore () {
+        fetchMore({
+          variables: {
+            after: result.value.all_task_groups.pageInfo.endCursor
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            return fetchMoreResult.all_task_groups.nodes.length ? {
+              all_task_groups: {
+                ...fetchMoreResult.all_task_groups,
+                nodes: [
+                  ...previousResult.all_task_groups.nodes,
+                  ...fetchMoreResult.all_task_groups.nodes
+                ]
+              }
+            } : previousResult
+          }
+        })
       }
-    },
-    methods: {
-      loadMore () {
-        this.$accessor.retrieveMoreTaskGroups()
+
+      return {
+        loadMore,
+        allTaskGroups
       }
     }
   })
