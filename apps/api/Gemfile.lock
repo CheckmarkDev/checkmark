@@ -66,6 +66,9 @@ GEM
       zeitwerk (~> 2.3)
     apipie-rails (0.5.18)
       rails (>= 4.1)
+    apollo_upload_server (2.0.5)
+      actionpack (>= 4.2)
+      graphql (>= 1.8)
     ast (2.4.2)
     aws-eventstream (1.1.1)
     aws-partitions (1.451.0)
@@ -267,6 +270,7 @@ PLATFORMS
 DEPENDENCIES
   active_record_doctor
   apipie-rails
+  apollo_upload_server (= 2.0.5)
   aws-sdk-s3
   bcrypt (~> 3.1.7)
   bootsnap (>= 1.4.2)

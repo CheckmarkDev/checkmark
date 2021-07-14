@@ -45,6 +45,10 @@
 
   // @ts-ignore
   import user from '@/apollo/fragments/user.gql'
+  // @ts-ignore
+  import task from '@/apollo/fragments/task.gql'
+  // @ts-ignore
+  import allTasks from '@/apollo/queries/allTasks.gql'
 
   export default defineComponent({
     components: {
@@ -69,53 +73,10 @@
     },
     setup () {
       const allTaskGroups = gql`
-        query GetAllTaskGroups ($after: String) {
-          all_task_groups (after: $after) {
-            pageInfo {
-              hasNextPage
-              endCursor
-            }
-            nodes {
-              uuid
-              created_at
-              updated_at
-              user {
-                ...user
-              }
-              tasks {
-                uuid
-                content
-                state
-                source
-                created_at
-                updated_at
-                user {
-                  ...user
-                }
-                images {
-                  uuid
-                  url
-                  thumbnail_url
-                }
-                comments {
-                  nodes {
-                    uuid
-                  }
-                }
-                likes {
-                  nodes {
-                    uuid
-                    user {
-                      uuid
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-
         ${user}
+        ${task}
+
+        ${allTasks}
       `
 
       const { fetchMore, result } = useQuery(allTaskGroups)

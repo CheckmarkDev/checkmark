@@ -1,0 +1,19 @@
+query GetAllTaskGroups ($after: String) {
+  all_task_groups (after: $after) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    nodes {
+      uuid
+      created_at
+      updated_at
+      user {
+        ...user
+      }
+      tasks {
+        ...task
+      }
+    }
+  }
+}
