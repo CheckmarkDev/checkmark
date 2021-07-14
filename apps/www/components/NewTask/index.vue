@@ -204,6 +204,11 @@
           taskGroups[taskGroupIndex].tasks.unshift(task.task)
         }
 
+        /**
+         * TODO: Handle the case where the task group does not exist
+         * because we're on a new day.
+         */
+
         cache.writeQuery({
           query: allTasksQuery,
           data
@@ -217,7 +222,8 @@
         }
 
         formData.value.content = null
-        toasted.success(trans('user.paragraphs.commented'))
+        formData.value.images = []
+        toasted.success(trans('home.paragraphs.task_added'))
       }
 
       function updateImages (e: any) {
