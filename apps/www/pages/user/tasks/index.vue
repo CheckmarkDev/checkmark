@@ -3,7 +3,8 @@
     <apollo-query
       :query="allTaskGroups"
       :variables="{
-        username: $route.params.username
+        username: $route.params.username,
+        state: $accessor.project.getFilters.state
       }"
     >
       <template
@@ -55,6 +56,7 @@
 
   // @ts-ignore
   import user from '@/apollo/fragments/user.gql'
+  import useAccessor from '@/composables/useAccessor'
 
   export default defineComponent({
     components: {
@@ -94,9 +96,10 @@
       }
     },
     setup () {
+      const accessor = useAccessor()
       const allTaskGroups = gql`
-        query GetUserAllTaskGroups ($username: String!, $after: String) {
-          all_user_task_groups (username: $username, after: $after) {
+        query GetUserAllTaskGroups ($username: String!, $state: String, $after: String) {
+          all_user_task_groups (username: $username, state: $state, after: $after) {
             pageInfo {
               hasNextPage
               endCursor
@@ -108,7 +111,7 @@
               user {
                 ...user
               }
-              tasks {
+              tasks (state: $state) {
                 uuid
                 content
                 state
@@ -151,7 +154,6 @@
         username: string,
         endCursor: string
       }>, data: any, loading: boolean) {
-        console.log('load more called', data)
         if (loading) return
         if (!data) return
 
@@ -161,10 +163,10 @@
           variables: {
             // @ts-ignore
             after: endCursor,
-            username
+            username,
+            state: accessor.project.getFilters.state
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
-            console.log('ok', previousResult, fetchMoreResult)
             return fetchMoreResult.all_user_task_groups.nodes.length ? {
               all_user_task_groups: {
                 ...fetchMoreResult.all_user_task_groups,

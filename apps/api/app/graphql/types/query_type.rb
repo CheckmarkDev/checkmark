@@ -19,6 +19,11 @@ module Types
     field :all_task_groups, Types::TaskGroupType.connection_type, null: false
     field :all_user_task_groups, Types::TaskGroupType.connection_type, null: false do
       argument :username, String, required: true
+      argument :state, String, required: false
+    end
+    field :all_project_task_groups, Types::TaskGroupType.connection_type, null: false do
+      argument :slug, String, required: true
+      argument :state, String, required: false
     end
     field :all_links, Types::LinkType.connection_type, null: false, description: 'Return all links'
     field :random_users, [Types::UserType], null: false, description: 'Return 10 random users'
@@ -74,16 +79,37 @@ module Types
         .order(created_at: :desc)
     end
 
-    def all_user_task_groups(username:)
-      TaskGroup
-        .includes([:user])
+    def all_user_task_groups(username:, state:)
+      task_groups = TaskGroup
+        .includes([:user, :tasks])
         .where(user: {
           status: User.statuses[:validated],
-          user: {
-            username: username
-          }
+          username: username
         })
-        .order(created_at: :desc)
+
+      if state.present?
+        task_groups = task_groups.where(tasks: { state: state })
+      end
+
+      task_groups = task_groups.order(created_at: :desc)
+      task_groups
+    end
+
+    def all_project_task_groups(slug:, state:)
+      task_groups = TaskGroup
+        .includes([:user])
+        .where(user: {
+          status: User.statuses[:validated]
+        })
+        .joins(tasks: :projects)
+        .where(projects: { slug: slug })
+
+      if state.present?
+        task_groups = task_groups.where(tasks: { state: state })
+      end
+
+      task_groups = task_groups.order(created_at: :desc)
+      task_groups
     end
   end
 end

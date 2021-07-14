@@ -4,8 +4,10 @@ FROM ruby:${RUBY_VERSION} as release
 
 WORKDIR /api
 
-RUN apt-get update -qq && \
-  apt-get install -y libxslt-dev libxml2-dev build-essential patch ruby-dev zlib1g-dev liblzma-dev libpq-dev
+RUN apt-get update -qq \
+  && apt-get install -y libxslt-dev libxml2-dev build-essential patch ruby-dev zlib1g-dev liblzma-dev libpq-dev \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
 
 COPY Gemfile Gemfile.lock ./
 
