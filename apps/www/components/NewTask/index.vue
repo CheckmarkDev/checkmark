@@ -107,12 +107,11 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, ref, toRefs } from '@nuxtjs/composition-api'
+  import { computed, defineComponent, ref } from '@nuxtjs/composition-api'
   import gql from 'graphql-tag'
 
   import TaskCheck from '@/components/TaskCheck/index.vue'
   import { TaskState } from '~/types/task'
-  import useValidationProvider from '~/composables/useValidationProvider'
 
   // @ts-ignore
   import user from '@/apollo/fragments/user.gql'
@@ -240,58 +239,6 @@
         done
       }
     }
-    // methods: {
-    //   // @ts-ignore
-      // updateImages (e) {
-      //   this.formData.images = e.target.files
-      // },
-    //   submitted () {
-    //     // @ts-ignore
-    //     this.$refs.observer.validate()
-    //       .then((valid: boolean) => {
-    //         if (!valid) return
-
-    //         const { state, content, images } = this.formData
-
-    //         const formData = new FormData()
-    //         formData.append('state', state)
-    //         if (content.trim()) {
-    //           formData.append('content', content.trim())
-    //         }
-
-    //         // @ts-ignore
-    //         if (images) {
-    //           images.forEach((file, k) => {
-    //             formData.append('images[]', file)
-    //           })
-    //         }
-
-    //         this.$wait.start('creating task')
-    //         this.$axios.post('/me/tasks', formData, {
-    //           headers: {
-    //             'Content-Type': 'multipart/form-data'
-    //           }
-    //         })
-    //           .then(() => {
-    //             this.formData.content = ''
-    //             this.formData.images = []
-    //             this.$toasted.success(this.$trans('home.paragraphs.task_added'))
-    //             this.$mitt.emit('update-tasks')
-
-    //             // @ts-ignore
-    //             this.$refs.observer.reset()
-    //           })
-    //           .catch(err => {
-    //             if (!err.response) return
-
-    //             useValidationProvider(err, this.$refs)
-    //           })
-    //           .finally(() => {
-    //             this.$wait.end('creating task')
-    //           })
-    //       })
-    //   }
-    // }
   })
 </script>
 
