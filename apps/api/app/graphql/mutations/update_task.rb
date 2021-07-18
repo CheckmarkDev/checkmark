@@ -27,17 +27,19 @@ module Mutations
         task.state = state
       end
 
-      task.images.each do |image|
-        image.purge unless images.include?(image.uuid)
-      end
+      if !images.nil?
+        task.images.each do |image|
+          image.purge unless images.include?(image.uuid)
+        end
 
-      images.each do |image|
-        image_infos = image.as_json
-        task.images.attach(
-          io: image.to_io,
-          filename: image_infos['original_filename'],
-          content_type: image_infos['content_type']
-        ) unless image.is_a? String
+        images.each do |image|
+          image_infos = image.as_json
+          task.images.attach(
+            io: image.to_io,
+            filename: image_infos['original_filename'],
+            content_type: image_infos['content_type']
+          ) unless image.is_a? String
+        end
       end
 
       if task.save
