@@ -4,6 +4,7 @@
     :variables="{
       content: formData.content,
       state: formData.state,
+      images: formData.images
     }"
     :update="updateCache"
     @done="done"
@@ -164,8 +165,8 @@
       }
 
       const createTask = gql`
-        mutation CreateTask ($content: String!, $state: String!) {
-          create_task (input: { content: $content, state: $state }) {
+        mutation CreateTask ($content: String!, $state: String!, $images: [Upload!]) {
+          create_task (input: { content: $content, state: $state, images: $images }) {
             task {
               ...task
               task_group {

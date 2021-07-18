@@ -17,13 +17,24 @@ module Mutations
       true
     end
 
-    def resolve(content:, state:)
+    def resolve(content:, state:, images: nil)
       task = Task.new(
         user: context[:current_user],
         state: state,
         source: Task.sources[:checkmark],
         content: content
       )
+
+      if images.present?
+        images.each do |image|
+          image_infos = image.as_json
+          task.images.attach(
+            io: image.to_io,
+            filename: image_infos['original_filename'],
+            content_type: image_infos['content_type']
+          ) unless image.is_a? String
+        end
+      end
 
       if task.save
         # Successful creation, return the created object with no errors
