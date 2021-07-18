@@ -107,8 +107,8 @@
     },
     setup (props, { refs, emit }) {
       const updateTask = gql`
-        mutation updateTask ($taskUuid: String!, $content: String, $state: String) {
-          update_task (input: {taskUuid: $taskUuid, content: $content, state: $state }) {
+        mutation updateTask ($taskUuid: String!, $content: String, $state: String, $images: [Upload!]) {
+          update_task (input: {taskUuid: $taskUuid, content: $content, state: $state, images: $images }) {
             task {
               ...task
               task_group {
@@ -159,7 +159,9 @@
               variables: {
                 taskUuid: task.value.uuid,
                 content,
-                state
+                state,
+                // @ts-ignore
+                images: editableImages.value.map(image => image.uuid || image.file)
               }
             })
 
