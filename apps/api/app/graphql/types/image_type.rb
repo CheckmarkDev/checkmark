@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class ImageType < Types::BaseObject
     field :uuid, ID, null: false
@@ -10,12 +12,12 @@ module Types
 
     def thumbnail_url
       Rails.application.routes.url_helpers.url_for(if object.variable?
-        object.variant(resize_to_fill: [
-      720, 405
-      ])
-      else
-        object
-      end)
+                                                     object.variant(resize_to_fill: [
+                                                   720, 405
+                                                   ])
+                                                   else
+                                                     object
+                                                   end)
     end
   end
 end

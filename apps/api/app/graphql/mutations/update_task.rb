@@ -20,25 +20,23 @@ module Mutations
 
     def resolve(task_uuid:, content: nil, state: nil, images: nil)
       task = Task.find_by(uuid: task_uuid)
-      if content.present?
-        task.content = content
-      end
-      if state.present?
-        task.state = state
-      end
+      task.content = content if content.present?
+      task.state = state if state.present?
 
-      if !images.nil?
+      unless images.nil?
         task.images.each do |image|
           image.purge unless images.include?(image.uuid)
         end
 
         images.each do |image|
           image_infos = image.as_json
+          next if image.is_a? String
+
           task.images.attach(
             io: image.to_io,
             filename: image_infos['original_filename'],
             content_type: image_infos['content_type']
-          ) unless image.is_a? String
+          )
         end
       end
 

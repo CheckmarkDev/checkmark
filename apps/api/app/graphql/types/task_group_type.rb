@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class TaskGroupType < Types::BaseObject
     field :uuid, ID, null: false
@@ -15,9 +17,7 @@ module Types
 
     def tasks(state: nil)
       tasks = object.tasks
-      if state.present?
-        tasks = tasks.where(state: state)
-      end
+      tasks = tasks.where(state: state) if state.present?
 
       tasks
     end

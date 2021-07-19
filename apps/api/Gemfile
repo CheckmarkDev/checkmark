@@ -37,9 +37,9 @@ gem 'sidekiq'
 gem 'validate_url'
 gem 'whenever', require: false
 
+gem 'apollo_upload_server', '2.0.5'
 gem 'graphql'
 gem 'graphql-batch'
-gem 'apollo_upload_server', '2.0.5'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

@@ -70,46 +70,40 @@ module Types
       Task.find_by(uuid: task_uuid).likes.order(created_at: :desc)
     end
 
-    def all_task_groups()
+    def all_task_groups
       TaskGroup
         .includes([:user])
         .where(user: {
-          status: User.statuses[:validated]
-        })
+                 status: User.statuses[:validated]
+               })
         .order(created_at: :desc)
     end
 
     def all_user_task_groups(username:, state:)
       task_groups = TaskGroup
-        .includes([:user, :tasks])
+        .includes(%i[user tasks])
         .where(user: {
-          status: User.statuses[:validated],
-          username: username
-        })
+                 status: User.statuses[:validated],
+                 username: username
+               })
 
-      if state.present?
-        task_groups = task_groups.where(tasks: { state: state })
-      end
+      task_groups = task_groups.where(tasks: { state: state }) if state.present?
 
-      task_groups = task_groups.order(created_at: :desc)
-      task_groups
+      task_groups.order(created_at: :desc)
     end
 
     def all_project_task_groups(slug:, state:)
       task_groups = TaskGroup
         .includes([:user])
         .where(user: {
-          status: User.statuses[:validated]
-        })
+                 status: User.statuses[:validated]
+               })
         .joins(tasks: :projects)
         .where(projects: { slug: slug })
 
-      if state.present?
-        task_groups = task_groups.where(tasks: { state: state })
-      end
+      task_groups = task_groups.where(tasks: { state: state }) if state.present?
 
-      task_groups = task_groups.order(created_at: :desc)
-      task_groups
+      task_groups.order(created_at: :desc)
     end
   end
 end

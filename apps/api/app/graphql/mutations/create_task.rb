@@ -28,11 +28,13 @@ module Mutations
       if images.present?
         images.each do |image|
           image_infos = image.as_json
+          next if image.is_a? String
+
           task.images.attach(
             io: image.to_io,
             filename: image_infos['original_filename'],
             content_type: image_infos['content_type']
-          ) unless image.is_a? String
+          )
         end
       end
 

@@ -149,11 +149,6 @@
           .then((valid: boolean) => {
             if (!valid) return
             const { content, state } = formData
-            // const images = []
-
-            // editableImages.value.forEach(image => {
-            //   images.push(image.uuid || image.file)
-            // })
 
             mutate({
               variables: {
@@ -164,21 +159,6 @@
                 images: editableImages.value.map(image => image.uuid || image.file)
               }
             })
-
-            // $axios.put(`/me/tasks/${task.uuid}`, data, {
-            //   headers: {
-            //     'Content-Type': 'multipart/form-data'
-            //   }
-            // })
-            //   .then(() => {
-            //     data.content = ''
-            //     $toasted.success($trans('home.paragraphs.task_edited'))
-            //     $mitt.emit('update-tasks')
-            //     $emit('close')
-            //   })
-            //   .finally(() => {
-            //     $wait.end('updating task')
-            //   })
           })
       }
 
