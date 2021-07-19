@@ -171,6 +171,11 @@
               ...task
               task_group {
                 uuid
+                created_at
+                updated_at
+                user {
+                  ...user
+                }
               }
             }
           }
@@ -202,16 +207,26 @@
         const taskGroupIndex = taskGroups.findIndex(node => node.uuid === task.task.task_group.uuid)
         if (taskGroupIndex !== -1) {
           taskGroups[taskGroupIndex].tasks.unshift(task.task)
-        }
+        } else {
+          /**
+          * Create a new task group because we don't have it yet
+          */
+          const taskGroup = {
+            ...task.task.task_group,
+            tasks: [task.task]
+          }
 
-        /**
-         * TODO: Handle the case where the task group does not exist
-         * because we're on a new day.
-         */
+          taskGroups.unshift(taskGroup)
+        }
 
         cache.writeQuery({
           query: allTasksQuery,
-          data
+          data: {
+            all_task_groups: {
+              ...data.all_task_groups,
+              nodes: taskGroups
+            }
+          }
         })
       }
 
