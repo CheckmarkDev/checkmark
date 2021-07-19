@@ -37,6 +37,7 @@ gem 'sidekiq'
 gem 'validate_url'
 gem 'whenever', require: false
 
+gem 'apollo_upload_server', '2.0.5'
 gem 'graphql'
 gem 'graphql-batch'
 

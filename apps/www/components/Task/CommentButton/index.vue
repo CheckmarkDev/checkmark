@@ -17,8 +17,8 @@
         class="select-none"
       >
       <div
-        v-if="task.metrics.comments > 0"
-        v-text="task.metrics.comments"
+        v-if="task.comments.nodes.length > 0"
+        v-text="task.comments.nodes.length"
         class="comment-button__badge absolute flex items-center justify-center bg-blue-500 text-white rounded-full w-5 h-5 text-xs"
       />
     </div>

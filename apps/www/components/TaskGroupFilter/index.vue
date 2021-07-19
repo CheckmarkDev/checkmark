@@ -65,15 +65,12 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, readonly, ref, toRefs } from '@nuxtjs/composition-api'
+  import { defineComponent, readonly, ref } from '@nuxtjs/composition-api'
   import { ChevronDownIcon } from 'vue-feather-icons'
-  import useAxios from '~/composables/useAxios'
-  import useWait from '~/composables/useWait'
-  import useToasted from '~/composables/useToasted'
   import useMitt from '~/composables/useMitt'
   import useICU from '~/composables/useICU'
   import useAccessor from '~/composables/useAccessor'
-  import { Task, TaskState } from '~/types/task'
+  import { TaskState } from '~/types/task'
   import TaskCheck from '@/components/TaskCheck/index.vue'
 
   export default defineComponent({
@@ -81,7 +78,7 @@
       ChevronDownIcon,
       TaskCheck
     },
-    setup (props) {
+    setup () {
       const open = ref(false)
       const mitt = useMitt()
       const trans = useICU()
