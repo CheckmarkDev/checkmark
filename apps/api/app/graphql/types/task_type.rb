@@ -14,6 +14,7 @@ module Types
     field :user, Types::UserType, null: false
     field :task_group, Types::TaskGroupType, null: false
     field :images, [Types::ImageType], null: false
+    field :projects, [Types::ProjectType], null: false
 
     def user
       RecordLoader.for(User).load(object.user_id)
@@ -26,5 +27,6 @@ module Types
     delegate :likes, to: :object
     delegate :comments, to: :object
     delegate :images, to: :object
+    delegate :projects, to: :object
   end
 end

@@ -8,6 +8,13 @@ fragment task on Task {
   user {
     ...user
   }
+  projects {
+    slug
+    name
+    main_color
+    avatar_url
+    url
+  }
   images {
     uuid
     url
