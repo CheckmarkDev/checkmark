@@ -14,10 +14,19 @@
             class="mb-8"
           />
 
-          <DateGroupedTaskGroups
-            :task-groups="$accessor.getTaskGroups"
-            class="mb-8"
-          />
+          <apollo-query
+            :query="allTaskGroups"
+          >
+            <template
+              v-slot="{ result: { data } }"
+            >
+              <DateGroupedTaskGroups
+                v-if="data"
+                :task-groups="data.all_task_groups.nodes"
+                class="mb-8"
+              />
+            </template>
+          </apollo-query>
         </section>
       </div>
     </div>
@@ -25,11 +34,21 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from '@nuxtjs/composition-api'
+  import { defineComponent, ref } from '@nuxtjs/composition-api'
+  import { useQuery, useResult } from '@vue/apollo-composable/dist'
+  import gql from 'graphql-tag'
+
   import DateGroupedTaskGroups from '@/components/DateGroupedTaskGroups/index.vue'
   import NewTask from '@/components/NewTask/index.vue'
   import SideNavigation from '@/components/Home/SideNavigation/index.vue'
   import HomeHero from '@/components/Home/HomeHero/index.vue'
+
+  // @ts-ignore
+  import user from '@/apollo/fragments/user.gql'
+  // @ts-ignore
+  import task from '@/apollo/fragments/task.gql'
+  // @ts-ignore
+  import allTasks from '@/apollo/queries/allTasks.gql'
 
   export default defineComponent({
     components: {
@@ -52,21 +71,40 @@
         ]
       }
     },
-    async middleware ({ store }) {
-      await store.dispatch('retrieveTaskGroups')
-    },
-    mounted () {
-      this.$mitt.on('update-tasks', this.updateTasks)
-    },
-    beforeDestroy () {
-      this.$mitt.off('update-tasks', this.updateTasks)
-    },
-    methods: {
-      updateTasks () {
-        this.$accessor.retrieveTaskGroups()
-      },
-      loadMore () {
-        this.$accessor.retrieveMoreTaskGroups()
+    setup () {
+      const allTaskGroups = gql`
+        ${user}
+        ${task}
+
+        ${allTasks}
+      `
+
+      const { fetchMore, result } = useQuery(allTaskGroups)
+
+      function loadMore () {
+        if (!result.value) return
+
+        fetchMore({
+          variables: {
+            after: result.value.all_task_groups.pageInfo.endCursor
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            return fetchMoreResult.all_task_groups.nodes.length ? {
+              all_task_groups: {
+                ...fetchMoreResult.all_task_groups,
+                nodes: [
+                  ...previousResult.all_task_groups.nodes,
+                  ...fetchMoreResult.all_task_groups.nodes
+                ]
+              }
+            } : previousResult
+          }
+        })
+      }
+
+      return {
+        loadMore,
+        allTaskGroups
       }
     }
   })

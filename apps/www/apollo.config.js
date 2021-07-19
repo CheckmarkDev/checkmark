@@ -1,10 +1,16 @@
+import { InMemoryCache } from 'apollo-cache-inmemory'
 import cookieparser from 'cookieparser'
 import jwt from 'jsonwebtoken'
 
 export default function(ctx) {
   const { baseURL, browserBaseURL } = ctx.$config.axios
 
+  const cache = new InMemoryCache({
+    dataIdFromObject: object => object.uuid
+  })
+
   return {
+    cache,
     httpEndpoint: `${process.server ? baseURL : browserBaseURL}/graphql`,
     getAuth: () => {
       const { req, store } = ctx

@@ -1,49 +1,76 @@
 <template>
-  <div
-    v-infinite-scroll="loadMore"
-    class="flex flex-col"
-  >
-    <!-- Screenshots -->
-    <ProjectScreenshots
-      v-if="$accessor.project.getProject.screenshots.length > 0"
-      class="mb-8"
-    />
-
-    <div class="flex items-center justify-between">
-      <h2 class="font-medium text-2xl mb-4">
-        {{ $trans('global.titles.feed') }}
-      </h2>
-
-      <TaskGroupFilter />
-    </div>
-
-    <template
-      v-if="filteredTaskGroups.data.length"
+  <div>
+    <apollo-query
+      :query="allTaskGroups"
+      :variables="{
+        slug: $route.params.slug,
+        state: $accessor.project.getFilters.state
+      }"
     >
-      <DateGroupedTaskGroups
-        :task-groups="filteredTaskGroups.data"
-        class="mb-8"
-      />
-    </template>
-    <template
-      v-else
-    >
-      <p
-        v-text="$accessor.project.getFilters.state
-          ? $trans('project.paragraphs.no_tasks_filter')
-          : $trans('project.paragraphs.no_tasks')"
-      />
-    </template>
+      <template
+        v-slot="{ result: { data, loading }, query, isLoading }"
+      >
+        <div
+          class="flex flex-col"
+        >
+          <!-- Screenshots -->
+          <ProjectScreenshots
+            v-if="$accessor.project.getProject.screenshots.length > 0"
+            class="mb-8"
+          />
+
+          <div class="flex items-center justify-between">
+            <h2 class="font-medium text-2xl mb-4">
+              {{ $trans('global.titles.feed') }}
+            </h2>
+
+            <TaskGroupFilter />
+          </div>
+
+          <template
+            v-if="data"
+          >
+            <template v-if="data.all_project_task_groups.nodes.length">
+              <DateGroupedTaskGroups
+                :task-groups="data.all_project_task_groups.nodes"
+                class="mb-8"
+              />
+
+              <button
+                v-if="data.all_project_task_groups.pageInfo.hasNextPage"
+                :disabled="!!(loading || isLoading)"
+                type="button"
+                class="btn btn-primary"
+                @click="loadMore(query, data, !!(loading || isLoading))"
+              >
+                Charger plus...
+              </button>
+            </template>
+            <template v-else>
+              <p
+                v-text="$accessor.project.getFilters.state
+                  ? $trans('project.paragraphs.no_tasks_filter')
+                  : $trans('project.paragraphs.no_tasks')"
+              />
+            </template>
+          </template>
+        </div>
+      </template>
+    </apollo-query>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from '@nuxtjs/composition-api'
-  import { TaskGroup } from '~/types/taskGroup'
+  import { defineComponent, useRoute } from '@nuxtjs/composition-api'
+  import gql from 'graphql-tag'
+  import { UseQueryReturn } from '@vue/apollo-composable/dist'
   import DateGroupedTaskGroups from '@/components/DateGroupedTaskGroups/index.vue'
   import ProjectScreenshots from '@/components/Project/ProjectScreenshots/index.vue'
   import TaskGroupFilter from '@/components/TaskGroupFilter/index.vue'
-  import { PaginateResponse } from '~/types/pagination'
+
+  // @ts-ignore
+  import user from '@/apollo/fragments/user.gql'
+  import useAccessor from '@/composables/useAccessor'
 
   export default defineComponent({
     components: {
@@ -51,86 +78,94 @@
       DateGroupedTaskGroups,
       ProjectScreenshots
     },
-    data () {
-      return {
-        taskGroups: null
-      } as {
-        taskGroups: PaginateResponse<TaskGroup>|null
-      }
-    },
-    async asyncData ({ $axios, route }) {
-      const { slug } = route.params
-      const [taskGroups] = await Promise.all([
-        $axios.$get(`/projects/${slug}/task_groups`),
-      ])
-
-      return {
-        taskGroups
-      }
-    },
-    computed: {
-      /**
-       * Returns a filtered version of the task groups
-       * excluding the tasks that do not belong to this project.
-       */
-      filteredTaskGroups () {
-        return {
-          ...this.taskGroups,
-          data: this.taskGroups.data.map(taskGroup => ({
-            ...taskGroup,
-            tasks: taskGroup.tasks
-              .filter(task => task.projects
-                .map(project => project.slug)
-                .includes(this.$route.params.slug)
-              )
-          }))
+    setup () {
+      const accessor = useAccessor()
+      const allTaskGroups = gql`
+        query GetProjectAllTaskGroups ($slug: String!, $state: String, $after: String) {
+          all_project_task_groups (slug: $slug, state: $state, after: $after) {
+            pageInfo {
+              hasNextPage
+              endCursor
+            }
+            nodes {
+              uuid
+              created_at
+              updated_at
+              user {
+                ...user
+              }
+              tasks (state: $state) {
+                uuid
+                content
+                state
+                source
+                created_at
+                updated_at
+                user {
+                  ...user
+                }
+                images {
+                  uuid
+                  url
+                  thumbnail_url
+                }
+                comments {
+                  nodes {
+                    uuid
+                  }
+                }
+                likes {
+                  nodes {
+                    uuid
+                    user {
+                      uuid
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
+
+        ${user}
+      `
+
+      const route = useRoute()
+      const slug = route.value.params.slug as string
+
+      function loadMore (query: UseQueryReturn<any, {
+        slug: string,
+        endCursor: string
+      }>, data: any, loading: boolean) {
+        if (loading) return
+        if (!data) return
+
+        const { endCursor } = data.all_project_task_groups.pageInfo
+
+        query.fetchMore({
+          variables: {
+            // @ts-ignore
+            after: endCursor,
+            slug,
+            state: accessor.project.getFilters.state
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            return fetchMoreResult.all_project_task_groups.nodes.length ? {
+              all_project_task_groups: {
+                ...fetchMoreResult.all_project_task_groups,
+                nodes: [
+                  ...previousResult.all_project_task_groups.nodes,
+                  ...fetchMoreResult.all_project_task_groups.nodes
+                ]
+              }
+            } : previousResult
+          }
+        })
       }
-    },
-    mounted () {
-      this.$mitt.on('update-tasks', this.fetchTaskGroups)
-    },
-    beforeDestroy () {
-      this.$mitt.off('update-tasks', this.fetchTaskGroups)
-    },
-    methods: {
-      fetchTaskGroups (params = {}) {
-        const { state } = this.$accessor.project.getFilters
 
-        const { slug } = this.$route.params
-        return this.$axios.$get(`/projects/${slug}/task_groups`, {
-          params: {
-            ...params,
-            state
-          }
-        })
-          .then(res => {
-            this.taskGroups = res
-          })
-      },
-      loadMore () {
-        if (this.taskGroups.meta.current_page + 1 > this.taskGroups.meta.total_pages) return
-
-        const { state } = this.$accessor.project.getFilters
-
-        const { slug } = this.$route.params
-        this.$wait.start('fetching task groups')
-        this.$axios.$get(`/projects/${slug}/task_groups`, {
-          params: {
-            page: this.taskGroups.meta.current_page + 1,
-            state
-          }
-        })
-          .then(res => {
-            this.taskGroups.data = [
-              ...this.taskGroups.data,
-              ...res.data
-            ]
-            this.taskGroups.meta = res.meta
-          })
-          .finally(() => {
-            this.$wait.end('fetching task groups')
-          })
+      return {
+        loadMore,
+        allTaskGroups
       }
     }
   })

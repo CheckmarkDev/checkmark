@@ -1,20 +1,12 @@
-const { MessageEmbed } =  require('discord.js')
+const prefix = '!';
 
 module.exports = async (client, message) => {
-    if (message.content.startsWith('!help')) {
-        const newMessage = new MessageEmbed()
-            .setColor('#0099ff')
-            .setTitle('!help')
-            .setDescription('help description')
-            .setThumbnail('https://www.checkmark.dev/icon.png')
-            .setFooter('Checkmark', 'https://www.checkmark.dev/icon.png')
-            .setTimestamp()
-        ;
+    if (!message.content.startsWith(prefix) || message.author.bot) return;
 
-        await message.channel.send(newMessage)
-    }
+    const args = message.content.slice(prefix.length).trim().split(/ +/);
+    const command = args.shift().toLowerCase();
 
-    if (message.content === 'ping') {
-        await message.reply('Pong!');
-    }
+    if (!client.commands.has(command)) return;
+
+    await client.commands.get(command).execute(client, message, args);
 }

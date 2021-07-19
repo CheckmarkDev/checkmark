@@ -4,7 +4,6 @@
     :variables="{
       taskUuid: task.uuid
     }"
-    :update="updateCache"
   >
     <template
       v-slot="{ mutate, loading }"
@@ -34,10 +33,10 @@
             </svg>
           </template>
           <div
-            v-if="task.metrics.likes.length > 0"
+            v-if="task.likes.nodes.length > 0"
             class="like-button__badge absolute bg-blue-500 text-white rounded-full w-4 h-4 text-xs"
           >
-            {{ task.metrics.likes.length }}
+            {{ task.likes.nodes.length }}
           </div>
         </div>
       </button>
@@ -47,10 +46,11 @@
 
 <script lang="ts">
   import { defineComponent, toRefs, computed } from '@nuxtjs/composition-api'
+  import gql from 'graphql-tag'
   import useAccessor from '~/composables/useAccessor'
   import { Task } from '~/types/task'
-  import gql from 'graphql-tag'
   import useMitt from '@/composables/useMitt'
+  import user from '@/apollo/fragments/user.gql'
 
   export default defineComponent({
     props: {
@@ -64,7 +64,7 @@
       const accessor = useAccessor()
       const mitt = useMitt()
 
-      const hasLiked = computed(() => accessor.getAuthUser && task.value.metrics.likes.includes(accessor.getAuthUser.uuid))
+      const hasLiked = computed(() => accessor.getAuthUser && task.value.likes.nodes.map(v => v.user.uuid).includes(accessor.getAuthUser.uuid))
       const isSelfTask = computed(() => accessor.getAuthUser && task.value.user.uuid === accessor.getAuthUser.uuid)
 
       const likeTask = gql`
@@ -82,8 +82,10 @@
                 avatar_url
               }
               task {
+                uuid
                 likes {
                   nodes {
+                    uuid
                     user {
                       uuid
                     }
@@ -104,26 +106,9 @@
         mutate()
       }
 
-      function updateCache (cache, { data: { create_like: like } }) {
-        const taskToUpdate = {
-          ...task.value,
-          metrics: {
-            ...task.value.metrics,
-            likes: like.like.task.likes.nodes.map(v => v.user.uuid)
-          }
-        }
-
-        accessor.setTask(taskToUpdate)
-        /**
-         * TODO: Remove this once we migrate the task on GraphQL
-         */
-        mitt.emit('update-task', taskToUpdate)
-      }
-
       return {
         like,
         likeTask,
-        updateCache,
         hasLiked
       }
     }

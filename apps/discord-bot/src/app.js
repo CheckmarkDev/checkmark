@@ -19,14 +19,16 @@ class App extends Discord.Client {
          */
         this.token = config.token;
 
+        this.commands = new Discord.Collection();
+
         this.logger = require('./utils/logger');
     }
 
     loadEvents(path) {
         readdir(path, (err, files) => {
-            if (err) console.log(err);
+            if (err) this.logger.error(err);
             files = files.filter(f => f.split('.').pop() === 'js');
-            if (files.length === 0) return console.log('No events found');
+            if (files.length === 0) return this.logger.info('No events found');
             this.logger.info(`${files.length} event(s) found...`);
             files.forEach(f => {
                 const eventName = f.substring(0, f.indexOf('.'));
@@ -37,6 +39,22 @@ class App extends Discord.Client {
             });
         });
         return this;
+    }
+
+    loadCommands(path) {
+        readdir(path, (err, files) => {
+            if (err) this.logger.error(err);
+            files = files.filter(f => f.split('.').pop() === 'js');
+            if (files.length === 0) return this.logger.info('No commands found')
+            this.logger.info(`${files.length} command(s) found...`);
+
+            for (const file of files) {
+                const commandName = file.substring(0, file.indexOf('.'));
+                const command = require(resolve(__basedir, join(path, file)));
+                this.commands.set(command.name, command);
+                this.logger.info(`Loading command: ${commandName}`)
+            }
+        })
     }
 }
 

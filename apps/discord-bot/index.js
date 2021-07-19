@@ -19,6 +19,7 @@ const client = new App({
 
 const init = () => {
     client.loadEvents('./src/events');
+    client.loadCommands('./src/commands');
     client.login(client.token);
 }
 

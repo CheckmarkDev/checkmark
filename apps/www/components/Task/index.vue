@@ -15,7 +15,7 @@
         <MarkAsButton
           v-if="$accessor.getAuthUser && task.user.uuid === $accessor.getAuthUser.uuid && task.state !== 'done'"
           :task="task"
-          class="my-4"
+          class="my-4 mr-auto"
         />
       </div>
       <div class="hidden md:flex items-center mt-1">

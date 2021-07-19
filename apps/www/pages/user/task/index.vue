@@ -1,16 +1,31 @@
 <template>
-  <div
-    class=""
-  >
-    <div class="border border-gray-300 dark:border-gray-600 rounded mb-8 px-8 py-4">
-      <Task
-        :task="task"
-      />
-    </div>
+  <div>
+    <apollo-query
+      :query="getTask"
+      :variables="{
+        uuid: $route.params.task
+      }"
+    >
+      <template
+        v-slot="{ result: { data } }"
+      >
+        <template
+          v-if="data"
+        >
+          <div class="border border-gray-300 dark:border-gray-600 rounded mb-8 px-8 py-4">
+            <Task
+              v-if="data.task"
+              :task="data.task"
+            />
+          </div>
 
-    <TaskComments
-      :task="task"
-    />
+          <TaskComments
+            v-if="data.task"
+            :task="data.task"
+          />
+        </template>
+      </template>
+    </apollo-query>
   </div>
 </template>
 
@@ -18,6 +33,8 @@
   import dayjs from 'dayjs'
   import { defineComponent } from '@nuxtjs/composition-api'
   import { NuxtAxiosInstance } from '@nuxtjs/axios'
+  import gql from 'graphql-tag'
+  import { useQuery } from '@vue/apollo-composable/dist'
 
   import TaskComponent from '@/components/Task/index.vue'
   import TaskComments from '@/components/TaskComments/index.vue'
@@ -26,6 +43,45 @@
   import { Comment } from '~/types/comment'
   import { Task } from '~/types/task'
 
+  const getTask = gql`
+    query GetTask ($uuid: String!) {
+      task (uuid: $uuid) {
+        uuid
+        content
+        state
+        source
+        created_at
+        updated_at
+        user {
+          ...user
+        }
+        images {
+          uuid
+          url
+          thumbnail_url
+        }
+        comments {
+          nodes {
+            uuid
+          }
+        }
+        likes {
+          nodes {
+            uuid
+            user {
+              uuid
+            }
+          }
+        }
+      }
+    }
+
+    ${user}
+  `
+
+  // @ts-ignore
+  import user from '@/apollo/fragments/user.gql'
+
   export default defineComponent({
     components: {
       Task: TaskComponent,
@@ -33,16 +89,35 @@
     },
     data () {
       return {
-        user: null,
-        task: null
+        user: null
       } as {
         user: User | null,
-        task: Task | null
+      }
+    },
+    apollo: {
+      task () {
+        return {
+          query: getTask,
+          variables: {
+            uuid: this.$route.params.task
+          },
+          error () {
+            console.log('fuck???')
+          }
+        }
+      },
+    },
+    setup () {
+      return {
+        getTask
       }
     },
     head () {
       const user = this.user as any
+      // @ts-ignore
       const task = this.task as any
+      if (!task) return
+
       const fullName = `${user.first_name} ${user.last_name}`.trim()
       const description = this.$trans('user.paragraphs.description', {
         user: fullName || user.username
@@ -78,24 +153,14 @@
       return !!username && !!task
     },
     async asyncData ({ $axios, route }) {
-      const { username, task: taskUuid } = route.params
-      const [user, task] = await Promise.all([
-        $axios.$get(`/users/${username}`),
-        $axios.$get(`/users/${username}/tasks/${taskUuid}`)
+      const { username } = route.params
+      const [user] = await Promise.all([
+        $axios.$get(`/users/${username}`)
       ])
 
       return {
         user,
-        task,
       }
-    },
-    mounted () {
-      this.$mitt.on('update-task', (task) => {
-        this.task = task
-      })
-    },
-    beforeDestroy () {
-      this.$mitt.off('update-task')
     }
   })
 </script>
