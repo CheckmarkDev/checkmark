@@ -595,6 +595,11 @@ deployments:
                 secretKeyRef:
                   name: discord-bot-secret
                   key: DISCORD_API_TOKEN
+            - name: API_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: discord-bot-secret
+                  key: API_SECRET
       ingress:
         annotations:
           kubernetes.io/ingress.class: nginx
