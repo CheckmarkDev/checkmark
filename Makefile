@@ -1,3 +1,11 @@
+setup-env:
+	cp apps/api/.env.example apps/api/.env
+	cp apps/www/.env.example apps/www/.env
+	cp apps/redis/.env.example apps/redis/.env
+	cp apps/redis/redis.conf.example apps/redis/redis.conf
+	cp apps/discord-bot/.env.example apps/discord-bot/.env
+	cp apps/db/.env.example apps/db/.env
+
 clear-secrets:
 	kubectl delete secret www-secret
 	kubectl delete secret api-secret
