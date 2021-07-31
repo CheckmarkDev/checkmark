@@ -56,6 +56,8 @@
 
   // @ts-ignore
   import user from '@/apollo/fragments/user.gql'
+  // @ts-ignore
+  import task from '@/apollo/fragments/task.gql'
   import useAccessor from '@/composables/useAccessor'
 
   export default defineComponent({
@@ -112,39 +114,14 @@
                 ...user
               }
               tasks (state: $state) {
-                uuid
-                content
-                state
-                source
-                created_at
-                updated_at
-                user {
-                  ...user
-                }
-                images {
-                  uuid
-                  url
-                  thumbnail_url
-                }
-                comments {
-                  nodes {
-                    uuid
-                  }
-                }
-                likes {
-                  nodes {
-                    uuid
-                    user {
-                      uuid
-                    }
-                  }
-                }
+                ...task
               }
             }
           }
         }
 
         ${user}
+        ${task}
       `
 
       const route = useRoute()
