@@ -62,7 +62,11 @@ const streamers = {
 }
 
 server.post('/webhooks', async (req, res) => {
-    const { event, data } = req.body
+    const { event, data, secret } = req.body
+
+    if (secret !== process.env.API_SECRET) {
+        return res.status(403).send('Forbidden')
+    }
 
     if (!event || !data) {
         return res.json({ status: 400, errorMessage: 'bad parameter' })
