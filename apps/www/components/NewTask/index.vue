@@ -29,7 +29,7 @@
               <div class="flex flex-1 items-start mb-3 md:mb-0 md:mr-4">
                 <button
                   type="button"
-                  class="new-task__toggle h-12 flex items-center border border-r-0 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-tl rounded-bl"
+                  class="new-task__toggle h-auto lg:h-20 flex items-center border border-r-0 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-tl rounded-bl"
                   @click="toggleState"
                 >
                   <div class="flex items-center px-4">
@@ -59,7 +59,7 @@
                       name="content"
                       minlength="2"
                       maxlength="1000"
-                      class="p-2 rounded-bl rounded-br rounded-tr appearance-none leading-relaxed border border-gray-300 dark:border-gray-600 border-solid mb-2 dark:bg-gray-600 dark:text-white"
+                      class="h-auto lg:h-20 p-2 rounded-bl rounded-br rounded-tr appearance-none leading-relaxed border border-gray-300 dark:border-gray-600 border-solid mb-2 dark:bg-gray-600 dark:text-white"
                       required
                     ></textarea>
                     <span
@@ -94,7 +94,7 @@
               </div>
               <button
                 :disabled="loading"
-                class="btn btn-primary w-full md:w-auto"
+                class="btn btn-primary h-auto lg:h-20 w-full md:w-auto"
                 type="submit"
               >
                 {{ $trans('home.buttons.send') }}
