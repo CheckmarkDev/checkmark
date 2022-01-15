@@ -1,6 +1,6 @@
 global.titles.reactions: Réactions
 global.titles.edit_task: Modifier une tâche
-global.titles.feed: Feed
+global.titles.feed: Activité récente
 global.paragraphs.no_reactions: Aucune réaction pour cette tâche.
 global.paragraphs.no_self_like: Vous ne pouvez pas liker vos propres tâches.
 global.paragraphs.max_chars: "{chars} caractères max."

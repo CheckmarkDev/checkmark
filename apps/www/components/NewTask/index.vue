@@ -18,7 +18,7 @@
           :disabled="loading"
           @submit.prevent="mutate"
         >
-          <div>
+          <div class="flex flex-col">
             <label
               for="task"
               class="text-base text-gray-800 dark:text-gray-300 mb-2"

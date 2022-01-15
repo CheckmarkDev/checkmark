@@ -5,7 +5,7 @@
       <div class="container mx-auto flex items-start">
         <SideNavigation />
         <section class="flex flex-col bg-white dark:bg-gray-700 dark:text-white rounded-lg w-full md:w-9/12 p-6">
-          <h2 class="font-medium text-2xl mb-4">
+          <h2 class="font-medium text-3xl mb-4">
             {{ $trans('links.titles.main') }}
           </h2>
 
