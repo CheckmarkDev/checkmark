@@ -101,9 +101,9 @@ ActiveRecord::Schema.define(version: 2021_06_27_210415) do
     t.string "name"
     t.text "description"
     t.string "url"
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "user_id", null: false
     t.string "main_color", default: "#2589C7", null: false
     t.string "github_secret"
     t.index ["slug"], name: "index_projects_on_slug", unique: true
@@ -184,7 +184,6 @@ ActiveRecord::Schema.define(version: 2021_06_27_210415) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "timezone", default: "Europe/Paris"
     t.integer "status", default: 0, null: false
-    t.text "description"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["status"], name: "index_users_on_status"
     t.index ["username"], name: "index_users_on_username", unique: true
