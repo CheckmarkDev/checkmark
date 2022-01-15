@@ -14,7 +14,7 @@
           class="flex flex-col dark:text-white"
         >
           <div class="flex items-center justify-between">
-            <h2 class="font-medium text-2xl mb-4">
+            <h2 class="font-medium text-3xl mb-4">
               {{ $trans('global.titles.feed') }}
             </h2>
 
