@@ -31,21 +31,31 @@
               <template
                 v-else-if="data"
               >
-                <Link
-                  v-for="link in data.all_links.nodes"
-                  :key="link.uuid"
-                  :link="link"
-                  class="mb-4"
-                />
-
-                <button
-                  v-if="data.all_links && data.all_links.pageInfo.hasNextPage"
-                  key="load-more"
-                  class="btn btn-primary w-full"
-                  @click="loadMore(query, data.all_links.pageInfo.endCursor)"
+                <template
+                  v-if="data.all_links.nodes.length"
                 >
-                  {{ $trans('links.buttons.load_more') }}
-                </button>
+                  <Link
+                    v-for="link in data.all_links.nodes"
+                    :key="link.uuid"
+                    :link="link"
+                    class="mb-4"
+                  />
+
+                  <button
+                    v-if="data.all_links && data.all_links.pageInfo.hasNextPage"
+                    key="load-more"
+                    class="btn btn-primary w-full"
+                    @click="loadMore(query, data.all_links.pageInfo.endCursor)"
+                  >
+                    {{ $trans('links.buttons.load_more') }}
+                  </button>
+                </template>
+
+                <template
+                  v-else
+                >
+                  Aucun lien pour le moment.
+                </template>
               </template>
             </template>
           </apollo-query>
