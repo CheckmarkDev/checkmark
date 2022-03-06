@@ -1,0 +1,6 @@
+forgot-password.titles.main: Mot de passe oublié ?
+forgot-password.paragraphs.main: Si vous avez oublié votre mot de passe, saisissez l'adresse e-mail avec laquelle vous vous êtes inscrits. Nous vous enverrons alors un e-mail pour pouvoir réinitialiser votre mot de passe.
+forgot-password.paragraphs.sent: Un e-mail vient de vous être envoyé, si cette adresse e-mail existe. Il contient un lien pour réinitialiser votre mot de passe.
+forgot-password.labels.email: E-mail
+forgot-password.buttons.submit: Valider
+forgot-password.buttons.retry: Réessayer

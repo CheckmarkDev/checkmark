@@ -19,6 +19,8 @@ import ProjectTasks from '@/pages/project/tasks/index.vue'
 import ProjectImages from '@/pages/project/images/index.vue'
 import SignIn from '@/pages/auth/sign-in/index.vue'
 import SignUp from '@/pages/auth/sign-up/index.vue'
+import ForgotPassword from '@/pages/auth/forgot-password/index.vue'
+import ResetPassword from '@/pages/auth/reset-password/index.vue'
 import EmailValidation from '@/pages/auth/email-validation/index.vue'
 import Settings from '@/pages/settings/index.vue'
 import SettingsNotifications from '@/pages/settings/notifications/index.vue'
@@ -44,6 +46,16 @@ const AUTH_ROUTES = [
     name: 'EmailValidation',
     path: '/auth/email-validation',
     component: EmailValidation
+  },
+  {
+    name: 'ForgotPassword',
+    path: '/auth/forgot-password',
+    component: ForgotPassword
+  },
+  {
+    name: 'ResetPassword',
+    path: '/auth/reset-password',
+    component: ResetPassword
   }
 ]
 

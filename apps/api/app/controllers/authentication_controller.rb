@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AuthenticationController < ApplicationController
-  before_action :authorize_request, except: %i[login register]
+  before_action :authorize_request, except: %i[login register forgot_password]
 
   api :GET, '/auth/me'
   def me
@@ -69,39 +69,43 @@ class AuthenticationController < ApplicationController
     end
   end
 
-  # def password_forgot
-  #   @user = User.find_by_email(password_forgot_params[:email])
-  #   if !@user.nil?
-  #     generate_token(@user)
+  def forgot_password
+    @user = User.find_by(email: password_forgot_params[:email])
+    unless @user.nil?
+      generate_token(@user, 'password_reset')
 
-  #     UserMailer.password_forgot(@user, @token).deliver_later
-  #   end
+      UserMailer.forgot_password(@user, @token).deliver_later
+    end
 
-  #   render json: {}, status: :ok
-  # end
+    render json: {}, status: :ok
+  end
 
-  # def password_reset
-  #   if password_reset_params[:password] != password_reset_params[:password_confirmation]
-  #     render json: {
-  #       error: 'Both passwords do not match'
-  #     }, status: :bad_request
-  #   else
-  #     if @current_user.update(password: password_reset_params[:password])
-  #       render status: :ok
-  #     else
-  #       render json: {}, status: :unprocessable_entity
-  #     end
-  #   end
-  # end
+  def reset_password
+    if @decoded_token[:type] != 'password_reset'
+      return render json: { errors: 'Token is invalid' }, status: :unauthorized
+    end
+
+    if password_reset_params[:password] != password_reset_params[:password_confirmation]
+      render json: {
+        error: 'Both passwords do not match'
+      }, status: :bad_request
+    elsif @current_user.update(password: password_reset_params[:password])
+      @saved_token&.update(status: Token.statuses[:revoked])
+
+      render json: {}, status: :ok
+    else
+      render json: {}, status: :unprocessable_entity
+    end
+  end
 
   private
 
-  def generate_token(user)
+  def generate_token(user, type = 'auth')
     timezone = user.timezone
     @expires_at = (DateTime.now.in_time_zone(timezone) + 1.month).to_i
     @token = JsonWebToken.encode(
       sub: user.uuid,
-      type: 'auth',
+      type: type,
       exp: @expires_at,
       jti: SecureRandom.hex
     )

@@ -5,6 +5,8 @@ const TRANSLATION_FILES = [
   'home',
   'sign-in',
   'sign-up',
+  'forgot-password',
+  'reset-password',
   'user',
   'project',
   'settings',

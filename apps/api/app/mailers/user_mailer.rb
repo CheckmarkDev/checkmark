@@ -19,4 +19,14 @@ class UserMailer < ApplicationMailer
       format.mjml
     end
   end
+
+  def forgot_password(user, token)
+    @name = user.full_name
+    @token = token
+
+    mail(to: user.email, subject: 'Réinitialisez votre mot de passe') do |format|
+      format.text
+      format.mjml
+    end
+  end
 end
