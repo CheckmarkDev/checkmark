@@ -25,6 +25,7 @@ module Types
       argument :slug, String, required: true
       argument :state, String, required: false
     end
+    field :top_users, Types::UserType.connection_type, null: false, description: 'Return top users'
     field :all_links, Types::LinkType.connection_type, null: false, description: 'Return all links'
     field :random_users, [Types::UserType], null: false, description: 'Return 10 random users'
     field :all_comments, Types::CommentType.connection_type, null: false,
@@ -42,6 +43,14 @@ module Types
 
     def user(uuid:)
       User.find_by(uuid: uuid)
+    end
+
+    def top_users
+      users = Rails.cache.fetch('top_users', expires_in: 24.hours) do
+        data = User.order(streak: :desc).limit(10).pluck(:id)
+      end
+
+      User.find(users)
     end
 
     def all_links

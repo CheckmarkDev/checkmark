@@ -1,0 +1,15 @@
+query GetTopUsers ($cursor: String) {
+  top_users (after: $cursor) {
+    nodes {
+      uuid
+      username
+      first_name
+      last_name
+      avatar_url
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}

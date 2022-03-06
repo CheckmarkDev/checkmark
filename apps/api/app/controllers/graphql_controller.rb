@@ -69,7 +69,7 @@ class GraphqlController < ApplicationController
 
   def handle_error_in_development(err)
     logger.error err.message
-    logger.error err.backtracerr.join("\n")
+    # logger.error err.backtracerr.join("\n")
 
     render json: { errors: [{ message: err.message, backtrace: err.backtrace }], data: {} },
            status: :internal_server_error
