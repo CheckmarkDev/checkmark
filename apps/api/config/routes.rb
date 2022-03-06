@@ -54,8 +54,8 @@ Rails.application.routes.draw do
       post '/register', to: 'authentication#register'
       post '/email_validation', to: 'authentication#email_validation'
       post '/login', to: 'authentication#login'
-      # post '/password-forgot', to: 'authentication#password_forgot'
-      # post '/password-reset', to: 'authentication#password_reset'
+      post '/forgot-password', to: 'authentication#forgot_password'
+      post '/reset-password', to: 'authentication#reset_password'
     end
 
     namespace 'webhooks' do

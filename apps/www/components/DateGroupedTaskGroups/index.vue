@@ -9,7 +9,7 @@
       >
         <div class="flex items-center mb-4">
           <div
-            class="text-2xl mr-3"
+            class="text-2xl mr-3 font-semibold text-gray-700"
             v-text="dayjs(group.date).format('LL')"
           />
         </div>

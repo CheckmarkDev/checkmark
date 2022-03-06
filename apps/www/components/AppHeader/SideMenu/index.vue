@@ -36,7 +36,7 @@
               class="flex py-2"
               @click.native="close"
             >
-              Liens
+              Ressources
             </nuxt-link>
           </li>
           <li>

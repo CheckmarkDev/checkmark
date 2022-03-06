@@ -5,7 +5,7 @@
       <div class="container mx-auto flex items-start">
         <SideNavigation />
         <section class="flex flex-col bg-white dark:bg-gray-700 dark:text-white rounded-lg w-full md:w-9/12 p-6">
-          <h2 class="font-medium text-2xl mb-4">
+          <h2 class="font-medium text-3xl mb-4">
             {{ $trans('links.titles.main') }}
           </h2>
 
@@ -31,21 +31,31 @@
               <template
                 v-else-if="data"
               >
-                <Link
-                  v-for="link in data.all_links.nodes"
-                  :key="link.uuid"
-                  :link="link"
-                  class="mb-4"
-                />
-
-                <button
-                  v-if="data.all_links && data.all_links.pageInfo.hasNextPage"
-                  key="load-more"
-                  class="btn btn-primary w-full"
-                  @click="loadMore(query, data.all_links.pageInfo.endCursor)"
+                <template
+                  v-if="data.all_links.nodes.length"
                 >
-                  {{ $trans('links.buttons.load_more') }}
-                </button>
+                  <Link
+                    v-for="link in data.all_links.nodes"
+                    :key="link.uuid"
+                    :link="link"
+                    class="mb-4"
+                  />
+
+                  <button
+                    v-if="data.all_links && data.all_links.pageInfo.hasNextPage"
+                    key="load-more"
+                    class="btn btn-primary w-full"
+                    @click="loadMore(query, data.all_links.pageInfo.endCursor)"
+                  >
+                    {{ $trans('links.buttons.load_more') }}
+                  </button>
+                </template>
+
+                <template
+                  v-else
+                >
+                  Aucun lien pour le moment.
+                </template>
               </template>
             </template>
           </apollo-query>
