@@ -2,7 +2,7 @@
   <main>
     <div class="container dark:text-white mx-auto pt-4 md:pt-12">
       <h1 class="text-2xl font-medium">
-        {{ $trans('sign-in.titles.main') }}
+        {{ $trans('reset-password.titles.main') }}
       </h1>
 
       <ValidationObserver
@@ -10,64 +10,35 @@
         slim
       >
         <form
-          :disabled="$wait.is('signing in')"
+          :disabled="$wait.is('resetting password')"
           class="flex flex-col md:w-1/2 mt-4"
           @submit.prevent="submitted"
         >
+          <p class="mb-8">
+            {{ $trans('reset-password.paragraphs.main') }}
+          </p>
+
           <div class="flex flex-col mb-4 md:mb-0">
-            <ValidationProvider
-              rules="email|required"
-              :name="$trans('sign-in.labels.email').toLowerCase()"
-              v-slot="{ invalid, errors }"
-              slim
-            >
-              <div class="flex flex-col">
-                <label
-                  for="email"
-                  class="text-left text-gray-700 dark:text-gray-300 text-base mb-1"
-                >
-                  {{ $trans('sign-in.labels.email') }} *
-                </label>
-                <input
-                  v-model="formData.email"
-                  :class="{
-                    'input--invalid': invalid && errors[0]
-                  }"
-                  :disabled="$wait.is('signing in')"
-                  type="email"
-                  id="email"
-                  class="input mb-1"
-                  required
-                  autocomplete="email"
-                >
-                <span
-                  v-if="invalid"
-                  v-text="errors[0]"
-                  role="alert"
-                  class="text-left text-sm text-red-500"
-                />
-              </div>
-            </ValidationProvider>
             <ValidationProvider
               vid="password"
               rules="required"
-              :name="$trans('sign-in.labels.password').toLowerCase()"
+              :name="$trans('reset-password.labels.password').toLowerCase()"
               v-slot="{ invalid, errors }"
               slim
             >
-              <div class="flex flex-col">
+              <div class="flex flex-col mb-4">
                 <label
                   for="password"
                   class="text-left text-gray-700 dark:text-gray-300 text-base mb-1"
                 >
-                  {{ $trans('sign-in.labels.password') }} *
+                  {{ $trans('reset-password.labels.password') }} *
                 </label>
                 <input
                   v-model="formData.password"
                   :class="{
                     'input--invalid': invalid && errors[0]
                   }"
-                  :disabled="$wait.is('signing in')"
+                  :disabled="$wait.is('resetting password')"
                   type="password"
                   id="password"
                   class="input mb-1"
@@ -82,25 +53,48 @@
                 />
               </div>
             </ValidationProvider>
-          </div>
-
-          <div class="py-2">
-            <NuxtLink
-              :to="{
-                name: 'ForgotPassword'
-              }"
-              class="underline"
+            <ValidationProvider
+              vid="passwordConfirmation"
+              rules="required|confirmed:password"
+              :name="$trans('reset-password.labels.password').toLowerCase()"
+              v-slot="{ invalid, errors }"
+              slim
             >
-              {{ $trans('sign-in.buttons.forgot-password') }}
-            </NuxtLink>
+              <div class="flex flex-col">
+                <label
+                  for="passwordConfirmation"
+                  class="text-left text-gray-700 dark:text-gray-300 text-base mb-1"
+                >
+                  {{ $trans('reset-password.labels.passwordConfirmation') }} *
+                </label>
+                <input
+                  v-model="formData.passwordConfirmation"
+                  :class="{
+                    'input--invalid': invalid && errors[0]
+                  }"
+                  :disabled="$wait.is('resetting password')"
+                  type="password"
+                  id="passwordConfirmation"
+                  class="input mb-1"
+                  autocomplete="new-password"
+                  required
+                >
+                <span
+                  v-if="invalid"
+                  v-text="errors[0]"
+                  role="alert"
+                  class="text-left text-sm text-red-500"
+                />
+              </div>
+            </ValidationProvider>
           </div>
 
           <button
-            :disabled="$wait.is('signing in')"
+            :disabled="$wait.is('resetting password')"
             class="btn btn-primary mt-4 md:w-1/2"
             type="submit"
           >
-            {{ $trans('sign-in.buttons.sign-in') }}
+            {{ $trans('reset-password.buttons.submit') }}
           </button>
         </form>
       </ValidationObserver>
@@ -110,23 +104,21 @@
 
 <script lang="ts">
   import { defineComponent } from '@nuxtjs/composition-api'
-  import Cookie from 'js-cookie'
 
   export default defineComponent({
-    middleware: ['notAuthenticated'],
+    middleware: ['notAuthenticated', ({ route, redirect }) => {
+      if (!route.query.token) redirect({ name: 'SignIn' })
+    }],
     head () {
       return {
-        title: this.$trans('sign-in.titles.main'),
-        meta: [
-          { hid: 'description', name: 'description', content: this.$trans('sign-in.paragraphs.description') }
-        ]
+        title: this.$trans('reset-password.titles.main')
       }
     },
     data () {
       return {
         formData: {
-          email: null,
-          password: null
+          password: null,
+          passwordConfirmation: null
         }
       }
     },
@@ -137,31 +129,30 @@
           .then((valid: boolean) => {
             if (!valid) return false
 
-            const { email, password } = this.formData
+            const { password, passwordConfirmation } = this.formData
 
-            this.$wait.start('signing in')
-            this.$axios.post('/auth/login', {
-              email,
-              password
+            this.$wait.start('resetting password')
+            this.$axios.post('/auth/reset-password', {
+              password,
+              password_confirmation: passwordConfirmation
+            }, {
+              headers: {
+                'Authorization': `Bearer ${this.$route.query.token}`
+              }
             })
-              .then(response => {
-                const { token, user, projects } = response.data
-                this.$accessor.setAuthToken(token)
-                this.$accessor.setAuthUser(user)
-                this.$accessor.setAuthProjects(projects)
-                Cookie.set('token', token)
-                Cookie.set('user', JSON.stringify(user))
+              .then(() => {
+                this.$toasted.success(this.$trans('reset-password.paragraphs.success'))
 
                 this.$router.push({
-                  name: 'Home'
+                  name: 'SignIn'
                 })
                   .catch(() => {})
               })
-              .catch(() => {
-                this.$toasted.error(this.$trans('sign-in.paragraphs.email-password-mismatch'))
+              .catch((err) => {
+                this.$toasted.error(this.$trans('reset-password.paragraphs.error'))
               })
               .finally(() => {
-                this.$wait.end('signing in')
+                this.$wait.end('resetting password')
               })
           })
       }

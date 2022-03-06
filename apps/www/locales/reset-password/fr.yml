@@ -1,0 +1,7 @@
+reset-password.titles.main: Réinitialisation du mot de passe
+reset-password.paragraphs.main: Vous êtes sur le point de réinitialiser votre mot de passe. Veuillez entrer votre nouveau mot de passe.
+reset-password.paragraphs.error: Impossible de réinitialiser votre mot de passe.
+reset-password.paragraphs.success: Votre mot de passe a bien été modifié. Vous pouvez vous connecter à votre compte.
+reset-password.labels.password: Mot de passe
+reset-password.labels.passwordConfirmation: Confirmation du mot de passe
+reset-password.buttons.submit: Valider
