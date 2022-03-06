@@ -70,8 +70,8 @@ class AuthenticationController < ApplicationController
   end
 
   def forgot_password
-    @user = User.find_by_email(password_forgot_params[:email])
-    if !@user.nil?
+    @user = User.find_by(email: password_forgot_params[:email])
+    unless @user.nil?
       generate_token(@user, 'password_reset')
 
       UserMailer.forgot_password(@user, @token).deliver_later
@@ -89,16 +89,12 @@ class AuthenticationController < ApplicationController
       render json: {
         error: 'Both passwords do not match'
       }, status: :bad_request
-    else
-      if @current_user.update(password: password_reset_params[:password])
-        if !@saved_token.nil?
-          @saved_token.update(status: Token.statuses[:revoked])
-        end
+    elsif @current_user.update(password: password_reset_params[:password])
+      @saved_token&.update(status: Token.statuses[:revoked])
 
-        render json: {}, status: :ok
-      else
-        render json: {}, status: :unprocessable_entity
-      end
+      render json: {}, status: :ok
+    else
+      render json: {}, status: :unprocessable_entity
     end
   end
 
