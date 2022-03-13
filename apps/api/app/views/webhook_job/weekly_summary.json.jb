@@ -2,6 +2,7 @@
 
 json = {
   event: 'weekly_summary.created',
+  secret: @secret,
   data: {
     user: {
       uuid: @user.uuid,
