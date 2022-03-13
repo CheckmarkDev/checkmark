@@ -6,6 +6,7 @@ class Project < ApplicationRecord
   has_many_attached :screenshots
   has_one_attached :avatar
   has_many :webhooks, dependent: :destroy
+  has_many :socials, dependent: :destroy
 
   validates :name, presence: true, length: { minimum: 2, maximum: 32 }, profanity: true
   validates :slug, presence: true, uniqueness: true, length: { minimum: 2, maximum: 32 }, profanity: true
